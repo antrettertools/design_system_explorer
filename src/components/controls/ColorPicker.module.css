@@ -1,0 +1,52 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  border: 2px solid var(--line-2);
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: border-color var(--t-fast);
+  overflow: hidden;
+}
+
+.swatch:hover {
+  border-color: var(--accent);
+}
+
+.fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hexInput {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  color: var(--text-0);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color var(--t-fast);
+  text-transform: uppercase;
+}
+
+.hexInput:focus {
+  border-color: var(--accent);
+}
+
+.meta {
+  font-size: 10px;
+  color: var(--text-3);
+  font-family: var(--mono);
+}

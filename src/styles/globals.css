@@ -1,0 +1,134 @@
+/* ═══════════════════════════════════════════════
+   TYPESET — Global CSS
+   App chrome tokens (amber accent, always fixed)
+   ═══════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── APP CHROME DESIGN TOKENS ── */
+:root {
+  /* Backgrounds — dark editorial (default) */
+  --bg-0: #0d0d0d;
+  --bg-1: #141414;
+  --bg-2: #1c1c1c;
+  --bg-3: #242424;
+  --bg-4: #2e2e2e;
+
+  /* Borders */
+  --line: #2a2a2a;
+  --line-2: #383838;
+
+  /* Text */
+  --text-0: #f0ede8;
+  --text-1: #b8b4ae;
+  --text-2: #7a776f;
+  --text-3: #4a4844;
+
+  /* App accent — always amber, regardless of user's brand color */
+  --accent: #e8a830;
+  --accent-dim: #c08820;
+  --accent-bg: #1e1608;
+
+  /* Semantic states for app chrome */
+  --app-red: #e85050;
+  --app-red-bg: #1a0505;
+  --app-green: #5ee870;
+  --app-green-bg: #051a08;
+  --app-teal: #5ee8c0;
+  --app-teal-bg: #051a14;
+
+  /* Shape */
+  --radius: 6px;
+  --radius-lg: 12px;
+
+  /* Typography */
+  --mono: 'DM Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --sans: 'Syne', system-ui, sans-serif;
+
+  /* Shadows */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* Layout */
+  --header-h: 52px;
+  --sidebar-w: 320px;
+
+  /* Transitions */
+  --t-fast: 0.12s ease;
+  --t-base: 0.18s ease;
+}
+
+/* ── LIGHT THEME OVERRIDE ── */
+:root[data-theme='light'] {
+  --bg-0: #f5f4f2;
+  --bg-1: #ffffff;
+  --bg-2: #f0ede8;
+  --bg-3: #e8e4de;
+  --bg-4: #ddd8d0;
+  --line: #e4e0da;
+  --line-2: #d0cbc3;
+  --text-0: #1a1816;
+  --text-1: #4a4540;
+  --text-2: #7a7570;
+  --text-3: #aaa59e;
+  --accent-bg: #fff8ec;
+}
+
+/* ── BASE ── */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--mono);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-1);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-3);
+}
+
+/* ── FOCUS RING ── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* ── RESET FORM ELEMENTS ── */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input, select, textarea {
+  font-family: var(--mono);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
