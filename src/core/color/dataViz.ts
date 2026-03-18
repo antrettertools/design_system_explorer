@@ -63,7 +63,7 @@ export function generateDataVizPalette(options: DataVizOptions): DataVizColor[] 
       hue = nudgeAwayFromReserved(hue, subsequentReserved, avoidWindowDeg)
     }
 
-    const name = dataVizColorName(i)
+    const name = dataVizColorName(i, hue)
 
     colors.push({
       name,
@@ -244,11 +244,28 @@ export function simulateAllColorblind(hex: string): {
 
 // ── Name generation ───────────────────────────────────────────
 
-const DATA_VIZ_NAMES = [
-  'Crimson', 'Amber', 'Jade', 'Azure', 'Violet', 'Rose',
-  'Teal', 'Gold', 'Indigo', 'Coral', 'Sage', 'Sky',
-]
+/**
+ * Derive a perceptual color name from an OKLCH hue angle (0–360°).
+ * OKLCH hue landmarks (approximate):
+ *   29° = red, 65° = orange, 110° = yellow, 142° = green,
+ *   195° = cyan, 264° = blue, 328° = magenta
+ */
+function hueToName(hueDeg: number): string {
+  const h = ((hueDeg % 360) + 360) % 360
+  if (h < 15 || h >= 345) return 'Rose'
+  if (h < 48)  return 'Crimson'
+  if (h < 78)  return 'Coral'
+  if (h < 105) return 'Amber'
+  if (h < 130) return 'Gold'
+  if (h < 155) return 'Sage'
+  if (h < 175) return 'Jade'
+  if (h < 210) return 'Teal'
+  if (h < 240) return 'Sky'
+  if (h < 270) return 'Azure'
+  if (h < 305) return 'Indigo'
+  return 'Violet'
+}
 
-function dataVizColorName(index: number): string {
-  return DATA_VIZ_NAMES[index % DATA_VIZ_NAMES.length]
+function dataVizColorName(_index: number, hueDeg: number): string {
+  return hueToName(hueDeg)
 }
