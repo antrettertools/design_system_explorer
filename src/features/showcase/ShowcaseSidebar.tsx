@@ -60,7 +60,7 @@ export function ShowcaseSidebar() {
       <ControlGroup>
         {swatch(tokens.primaryBrand.hex, tokens.primaryBrand.name)}
         {swatch(tokens.secondaryBrand.hex, tokens.secondaryBrand.name)}
-        {tokens.subBrandColors.slice(0, 2).map(c => swatch(c.hex, c.name))}
+        {tokens.subBrandColors.slice(0, 2).map((c, i) => <div key={i}>{swatch(c.hex, c.name)}</div>)}
         <div style={{ marginTop: 8 }}>
           {row('Success', tokens.stateColors.success)}
           {row('Warning', tokens.stateColors.warning)}

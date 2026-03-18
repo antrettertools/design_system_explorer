@@ -20,11 +20,11 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
       {/* ── Dark variants ── */}
       <RowLabel>Dark variants — use on dark backgrounds</RowLabel>
       <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
-        {colors.map((c) => {
+        {colors.map((c, i) => {
           const onColor = getOnColor(c.dark)
           return (
             <div
-              key={`dark-${c.name}`}
+              key={i}
               style={{
                 flex: 1,
                 height: 52,
@@ -72,11 +72,11 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
       {/* ── Light variants ── */}
       <RowLabel>Light variants — use on light backgrounds</RowLabel>
       <div style={{ display: 'flex', gap: 4, marginBottom: showColorblind ? 24 : 0 }}>
-        {colors.map((c) => {
+        {colors.map((c, i) => {
           const onColor = getOnColor(c.light)
           return (
             <div
-              key={`light-${c.name}`}
+              key={i}
               style={{
                 flex: 1,
                 height: 52,
@@ -152,11 +152,11 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </div>
               <div style={{ display: 'flex', gap: 4 }}>
-                {colors.map((c) => {
+                {colors.map((c, i) => {
                   const sim = simulateAllColorblind(c.dark)
                   return (
                     <div
-                      key={c.name}
+                      key={i}
                       style={{
                         flex: 1,
                         height: 20,

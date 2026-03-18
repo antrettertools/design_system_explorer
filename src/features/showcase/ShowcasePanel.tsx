@@ -559,8 +559,8 @@ export function ShowcasePanel() {
             </span>
           </div>
           <div style={{ display: 'flex', gap: px(3), flexWrap: 'wrap' }}>
-            {dv.map((c) => (
-              <div key={c.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: px(1) }}>
+            {dv.map((c, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: px(1) }}>
                 <div style={{
                   width: 44,
                   height: 44,
