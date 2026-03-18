@@ -6,31 +6,31 @@ import type { StateColors } from '../tokens/types'
  * Derives semantic state colors (success, warning, error, info) from a
  * set of palette hues already in use.
  *
- * Algorithm: for each state semantic role, we have a set of candidate
- * hue values (within the typical visual range for that role). We pick
- * the candidate that maximizes the minimum angular distance from all
- * palette hues already in use. This ensures state colors are visually
- * distinct from the brand palette.
+ * Algorithm: for each role we have candidate hues within the typical visual
+ * range (green for success, amber for warning, red for error, blue for info).
+ * We pick the candidate that maximizes minimum angular distance from all
+ * palette hues already in use — ensuring state colors are visually distinct.
  *
- * All derived colors use fixed saturation (0.68–0.85) and lightness
- * (0.46–0.52) tuned to be legible on both dark and light backgrounds.
+ * chroma-js convention: h from .hsl() is 0-360 degrees; chroma.hsl() also
+ * expects 0-360 degrees. No * 360 / / 360 conversions needed.
  */
 export function deriveStateColors(paletteHexes: string[]): StateColors {
+  // Extract hues in 0-360 degrees — chroma .hsl() already returns degrees
   const paletteHues = paletteHexes.map((hex) => {
     const [h] = chroma(hex).hsl()
-    return (h ?? 0) * 360
+    return h ?? 0
   })
 
-  const successH = bestCandidateHue([120, 135, 150, 110, 165, 142], paletteHues)
-  const warningH = bestCandidateHue([40, 45, 35, 50, 30, 38], paletteHues)
-  const errorH = bestCandidateHue([0, 5, 355, 10, 350, 3], paletteHues)
-  const infoH = bestCandidateHue([210, 200, 220, 195, 225, 215], paletteHues)
+  const successH = bestCandidateHue([120, 135, 150, 110, 165, 142, 128], paletteHues)
+  const warningH = bestCandidateHue([40, 45, 35, 50, 30, 38, 48], paletteHues)
+  const errorH   = bestCandidateHue([0, 5, 355, 10, 350, 3, 358], paletteHues)
+  const infoH    = bestCandidateHue([210, 200, 220, 195, 225, 215, 205], paletteHues)
 
   return {
-    success: chroma.hsl(successH / 360, 0.68, 0.46).hex(),
-    warning: chroma.hsl(warningH / 360, 0.85, 0.50).hex(),
-    error: chroma.hsl(errorH / 360, 0.72, 0.50).hex(),
-    info: chroma.hsl(infoH / 360, 0.65, 0.50).hex(),
+    success: chroma.hsl(successH, 0.68, 0.46).hex(),
+    warning: chroma.hsl(warningH, 0.85, 0.50).hex(),
+    error:   chroma.hsl(errorH,   0.72, 0.50).hex(),
+    info:    chroma.hsl(infoH,    0.65, 0.50).hex(),
   }
 }
 
@@ -39,21 +39,5 @@ export function deriveStateColors(paletteHexes: string[]): StateColors {
  */
 export function getHueDeg(hex: string): number {
   const [h] = chroma(hex).hsl()
-  return ((h ?? 0) * 360 + 360) % 360
-}
-
-/**
- * Returns the angular distance (in degrees) between a state color and the
- * nearest palette color. Used for UI validation display.
- */
-export function stateColorDistanceFromPalette(stateHex: string, paletteHexes: string[]): number {
-  if (paletteHexes.length === 0) return 180
-  const stateH = getHueDeg(stateHex)
-  return Math.min(
-    ...paletteHexes.map((hex) => {
-      const h = getHueDeg(hex)
-      const diff = Math.abs(stateH - h) % 360
-      return Math.min(diff, 360 - diff)
-    }),
-  )
+  return ((h ?? 0) + 360) % 360
 }
