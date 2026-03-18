@@ -2,7 +2,10 @@ import { PreviewCard } from '@/components/layout/PreviewCard'
 import { ShadeScale } from './ShadeScale'
 import { DataVizPalette } from './DataVizPalette'
 import { ContrastGrid } from './ContrastGrid'
+import { HarmonyWheel } from './HarmonyWheel'
 import { HARMONY_MODELS } from '@/core/color/types'
+import { getHarmonyColors } from '@/core/color/harmony'
+import { getOnColor } from '@/core/color/scales'
 import { useColor } from '@/store'
 import { useTokens } from '@/hooks/useTokens'
 import type { StateColors } from '@/core/tokens/types'
@@ -10,6 +13,9 @@ import type { StateColors } from '@/core/tokens/types'
 export function ColorPanel() {
   const color = useColor()
   const tokens = useTokens()
+
+  // Live harmony colors including primary — these are the positions the model defines
+  const harmonyColors = getHarmonyColors(color.primaryHex, color.harmonyModel)
 
   return (
     <>
@@ -43,7 +49,13 @@ export function ColorPanel() {
             label={`${sb.name} — Sub ${i + 1}`}
             hex={sb.hex}
             scale={sb.scale}
-            badge={sb.mode === 'manual' ? 'Manual' : sb.mode === 'auto-harmony' ? 'Auto' : 'From 2nd'}
+            badge={
+              sb.mode === 'manual'
+                ? 'Manual'
+                : sb.mode === 'auto-harmony'
+                ? 'Auto · Primary'
+                : 'Auto · Secondary'
+            }
           />
         ))}
       </PreviewCard>
@@ -51,22 +63,113 @@ export function ColorPanel() {
       {/* ── Harmony View ── */}
       <PreviewCard
         title={`Color Harmony — ${HARMONY_MODELS[color.harmonyModel].name}`}
+        subtitle="— positions derived from primary"
       >
         <div
           style={{
             fontSize: 11,
             color: 'var(--text-2)',
-            marginBottom: 16,
+            marginBottom: 20,
             lineHeight: 1.6,
-            maxWidth: 600,
+            maxWidth: 560,
           }}
         >
           {HARMONY_MODELS[color.harmonyModel].description}
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {[tokens.primaryBrand.hex, tokens.secondaryBrand.hex].map((hex, i) => (
-            <ColorCard key={i} hex={hex} label={i === 0 ? 'Primary' : 'Secondary'} />
-          ))}
+
+        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          {/* Wheel */}
+          <div style={{ flexShrink: 0 }}>
+            <HarmonyWheel
+              harmonyColors={harmonyColors}
+              secondaryHex={color.secondaryHex}
+              size={200}
+            />
+          </div>
+
+          {/* Color strips */}
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div
+              style={{
+                fontSize: 10,
+                color: 'var(--text-3)',
+                fontFamily: 'var(--mono)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                marginBottom: 8,
+              }}
+            >
+              Harmony positions
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {harmonyColors.map((hex, i) => {
+                const onColor = getOnColor(hex)
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      background: hex,
+                      borderRadius: 8,
+                      padding: '8px 14px',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 10,
+                        color: onColor,
+                        opacity: 0.65,
+                        fontFamily: 'var(--mono)',
+                        minWidth: 60,
+                      }}
+                    >
+                      {i === 0 ? 'Primary' : `+${HARMONY_MODELS[color.harmonyModel].angles[i - 1]}°`}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: onColor,
+                        fontFamily: 'var(--mono)',
+                        flex: 1,
+                      }}
+                    >
+                      {hex}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Secondary brand position note */}
+            <div
+              style={{
+                marginTop: 12,
+                padding: '8px 14px',
+                borderRadius: 8,
+                border: '1px dashed var(--line)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: '50%',
+                  background: color.secondaryHex,
+                  border: '2px solid var(--accent)',
+                  flexShrink: 0,
+                }}
+              />
+              <span style={{ fontSize: 10, color: 'var(--text-2)', fontFamily: 'var(--mono)' }}>
+                Secondary brand ({color.secondaryHex}) — independent position
+              </span>
+            </div>
+          </div>
         </div>
       </PreviewCard>
 
@@ -115,44 +218,9 @@ export function ColorPanel() {
       </PreviewCard>
 
       {/* ── Contrast Grid ── */}
-      <PreviewCard title="Contrast Analysis" subtitle="— WCAG 2.x">
+      <PreviewCard title="Contrast Analysis" subtitle="— WCAG 2.x on white and dark background">
         <ContrastGrid tokens={tokens} />
       </PreviewCard>
     </>
-  )
-}
-
-function ColorCard({ hex, label }: { hex: string; label: string }) {
-  const import_chroma = (h: string) => {
-    // Simple inline contrast calculation
-    const n = parseInt(h.replace('#', ''), 16)
-    const r = ((n >> 16) & 0xff) / 255
-    const g = ((n >> 8) & 0xff) / 255
-    const b = (n & 0xff) / 255
-    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
-    return luminance > 0.5 ? '#111111' : '#ffffff'
-  }
-  const onColor = import_chroma(hex)
-
-  return (
-    <div
-      style={{
-        background: hex,
-        borderRadius: 10,
-        padding: '16px 20px',
-        minWidth: 120,
-        minHeight: 72,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-      }}
-    >
-      <div style={{ fontSize: 10, color: onColor, opacity: 0.7, fontFamily: 'var(--mono)' }}>
-        {label}
-      </div>
-      <div style={{ fontSize: 13, fontWeight: 600, color: onColor, fontFamily: 'var(--mono)' }}>
-        {hex}
-      </div>
-    </div>
   )
 }

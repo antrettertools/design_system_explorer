@@ -1,4 +1,5 @@
 import { simulateAllColorblind } from '@/core/color/dataViz'
+import { getOnColor } from '@/core/color/scales'
 import type { DataVizColor } from '@/core/tokens/types'
 import { useUIActions } from '@/store'
 
@@ -16,63 +17,139 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
 
   return (
     <div>
-      {/* Dark variants row */}
-      <div style={{ marginBottom: 4, fontSize: 10, color: 'var(--text-3)', fontFamily: 'var(--mono)' }}>
-        On dark backgrounds
-      </div>
+      {/* ── Dark variants ── */}
+      <RowLabel>Dark variants — use on dark backgrounds</RowLabel>
       <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
-        {colors.map((c) => (
-          <div
-            key={`dark-${c.name}`}
-            style={{
-              flex: 1,
-              height: 44,
-              background: c.dark,
-              borderRadius: 'var(--radius)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'flex-end',
-              padding: '3px 4px',
-            }}
-            onClick={() => copy(c.dark)}
-            title={`${c.name} (dark): ${c.dark}`}
-          >
-            <span style={{ fontSize: 8, color: 'rgba(0,0,0,0.4)', fontFamily: 'var(--mono)' }}>
-              {c.name}
-            </span>
-          </div>
-        ))}
+        {colors.map((c) => {
+          const onColor = getOnColor(c.dark)
+          return (
+            <div
+              key={`dark-${c.name}`}
+              style={{
+                flex: 1,
+                height: 52,
+                background: c.dark,
+                borderRadius: 6,
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                padding: '4px 5px',
+                gap: 1,
+              }}
+              onClick={() => copy(c.dark)}
+              title={`${c.name} dark: ${c.dark}`}
+            >
+              <span
+                style={{
+                  fontSize: 8,
+                  color: onColor,
+                  opacity: 0.7,
+                  fontFamily: 'var(--mono)',
+                  lineHeight: 1,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
+              >
+                {c.name}
+              </span>
+              <span
+                style={{
+                  fontSize: 7,
+                  color: onColor,
+                  opacity: 0.45,
+                  fontFamily: 'var(--mono)',
+                  lineHeight: 1,
+                }}
+              >
+                {c.dark}
+              </span>
+            </div>
+          )
+        })}
       </div>
 
-      {/* Light variants row */}
-      <div style={{ marginBottom: 4, fontSize: 10, color: 'var(--text-3)', fontFamily: 'var(--mono)' }}>
-        On light backgrounds
-      </div>
+      {/* ── Light variants ── */}
+      <RowLabel>Light variants — use on light backgrounds</RowLabel>
       <div style={{ display: 'flex', gap: 4, marginBottom: showColorblind ? 24 : 0 }}>
-        {colors.map((c) => (
-          <div
-            key={`light-${c.name}`}
-            style={{
-              flex: 1,
-              height: 44,
-              background: c.light,
-              borderRadius: 'var(--radius)',
-              cursor: 'pointer',
-              border: '1px solid rgba(0,0,0,0.06)',
-            }}
-            onClick={() => copy(c.light)}
-            title={`${c.name} (light): ${c.light}`}
-          />
-        ))}
+        {colors.map((c) => {
+          const onColor = getOnColor(c.light)
+          return (
+            <div
+              key={`light-${c.name}`}
+              style={{
+                flex: 1,
+                height: 52,
+                background: c.light,
+                borderRadius: 6,
+                border: '1px solid rgba(0,0,0,0.06)',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                padding: '4px 5px',
+                gap: 1,
+              }}
+              onClick={() => copy(c.light)}
+              title={`${c.name} light: ${c.light}`}
+            >
+              <span
+                style={{
+                  fontSize: 8,
+                  color: onColor,
+                  opacity: 0.7,
+                  fontFamily: 'var(--mono)',
+                  lineHeight: 1,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
+              >
+                {c.name}
+              </span>
+              <span
+                style={{
+                  fontSize: 7,
+                  color: onColor,
+                  opacity: 0.45,
+                  fontFamily: 'var(--mono)',
+                  lineHeight: 1,
+                }}
+              >
+                {c.light}
+              </span>
+            </div>
+          )
+        })}
       </div>
 
-      {/* Colorblind simulations */}
+      {/* ── Colorblind simulations ── */}
       {showColorblind && (
         <>
+          <div
+            style={{
+              fontSize: 10,
+              color: 'var(--text-3)',
+              fontFamily: 'var(--mono)',
+              marginBottom: 10,
+              marginTop: 4,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Colorblind simulations (dark variants)
+          </div>
           {(['deuteranopia', 'protanopia', 'tritanopia'] as const).map((type) => (
-            <div key={type} style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 10, color: 'var(--text-3)', fontFamily: 'var(--mono)', marginBottom: 4 }}>
-                {type.charAt(0).toUpperCase() + type.slice(1)} simulation
+            <div key={type} style={{ marginBottom: 8 }}>
+              <div
+                style={{
+                  fontSize: 9,
+                  color: 'var(--text-3)',
+                  fontFamily: 'var(--mono)',
+                  marginBottom: 3,
+                  opacity: 0.8,
+                }}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
               </div>
               <div style={{ display: 'flex', gap: 4 }}>
                 {colors.map((c) => {
@@ -82,11 +159,11 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
                       key={c.name}
                       style={{
                         flex: 1,
-                        height: 24,
+                        height: 20,
                         background: sim[type],
                         borderRadius: 4,
                       }}
-                      title={`${c.name} simulated: ${sim[type]}`}
+                      title={`${c.name} ${type}: ${sim[type]}`}
                     />
                   )
                 })}
@@ -95,6 +172,22 @@ export function DataVizPalette({ colors, showColorblind = true }: DataVizPalette
           ))}
         </>
       )}
+    </div>
+  )
+}
+
+function RowLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        fontSize: 10,
+        color: 'var(--text-3)',
+        fontFamily: 'var(--mono)',
+        marginBottom: 5,
+        letterSpacing: '0.05em',
+      }}
+    >
+      {children}
     </div>
   )
 }

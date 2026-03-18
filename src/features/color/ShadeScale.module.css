@@ -37,7 +37,7 @@
   text-align: center;
   font-size: 8px;
   font-family: var(--mono);
-  color: rgba(255, 255, 255, 0.7);
+  /* color is set inline per-swatch for correct contrast */
   opacity: 0;
   transition: opacity var(--t-fast);
 }

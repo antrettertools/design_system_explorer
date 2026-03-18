@@ -1,5 +1,6 @@
 import { SHADE_STEPS } from '@/core/tokens/types'
 import type { ShadeScale as ShadeScaleType } from '@/core/tokens/types'
+import { getOnColor } from '@/core/color/scales'
 import { useUIActions } from '@/store'
 import styles from './ShadeScale.module.css'
 
@@ -41,17 +42,29 @@ export function ShadeScale({ label, hex, scale, badge }: ShadeScaleProps) {
         <span className={styles.rowHex}>{hex}</span>
       </div>
       <div className={styles.swatchRow}>
-        {SHADE_STEPS.map((step) => (
-          <div
-            key={step}
-            className={styles.swatch}
-            style={{ background: scale[step] }}
-            onClick={() => copy(scale[step])}
-            title={`${step}: ${scale[step]}`}
-          >
-            <div className={styles.swatchLabel}>{step}</div>
-          </div>
-        ))}
+        {SHADE_STEPS.map((step) => {
+          const swatchHex = scale[step]
+          // Compute readable label color per-swatch — white on dark, near-black on light
+          const labelColor = getOnColor(swatchHex) === '#ffffff'
+            ? 'rgba(255,255,255,0.65)'
+            : 'rgba(0,0,0,0.45)'
+          return (
+            <div
+              key={step}
+              className={styles.swatch}
+              style={{ background: swatchHex, '--swatch-label-color': labelColor } as React.CSSProperties}
+              onClick={() => copy(swatchHex)}
+              title={`${step}: ${swatchHex}`}
+            >
+              <div
+                className={styles.swatchLabel}
+                style={{ color: labelColor }}
+              >
+                {step}
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
