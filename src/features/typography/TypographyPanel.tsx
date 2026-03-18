@@ -1,7 +1,6 @@
 import { PreviewCard } from '@/components/layout/PreviewCard'
 import { ReadabilityScore } from './ReadabilityScore'
-import { TypeSpecimen, CharacterGrid } from './TypeSpecimen'
-import { FontPairings } from './FontPairings'
+import { TypeSpecimen, TypeScaleTable, CharacterGrid } from './TypeSpecimen'
 import { useTypography } from '@/store'
 
 export function TypographyPanel() {
@@ -11,19 +10,21 @@ export function TypographyPanel() {
     <>
       <ReadabilityScore />
 
-      <PreviewCard title="Type Specimen">
+      <PreviewCard title="Type System" subtitle="Heading + body font pair in context">
         <TypeSpecimen />
       </PreviewCard>
 
-      <PreviewCard title="Custom Text Preview">
-        <TypeSpecimen customText={customText} />
+      <PreviewCard title="Type Scale" subtitle="Semantic roles mapped to scale steps">
+        <TypeScaleTable />
       </PreviewCard>
 
-      <PreviewCard title="Font Pairings">
-        <FontPairings />
-      </PreviewCard>
+      {customText && (
+        <PreviewCard title="Custom Preview">
+          <TypeSpecimen customText={customText} />
+        </PreviewCard>
+      )}
 
-      <PreviewCard title="Character Set">
+      <PreviewCard title="Character Sets" subtitle="Both fonts · full glyph coverage">
         <CharacterGrid />
       </PreviewCard>
     </>

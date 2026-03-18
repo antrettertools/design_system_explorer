@@ -13,12 +13,21 @@ export const cssPlugin: ExportPlugin = {
     const lines: string[] = [':root {']
 
     // ── Typography ──
-    lines.push('  /* Typography */')
-    lines.push(`  --font-primary: '${tokens.fontFamily}', ${fontFallback(tokens.fontCategory)};`)
+    lines.push('  /* Typography — Heading */')
+    lines.push(`  --font-heading: ${tokens.heading.fontStack};`)
+    lines.push(`  --font-weight-heading: ${tokens.heading.fontWeight};`)
+    lines.push(`  --line-height-heading: ${tokens.heading.lineHeight};`)
+    lines.push(`  --letter-spacing-heading: ${tokens.heading.letterSpacing}em;`)
+    lines.push('')
+    lines.push('  /* Typography — Body */')
+    lines.push(`  --font-body: ${tokens.body.fontStack};`)
     lines.push(`  --font-size-base: ${tokens.fontSize}px;`)
-    lines.push(`  --line-height-base: ${tokens.lineHeight};`)
-    lines.push(`  --letter-spacing-base: ${tokens.letterSpacing}em;`)
-    lines.push(`  --font-weight-body: ${tokens.fontWeight};`)
+    lines.push(`  --font-weight-body: ${tokens.body.fontWeight};`)
+    lines.push(`  --line-height-body: ${tokens.body.lineHeight};`)
+    lines.push(`  --letter-spacing-body: ${tokens.body.letterSpacing}em;`)
+    lines.push('')
+    lines.push('  /* Typography — Legacy aliases */')
+    lines.push(`  --font-primary: ${tokens.body.fontStack};`)
 
     // Type scale
     lines.push('')
@@ -121,10 +130,4 @@ export const cssPlugin: ExportPlugin = {
     lines.push('}')
     return lines.join('\n')
   },
-}
-
-function fontFallback(category: string): string {
-  if (category === 'mono') return "'Cascadia Code', 'Fira Code', monospace"
-  if (category === 'serif') return 'Georgia, serif'
-  return 'system-ui, sans-serif'
 }

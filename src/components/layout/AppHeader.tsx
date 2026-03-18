@@ -26,20 +26,20 @@ export function AppHeader() {
   const handlePin = () => {
     const fontStyle = [
       `font-family: ${fontFamilyStack};`,
-      `font-weight: ${typography.fontWeight};`,
+      `font-weight: ${typography.bodyWeight};`,
       `font-size: ${typography.fontSize}px;`,
-      `line-height: ${typography.lineHeight};`,
+      `line-height: ${typography.bodyLineHeight};`,
       variationSettings ? `font-variation-settings: ${variationSettings};` : '',
     ]
       .filter(Boolean)
       .join(' ')
 
     compareActions.pin({
-      label: `${typography.fontFamily} · ${new Date().toLocaleTimeString()}`,
-      fontFamily: typography.fontFamily,
-      fontWeight: typography.fontWeight,
+      label: `${typography.headingFamily} / ${typography.bodyFamily} · ${new Date().toLocaleTimeString()}`,
+      fontFamily: typography.bodyFamily,
+      fontWeight: typography.bodyWeight,
       fontSize: typography.fontSize,
-      lineHeight: typography.lineHeight,
+      lineHeight: typography.bodyLineHeight,
       primaryHex: color.primaryHex,
       secondaryHex: color.secondaryHex,
       fontStyle,

@@ -38,7 +38,9 @@ export const tailwindPlugin: ExportPlugin = {
       `  theme: {`,
       `    extend: {`,
       `      fontFamily: {`,
-      `        primary: ["'${tokens.fontFamily}'", '${fontFallback(tokens.fontCategory)}'],`,
+      `        heading: [${tokens.heading.fontStack.split(',').map(f => `'${f.trim()}'`).join(', ')}],`,
+      `        body: [${tokens.body.fontStack.split(',').map(f => `'${f.trim()}'`).join(', ')}],`,
+      `        sans: [${tokens.body.fontStack.split(',').map(f => `'${f.trim()}'`).join(', ')}],`,
       `      },`,
       `      fontSize: {`,
       ...Object.entries(tokens.typeScale).map(
@@ -94,10 +96,4 @@ function shadeScaleToTailwind(scale: Record<number, string>): Record<string, str
     out[String(step)] = scale[step]
   }
   return out
-}
-
-function fontFallback(category: string): string {
-  if (category === 'mono') return "monospace"
-  if (category === 'serif') return "serif"
-  return "sans-serif"
 }

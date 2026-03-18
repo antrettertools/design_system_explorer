@@ -11,8 +11,14 @@ import { shadowToCss } from '@/core/shadow/presets'
  */
 export function ShowcasePanel() {
   const tokens = useTokens()
-  const { fontFamilyStack, variationSettings } = useFont()
+  const { heading: headingFont, body: bodyFont } = useFont()
   const components = useComponents()
+
+  // ── Font shorthands ───────────────────────────────────────────
+  const fontFamilyStack = bodyFont.fontFamilyStack
+  const variationSettings = bodyFont.variationSettings
+  const headingStack = headingFont.fontFamilyStack
+  const headingVariation = headingFont.variationSettings
 
   // ── Token aliases ────────────────────────────────────────────
   const primary    = tokens.primaryBrand.hex
@@ -36,12 +42,20 @@ export function ShowcasePanel() {
     spacingArr[Math.max(0, Math.min(i - 1, spacingArr.length - 1))] ?? tokens.spacingBase * i
   const px = (i: number) => `${sp(i)}px`
 
-  // ── Font ─────────────────────────────────────────────────────
+  // ── Font helpers ─────────────────────────────────────────────
   const fontBase: CSSProperties = {
     fontFamily: fontFamilyStack,
     ...(variationSettings ? { fontVariationSettings: variationSettings } : {}),
-    lineHeight: tokens.lineHeight,
+    lineHeight: tokens.body.lineHeight,
   }
+  const headingCss = (extra?: CSSProperties): CSSProperties => ({
+    fontFamily: headingStack,
+    fontWeight: tokens.heading.fontWeight,
+    lineHeight: tokens.heading.lineHeight,
+    letterSpacing: `${tokens.heading.letterSpacing}em`,
+    ...(headingVariation ? { fontVariationSettings: headingVariation } : {}),
+    ...extra,
+  })
 
   // ── Button factory ───────────────────────────────────────────
   const btnSize = components.size
@@ -173,15 +187,12 @@ export function ShowcasePanel() {
         </div>
 
         {/* Headline */}
-        <h1 style={{
+        <h1 style={headingCss({
           fontSize: ts['4xl'],
-          fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: '-0.03em',
           color: 'var(--text-0)',
           maxWidth: 700,
           margin: 0,
-        }}>
+        })}>
           Design systems that{' '}
           <span style={{ color: primary }}>scale with your team</span>
         </h1>
@@ -318,13 +329,11 @@ export function ShowcasePanel() {
           }}>
             Why teams choose us
           </span>
-          <h2 style={{
+          <h2 style={headingCss({
             fontSize: ts['3xl'],
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
             color: 'var(--text-0)',
             margin: 0,
-          }}>
+          })}>
             Everything you need to ship faster
           </h2>
         </div>
@@ -724,23 +733,22 @@ export function ShowcasePanel() {
             textTransform: 'uppercase',
             color: 'var(--text-3)',
           }}>
-            Type Specimen · {tokens.fontFamily}
+            Type Specimen · {tokens.heading.fontFamily} / {tokens.body.fontFamily}
           </span>
 
-          {[
-            { size: ts['4xl'],  weight: 800, text: 'Heading Display', letterSpacing: '-0.03em' },
-            { size: ts['2xl'],  weight: 700, text: 'Heading Large',   letterSpacing: '-0.02em' },
-            { size: ts.xl,      weight: 600, text: 'Heading Medium',  letterSpacing: '-0.01em' },
-            { size: ts.md,      weight: 500, text: 'Subheading',      letterSpacing: '0' },
-            { size: ts.sm,      weight: 400, text: 'Body text — The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow.', letterSpacing: '0' },
-            { size: ts.xs,      weight: 400, text: 'Caption — small text for labels, tooltips, and supplementary details.', letterSpacing: '0.02em' },
-          ].map(({ size, weight, text, letterSpacing }, i) => (
+          {([
+            { size: ts['4xl'], role: 'heading', text: 'Heading Display' },
+            { size: ts['2xl'], role: 'heading', text: 'Heading Large' },
+            { size: ts.xl,     role: 'heading', text: 'Heading Medium' },
+            { size: ts.md,     role: 'body',    text: 'Subheading — lead paragraph intro' },
+            { size: ts.sm,     role: 'body',    text: 'Body — The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow.' },
+            { size: ts.xs,     role: 'body',    text: 'Caption — small text for labels, tooltips, and supporting details.' },
+          ] as const).map(({ size, role, text }, i) => (
             <div key={i} style={{
-              fontSize: size,
-              fontWeight: weight,
-              color: i < 4 ? 'var(--text-0)' : 'var(--text-2)',
-              lineHeight: i < 4 ? 1.15 : tokens.lineHeight,
-              letterSpacing,
+              ...(role === 'heading'
+                ? headingCss({ fontSize: size })
+                : { fontFamily: fontFamilyStack, fontWeight: tokens.body.fontWeight, lineHeight: tokens.body.lineHeight, letterSpacing: `${tokens.body.letterSpacing}em`, fontSize: size }),
+              color: role === 'heading' ? 'var(--text-0)' : 'var(--text-2)',
               paddingBottom: px(3),
               borderBottom: i < 5 ? '1px solid var(--line)' : 'none',
             }}>

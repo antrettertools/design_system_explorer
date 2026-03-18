@@ -6,15 +6,14 @@ import { deriveStateColors } from '@/core/color/semantic'
 import { deriveSubBrandColor } from '@/core/color/harmony'
 import { generateDataVizPalette } from '@/core/color/dataViz'
 import { generateTypeScale } from '@/core/typography/scale'
+import { buildFontFamilyStack } from '@/core/typography/fontLoader'
+import { getFontByName } from '@/core/typography/fontDatabase'
 import { generateSpacingScale, generateRadiusScale, DEFAULT_Z_INDEX, DEFAULT_BREAKPOINTS } from '@/core/spacing/scale'
 import { buildElevationScale } from '@/core/shadow/presets'
-import type { DesignTokens, BrandColor, SubBrandColor, ShadeScale } from '@/core/tokens/types'
+import type { DesignTokens, BrandColor, SubBrandColor, ShadeScale, TypographyRole } from '@/core/tokens/types'
 
 /**
  * Computes the complete DesignTokens object from the current store state.
- * This is the central derived-data hook — all rendering and export
- * should call this hook rather than computing tokens independently.
- *
  * Memoized: only recomputes when relevant state slices change.
  */
 export function useTokens(): DesignTokens {
@@ -54,7 +53,6 @@ export function useTokens(): DesignTokens {
           i,
         )
       } else {
-        // auto-secondary: derive from secondary using complementary offset
         hex = deriveSubBrandColor(
           color.secondaryHex,
           color.primaryHex,
@@ -101,7 +99,30 @@ export function useTokens(): DesignTokens {
       chromaTarget: color.dataVizChroma,
     })
 
-    // ── Typography ─────────────────────────────────────────────
+    // ── Typography — dual roles ────────────────────────────────
+    const headingFontDef = getFontByName(typography.headingFamily)
+    const bodyFontDef = getFontByName(typography.bodyFamily)
+
+    const heading: TypographyRole = {
+      fontFamily: typography.headingFamily,
+      fontStack: headingFontDef
+        ? buildFontFamilyStack(headingFontDef)
+        : `'${typography.headingFamily}', serif`,
+      fontWeight: typography.headingWeight,
+      lineHeight: typography.headingLineHeight,
+      letterSpacing: typography.headingLetterSpacing,
+    }
+
+    const body: TypographyRole = {
+      fontFamily: typography.bodyFamily,
+      fontStack: bodyFontDef
+        ? buildFontFamilyStack(bodyFontDef)
+        : `'${typography.bodyFamily}', sans-serif`,
+      fontWeight: typography.bodyWeight,
+      lineHeight: typography.bodyLineHeight,
+      letterSpacing: typography.bodyLetterSpacing,
+    }
+
     const typeScale = generateTypeScale(
       typography.fontSize,
       typography.scaleAlgorithm,
@@ -123,13 +144,20 @@ export function useTokens(): DesignTokens {
       stateColors,
       stateScales,
       neutral: { tint: color.neutralTint, scale: neutralScale },
-      fontFamily: typography.fontFamily,
-      fontCategory: typography.fontCategory,
-      fontWeight: typography.fontWeight,
+
+      // Dual-font roles
+      heading,
+      body,
+
+      // Backward-compat aliases (point to body)
+      fontFamily: typography.bodyFamily,
+      fontCategory: typography.bodyCategory,
+      fontWeight: typography.bodyWeight,
       fontSize: typography.fontSize,
-      lineHeight: typography.lineHeight,
-      letterSpacing: typography.letterSpacing,
+      lineHeight: typography.bodyLineHeight,
+      letterSpacing: typography.bodyLetterSpacing,
       typeScale,
+
       spacingBase: spacing.base,
       spacingScale,
       radiusScale,

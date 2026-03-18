@@ -1,11 +1,9 @@
 import { useTokens } from '@/hooks/useTokens'
-import { useFont } from '@/hooks/useFont'
 import { useTypography, useSpacing, useShadow, useComponents } from '@/store'
 import { SidebarSection, ControlGroup } from '@/components/layout/AppLayout'
 
 export function ShowcaseSidebar() {
   const tokens = useTokens()
-  const { fontFamilyStack } = useFont()
   const typography = useTypography()
   const spacing = useSpacing()
   const shadow = useShadow()
@@ -47,11 +45,12 @@ export function ShowcaseSidebar() {
 
       <SidebarSection title="Typography" />
       <ControlGroup>
-        {row('Font', tokens.fontFamily)}
-        {row('Stack', fontFamilyStack.split(',')[0].trim())}
+        {row('Heading', typography.headingFamily)}
+        {row('Body', typography.bodyFamily)}
         {row('Base size', `${typography.fontSize}px`)}
-        {row('Weight', String(typography.fontWeight))}
-        {row('Line height', String(typography.lineHeight))}
+        {row('Heading wt', String(typography.headingWeight))}
+        {row('Body wt', String(typography.bodyWeight))}
+        {row('Line height', `H ${typography.headingLineHeight} / B ${typography.bodyLineHeight}`)}
         {row('Scale', typography.scaleAlgorithm)}
         {row('Type xs', `${Math.round(tokens.typeScale.xs)}px`)}
         {row('Type 4xl', `${Math.round(tokens.typeScale['4xl'])}px`)}

@@ -70,6 +70,18 @@ export interface NeutralPalette {
 export type FontCategory = 'sans' | 'serif' | 'mono'
 export type FontSource = 'google' | 'fontshare' | 'system'
 
+/**
+ * Per-role typography settings. Heading and body each have their own
+ * font family, weight, line-height and tracking.
+ */
+export interface TypographyRole {
+  fontFamily: string
+  fontStack: string     // e.g. "'Fraunces', Georgia, serif"
+  fontWeight: number
+  lineHeight: number
+  letterSpacing: number // em
+}
+
 export interface FontAxisRange {
   min: number
   max: number
@@ -187,7 +199,11 @@ export interface DesignTokens {
   stateScales: Record<keyof StateColors, ShadeScale>
   neutral: NeutralPalette
 
-  // Typography
+  // Typography — dual font roles
+  heading: TypographyRole
+  body: TypographyRole
+
+  // Backward-compat aliases (point to body role)
   fontFamily: string
   fontCategory: FontCategory
   fontWeight: number

@@ -8,16 +8,16 @@ const CIRCUMFERENCE = 2 * Math.PI * 22 // r=22
 
 export function ReadabilityScore() {
   const typography = useTypography()
-  const font = getFontByName(typography.fontFamily)
+  const font = getFontByName(typography.bodyFamily)
 
   const score = useMemo(() => {
     if (!font) return null
     return computeReadabilityScore({
       font,
-      weight: typography.fontWeight,
+      weight: typography.bodyWeight,
       size: typography.fontSize,
-      lineHeight: typography.lineHeight,
-      letterSpacing: typography.letterSpacing,
+      lineHeight: typography.bodyLineHeight,
+      letterSpacing: typography.bodyLetterSpacing,
     })
   }, [font, typography])
 

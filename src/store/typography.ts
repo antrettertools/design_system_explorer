@@ -1,27 +1,45 @@
 import type { FontCategory, TypeScaleAlgorithm, ModularRatio } from '@/core/tokens/types'
 
 export interface TypographyState {
-  fontFamily: string
-  fontCategory: FontCategory
-  fontWeight: number
-  fontSize: number         // px
-  lineHeight: number
-  letterSpacing: number    // em
-  extraAxes: Record<string, number>
+  // ── Heading role ───────────────────────────────────────────────
+  headingFamily: string
+  headingCategory: FontCategory
+  headingWeight: number
+  headingLineHeight: number
+  headingLetterSpacing: number    // em
+  headingExtraAxes: Record<string, number>
+
+  // ── Body role ──────────────────────────────────────────────────
+  bodyFamily: string
+  bodyCategory: FontCategory
+  bodyWeight: number
+  bodyLineHeight: number
+  bodyLetterSpacing: number       // em
+  bodyExtraAxes: Record<string, number>
+
+  // ── Type scale (shared; bodySize is the base) ──────────────────
+  fontSize: number                // body base size in px
   scaleAlgorithm: TypeScaleAlgorithm
   modularRatio: ModularRatio
+
+  // ── Accessibility / preview ────────────────────────────────────
   customText: string
-  textColor: string        // for contrast checker
-  bgColor: string          // for contrast checker
+  textColor: string
+  bgColor: string
 }
 
 export interface TypographyActions {
-  setFont(family: string, category: FontCategory): void
-  setFontWeight(weight: number): void
+  setHeadingFont(family: string, category: FontCategory): void
+  setBodyFont(family: string, category: FontCategory): void
+  setHeadingWeight(weight: number): void
+  setBodyWeight(weight: number): void
+  setHeadingLineHeight(lh: number): void
+  setBodyLineHeight(lh: number): void
+  setHeadingLetterSpacing(ls: number): void
+  setBodyLetterSpacing(ls: number): void
+  setHeadingExtraAxis(tag: string, value: number): void
+  setBodyExtraAxis(tag: string, value: number): void
   setFontSize(size: number): void
-  setLineHeight(lh: number): void
-  setLetterSpacing(ls: number): void
-  setExtraAxis(tag: string, value: number): void
   setScaleAlgorithm(algorithm: TypeScaleAlgorithm): void
   setModularRatio(ratio: ModularRatio): void
   setCustomText(text: string): void
@@ -30,15 +48,24 @@ export interface TypographyActions {
 }
 
 export const defaultTypographyState: TypographyState = {
-  fontFamily: 'Inter',
-  fontCategory: 'sans',
-  fontWeight: 400,
+  headingFamily: 'Fraunces',
+  headingCategory: 'serif',
+  headingWeight: 700,
+  headingLineHeight: 1.1,
+  headingLetterSpacing: -0.02,
+  headingExtraAxes: {},
+
+  bodyFamily: 'Inter',
+  bodyCategory: 'sans',
+  bodyWeight: 400,
+  bodyLineHeight: 1.6,
+  bodyLetterSpacing: 0,
+  bodyExtraAxes: {},
+
   fontSize: 16,
-  lineHeight: 1.6,
-  letterSpacing: 0,
-  extraAxes: {},
-  scaleAlgorithm: 'linear',
+  scaleAlgorithm: 'modular',
   modularRatio: 1.25,
+
   customText: 'The quick brown fox jumps over the lazy dog.',
   textColor: '#f0ede8',
   bgColor: '#141414',
@@ -51,18 +78,34 @@ export function createTypographyActions(
     set((s) => ({ typography: { ...s.typography, ...patch } }))
 
   return {
-    setFont: (family, category) => update({ fontFamily: family, fontCategory: category, extraAxes: {} }),
-    setFontWeight: (weight) => update({ fontWeight: weight }),
-    setFontSize: (size) => update({ fontSize: size }),
-    setLineHeight: (lh) => update({ lineHeight: lh }),
-    setLetterSpacing: (ls) => update({ letterSpacing: ls }),
-    setExtraAxis: (tag, value) =>
+    setHeadingFont: (family, category) =>
+      update({ headingFamily: family, headingCategory: category, headingExtraAxes: {} }),
+    setBodyFont: (family, category) =>
+      update({ bodyFamily: family, bodyCategory: category, bodyExtraAxes: {} }),
+
+    setHeadingWeight: (weight) => update({ headingWeight: weight }),
+    setBodyWeight: (weight) => update({ bodyWeight: weight }),
+    setHeadingLineHeight: (lh) => update({ headingLineHeight: lh }),
+    setBodyLineHeight: (lh) => update({ bodyLineHeight: lh }),
+    setHeadingLetterSpacing: (ls) => update({ headingLetterSpacing: ls }),
+    setBodyLetterSpacing: (ls) => update({ bodyLetterSpacing: ls }),
+
+    setHeadingExtraAxis: (tag, value) =>
       set((s) => ({
         typography: {
           ...s.typography,
-          extraAxes: { ...s.typography.extraAxes, [tag]: value },
+          headingExtraAxes: { ...s.typography.headingExtraAxes, [tag]: value },
         },
       })),
+    setBodyExtraAxis: (tag, value) =>
+      set((s) => ({
+        typography: {
+          ...s.typography,
+          bodyExtraAxes: { ...s.typography.bodyExtraAxes, [tag]: value },
+        },
+      })),
+
+    setFontSize: (size) => update({ fontSize: size }),
     setScaleAlgorithm: (algorithm) => update({ scaleAlgorithm: algorithm }),
     setModularRatio: (ratio) => update({ modularRatio: ratio }),
     setCustomText: (text) => update({ customText: text }),
