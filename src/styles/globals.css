@@ -76,6 +76,19 @@
   --text-2: #7a7570;
   --text-3: #aaa59e;
   --accent-bg: #fff8ec;
+  --accent-dim: #c08820;
+
+  /* Semantic app colors — lighter tints for light mode */
+  --app-red: #c83030;
+  --app-red-bg: #fdf0f0;
+  --app-green: #1a8c2a;
+  --app-green-bg: #f0fdf2;
+  --app-teal: #0e7a66;
+  --app-teal-bg: #f0fdfb;
+
+  /* Lighter shadows for light mode */
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* ── BASE ── */

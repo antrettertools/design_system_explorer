@@ -49,7 +49,7 @@
 }
 
 .tagVar { background: var(--accent-bg); color: var(--accent); }
-.tagSans { background: #151e15; color: var(--app-green); }
-.tagSerif { background: #1e1520; color: #c080e0; }
-.tagMono { background: #1a2020; color: var(--app-teal); }
-.tagSrc { background: #1a2030; color: #6090e0; }
+.tagSans { background: var(--app-green-bg); color: var(--app-green); }
+.tagSerif { background: var(--bg-3); color: var(--text-1); }
+.tagMono { background: var(--app-teal-bg); color: var(--app-teal); }
+.tagSrc { background: var(--bg-3); color: var(--text-2); }
