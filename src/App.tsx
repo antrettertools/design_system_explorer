@@ -23,6 +23,10 @@ import { ShadowPanel } from '@/features/shadows/ShadowPanel'
 import { ComponentsSidebar } from '@/features/components/ComponentsSidebar'
 import { ComponentsPanel } from '@/features/components/ComponentsPanel'
 
+// Showcase
+import { ShowcaseSidebar } from '@/features/showcase/ShowcaseSidebar'
+import { ShowcasePanel } from '@/features/showcase/ShowcasePanel'
+
 // Compare
 import { CompareSidebar } from '@/features/compare/CompareSidebar'
 import { ComparePanel } from '@/features/compare/ComparePanel'
@@ -59,6 +63,8 @@ function getTabContent(tab: TabId): { sidebar: React.ReactNode; panel: React.Rea
       return { sidebar: <ShadowSidebar />, panel: <ShadowPanel /> }
     case 'components':
       return { sidebar: <ComponentsSidebar />, panel: <ComponentsPanel /> }
+    case 'showcase':
+      return { sidebar: <ShowcaseSidebar />, panel: <ShowcasePanel /> }
     case 'compare':
       return { sidebar: <CompareSidebar />, panel: <ComparePanel /> }
     case 'export':

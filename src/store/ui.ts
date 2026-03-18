@@ -4,6 +4,7 @@ export type TabId =
   | 'color'
   | 'shadows'
   | 'components'
+  | 'showcase'
   | 'compare'
   | 'export'
 

@@ -10,6 +10,7 @@ const TABS: Array<{ id: TabId; label: string }> = [
   { id: 'color', label: 'Color' },
   { id: 'shadows', label: 'Shadows' },
   { id: 'components', label: 'Components' },
+  { id: 'showcase', label: 'Showcase' },
   { id: 'compare', label: 'Compare' },
   { id: 'export', label: 'Export' },
 ]
