@@ -63,5 +63,7 @@ function getTabContent(tab: TabId): { sidebar: React.ReactNode; panel: React.Rea
       return { sidebar: <CompareSidebar />, panel: <ComparePanel /> }
     case 'export':
       return { sidebar: <ExportSidebar />, panel: <ExportPanel /> }
+    default:
+      return { sidebar: <TypographySidebar />, panel: <TypographyPanel /> }
   }
 }

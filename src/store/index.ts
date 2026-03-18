@@ -102,6 +102,22 @@ export const useStore = create<AppStore>()(
           compare: state.compare,
           ui: { theme: state.ui.theme }, // persist theme only
         }),
+        // Deep-merge each slice so persisted partials don't clobber defaults.
+        // Without this, Zustand's shallow merge replaces `ui` with `{ theme }`,
+        // dropping `activeTab` and causing a runtime crash on destructure.
+        merge: (persisted, current) => {
+          const p = (persisted ?? {}) as Partial<AppStore>
+          return {
+            ...current,
+            typography: { ...current.typography, ...(p.typography ?? {}) },
+            color: { ...current.color, ...(p.color ?? {}) },
+            spacing: { ...current.spacing, ...(p.spacing ?? {}) },
+            shadow: { ...current.shadow, ...(p.shadow ?? {}) },
+            components: { ...current.components, ...(p.components ?? {}) },
+            compare: { ...current.compare, ...(p.compare ?? {}) },
+            ui: { ...current.ui, ...(p.ui ?? {}) },
+          }
+        },
       },
     ),
   ),
