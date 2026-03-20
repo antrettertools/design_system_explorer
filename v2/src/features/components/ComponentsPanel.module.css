@@ -1,0 +1,171 @@
+.panel {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sideNav {
+  width: 180px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border, #e2e8f0);
+  overflow-y: auto;
+  background: var(--color-surface-raised, #f8fafc);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.previewLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.previewArea {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 10px;
+  padding: 24px;
+  min-height: 80px;
+}
+
+.previewContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Demo component styles — use CSS vars so they reflect the live token values */
+.demoBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-md, 6px);
+  font-size: var(--text-sm, 14px);
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 120ms ease, opacity 120ms ease;
+  text-transform: capitalize;
+}
+
+.demoBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* button-primary */
+.button_primary {
+  background: var(--color-interactive, #2563eb);
+  color: var(--color-on-interactive, #fff);
+  border-color: transparent;
+}
+.button_primary:not(:disabled):hover {
+  background: var(--color-interactive-hover, #1d4ed8);
+}
+
+/* button-secondary */
+.button_secondary {
+  background: transparent;
+  color: var(--color-interactive, #2563eb);
+  border-color: var(--color-interactive, #2563eb);
+}
+.button_secondary:not(:disabled):hover {
+  background: var(--color-interactive-subtle, rgba(37,99,235,0.08));
+}
+
+/* button-ghost */
+.button_ghost {
+  background: transparent;
+  color: var(--color-on-surface, #1a1a1a);
+  border-color: transparent;
+}
+.button_ghost:not(:disabled):hover {
+  background: var(--color-interactive-subtle, rgba(0,0,0,0.06));
+  color: var(--color-interactive, #2563eb);
+}
+
+/* button-danger */
+.button_danger {
+  background: var(--color-error, #ef4444);
+  color: var(--color-on-error, #fff);
+  border-color: transparent;
+}
+.button_danger:not(:disabled):hover {
+  background: var(--color-error-container, #fee2e2);
+  color: var(--color-on-error-container, #991b1b);
+}
+
+/* input */
+.demoInput {
+  padding: var(--space-2, 8px) var(--space-4, 16px);
+  border-radius: var(--radius-base, 6px);
+  border: 1px solid var(--color-border, #e2e8f0);
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #1a1a1a);
+  font-size: 14px;
+  min-width: 200px;
+}
+.demoInput:focus {
+  outline: 2px solid var(--color-interactive, #2563eb);
+  outline-offset: -1px;
+  border-color: var(--color-interactive, #2563eb);
+}
+
+/* card */
+.demoCard {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
+  padding: var(--space-6, 24px);
+  font-size: 14px;
+  color: var(--color-on-surface, #1a1a1a);
+}
+
+/* badges */
+.demoBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.badge_success { background: var(--color-success-container, #dcfce7); color: var(--color-on-success-container, #166534); }
+.badge_warning { background: var(--color-warning-container, #fef9c3); color: var(--color-on-warning-container, #854d0e); }
+.badge_error   { background: var(--color-error-container, #fee2e2);   color: var(--color-on-error-container, #991b1b); }
+.badge_info    { background: var(--color-info-container, #dbeafe);    color: var(--color-on-info-container, #1e40af); }
+.badge_neutral { background: var(--color-surface-overlay, #f1f5f9);   color: var(--color-on-surface, #1a1a1a); border: 1px solid var(--color-border, #e2e8f0); }
+
+.previewPlaceholder {
+  font-size: 13px;
+  color: var(--color-on-surface-subtle, #888);
+  font-style: italic;
+  text-transform: capitalize;
+}
