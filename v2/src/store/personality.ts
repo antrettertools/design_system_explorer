@@ -1,9 +1,10 @@
 import { generateCycleSequence } from '@/core/color/candidates'
+import type { ColorCandidate } from '@/core/color/candidates'
 import type { ArchetypeId } from '@/core/personality/types'
 
 export interface PersonalityState {
   archetype: ArchetypeId | null
-  candidates: Array<{ hex: string; locked: boolean }>
+  candidates: ColorCandidate[]
   locked: (string | null)[]   // hex per slot, null if unlocked
   step: 1 | 2 | 3
   cycleSequence: number[]
@@ -12,7 +13,7 @@ export interface PersonalityState {
 
 export interface PersonalityActions {
   setArchetype(id: ArchetypeId): void
-  setCandidates(candidates: PersonalityState['candidates']): void
+  setCandidates(candidates: ColorCandidate[]): void
   lockColor(index: number, hex: string): void
   unlockColor(index: number): void
   addCard(): void
