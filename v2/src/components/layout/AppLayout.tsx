@@ -12,6 +12,9 @@ import { SpacingPanel } from '@/features/spacing/SpacingPanel'
 import { SpacingSidebar } from '@/features/spacing/SpacingSidebar'
 import { ShadowPanel } from '@/features/shadows/ShadowPanel'
 import { ShadowSidebar } from '@/features/shadows/ShadowSidebar'
+import { ComponentsPanel } from '@/features/components/ComponentsPanel'
+import { ExportPanel } from '@/features/export/ExportPanel'
+import { ExportSidebar } from '@/features/export/ExportSidebar'
 import { useUI, useUIActions } from '@/store'
 import type { TabId } from '@/store/ui'
 
@@ -78,8 +81,11 @@ export function AppLayout() {
           {activeTab === 'spacing' && <SpacingSidebar />}
           {activeTab === 'shadows' && <ShadowSidebar />}
           {activeTab === 'showcase' && <ShowcaseSidebar />}
-          {activeTab !== 'color' && activeTab !== 'typography' && activeTab !== 'spacing' && activeTab !== 'shadows' && activeTab !== 'showcase' && (
-            <div className={styles.placeholder}>Sidebar — {activeTab}</div>
+          {activeTab === 'export' && <ExportSidebar />}
+          {activeTab === 'components' && (
+            <div className={styles.placeholder} style={{ padding: '12px', fontSize: '12px', color: 'var(--color-on-surface-subtle)' }}>
+              Select a component from the panel
+            </div>
           )}
         </aside>
         <div className={styles.resizeHandle} onMouseDown={handleResizeStart} />
@@ -89,9 +95,8 @@ export function AppLayout() {
           {activeTab === 'spacing' && <SpacingPanel />}
           {activeTab === 'shadows' && <ShadowPanel />}
           {activeTab === 'showcase' && <ShowcasePanel />}
-          {activeTab !== 'color' && activeTab !== 'typography' && activeTab !== 'spacing' && activeTab !== 'shadows' && activeTab !== 'showcase' && (
-            <div className={styles.placeholder}>Panel — {activeTab}</div>
-          )}
+          {activeTab === 'components' && <ComponentsPanel />}
+          {activeTab === 'export' && <ExportPanel />}
         </main>
       </div>
     </div>
