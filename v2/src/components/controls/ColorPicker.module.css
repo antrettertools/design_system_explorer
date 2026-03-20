@@ -1,0 +1,66 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  border: 2px solid var(--chrome-border);
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: border-color 0.12s ease;
+  overflow: hidden;
+}
+
+.swatch:hover {
+  border-color: var(--chrome-accent);
+}
+
+.fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hexInput {
+  width: 100%;
+  background: var(--chrome-surface);
+  border: 1px solid var(--chrome-border);
+  border-radius: var(--chrome-radius);
+  color: var(--chrome-text);
+  font-family: var(--chrome-font-mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color 0.12s ease;
+  text-transform: uppercase;
+}
+
+.hexInput:focus {
+  border-color: var(--chrome-accent);
+}
+
+.meta {
+  font-size: 10px;
+  color: var(--chrome-text-subtle);
+  font-family: var(--chrome-font-mono);
+}
+
+/* ColorSwatch inline */
+.swatchInline {
+  width: var(--swatch-size, 28px);
+  height: var(--swatch-size, 28px);
+  border-radius: 4px;
+  background: var(--swatch-color, #888);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.swatchInline[data-clickable='true'] {
+  cursor: pointer;
+}

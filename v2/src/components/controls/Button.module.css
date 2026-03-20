@@ -1,0 +1,34 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: var(--chrome-radius);
+  font-family: var(--chrome-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+
+/* Sizes */
+.sm { padding: 4px 10px; font-size: 10px; }
+.md { padding: 7px 14px; font-size: 11px; }
+.lg { padding: 10px 20px; font-size: 13px; }
+
+/* Variants */
+.primary { background: var(--chrome-accent); color: var(--chrome-bg); }
+.primary:hover { background: #f0b840; }
+
+.secondary { background: var(--chrome-surface-raised); color: var(--chrome-text); border: 1px solid var(--chrome-border); }
+.secondary:hover { background: #2e2e2e; color: var(--chrome-text); }
+
+.ghost { background: none; color: var(--chrome-text-subtle); }
+.ghost:hover { color: var(--chrome-text); background: var(--chrome-surface); }
+
+.danger { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.12); }
+.danger:hover { border-color: #ef4444; }
+
+.full { width: 100%; justify-content: center; }
