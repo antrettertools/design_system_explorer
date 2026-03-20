@@ -1,5 +1,4 @@
 import { useColor, useColorActions } from '@/store'
-import { HARMONY_MODELS } from '@/core/color/types'
 import type { HarmonyModel, NeutralTint } from '@/core/color/types'
 import { getHarmonyColors } from '@/core/color/harmony'
 import { ColorPicker } from '@/components/controls/ColorPicker'
