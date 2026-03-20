@@ -61,7 +61,7 @@ export function ColorDiscovery() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} aria-label="Color discovery — press Space to cycle colors">
       <div className={styles.heading}>
         <h1 className={styles.title}>Find your colors</h1>
         <p className={styles.subtitle}>
