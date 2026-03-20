@@ -29,3 +29,9 @@ html, body, #root {
   outline: 2px solid var(--chrome-accent);
   outline-offset: 2px;
 }
+
+/* Scrollbar (webkit) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--chrome-bg); }
+::-webkit-scrollbar-thumb { background: var(--chrome-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--chrome-text-subtle); }
