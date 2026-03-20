@@ -3,6 +3,27 @@ import { useSemanticOverridesActions, useSemanticOverrides } from '@/store'
 import type { SemanticRoleId } from '@/core/tokens/types'
 import styles from './SemanticRolesPanel.module.css'
 
+const ROLE_DESCRIPTIONS: Partial<Record<SemanticRoleId, string>> = {
+  'interactive': 'Primary action color. Derived from primary OKLCH with L clamped to [0.42, 0.65] for UI viability.',
+  'on-interactive': 'Text on interactive backgrounds. High contrast against --interactive.',
+  'interactive-container': 'Muted tinted container for interactive areas. Lower chroma than interactive.',
+  'on-interactive-container': 'Text inside interactive containers.',
+  'interactive-subtle': 'Very light tint for hover states and backgrounds. Low chroma.',
+  'interactive-hover': 'Slightly darker than interactive for hover feedback.',
+  'accent': 'Secondary accent color derived from harmony model.',
+  'background': 'Main page background. Near-white in light, near-black in dark.',
+  'surface': 'Card/panel surface. Slightly different from background.',
+  'surface-raised': 'Elevated surfaces like modals and dropdowns.',
+  'on-surface': 'Primary text on surfaces.',
+  'on-surface-subtle': 'Secondary text, labels, placeholders.',
+  'border': 'Default border color.',
+  'scrim': 'Semi-transparent overlay for modals.',
+  'error': 'Error state — derived from hue ~25° (red range), WCAG AA compliant.',
+  'warning': 'Warning state — derived from hue ~85° (yellow-green range).',
+  'success': 'Success state — derived from hue ~140° (green range).',
+  'info': 'Info state — derived from hue ~220° (blue range).',
+}
+
 const ROLE_GROUPS: Array<{ label: string; roles: SemanticRoleId[] }> = [
   {
     label: 'Interactive',
@@ -67,7 +88,7 @@ export function SemanticRolesPanel() {
                       title={`Dark: ${val.dark}`}
                     />
                   </div>
-                  <div className={styles.roleName}>{roleId}</div>
+                  <div className={styles.roleName} title={ROLE_DESCRIPTIONS[roleId] ?? roleId}>{roleId}</div>
                   <div className={styles.roleMeta}>
                     {(isOverriddenLight || isOverriddenDark) ? (
                       <>
