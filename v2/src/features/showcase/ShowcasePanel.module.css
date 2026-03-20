@@ -1,0 +1,51 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.templateBar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--chrome-border);
+  background: var(--chrome-surface);
+  flex-shrink: 0;
+}
+
+.templateBtn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--chrome-radius);
+  color: var(--chrome-text-subtle);
+  cursor: pointer;
+  font-family: var(--chrome-font-ui);
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.templateBtn:hover { color: var(--chrome-text); }
+
+.templateBtnActive {
+  border-color: var(--chrome-accent);
+  color: var(--chrome-text);
+  background: var(--chrome-surface-raised);
+}
+
+.spacer { flex: 1; }
+
+.themeLabel {
+  font-size: 0.7rem;
+  color: var(--chrome-text-subtle);
+}
+
+.templateContainer {
+  flex: 1;
+  overflow-y: auto;
+  font-family: var(--font-body, sans-serif);
+}
+
+.dark { background: var(--color-background); color: var(--color-on-background); }
+.light { background: var(--color-background); color: var(--color-on-background); }
