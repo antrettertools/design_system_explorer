@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react'
 import styles from './AppLayout.module.css'
 import { AppHeader } from './AppHeader'
+import { QuickModeLayout } from '@/features/quick/QuickModeLayout'
 import { useUI, useUIActions } from '@/store'
 import type { TabId } from '@/store/ui'
 
@@ -23,8 +24,7 @@ export function AppLayout() {
       <div className={styles.quickLayout}>
         <AppHeader />
         <div className={styles.quickContent}>
-          {/* QuickModeLayout renders here — wired in Task 14 */}
-          <div className={styles.placeholder}>Quick Mode</div>
+          <QuickModeLayout />
         </div>
       </div>
     )
