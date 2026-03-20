@@ -1,12 +1,9 @@
 import { useEffect } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
-import { useTemporalStore, useStore } from '@/store'
+import { useStore, temporalUndo, temporalRedo } from '@/store'
 import { decodeShare } from '@/utils/share'
 
 export function App() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const temporal = (useTemporalStore as (sel: (s: any) => any) => any)(s => s)
-
   useEffect(() => {
     // Restore from URL hash
     const hash = window.location.hash
@@ -30,15 +27,15 @@ export function App() {
       const mod = e.metaKey || e.ctrlKey
       if (mod && !e.shiftKey && e.key === 'z') {
         e.preventDefault()
-        temporal.undo()
+        temporalUndo()
       } else if (mod && e.shiftKey && e.key === 'z') {
         e.preventDefault()
-        temporal.redo()
+        temporalRedo()
       }
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [temporal])
+  }, [])
 
   return <AppLayout />
 }

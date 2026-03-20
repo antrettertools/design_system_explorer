@@ -1,12 +1,10 @@
 import styles from './AppHeader.module.css'
-import { useUI, useUIActions, useTemporalStore, useStore } from '@/store'
+import { useUI, useUIActions, useStore, temporalUndo, temporalRedo } from '@/store'
 import { encodeShare } from '@/utils/share'
 
 export function AppHeader() {
   const { mode, theme } = useUI()
   const { setMode, setTheme, showToast } = useUIActions()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const temporal = (useTemporalStore as (sel: (s: any) => any) => any)(s => s)
 
   const handleShare = async () => {
     const state = useStore.getState()
@@ -36,15 +34,13 @@ export function AppHeader() {
         <div className={styles.undoRedo}>
           <button
             className={styles.iconBtn}
-            onClick={() => temporal.undo()}
-            disabled={temporal.pastStates.length === 0}
+            onClick={temporalUndo}
             aria-label="Undo"
             title="Undo (Cmd+Z)"
           >↩</button>
           <button
             className={styles.iconBtn}
-            onClick={() => temporal.redo()}
-            disabled={temporal.futureStates.length === 0}
+            onClick={temporalRedo}
             aria-label="Redo"
             title="Redo (Cmd+Shift+Z)"
           >↪</button>

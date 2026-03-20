@@ -125,7 +125,11 @@ export const useStore = create<AppStore>()(
 )
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useTemporalStore = (useStore as any).temporal
+const _temporal = (useStore as any).temporal as { getState: () => { undo: () => void; redo: () => void; pastStates: unknown[]; futureStates: unknown[] } } | undefined
+
+export const temporalUndo = () => _temporal?.getState().undo()
+export const temporalRedo = () => _temporal?.getState().redo()
+export const getTemporalState = () => _temporal?.getState()
 
 // Convenience selectors
 export const usePersonality = () => useStore(s => s.personality)
