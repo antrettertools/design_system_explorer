@@ -4,6 +4,14 @@ import { AppHeader } from './AppHeader'
 import { QuickModeLayout } from '@/features/quick/QuickModeLayout'
 import { ShowcasePanel } from '@/features/showcase/ShowcasePanel'
 import { ShowcaseSidebar } from '@/features/showcase/ShowcaseSidebar'
+import { ColorPanel } from '@/features/color/ColorPanel'
+import { ColorSidebar } from '@/features/color/ColorSidebar'
+import { TypographyPanel } from '@/features/typography/TypographyPanel'
+import { TypographySidebar } from '@/features/typography/TypographySidebar'
+import { SpacingPanel } from '@/features/spacing/SpacingPanel'
+import { SpacingSidebar } from '@/features/spacing/SpacingSidebar'
+import { ShadowPanel } from '@/features/shadows/ShadowPanel'
+import { ShadowSidebar } from '@/features/shadows/ShadowSidebar'
 import { useUI, useUIActions } from '@/store'
 import type { TabId } from '@/store/ui'
 
@@ -65,19 +73,23 @@ export function AppLayout() {
       </div>
       <div className={styles.body}>
         <aside className={styles.sidebar} style={{ width: sidebarWidth }}>
-          {activeTab === 'showcase' ? (
-            <ShowcaseSidebar />
-          ) : (
-            /* Sidebar content wired per-tab in later tasks */
+          {activeTab === 'color' && <ColorSidebar />}
+          {activeTab === 'typography' && <TypographySidebar />}
+          {activeTab === 'spacing' && <SpacingSidebar />}
+          {activeTab === 'shadows' && <ShadowSidebar />}
+          {activeTab === 'showcase' && <ShowcaseSidebar />}
+          {activeTab !== 'color' && activeTab !== 'typography' && activeTab !== 'spacing' && activeTab !== 'shadows' && activeTab !== 'showcase' && (
             <div className={styles.placeholder}>Sidebar — {activeTab}</div>
           )}
         </aside>
         <div className={styles.resizeHandle} onMouseDown={handleResizeStart} />
         <main className={styles.preview}>
-          {activeTab === 'showcase' ? (
-            <ShowcasePanel />
-          ) : (
-            /* Panel content wired per-tab in later tasks */
+          {activeTab === 'color' && <ColorPanel />}
+          {activeTab === 'typography' && <TypographyPanel />}
+          {activeTab === 'spacing' && <SpacingPanel />}
+          {activeTab === 'shadows' && <ShadowPanel />}
+          {activeTab === 'showcase' && <ShowcasePanel />}
+          {activeTab !== 'color' && activeTab !== 'typography' && activeTab !== 'spacing' && activeTab !== 'shadows' && activeTab !== 'showcase' && (
             <div className={styles.placeholder}>Panel — {activeTab}</div>
           )}
         </main>
