@@ -2,6 +2,8 @@ import type { MouseEvent } from 'react'
 import styles from './AppLayout.module.css'
 import { AppHeader } from './AppHeader'
 import { QuickModeLayout } from '@/features/quick/QuickModeLayout'
+import { ShowcasePanel } from '@/features/showcase/ShowcasePanel'
+import { ShowcaseSidebar } from '@/features/showcase/ShowcaseSidebar'
 import { useUI, useUIActions } from '@/store'
 import type { TabId } from '@/store/ui'
 
@@ -63,13 +65,21 @@ export function AppLayout() {
       </div>
       <div className={styles.body}>
         <aside className={styles.sidebar} style={{ width: sidebarWidth }}>
-          {/* Sidebar content wired per-tab in later tasks */}
-          <div className={styles.placeholder}>Sidebar — {activeTab}</div>
+          {activeTab === 'showcase' ? (
+            <ShowcaseSidebar />
+          ) : (
+            /* Sidebar content wired per-tab in later tasks */
+            <div className={styles.placeholder}>Sidebar — {activeTab}</div>
+          )}
         </aside>
         <div className={styles.resizeHandle} onMouseDown={handleResizeStart} />
         <main className={styles.preview}>
-          {/* Panel content wired per-tab in later tasks */}
-          <div className={styles.placeholder}>Panel — {activeTab}</div>
+          {activeTab === 'showcase' ? (
+            <ShowcasePanel />
+          ) : (
+            /* Panel content wired per-tab in later tasks */
+            <div className={styles.placeholder}>Panel — {activeTab}</div>
+          )}
         </main>
       </div>
     </div>
