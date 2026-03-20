@@ -1,0 +1,20 @@
+.card {
+  background: var(--chrome-surface);
+  border: 1px solid var(--chrome-border);
+  border-radius: var(--chrome-radius);
+  overflow: hidden;
+}
+
+.title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--chrome-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--chrome-border);
+}
+
+.content {
+  padding: 1rem;
+}
