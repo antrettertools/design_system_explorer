@@ -37,29 +37,73 @@
   cursor: default;
 }
 
-.tokenGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+.previewLabel {
+  font-size: 13px;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: sans-serif;
+}
+
+.controlsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   width: 100%;
 }
 
-.tokenCard {
-  text-align: center;
+.controlRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.tokenLabel {
-  font-size: 8px;
+.controlLabel {
+  font-size: 13px;
+  font-family: monospace;
   color: var(--color-on-surface-subtle, #aaa);
-  font-family: sans-serif;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 3px;
+  min-width: 160px;
+  flex-shrink: 0;
 }
 
-.tokenValue {
-  font-size: 11px;
+.colorField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.colorSwatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid var(--color-border, #e0dbd5);
+  transition: filter 0.15s;
+  flex-shrink: 0;
+}
+
+.colorSwatch:hover { filter: brightness(0.88); }
+
+.colorValue {
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface, #333);
-  font-weight: 600;
+}
+
+.sliderField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.slider {
+  flex: 1;
+  accent-color: var(--color-interactive, #e8543a);
+}
+
+.sliderValue {
+  font-size: 13px;
+  font-family: monospace;
+  color: var(--color-on-surface, #333);
+  min-width: 36px;
+  text-align: right;
 }
