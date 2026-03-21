@@ -1,0 +1,4 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+body { font-family: sans-serif; background: var(--color-background, #f8f7f4); color: var(--color-on-surface, #111); }
