@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useComponents, useComponentsActions, useStore } from '@/store'
 import { deriveComponentTokens } from '@/core/components/tokens'
 import type { ComponentName } from '@/core/components/types'
+import { ComponentPreview } from './ComponentPreview'
 import styles from './ComponentTokenSection.module.css'
 
 const COMPONENT_ORDER: ComponentName[] = ['button', 'input', 'card', 'badge', 'tag', 'tooltip', 'alert']
@@ -104,42 +105,10 @@ export function ComponentTokenSection() {
                     })}
                   </div>
 
-                  {/* Live button preview */}
-                  {comp === 'button' && (
-                    <div className={styles.componentPreview}>
-                      <span className={styles.previewLabel}>Preview:</span>
-                      <button
-                        style={{
-                          background: 'var(--component-button-bg)',
-                          color: 'var(--component-button-text)',
-                          border: '1px solid var(--component-button-border)',
-                          borderRadius: 'var(--component-button-radius)',
-                          boxShadow: 'var(--component-button-shadow)',
-                          padding: '8px 16px',
-                          fontSize: 'var(--font-size-body)',
-                          fontFamily: 'var(--font-body)',
-                          cursor: 'default',
-                        }}
-                      >
-                        Button
-                      </button>
-                      <button
-                        style={{
-                          background: 'var(--component-button-bg-hover)',
-                          color: 'var(--component-button-text)',
-                          border: '1px solid var(--component-button-border)',
-                          borderRadius: 'var(--component-button-radius)',
-                          boxShadow: 'var(--component-button-shadow)',
-                          padding: '8px 16px',
-                          fontSize: 'var(--font-size-body)',
-                          fontFamily: 'var(--font-body)',
-                          cursor: 'default',
-                        }}
-                      >
-                        Hover
-                      </button>
-                    </div>
-                  )}
+                  <div className={styles.previewWrapper}>
+                    <span className={styles.previewLabel}>Preview</span>
+                    <ComponentPreview componentName={comp} />
+                  </div>
                 </div>
               )}
             </div>
