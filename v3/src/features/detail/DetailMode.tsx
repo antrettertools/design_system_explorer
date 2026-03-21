@@ -3,6 +3,8 @@ import { useUI, useUIActions } from '@/store'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
+import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
+import { ExportTab } from './tabs/ExportTab/ExportTab'
 
 const PHASE_1_TABS: { id: DetailTab; label: string }[] = [
   { id: 'colors', label: 'Colors' },
@@ -14,7 +16,7 @@ const PHASE_1_TABS: { id: DetailTab; label: string }[] = [
   { id: 'export', label: 'Export' },
 ]
 
-const PHASE_1_IMPLEMENTED: DetailTab[] = ['colors', 'typography']
+const PHASE_1_IMPLEMENTED: DetailTab[] = ['colors', 'typography', 'showcase', 'export']
 
 export function DetailMode() {
   const { activeTab } = useUI()
@@ -24,6 +26,8 @@ export function DetailMode() {
     switch (activeTab) {
       case 'colors': return <ColorsTab />
       case 'typography': return <TypographyTab />
+      case 'showcase': return <ShowcaseTab />
+      case 'export': return <ExportTab />
       default:
         return (
           <div className={styles.comingSoon}>

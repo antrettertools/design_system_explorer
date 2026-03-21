@@ -1,0 +1,85 @@
+.panel { display: flex; flex-direction: column; gap: 20px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 10px;
+  font-family: sans-serif;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.templateBtn {
+  padding: 12px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 8px;
+  background: var(--color-surface, #fff);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: sans-serif;
+}
+
+.templateBtn:hover {
+  border-color: var(--color-interactive, #e8543a);
+}
+
+.templateBtn.active {
+  border-color: var(--color-interactive, #e8543a);
+  background: var(--color-interactive-subtle, #fde8e3);
+}
+
+.templateName {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-on-surface, #333);
+  display: block;
+}
+
+.templateDesc {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #888);
+  margin-top: 2px;
+  display: block;
+}
+
+.actions { display: flex; flex-direction: column; gap: 8px; }
+
+.actionBtn {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+
+.actionBtn:hover { border-color: var(--color-interactive, #e8543a); }
+
+.actionBtnPrimary {
+  background: var(--color-interactive, #e8543a);
+  color: var(--color-on-interactive, #fff);
+  border-color: transparent;
+}
+
+.actionBtnPrimary:hover { opacity: 0.85; }
+
+.copied {
+  color: #15803d;
+  font-size: 10px;
+  font-family: sans-serif;
+  margin-top: 4px;
+}
