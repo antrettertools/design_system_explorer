@@ -197,7 +197,7 @@ Dark mode values are computed from the same shade scales simultaneously with lig
 |---|---|---|
 | background | 50 | 950 |
 | surface | 100 | 900 |
-| surface-raised | 50 (white) | 850 |
+| surface-raised | 50 (white) | 800 |
 | on-surface | 900 | 100 |
 | on-surface-subtle | 600 | 400 |
 | border | 200 | 800 |
@@ -298,7 +298,7 @@ Full access to entire Google Fonts + Fontshare + Bunny catalog:
 - Pick heading + body independently
 - **Quick picks** at top of browser: the 60 curated pairings shown as a scrollable row. Clicking one applies both heading and body instantly. Quick picks supplement (not replace) the spacebar cycling — cycling in detail mode is not available, but the user can click any Quick pick or browse freely.
 
-### 9.5 Typography showcase (System view)
+### 9.6 Typography showcase (System view)
 
 The typography section of the System view must be visually exceptional:
 - Full type specimen in each scale step
