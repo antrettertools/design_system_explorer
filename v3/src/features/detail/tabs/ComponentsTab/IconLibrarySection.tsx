@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import * as LucideIcons from 'lucide-react'
+import {
+  Home, Search, Settings, User, Heart, Star,
+  Bell, Mail, Calendar, Clock, Camera, Image,
+  File, Folder, Trash2, Pencil, Plus, Minus,
+  Check, X, ArrowRight, ArrowLeft, ChevronDown, Menu,
+} from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
 import { useComponents, useComponentsActions, useStore } from '@/store'
 import { ICON_LIBRARIES, deriveIconSizeMap } from '@/core/components/icons'
 import styles from './IconLibrarySection.module.css'
@@ -14,10 +20,37 @@ const SIZE_OPTIONS = [
   { label: 'XL', value: 32 },
 ]
 
-function getLucideIcon(slug: string): React.ComponentType<{ size?: number; strokeWidth?: number }> | null {
-  const name = slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('')
-  const icon = (LucideIcons as Record<string, unknown>)[name]
-  return typeof icon === 'function' ? icon as React.ComponentType<{ size?: number; strokeWidth?: number }> : null
+type LucideIconComponent = React.ComponentType<LucideProps>
+
+const LUCIDE_ICON_MAP: Record<string, LucideIconComponent> = {
+  home: Home,
+  search: Search,
+  settings: Settings,
+  user: User,
+  heart: Heart,
+  star: Star,
+  bell: Bell,
+  mail: Mail,
+  calendar: Calendar,
+  clock: Clock,
+  camera: Camera,
+  image: Image,
+  file: File,
+  folder: Folder,
+  trash: Trash2,
+  edit: Pencil,
+  plus: Plus,
+  minus: Minus,
+  check: Check,
+  x: X,
+  'arrow-right': ArrowRight,
+  'arrow-left': ArrowLeft,
+  'chevron-down': ChevronDown,
+  menu: Menu,
+}
+
+function getLucideIcon(slug: string): LucideIconComponent | null {
+  return LUCIDE_ICON_MAP[slug] ?? null
 }
 
 export function IconLibrarySection() {
