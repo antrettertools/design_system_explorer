@@ -32,6 +32,15 @@ export interface AppStore {
   componentsActions: ComponentsActions
 }
 
+// Module-level cache — updated by the subscription, never triggers re-renders directly
+let _cachedTokenMap: { light: Record<string, string>; dark: Record<string, string> } = {
+  light: {},
+  dark: {},
+}
+
+// Export for testing
+export { _cachedTokenMap }
+
 export const useStore = create<AppStore>()(
   subscribeWithSelector(
     temporal(
@@ -93,6 +102,7 @@ useStore.subscribe(
   ({ slots, pairing, scale, dataVizN, spacing, effects, componentOverrides, theme }) => {
     if (slots.length === 0) return
     const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides }, theme)
+    _cachedTokenMap = tokens
     injectTokensToDOM(tokens, theme)
   },
   { equalityFn: (a, b) => JSON.stringify(a) === JSON.stringify(b) },
@@ -105,6 +115,16 @@ useStore.subscribe(
     if (brandHex) useStore.getState().effectsActions.rebuildFromBrand(brandHex)
   },
 )
+
+// Selector that returns the cached token map, re-renders when palette/pairing changes
+export function useColorTokens(): { light: Record<string, string>; dark: Record<string, string> } {
+  return useStore(state => {
+    // Read state.color.slots and state.typography.pairing to establish subscription
+    void state.color.slots
+    void state.typography.pairing
+    return _cachedTokenMap
+  })
+}
 
 // Undo/redo helpers
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
