@@ -1,0 +1,317 @@
+/* System view — beautiful design system document */
+.doc {
+  font-family: var(--font-body, sans-serif);
+  background: var(--color-background, #f8f7f4);
+  color: var(--color-on-surface, #111);
+  padding: 32px 40px;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header { margin-bottom: 40px; }
+
+.systemLabel {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #bbb);
+  margin-bottom: 6px;
+  font-family: sans-serif;
+}
+
+.wordmark {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  color: var(--color-on-surface, #111);
+}
+
+.systemMeta {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-top: 4px;
+  font-family: sans-serif;
+}
+
+/* Section headers */
+.sectionLabel {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #bbb);
+  margin-bottom: 16px;
+  font-family: sans-serif;
+}
+
+/* Dividers between sections */
+.section {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+}
+
+.section:last-child { border-bottom: none; }
+
+/* COLOR SECTION */
+.brandScaleRow {
+  margin-bottom: 18px;
+}
+
+.colorRowHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.colorRoleName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-on-surface, #333);
+  font-family: sans-serif;
+}
+
+.colorMeta {
+  font-size: 9px;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: monospace;
+}
+
+.brandScale {
+  display: flex;
+  gap: 3px;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 44px;
+}
+
+.brandScaleCell {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 4px;
+}
+
+.brandScaleStep {
+  font-size: 7px;
+  color: rgba(255,255,255,0.5);
+  font-family: monospace;
+}
+
+.brandScaleStepDark {
+  color: rgba(0,0,0,0.3);
+}
+
+/* Secondary/accent compact scales */
+.compactScaleRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.compactScaleBlock { flex: 1; }
+
+.compactScaleLabel {
+  font-size: 9px;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 4px;
+  font-family: sans-serif;
+}
+
+.compactScale {
+  display: flex;
+  gap: 2px;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 20px;
+}
+
+.compactScaleCell { flex: 1; }
+
+/* Semantic roles swatches */
+.semanticGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.semanticSwatch {
+  border-radius: 5px;
+  height: 32px;
+  border: 1px solid rgba(0,0,0,0.06);
+  margin-bottom: 3px;
+}
+
+.semanticLabel {
+  font-size: 7px;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: sans-serif;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* State colors */
+.stateRow {
+  display: flex;
+  gap: 8px;
+}
+
+.stateCard {
+  flex: 1;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.statePair {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.stateSwatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.stateLabel {
+  font-size: 8px;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: sans-serif;
+}
+
+/* TYPOGRAPHY SECTION */
+.fontSpecimen { margin-bottom: 16px; }
+
+.fontHeadingName {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.displaySpec {
+  font-family: var(--font-heading, Georgia, serif);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--color-on-surface, #111);
+  margin-bottom: 0;
+  border-left: 4px solid var(--color-interactive, #e8543a);
+  padding-left: 14px;
+  font-size: clamp(28px, 6vw, var(--font-size-display, 62px));
+}
+
+.h1Spec {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(20px, 4vw, var(--font-size-h1, 44px));
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-on-surface, #111);
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.h2Spec {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(16px, 3vw, var(--font-size-h2, 31px));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-on-surface, #222);
+  line-height: 1.15;
+  margin-bottom: 2px;
+}
+
+.h3Spec {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(14px, 2vw, var(--font-size-h3, 22px));
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-on-surface, #333);
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.bodySpec {
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-on-surface-subtle, #555);
+  max-width: 480px;
+  margin-bottom: 14px;
+}
+
+.charsetBlock {
+  background: var(--color-surface, #fff);
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border, #e8e4df);
+  margin-bottom: 12px;
+}
+
+.charsetLabel {
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #bbb);
+  margin-bottom: 8px;
+  font-family: sans-serif;
+}
+
+.charset {
+  font-size: 14px;
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+  color: var(--color-on-surface, #333);
+  word-break: break-all;
+}
+
+.charsetMuted { color: var(--color-on-surface-subtle, #bbb); }
+
+.weightRow {
+  margin-top: 8px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--color-on-surface, #333);
+}
+
+/* DATA VIZ SECTION */
+.dataVizPalette {
+  display: flex;
+  gap: 5px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.dataVizCell { flex: 1; border-radius: 0; }
+
+.miniChart {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 64px;
+}
+
+.miniBar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+}
