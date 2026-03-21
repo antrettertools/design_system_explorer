@@ -3,7 +3,7 @@ import { useColorActions, useTypographyActions, useUIActions, temporalUndo, temp
 import { AppHeader } from './components/AppShell/AppHeader'
 import { SplitPane } from './components/SplitPane/SplitPane'
 import { GeneratorPanel } from './features/generator/GeneratorPanel'
-import { LivePreviewStub } from './features/preview/LivePreviewStub'
+import { LivePreview } from './features/preview/LivePreview'
 import appStyles from './App.module.css'
 
 export default function App() {
@@ -12,8 +12,15 @@ export default function App() {
   const { openExportPanel } = useUIActions()
 
   useEffect(() => {
+    document.documentElement.classList.add('no-transitions')
     colorActions.generate()
     typographyActions.generate()
+    // Re-enable transitions after paint to avoid flash on load
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('no-transitions')
+      })
+    })
   }, [])
 
   useEffect(() => {
@@ -54,7 +61,7 @@ export default function App() {
       <div className={appStyles.body}>
         <SplitPane
           left={<GeneratorPanel />}
-          right={<LivePreviewStub />}
+          right={<LivePreview />}
         />
       </div>
     </div>

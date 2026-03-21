@@ -10,3 +10,11 @@ body { font-family: sans-serif; background: var(--color-background, #f8f7f4); co
 }
 
 button:focus:not(:focus-visible) { outline: none; }
+
+/* Smooth dark mode transitions */
+*, *::before, *::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+/* Disable transitions during initial load to avoid flash */
+.no-transitions * { transition: none !important; }
