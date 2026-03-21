@@ -29,50 +29,97 @@
 }
 
 .tokenName {
-  width: 140px;
+  width: 160px;
   flex-shrink: 0;
   color: var(--color-on-surface-subtle, #888);
 }
 
-.tokenValue { flex: 1; }
-
-/* Easing curve visualizer — simple CSS animation demo */
-.easingDemo {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+.tokenValue {
+  flex: 1;
+  font-size: 13px;
 }
 
-.easingCard {
-  border: 1px solid var(--color-border, #e8e4df);
+/* Easing rows with animation demo */
+.easingList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.easingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
   border-radius: 6px;
-  padding: 10px;
+  border: 1px solid var(--color-border, #e8e4df);
   background: var(--color-surface, #fff);
-  min-width: 100px;
   cursor: default;
   transition: border-color 0.15s;
 }
 
-.easingCard:hover { border-color: var(--color-interactive, #e8543a); }
+.easingRow:hover { border-color: var(--color-interactive, #e8543a); }
 
 .easingName {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
-  margin-bottom: 4px;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.easingDemo {
+  width: 16px;
+  height: 16px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.easingDemoActive {
+  transform: translateX(40px);
 }
 
 .easingValue {
-  font-size: 8px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle, #aaa);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Duration row */
+.durationField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 .durationBar {
   height: 6px;
   background: var(--color-interactive, #e8543a);
   border-radius: 3px;
-  margin-bottom: 4px;
+  transition: width 0.15s;
+}
+
+.durationInput {
+  width: 64px;
+  font-size: 13px;
+  font-family: monospace;
+  padding: 3px 6px;
+  background: var(--color-background, #f7f4f0);
+  border: 1px solid var(--color-border, #e0dbd5);
+  border-radius: 4px;
+  color: var(--color-on-surface, #333);
+  text-align: right;
+}
+
+.durationInput:focus {
+  outline: 2px solid var(--color-interactive, #e8543a);
+  outline-offset: 1px;
 }
