@@ -1,9 +1,16 @@
-import { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useComponents, useComponentsActions, useStore } from '@/store'
 import { deriveComponentTokens } from '@/core/components/tokens'
 import type { ComponentName } from '@/core/components/types'
 import { ComponentPreview } from './ComponentPreview'
+import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import styles from './ComponentTokenSection.module.css'
+
+const COLOR_KEYS = new Set(['bg', 'bgHover', 'text', 'border', 'focusBorder', 'placeholder', 'iconColor'])
+
+function isColorKey(key: string): boolean {
+  return COLOR_KEYS.has(key)
+}
 
 const COMPONENT_ORDER: ComponentName[] = ['button', 'input', 'card', 'badge', 'tag', 'tooltip', 'alert']
 
@@ -26,6 +33,8 @@ export function ComponentTokenSection() {
   const slots = useStore((s) => s.color.slots)
   const spacing = useStore((s) => s.spacing)
   const [expanded, setExpanded] = useState<ComponentName | null>('button')
+  const [openPicker, setOpenPicker] = useState<string | null>(null)
+  const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   const derived = deriveComponentTokens(slots, spacing.config)
 
@@ -71,6 +80,7 @@ export function ComponentTokenSection() {
                         ? (compOverrides as Record<string, string>)[key]
                         : autoValue
 
+                      const pickerId = `${comp}-${key}`
                       return (
                         <div key={key} className={styles.tokenRow}>
                           <div className={styles.tokenKey}>
@@ -81,6 +91,19 @@ export function ComponentTokenSection() {
                               <span className={styles.overriddenPill}>overridden</span>
                             ) : (
                               <span className={styles.autoPill}>auto</span>
+                            )}
+                            {isColorKey(key) && (
+                              <div
+                                className={styles.tokenColorSwatch}
+                                style={{ background: currentValue }}
+                                ref={(el) => { swatchRefs.current[pickerId] = el }}
+                                onClick={() => setOpenPicker(openPicker === pickerId ? null : pickerId)}
+                                title="Click to edit color"
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => e.key === 'Enter' && setOpenPicker(openPicker === pickerId ? null : pickerId)}
+                                aria-label={`Edit ${comp} ${key} color`}
+                              />
                             )}
                             <input
                               className={styles.tokenInput}
@@ -98,6 +121,14 @@ export function ComponentTokenSection() {
                               >
                                 ↺
                               </button>
+                            )}
+                            {openPicker === pickerId && (
+                              <ColorPickerPopover
+                                hex={currentValue.startsWith('#') ? currentValue : '#888888'}
+                                onChange={(hex) => overrideComponentToken(comp, key, hex)}
+                                onClose={() => setOpenPicker(null)}
+                                anchorRef={{ current: swatchRefs.current[pickerId] } as React.RefObject<HTMLElement>}
+                              />
                             )}
                           </div>
                         </div>

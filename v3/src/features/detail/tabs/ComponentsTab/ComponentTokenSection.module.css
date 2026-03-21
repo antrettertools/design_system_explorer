@@ -169,6 +169,21 @@
   color: var(--color-text-primary);
 }
 
+.tokenColorSwatch {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm, 3px);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.1s;
+}
+
+.tokenColorSwatch:hover {
+  transform: scale(1.15);
+  border-color: var(--color-interactive);
+}
+
 .previewWrapper {
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
