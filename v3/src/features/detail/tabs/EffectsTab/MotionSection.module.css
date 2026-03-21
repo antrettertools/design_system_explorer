@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
@@ -10,7 +10,7 @@
 }
 
 .subsectionLabel {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--color-on-surface-subtle, #888);
   margin-bottom: 8px;
@@ -23,7 +23,7 @@
   gap: 8px;
   padding: 5px 0;
   border-bottom: 1px solid var(--color-border, #e8e4df);
-  font-size: 11px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface, #333);
 }

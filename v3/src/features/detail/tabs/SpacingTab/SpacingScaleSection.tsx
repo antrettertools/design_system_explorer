@@ -33,7 +33,7 @@ export function SpacingScaleSection() {
             8pt
           </button>
         </div>
-        <span style={{ opacity: 0.5, fontSize: 10 }}>base unit = {baseUnit}px</span>
+        <span className={styles.baseUnitHint}>base unit = {baseUnit}px</span>
       </div>
 
       <div className={styles.ruler} role="list">

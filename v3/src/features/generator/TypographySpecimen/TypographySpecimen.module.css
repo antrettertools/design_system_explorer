@@ -12,7 +12,7 @@
 }
 
 .fontNameLabel {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: sans-serif;
   letter-spacing: 0.03em;
@@ -27,7 +27,7 @@
   background: none;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 13px;
   padding: 2px 6px;
   cursor: pointer;
   color: var(--color-on-surface-subtle);
@@ -75,7 +75,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle);
 }

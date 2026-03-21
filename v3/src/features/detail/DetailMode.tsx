@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'
 import styles from './DetailMode.module.css'
 import { useUI, useUIActions } from '@/store'
 import type { DetailTab } from '@/store/ui'
@@ -9,14 +10,14 @@ import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
 import { ExportTab } from './tabs/ExportTab/ExportTab'
 import { ComponentsTab } from './tabs/ComponentsTab/ComponentsTab'
 
-const ALL_TABS: { id: DetailTab; label: string }[] = [
-  { id: 'colors', label: 'Colors' },
-  { id: 'typography', label: 'Typography' },
-  { id: 'spacing', label: 'Spacing' },
-  { id: 'effects', label: 'Effects' },
-  { id: 'components', label: 'Components' },
-  { id: 'showcase', label: 'Showcase' },
-  { id: 'export', label: 'Export' },
+const ALL_TABS: { id: DetailTab; label: string; short: string }[] = [
+  { id: 'colors',     label: 'Colors',     short: 'Clr' },
+  { id: 'typography', label: 'Typography', short: 'Typ' },
+  { id: 'spacing',    label: 'Spacing',    short: 'Spc' },
+  { id: 'effects',    label: 'Effects',    short: 'Eff' },
+  { id: 'components', label: 'Components', short: 'Cmp' },
+  { id: 'showcase',   label: 'Showcase',   short: 'Shw' },
+  { id: 'export',     label: 'Export',     short: 'Exp' },
 ]
 
 const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'components', 'showcase', 'export']
@@ -24,6 +25,11 @@ const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effec
 export function DetailMode() {
   const { activeTab } = useUI()
   const { setMode, setActiveTab } = useUIActions()
+  const activeTabRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({ inline: 'nearest', behavior: 'smooth' })
+  }, [activeTab])
 
   const renderTab = () => {
     switch (activeTab) {
@@ -58,6 +64,7 @@ export function DetailMode() {
           {ALL_TABS.map(tab => (
             <button
               key={tab.id}
+              ref={activeTab === tab.id ? activeTabRef : undefined}
               className={`${styles.tab} ${activeTab === tab.id ? styles.active : ''}`}
               onClick={() => setActiveTab(tab.id)}
               aria-selected={activeTab === tab.id}
@@ -67,9 +74,10 @@ export function DetailMode() {
                   : `${tab.label} (coming soon)`
               }
             >
-              {tab.label}
+              <span className={styles.tabFullLabel}>{tab.label}</span>
+              <span className={styles.tabShortLabel}>{tab.short}</span>
               {!IMPLEMENTED_TABS.includes(tab.id) && (
-                <span style={{ opacity: 0.4, fontSize: 9, marginLeft: 3 }}>2+</span>
+                <span className={styles.tabBadge}>2+</span>
               )}
             </button>
           ))}

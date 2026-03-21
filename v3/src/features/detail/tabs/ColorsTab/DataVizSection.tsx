@@ -1,14 +1,15 @@
 import { useColor, useColorActions } from '@/store'
-import { generateDataVizPalette } from '@/core/color/dataViz'
 import styles from './DataVizSection.module.css'
 
 const DEMO_HEIGHTS = [80, 55, 70, 40, 90, 60, 45, 75]
 
 export function DataVizSection() {
-  const { slots, dataVizN } = useColor()
+  const { dataVizN } = useColor()
   const { setDataVizN } = useColorActions()
-  const brandHex = slots.find(s => s.role === 'brand')?.hex ?? '#888888'
-  const palette = generateDataVizPalette(brandHex, dataVizN)
+  const style = getComputedStyle(document.documentElement)
+  const palette = Array.from({ length: dataVizN }, (_, i) =>
+    style.getPropertyValue(`--color-dataviz-${i + 1}`).trim() || '#888'
+  )
 
   return (
     <div className={styles.section}>
@@ -25,7 +26,7 @@ export function DataVizSection() {
             <option key={n} value={n}>{n}</option>
           ))}
         </select>
-        <span style={{ fontSize: 10, opacity: 0.6 }}>
+        <span className={styles.paramHint}>
           OKLCH-equidistant · L≈0.65 · C≈0.15
         </span>
       </div>

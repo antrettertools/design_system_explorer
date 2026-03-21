@@ -1,6 +1,4 @@
 import { useColor } from '@/store'
-import { getWcagContrastRatio, getWcagLevels, makeShadeScale } from '@/core/color/scales'
-import { deriveBrandRoles, deriveNeutralRoles } from '@/core/color/semantic'
 import styles from './ContrastGrid.module.css'
 
 interface ContrastPair {
@@ -10,37 +8,64 @@ interface ContrastPair {
   bgHex: string
 }
 
+function getLuminance(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
+  const toLinear = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b)
+}
+
+function contrastRatio(hex1: string, hex2: string): number {
+  const l1 = getLuminance(hex1)
+  const l2 = getLuminance(hex2)
+  const bright = Math.max(l1, l2)
+  const dark = Math.min(l1, l2)
+  return (bright + 0.05) / (dark + 0.05)
+}
+
+function getWcagLevels(ratio: number): { aaBodyText: boolean; aaaBodyText: boolean } {
+  return { aaBodyText: ratio >= 4.5, aaaBodyText: ratio >= 7 }
+}
+
+function getCssVar(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
+}
+
 export function ContrastGrid() {
   const { slots } = useColor()
-  const brandHex = slots.find(s => s.role === 'brand')?.hex ?? '#888'
-  const brandScale = makeShadeScale(brandHex)
-  const brandRoles = deriveBrandRoles(brandScale)
-  const neutralRoles = deriveNeutralRoles(brandScale)
+
+  const onSurface = getCssVar('--color-on-surface')
+  const background = getCssVar('--color-background')
+  const onInteractive = getCssVar('--color-on-interactive')
+  const interactive = getCssVar('--color-interactive')
+  const onSurfaceSubtle = getCssVar('--color-on-surface-subtle')
+  const surface = getCssVar('--color-surface')
 
   const pairs: ContrastPair[] = [
     {
       fgLabel: 'on-surface / background',
       bgLabel: 'background',
-      fgHex: neutralRoles['on-surface'],
-      bgHex: neutralRoles['background'],
+      fgHex: onSurface,
+      bgHex: background,
     },
     {
       fgLabel: 'on-interactive / interactive',
       bgLabel: 'interactive',
-      fgHex: brandRoles['on-interactive'],
-      bgHex: brandRoles['interactive'],
+      fgHex: onInteractive,
+      bgHex: interactive,
     },
     {
       fgLabel: 'interactive / background',
       bgLabel: 'background',
-      fgHex: brandRoles['interactive'],
-      bgHex: neutralRoles['background'],
+      fgHex: interactive,
+      bgHex: background,
     },
     {
       fgLabel: 'on-surface-subtle / surface',
       bgLabel: 'surface',
-      fgHex: neutralRoles['on-surface-subtle'],
-      bgHex: neutralRoles['surface'],
+      fgHex: onSurfaceSubtle,
+      bgHex: surface,
     },
     ...slots.flatMap(slot =>
       slots
@@ -59,7 +84,7 @@ export function ContrastGrid() {
       <div className={styles.sectionTitle}>Contrast — WCAG AA/AAA</div>
       <div className={styles.grid} role="list">
         {pairs.map((pair, i) => {
-          const ratio = getWcagContrastRatio(pair.fgHex, pair.bgHex)
+          const ratio = contrastRatio(pair.fgHex, pair.bgHex)
           const levels = getWcagLevels(ratio)
           return (
             <div

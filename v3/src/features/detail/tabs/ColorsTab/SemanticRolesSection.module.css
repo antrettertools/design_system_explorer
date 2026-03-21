@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -10,7 +10,7 @@
 }
 
 .subsectionTitle {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--color-on-surface-subtle);
   margin-bottom: 8px;
@@ -42,14 +42,14 @@
 }
 
 .roleName {
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-on-surface);
   font-family: sans-serif;
 }
 
 .roleHex {
-  font-size: 8px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: monospace;
 }
@@ -71,13 +71,13 @@
 }
 
 .pairedLabel {
-  font-size: 10px;
+  font-size: 13px;
   font-family: sans-serif;
   color: var(--color-on-surface);
 }
 
 .pairedHex {
-  font-size: 9px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle);
   margin-left: 4px;
@@ -92,7 +92,7 @@
 }
 
 .themeBadge {
-  font-size: 8px;
+  font-size: 13px;
   padding: 1px 5px;
   border-radius: 3px;
   background: var(--color-border);
@@ -128,7 +128,7 @@
 
 .stateLabel {
   padding: 4px 8px 8px;
-  font-size: 9px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: sans-serif;
   text-transform: capitalize;

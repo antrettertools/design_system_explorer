@@ -42,14 +42,14 @@
 }
 
 .cellName {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-on-surface);
   font-family: sans-serif;
 }
 
 .cellSource {
-  font-size: 9px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: sans-serif;
   text-transform: uppercase;

@@ -3,7 +3,7 @@
 }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
@@ -62,7 +62,7 @@
 }
 
 .tokenName {
-  font-size: 9px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle, #888);
   font-family: monospace;
   white-space: nowrap;
@@ -71,7 +71,7 @@
 }
 
 .hex {
-  font-size: 9px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle, #aaa);
   font-family: monospace;
   white-space: nowrap;

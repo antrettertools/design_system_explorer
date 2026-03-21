@@ -1,7 +1,7 @@
 .panel { display: flex; flex-direction: column; gap: 20px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
@@ -36,14 +36,14 @@
 }
 
 .templateName {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-on-surface, #333);
   display: block;
 }
 
 .templateDesc {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle, #888);
   margin-top: 2px;
   display: block;
@@ -58,7 +58,7 @@
   border-radius: 6px;
   background: var(--color-surface, #fff);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
   display: flex;
@@ -79,7 +79,7 @@
 
 .copied {
   color: #15803d;
-  font-size: 10px;
+  font-size: 13px;
   font-family: sans-serif;
   margin-top: 4px;
 }
