@@ -7,6 +7,7 @@ import { SpacingTab } from './tabs/SpacingTab/SpacingTab'
 import { EffectsTab } from './tabs/EffectsTab/EffectsTab'
 import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
 import { ExportTab } from './tabs/ExportTab/ExportTab'
+import { ComponentsTab } from './tabs/ComponentsTab/ComponentsTab'
 
 const ALL_TABS: { id: DetailTab; label: string }[] = [
   { id: 'colors', label: 'Colors' },
@@ -18,7 +19,7 @@ const ALL_TABS: { id: DetailTab; label: string }[] = [
   { id: 'export', label: 'Export' },
 ]
 
-const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'showcase', 'export']
+const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'components', 'showcase', 'export']
 
 export function DetailMode() {
   const { activeTab } = useUI()
@@ -30,6 +31,7 @@ export function DetailMode() {
       case 'typography': return <TypographyTab />
       case 'spacing': return <SpacingTab />
       case 'effects': return <EffectsTab />
+      case 'components': return <ComponentsTab />
       case 'showcase': return <ShowcaseTab />
       case 'export': return <ExportTab />
       default:

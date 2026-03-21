@@ -8,6 +8,7 @@ import { GeneratorPanel } from './features/generator/GeneratorPanel'
 import { DetailMode } from './features/detail/DetailMode'
 import { LivePreview } from './features/preview/LivePreview'
 import { ExportPanel } from './features/export/ExportPanel'
+import { SessionsDrawer } from './features/sessions/SessionsDrawer'
 import { loadFromHash } from './core/share/loadFromHash'
 import appStyles from './App.module.css'
 
@@ -112,6 +113,7 @@ export default function App() {
         />
       </div>
       <ExportPanel />
+      <SessionsDrawer />
     </div>
   )
 }
