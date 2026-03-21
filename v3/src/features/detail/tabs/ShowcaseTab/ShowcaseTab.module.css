@@ -83,3 +83,23 @@
   font-family: sans-serif;
   margin-top: 4px;
 }
+
+.dataVizStrip {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.dataVizCell {
+  flex: 1;
+  height: 20px;
+  border-radius: 3px;
+  min-width: 12px;
+}
+
+.dataVizHint {
+  font-size: 13px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: sans-serif;
+}
