@@ -15,9 +15,41 @@
 
 .colorHeader {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+}
+
+.colorSwatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.15s;
+}
+
+.colorSwatch:hover { filter: brightness(0.88); }
+
+.swatchEditIcon {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.colorSwatch:hover .swatchEditIcon { opacity: 1; }
+
+.colorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .roleName {

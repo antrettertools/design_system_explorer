@@ -1,7 +1,9 @@
+import { useState, useRef } from 'react'
 import { converter } from 'culori'
-import { useColor } from '@/store'
+import { useColor, useColorActions } from '@/store'
 import { makeShadeScale } from '@/core/color/scales'
 import { SHADE_STEPS } from '@/core/color/types'
+import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import styles from './ShadeScaleSection.module.css'
 
 const toOklch = converter('oklch')
@@ -28,6 +30,9 @@ function hexToOklchLabel(hex: string): string {
 
 export function ShadeScaleSection() {
   const { slots } = useColor()
+  const colorActions = useColorActions()
+  const [openSlotId, setOpenSlotId] = useState<string | null>(null)
+  const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   return (
     <div className={styles.section}>
@@ -35,11 +40,23 @@ export function ShadeScaleSection() {
       {slots.map(slot => {
         const scale = makeShadeScale(slot.hex)
         const oklchLabel = hexToOklchLabel(slot.hex)
+        const anchorRef = { current: swatchRefs.current[slot.id] } as React.RefObject<HTMLElement>
         return (
           <div key={slot.id} className={styles.colorRow}>
             <div className={styles.colorHeader}>
-              <span className={styles.roleName}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
-              <span className={styles.colorMeta}>{slot.hex.toUpperCase()} · {oklchLabel}</span>
+              <div
+                ref={el => { swatchRefs.current[slot.id] = el }}
+                className={styles.colorSwatch}
+                style={{ background: slot.hex }}
+                onClick={() => setOpenSlotId(slot.id)}
+                title={`Edit ${ROLE_LABELS[slot.role] ?? slot.role} color`}
+              >
+                <span className={styles.swatchEditIcon}>✎</span>
+              </div>
+              <div className={styles.colorInfo}>
+                <span className={styles.roleName}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
+                <span className={styles.colorMeta}>{slot.hex.toUpperCase()} · {oklchLabel}</span>
+              </div>
             </div>
             <div className={styles.scaleRow} role="list" aria-label={`${ROLE_LABELS[slot.role] ?? slot.role} shade scale`}>
               {SHADE_STEPS.map(step => {
@@ -64,6 +81,14 @@ export function ShadeScaleSection() {
                 )
               })}
             </div>
+            {openSlotId === slot.id && (
+              <ColorPickerPopover
+                hex={slot.hex}
+                onChange={hex => colorActions.overrideHex(slot.id, hex)}
+                onClose={() => setOpenSlotId(null)}
+                anchorRef={anchorRef}
+              />
+            )}
           </div>
         )
       })}
