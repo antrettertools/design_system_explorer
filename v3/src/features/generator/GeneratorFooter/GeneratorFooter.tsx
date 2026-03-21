@@ -4,7 +4,7 @@ import styles from './GeneratorFooter.module.css'
 export function GeneratorFooter() {
   const { slots } = useColor()
   const { addSlot } = useColorActions()
-  const { setMode } = useUIActions()
+  const { setMode, showMobilePreview } = useUIActions()
   const colorActions = useColorActions()
   const typographyActions = useTypographyActions()
 
@@ -43,6 +43,13 @@ export function GeneratorFooter() {
           Detail Mode \u2192
         </button>
       </div>
+      <button
+        className={styles.previewBtn}
+        onClick={showMobilePreview}
+        aria-label="Show live preview"
+      >
+        Preview &rarr;
+      </button>
       <button
         className={styles.generateMobile}
         onClick={handleGenerate}

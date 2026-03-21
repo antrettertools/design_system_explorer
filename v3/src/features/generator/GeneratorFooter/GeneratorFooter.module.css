@@ -81,6 +81,10 @@
   display: none;
 }
 
+.previewBtn {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .hint { display: none; }
   .footer {
@@ -99,5 +103,19 @@
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+  }
+  .previewBtn {
+    display: block;
+    height: 40px;
+    padding: 0 16px;
+    background: var(--color-surface, #fff);
+    color: var(--color-on-surface, #111);
+    border: 1px solid var(--color-border, #e8e4df);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+    font-family: sans-serif;
+    white-space: nowrap;
   }
 }

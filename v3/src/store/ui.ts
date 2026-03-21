@@ -11,6 +11,7 @@ export interface UIState {
   showcaseTemplate: ShowcaseTemplate
   exportPanelOpen: boolean
   activeExportFormat: ExportFormat
+  mobileShowPreview: boolean
 }
 
 export interface UIActions {
@@ -21,6 +22,8 @@ export interface UIActions {
   openExportPanel: () => void
   closeExportPanel: () => void
   setExportFormat: (format: ExportFormat) => void
+  showMobilePreview: () => void
+  hideMobilePreview: () => void
 }
 
 export const defaultUIState: UIState = {
@@ -30,6 +33,7 @@ export const defaultUIState: UIState = {
   showcaseTemplate: 'landing',
   exportPanelOpen: false,
   activeExportFormat: 'css',
+  mobileShowPreview: false,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,5 +51,7 @@ export function createUIActions(set: any, get: any): UIActions {
     openExportPanel: () => set({ ui: { ...(get() as { ui: UIState }).ui, exportPanelOpen: true } }),
     closeExportPanel: () => set({ ui: { ...(get() as { ui: UIState }).ui, exportPanelOpen: false } }),
     setExportFormat: (activeExportFormat) => set({ ui: { ...(get() as { ui: UIState }).ui, activeExportFormat } }),
+    showMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: true } }),
+    hideMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: false } }),
   }
 }

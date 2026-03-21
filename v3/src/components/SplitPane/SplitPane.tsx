@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
+import { useUI } from '@/store'
 import styles from './SplitPane.module.css'
 
 interface SplitPaneProps {
@@ -11,6 +12,7 @@ export function SplitPane({ left, right, defaultLeftPercent = 50 }: SplitPanePro
   const [leftPercent, setLeftPercent] = useState(defaultLeftPercent)
   const [dragging, setDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const { mobileShowPreview } = useUI()
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -38,7 +40,10 @@ export function SplitPane({ left, right, defaultLeftPercent = 50 }: SplitPanePro
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <div className={styles.left} style={{ width: `${leftPercent}%` }}>
+      <div
+        className={`${styles.left} ${mobileShowPreview ? styles.slideOut : ''}`}
+        style={{ width: `${leftPercent}%` }}
+      >
         {left}
       </div>
       <div
@@ -49,7 +54,7 @@ export function SplitPane({ left, right, defaultLeftPercent = 50 }: SplitPanePro
         aria-label="Resize panels"
         tabIndex={0}
       />
-      <div className={styles.right}>
+      <div className={`${styles.right} ${mobileShowPreview ? styles.slideIn : ''}`}>
         {right}
       </div>
     </div>
