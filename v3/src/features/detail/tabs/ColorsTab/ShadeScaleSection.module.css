@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -53,14 +53,14 @@
 }
 
 .roleName {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--color-on-surface);
   font-family: sans-serif;
 }
 
 .colorMeta {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: monospace;
 }
@@ -99,7 +99,7 @@
 .scaleCell:last-child .scaleCellLabel { opacity: 0.5; }
 
 .scaleCellStep {
-  font-size: 7px;
+  font-size: 13px;
   font-family: monospace;
   color: rgba(255, 255, 255, 0.7);
   background: rgba(0, 0, 0, 0.3);
@@ -108,7 +108,7 @@
 }
 
 .scaleCellHex {
-  font-size: 7px;
+  font-size: 13px;
   font-family: monospace;
   color: rgba(255, 255, 255, 0.6);
   margin-top: 2px;

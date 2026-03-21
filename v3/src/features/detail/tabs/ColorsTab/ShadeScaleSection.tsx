@@ -1,12 +1,12 @@
 import { useState, useRef } from 'react'
 import { converter } from 'culori'
 import { useColor, useColorActions } from '@/store'
-import { makeShadeScale } from '@/core/color/scales'
-import { SHADE_STEPS } from '@/core/color/types'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import styles from './ShadeScaleSection.module.css'
 
 const toOklch = converter('oklch')
+
+const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 
 const ROLE_LABELS: Record<string, string> = {
   brand: 'Brand',
@@ -28,6 +28,15 @@ function hexToOklchLabel(hex: string): string {
   return `oklch(${(c.l ?? 0).toFixed(2)} ${(c.c ?? 0).toFixed(2)} ${Math.round(c.h ?? 0)})`
 }
 
+function getShadeSteps(role: string): Record<number, string> {
+  const style = getComputedStyle(document.documentElement)
+  const result: Record<number, string> = {}
+  for (const step of SHADE_STEPS) {
+    result[step] = style.getPropertyValue(`--color-${role}-${step}`).trim() || '#888'
+  }
+  return result
+}
+
 export function ShadeScaleSection() {
   const { slots } = useColor()
   const colorActions = useColorActions()
@@ -38,7 +47,7 @@ export function ShadeScaleSection() {
     <div className={styles.section}>
       <div className={styles.sectionTitle}>Shade Scales</div>
       {slots.map(slot => {
-        const scale = makeShadeScale(slot.hex)
+        const scale = getShadeSteps(slot.role)
         const oklchLabel = hexToOklchLabel(slot.hex)
         const anchorRef = { current: swatchRefs.current[slot.id] } as React.RefObject<HTMLElement>
         return (
