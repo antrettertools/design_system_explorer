@@ -1,9 +1,7 @@
 import { useColor, useTypography } from '@/store'
-import { makeShadeScale } from '@/core/color/scales'
-import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles } from '@/core/color/semantic'
-import { generateDataVizPalette } from '@/core/color/dataViz'
-import { SHADE_STEPS } from '@/core/color/types'
 import styles from './SystemTemplate.module.css'
+
+const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 
 const ROLE_LABELS: Record<string, string> = {
   brand: 'Brand', secondary: 'Secondary', accentA: 'Accent A', accentB: 'Accent B',
@@ -29,17 +27,20 @@ function isLightHex(hex: string): boolean {
   return (r * 299 + g * 587 + b * 114) / 1000 > 150
 }
 
+function getCssVar(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
+}
+
 export function SystemTemplate() {
   const { slots, dataVizN, activeModel } = useColor()
   const { pairing } = useTypography()
 
   const brandSlot = slots.find(s => s.role === 'brand') ?? slots[0]
   const brandHex = brandSlot?.hex ?? '#888888'
-  const brandScale = makeShadeScale(brandHex)
-  const brandRoles = deriveBrandRoles(brandScale)
-  const neutralRoles = deriveNeutralRoles(brandScale)
-  const stateMoodRoles = deriveStateMoodRoles(brandHex)
-  const dvPalette = generateDataVizPalette(brandHex, Math.min(dataVizN, 8))
+
+  const dvPalette = Array.from({ length: Math.min(dataVizN, 8) }, (_, i) =>
+    getCssVar(`--color-dataviz-${i + 1}`)
+  )
 
   const otherSlots = slots.filter(s => s.role !== 'brand')
 
@@ -68,7 +69,7 @@ export function SystemTemplate() {
           </div>
           <div className={styles.brandScale}>
             {SHADE_STEPS.map(step => {
-              const hex = brandScale[step]
+              const hex = getCssVar(`--color-brand-${step}`)
               const light = isLightHex(hex)
               return (
                 <div key={step} className={styles.brandScaleCell} style={{ background: hex }}>
@@ -86,26 +87,27 @@ export function SystemTemplate() {
         {/* Secondary + accent compact rows */}
         {otherSlots.length > 0 && (
           <div className={styles.compactScaleRow}>
-            {otherSlots.map(slot => {
-              const slotScale = makeShadeScale(slot.hex)
-              return (
-                <div key={slot.id} className={styles.compactScaleBlock}>
-                  <div className={styles.compactScaleLabel}>{ROLE_LABELS[slot.role] ?? slot.role}</div>
-                  <div className={styles.compactScale}>
-                    {SHADE_STEPS.map(step => (
-                      <div key={step} className={styles.compactScaleCell} style={{ background: slotScale[step] }} />
-                    ))}
-                  </div>
+            {otherSlots.map(slot => (
+              <div key={slot.id} className={styles.compactScaleBlock}>
+                <div className={styles.compactScaleLabel}>{ROLE_LABELS[slot.role] ?? slot.role}</div>
+                <div className={styles.compactScale}>
+                  {SHADE_STEPS.map(step => (
+                    <div
+                      key={step}
+                      className={styles.compactScaleCell}
+                      style={{ background: getCssVar(`--color-${slot.role}-${step}`) }}
+                    />
+                  ))}
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </div>
         )}
 
         {/* Key semantic swatches */}
         <div className={styles.semanticGrid}>
           {KEY_SEMANTIC.map(role => {
-            const hex = (brandRoles as Record<string, string>)[role] ?? (neutralRoles as Record<string, string>)[role] ?? '#888'
+            const hex = getCssVar(`--color-${role}`)
             return (
               <div key={role} style={{ textAlign: 'center' }}>
                 <div
@@ -124,8 +126,8 @@ export function SystemTemplate() {
           {STATE_PREFIXES.map(prefix => (
             <div key={prefix} className={styles.stateCard}>
               <div className={styles.statePair}>
-                <div className={styles.stateSwatch} style={{ background: (stateMoodRoles as Record<string, string>)[prefix] ?? '#888' }} />
-                <div className={styles.stateSwatch} style={{ background: (stateMoodRoles as Record<string, string>)[`${prefix}-container`] ?? '#eee' }} />
+                <div className={styles.stateSwatch} style={{ background: getCssVar(`--color-${prefix}`) }} />
+                <div className={styles.stateSwatch} style={{ background: getCssVar(`--color-${prefix}-container`) }} />
               </div>
               <div className={styles.stateLabel}>{prefix}</div>
             </div>
