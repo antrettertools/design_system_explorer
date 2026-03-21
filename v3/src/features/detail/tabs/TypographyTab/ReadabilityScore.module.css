@@ -1,7 +1,7 @@
 .section { margin-bottom: 24px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -32,7 +32,7 @@
 }
 
 .scoreLabel {
-  font-size: 11px;
+  font-size: 13px;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
 }

@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -14,7 +14,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
 }
@@ -23,9 +23,16 @@
   padding: 3px 8px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   background: var(--color-surface);
   color: var(--color-on-surface);
+}
+
+.paramHint {
+  font-size: 13px;
+  opacity: 0.6;
+  color: var(--color-on-surface-subtle);
+  font-family: monospace;
 }
 
 .palette {

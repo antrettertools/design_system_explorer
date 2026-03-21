@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -20,7 +20,7 @@
   justify-content: space-between;
   padding: 6px 10px;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 13px;
   font-family: monospace;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .cellLabel {
-  font-size: 10px;
+  font-size: 13px;
   color: inherit;
   font-family: sans-serif;
 }
@@ -50,7 +50,7 @@
 }
 
 .badge {
-  font-size: 8px;
+  font-size: 13px;
   padding: 1px 5px;
   border-radius: 3px;
   font-family: sans-serif;
@@ -74,7 +74,7 @@
 }
 
 .ratio {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: monospace;
   margin-left: 8px;
