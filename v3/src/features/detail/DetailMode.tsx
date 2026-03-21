@@ -3,10 +3,12 @@ import { useUI, useUIActions } from '@/store'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
+import { SpacingTab } from './tabs/SpacingTab/SpacingTab'
+import { EffectsTab } from './tabs/EffectsTab/EffectsTab'
 import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
 import { ExportTab } from './tabs/ExportTab/ExportTab'
 
-const PHASE_1_TABS: { id: DetailTab; label: string }[] = [
+const ALL_TABS: { id: DetailTab; label: string }[] = [
   { id: 'colors', label: 'Colors' },
   { id: 'typography', label: 'Typography' },
   { id: 'spacing', label: 'Spacing' },
@@ -16,7 +18,7 @@ const PHASE_1_TABS: { id: DetailTab; label: string }[] = [
   { id: 'export', label: 'Export' },
 ]
 
-const PHASE_1_IMPLEMENTED: DetailTab[] = ['colors', 'typography', 'showcase', 'export']
+const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'showcase', 'export']
 
 export function DetailMode() {
   const { activeTab } = useUI()
@@ -26,12 +28,14 @@ export function DetailMode() {
     switch (activeTab) {
       case 'colors': return <ColorsTab />
       case 'typography': return <TypographyTab />
+      case 'spacing': return <SpacingTab />
+      case 'effects': return <EffectsTab />
       case 'showcase': return <ShowcaseTab />
       case 'export': return <ExportTab />
       default:
         return (
           <div className={styles.comingSoon}>
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} tab — coming in Phase 2
+            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} tab — coming in Phase 3
           </div>
         )
     }
@@ -49,20 +53,20 @@ export function DetailMode() {
         </button>
         <div className={styles.divider} />
         <nav className={styles.tabs} aria-label="Detail mode tabs">
-          {PHASE_1_TABS.map(tab => (
+          {ALL_TABS.map(tab => (
             <button
               key={tab.id}
               className={`${styles.tab} ${activeTab === tab.id ? styles.active : ''}`}
               onClick={() => setActiveTab(tab.id)}
               aria-selected={activeTab === tab.id}
               aria-label={
-                PHASE_1_IMPLEMENTED.includes(tab.id)
+                IMPLEMENTED_TABS.includes(tab.id)
                   ? tab.label
                   : `${tab.label} (coming soon)`
               }
             >
               {tab.label}
-              {!PHASE_1_IMPLEMENTED.includes(tab.id) && (
+              {!IMPLEMENTED_TABS.includes(tab.id) && (
                 <span style={{ opacity: 0.4, fontSize: 9, marginLeft: 3 }}>2+</span>
               )}
             </button>

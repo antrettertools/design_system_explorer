@@ -1,0 +1,47 @@
+.section { margin-bottom: 28px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.card {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview {
+  width: 40px;
+  height: 40px;
+  background: var(--color-interactive-subtle, #fde8e3);
+  border: 2px solid var(--color-interactive, #e8543a);
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+}
+
+.value {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle, #aaa);
+}
