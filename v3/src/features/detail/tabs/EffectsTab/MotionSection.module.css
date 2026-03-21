@@ -1,0 +1,78 @@
+.section { margin-bottom: 28px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.subsectionLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: 8px;
+  font-family: sans-serif;
+}
+
+.tokenRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--color-on-surface, #333);
+}
+
+.tokenName {
+  width: 140px;
+  flex-shrink: 0;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.tokenValue { flex: 1; }
+
+/* Easing curve visualizer — simple CSS animation demo */
+.easingDemo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.easingCard {
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  padding: 10px;
+  background: var(--color-surface, #fff);
+  min-width: 100px;
+  cursor: default;
+  transition: border-color 0.15s;
+}
+
+.easingCard:hover { border-color: var(--color-interactive, #e8543a); }
+
+.easingName {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+  margin-bottom: 4px;
+}
+
+.easingValue {
+  font-size: 8px;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle, #aaa);
+}
+
+.durationBar {
+  height: 6px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
