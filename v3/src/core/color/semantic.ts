@@ -56,6 +56,36 @@ export function deriveStateMoodRoles(brandHex: string): SemanticRoles {
   }
 }
 
+function lightenForDark(hex: string): string {
+  const c = toOklch(hex)
+  if (!c) return hex
+  return formatHex({ ...c, l: Math.min(0.85, (c.l ?? 0) + 0.25) }) ?? hex
+}
+
+function darkenForDark(hex: string): string {
+  const c = toOklch(hex)
+  if (!c) return hex
+  return formatHex({ ...c, l: Math.max(0.1, (c.l ?? 0) - 0.3), c: (c.c ?? 0) * 0.6 }) ?? hex
+}
+
+/**
+ * Dark mode state/mood roles — lighten base colors and darken containers
+ * so they remain visible on dark backgrounds.
+ */
+export function deriveDarkStateMoodRoles(brandHex: string): SemanticRoles {
+  const light = deriveStateMoodRoles(brandHex)
+  return {
+    'error':             lightenForDark(light['error']),
+    'error-container':   darkenForDark(light['error-container']),
+    'warning':           lightenForDark(light['warning']),
+    'warning-container': darkenForDark(light['warning-container']),
+    'success':           lightenForDark(light['success']),
+    'success-container': darkenForDark(light['success-container']),
+    'info':              lightenForDark(light['info']),
+    'info-container':    darkenForDark(light['info-container']),
+  }
+}
+
 /**
  * Neutral roles from brand shade scale — background and surface tones
  * derived using near-zero-chroma steps.

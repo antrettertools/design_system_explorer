@@ -281,3 +281,215 @@ All Phase 4A work follows the Engineering Guide:
 - `ColorPickerPopover` correctly placed in `components/ui/` as a reusable primitive
 - Shadow parser is local to `ShadowBuilder.tsx` (no need for `core/`)
 - Store action helpers (`applyStepOverrides`) are local to `typography.ts` (not exported)
+
+---
+
+---
+
+# palette. Phase 4B — Color System Completeness: Implementation Log
+
+> **Branch:** `feat/v4-phase4b-color-system` (based on `feat/v3-phase1a`)
+> **Date:** 2026-03-21
+> **Baseline:** 106 tests → **116 tests passing** after phase
+> **TypeScript:** `tsc --noEmit` — zero new errors
+> **Build:** `npx vite build` — ✓ built in 1.60s, 309 modules
+
+---
+
+## What Was Built
+
+Phase 4B completes the color system: three-way theme mode (white/light/dark), full dark-mode token coverage, greyscale and font color sections in the Colors tab, and showcase templates that use the full palette (secondary, accent, state, data viz colors).
+
+---
+
+## Task 1 — Three-way `AppTheme` type + `setTheme` action
+
+**Files modified:**
+- `v3/src/store/ui.ts`
+- `v3/src/core/share/types.ts`
+
+**Files created:**
+- `v3/src/store/__tests__/ui-theme.test.ts`
+
+**Commits:** `391ab47`
+
+**Changes:**
+- `AppTheme` changed from `'light' | 'dark'` to `'white' | 'light' | 'dark'`
+- `toggleTheme()` removed from `UIActions`; replaced with `setTheme(theme: AppTheme)`
+- `setTheme` sets `data-theme` on `document.documentElement` and updates store
+- `ShareSnapshot.theme` type updated to match new three-way type
+
+**Tests:** 3 new tests — setTheme to white, setTheme to dark, data-theme attribute set
+
+---
+
+## Task 2 — Three-way theme segmented control in `AppHeader`
+
+**Files modified:**
+- `v3/src/components/AppShell/AppHeader.tsx`
+- `v3/src/components/AppShell/AppHeader.module.css`
+
+**Commit:** `b603375`
+
+**What changed:**
+- Single toggle button (`◐`/`○`) replaced with a 3-button segmented control (☀ ◑ ◐)
+- Buttons map to `'white'`, `'light'`, `'dark'` — each calls `setTheme(opt.value)`
+- Active button highlighted via `.themeBtnActive` class
+- New CSS: `.themeSegment`, `.themeBtn`, `.themeBtnActive`
+- `ShowcaseTab` had its theme toggle button removed (theme is now global in the header)
+
+---
+
+## Task 3 — White-mode surface override in `buildTokenMap` / `injectTokensToDOM`
+
+**Files modified:**
+- `v3/src/store/derived.ts`
+- `v3/src/store/index.ts`
+
+**Files created:**
+- `v3/src/store/__tests__/derived-theme.test.ts`
+
+**Commit:** `32aa38a`
+
+**What changed:**
+- `buildTokenMap` gains an 8th parameter: `theme: AppTheme = 'light'`
+- When `theme === 'white'`, after computing neutral roles, overrides: `--color-background`, `--color-surface`, `--color-surface-raised` → `#ffffff`
+- `injectTokensToDOM` gains a `theme` parameter; dark overrides (`<style id="palette-dark-tokens">`) are only written when `theme === 'dark'` — cleared otherwise
+- `store/index.ts` subscription now selects `state.ui.theme` and passes it to both functions
+
+**Tests:** 4 new tests — white mode forces background to #ffffff, light mode does not, dark maps include state/dataviz tokens
+
+---
+
+## Task 4 — Complete dark token coverage in `buildTokenMap`
+
+**Files modified:**
+- `v3/src/core/color/semantic.ts`
+- `v3/src/store/derived.ts`
+
+**Files created:**
+- `v3/src/core/color/__tests__/semantic-dark.test.ts`
+
+**Commit:** `e0c57a2`
+
+**What changed:**
+- New function `deriveDarkStateMoodRoles(brandHex)` in `semantic.ts`:
+  - Takes the light state/mood roles and transforms them for dark backgrounds
+  - `lightenForDark(hex)`: adds 0.25 to OKLCH L, capped at 0.85 — makes error/warning/success/info more visible
+  - `darkenForDark(hex)`: subtracts 0.3 from L, reduces chroma by 40% — makes containers dark-appropriate
+  - Returns 8 keys: error, error-container, warning, warning-container, success, success-container, info, info-container
+- `buildTokenMap` calls `deriveDarkStateMoodRoles` and adds results to `dark` token map
+- Data viz colors are now also copied to `dark` map (same values — perceptually designed to work on both)
+
+**Tests:** 3 new tests — 8 keys returned, error is lighter in dark mode, no throw on edge colors
+
+---
+
+## Task 5 — `ShowcaseTab` data viz swatch strip
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ShowcaseTab/ShowcaseTab.tsx`
+- `v3/src/features/detail/tabs/ShowcaseTab/ShowcaseTab.module.css`
+
+**Commit:** `3524848`
+
+**What changed:**
+- Removed the "◐ Switch to dark / light mode" action button (theme is now in AppHeader)
+- Replaced the text-only Data Viz Colors section with a colored swatch strip:
+  - `dataVizN` small colored squares using `var(--color-dataviz-N)` backgrounds
+  - Caption shows the count and a hint to adjust in Colors tab
+- New CSS: `.dataVizStrip`, `.dataVizCell`, `.dataVizHint`
+
+---
+
+## Task 6 — `GreyscaleSection` in Colors tab
+
+**Files created:**
+- `v3/src/features/detail/tabs/ColorsTab/GreyscaleSection.tsx`
+- `v3/src/features/detail/tabs/ColorsTab/GreyscaleSection.module.css`
+
+**Commit:** `99651d2` (combined with Task 7)
+
+**What it shows:**
+7 neutral token swatches in a horizontal strip: background, surface, surface-raised, border, border-strong, on-surface-subtle, on-surface. Each swatch is 48px tall. Below: token name and resolved hex. Click any swatch to copy the hex value.
+
+**Implementation:**
+- Reads resolved CSS var values via `getComputedStyle(document.documentElement)` on every render
+- Subscribes to `useColor()` to re-render when palette changes
+- No store state needed (display only)
+
+---
+
+## Task 7 — `FontColorsSection` with WCAG contrast ratios
+
+**Files created:**
+- `v3/src/features/detail/tabs/ColorsTab/FontColorsSection.tsx`
+- `v3/src/features/detail/tabs/ColorsTab/FontColorsSection.module.css`
+
+**Commit:** `99651d2` (combined with Task 6)
+
+**What it shows:**
+4 text role rows: on-surface, on-surface-subtle, interactive (link), on-interactive (on primary button). Each row shows:
+- A color dot (background: the token's resolved hex)
+- The token name
+- A text specimen in that color (on its actual background)
+- An AA WCAG badge: "AA ✓ 12.3:1" (green) or "AA ✗ 3.2:1" (red) — pass threshold 4.5:1
+
+**Implementation:**
+- Local `getLuminance(hex)` and `contrastRatio(hex1, hex2)` utilities — no `core/` import (complies with architecture rule)
+- Reads token values via `getComputedStyle` on each render; subscribes to `useColor()` for reactivity
+
+---
+
+## Task 8 — Showcase templates use full palette
+
+**Files modified:**
+- `v3/src/features/preview/templates/LandingTemplate/LandingTemplate.tsx` + `.module.css`
+- `v3/src/features/preview/templates/DashboardTemplate/DashboardTemplate.tsx` + `.module.css`
+- `v3/src/features/preview/templates/BlogTemplate/BlogTemplate.tsx` + `.module.css`
+- `v3/src/features/preview/templates/SystemTemplate/SystemTemplate.tsx` + `.module.css`
+
+**Commit:** `4b44eee`
+
+**LandingTemplate changes:**
+- Hero badge: uses `--color-accentA-100/500` (fallback to interactive-subtle/interactive)
+- Feature icons: rotate through 3 CSS modifier classes — brand, secondary, accentA tints
+- Status row added (before testimonial): 4 badges using success/info/warning/error container+base tokens
+
+**DashboardTemplate changes:**
+- Stat delta colors: positive = `--color-success`, negative = `--color-error` (no more single orange)
+- Chart bars: cycle through `--color-dataviz-1` to `--color-dataviz-4`
+- Alert banner: `--color-warning-container` background with `--color-warning` text and border
+
+**BlogTemplate changes:**
+- Category tag (`.postTag`): now uses `--color-secondary-100/500` (pill style with background)
+- Reading time dot: inline element colored with `--color-accentA-500`
+- Pull quote (blockquote): `--color-accentB-100` background, `--color-accentB-500` left border
+
+**SystemTemplate changes:**
+- New `CssVarsSection` component (defined inline in the same file):
+  - Reads 20 semantic `--color-*` CSS var values from `getComputedStyle`
+  - Renders a table: variable name | hex value | 18×18px swatch
+  - All values are live — updates on every palette regeneration
+
+**Token usage pattern (all templates):**
+All new color references use CSS vars with fallbacks: `var(--color-secondary-100, var(--color-interactive-subtle, #fde8e3))`. This ensures templates degrade gracefully when fewer than 4 palette slots are active.
+
+---
+
+## What Phase 4C Receives
+
+Phase 4C starts with the following in place:
+
+| Item | State |
+|------|-------|
+| `AppTheme` | Three-way: `'white' \| 'light' \| 'dark'` |
+| `setTheme(theme)` | In store, tested |
+| White mode | `--color-background/surface/surface-raised` forced to `#ffffff` |
+| Dark mode | State/mood tokens, data viz tokens all have dark variants |
+| `GreyscaleSection` | In Colors tab — 7 neutral swatches, click-to-copy |
+| `FontColorsSection` | In Colors tab — 4 text roles with WCAG AA badges |
+| All templates | Use secondary, accentA, accentB, state, data viz tokens |
+| Test count | 116 (was 106) |
+| TypeScript | `tsc --noEmit` clean; pre-existing `tsc -b` errors unchanged |
+| Vite build | ✓ 309 modules |

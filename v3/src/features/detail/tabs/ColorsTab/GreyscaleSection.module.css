@@ -1,0 +1,80 @@
+.section {
+  margin-bottom: 4px;
+}
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 10px;
+  font-family: sans-serif;
+}
+
+.strip {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e0dbd5);
+}
+
+.swatch {
+  flex: 1;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.12s;
+  min-width: 0;
+}
+
+.swatch:hover {
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.copied {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: inherit;
+  background: rgba(0,0,0,0.15);
+  border-radius: 0;
+}
+
+.labels {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  margin-top: 6px;
+}
+
+.labelCell {
+  flex: 1;
+  min-width: 0;
+  padding: 0 2px;
+  overflow: hidden;
+}
+
+.tokenName {
+  font-size: 9px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hex {
+  font-size: 9px;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

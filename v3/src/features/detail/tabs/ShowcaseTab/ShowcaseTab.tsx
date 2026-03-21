@@ -5,6 +5,7 @@ import type { ShareSnapshot } from '@/core/share/types'
 import type { ShowcaseTemplate } from '@/store/ui'
 import styles from './ShowcaseTab.module.css'
 
+
 const TEMPLATES: { id: ShowcaseTemplate; name: string; desc: string }[] = [
   { id: 'landing', name: 'Landing', desc: 'SaaS homepage' },
   { id: 'dashboard', name: 'Dashboard', desc: 'Admin panel' },
@@ -14,7 +15,7 @@ const TEMPLATES: { id: ShowcaseTemplate; name: string; desc: string }[] = [
 
 export function ShowcaseTab() {
   const { showcaseTemplate, theme, mode, activeTab } = useUI()
-  const { setShowcaseTemplate, toggleTheme } = useUIActions()
+  const { setShowcaseTemplate } = useUIActions()
   const { slots, activeModel, dataVizN } = useColor()
   const { pairing, scale, locks } = useTypography()
   const { baseUnit } = useSpacing()
@@ -73,9 +74,6 @@ export function ShowcaseTab() {
       <div>
         <div className={styles.sectionTitle}>Actions</div>
         <div className={styles.actions}>
-          <button className={styles.actionBtn} onClick={toggleTheme}>
-            {theme === 'light' ? '◐' : '○'} {theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-          </button>
           <button className={styles.actionBtn} onClick={toggleFullscreen}>
             ⛶ Fullscreen preview
           </button>
@@ -92,9 +90,17 @@ export function ShowcaseTab() {
 
       <div>
         <div className={styles.sectionTitle}>Data Viz Colors</div>
-        <div style={{ fontSize: 11, color: 'var(--color-on-surface-subtle, #888)', fontFamily: 'sans-serif' }}>
-          {dataVizN}-color categorical palette — adjust in Colors tab
+        <div className={styles.dataVizStrip}>
+          {Array.from({ length: dataVizN }, (_, i) => (
+            <div
+              key={i}
+              className={styles.dataVizCell}
+              style={{ background: `var(--color-dataviz-${i + 1})` }}
+              title={`Color ${i + 1}`}
+            />
+          ))}
         </div>
+        <div className={styles.dataVizHint}>{dataVizN}-color palette — adjust count in Colors tab</div>
       </div>
     </div>
   )

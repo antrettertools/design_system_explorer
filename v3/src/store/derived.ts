@@ -1,5 +1,5 @@
 import { makeShadeScale } from '@/core/color/scales'
-import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles } from '@/core/color/semantic'
+import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles, deriveDarkStateMoodRoles } from '@/core/color/semantic'
 import { deriveDarkModeRoles } from '@/core/color/darkMode'
 import { generateDataVizPalette } from '@/core/color/dataViz'
 import { deriveComponentTokens } from '@/core/components/tokens'
@@ -9,6 +9,7 @@ import type { TokenMap } from '@/core/export/types'
 import type { ComponentName, ComponentTokenMap } from '@/core/components/types'
 import type { SpacingState } from './spacing'
 import type { EffectsState } from './effects'
+import type { AppTheme } from './ui'
 
 /**
  * Build the full token map from the current store state.
@@ -25,6 +26,7 @@ export function buildTokenMap(
   opts?: {
     componentOverrides?: Partial<ComponentTokenMap>
   },
+  theme: AppTheme = 'light',
 ): TokenMap {
   const light: Record<string, string> = {}
   const dark: Record<string, string> = {}
@@ -65,11 +67,25 @@ export function buildTokenMap(
     dark[`--color-${k}`] = v
   }
 
+  // Dark state/mood roles — lighter variants for visibility on dark backgrounds
+  const darkStateMoodRoles = deriveDarkStateMoodRoles(brandHex)
+  for (const [k, v] of Object.entries(darkStateMoodRoles)) {
+    dark[`--color-${k}`] = v
+  }
+
   // Data viz palette
   const dvColors = generateDataVizPalette(brandHex, dataVizN)
   dvColors.forEach((hex, i) => {
     light[`--color-dataviz-${i + 1}`] = hex
+    dark[`--color-dataviz-${i + 1}`] = hex  // same in dark mode
   })
+
+  // White mode: override surface tokens to pure white
+  if (theme === 'white') {
+    light['--color-background'] = '#ffffff'
+    light['--color-surface'] = '#ffffff'
+    light['--color-surface-raised'] = '#ffffff'
+  }
 
   // Typography tokens
   if (pairing) {
@@ -178,7 +194,7 @@ export function buildTokenMap(
  * Inject CSS custom properties into :root and [data-theme="dark"].
  * Call this after every state change.
  */
-export function injectTokensToDOM(tokens: TokenMap): void {
+export function injectTokensToDOM(tokens: TokenMap, theme: AppTheme = 'light'): void {
   const root = document.documentElement
   for (const [key, value] of Object.entries(tokens.light)) {
     root.style.setProperty(key, value)
@@ -191,8 +207,12 @@ export function injectTokensToDOM(tokens: TokenMap): void {
     styleEl.id = 'palette-dark-tokens'
     document.head.appendChild(styleEl)
   }
-  const darkRules = Object.entries(tokens.dark)
-    .map(([k, v]) => `  ${k}: ${v};`)
-    .join('\n')
-  styleEl.textContent = `[data-theme="dark"] {\n${darkRules}\n}`
+  if (theme === 'dark') {
+    const darkRules = Object.entries(tokens.dark)
+      .map(([k, v]) => `  ${k}: ${v};`)
+      .join('\n')
+    styleEl.textContent = `[data-theme="dark"] {\n${darkRules}\n}`
+  } else {
+    styleEl.textContent = ''  // Clear dark overrides when not in dark mode
+  }
 }

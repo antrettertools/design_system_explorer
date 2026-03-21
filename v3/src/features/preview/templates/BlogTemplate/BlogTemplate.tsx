@@ -27,14 +27,20 @@ export function BlogTemplate() {
             For decades, designers worked in RGB and HSL — color spaces that feel intuitive
             but are perceptually uneven. Here is why the future belongs to OKLCH.
           </p>
-          <div className={styles.meta}>March 21, 2026 · 8 min read</div>
+          <blockquote className={styles.pullQuote}>
+            "Colors that look equally saturated in HSL can differ wildly in perceived lightness.
+            OKLCH fixes this by separating lightness from chroma mathematically."
+          </blockquote>
+          <div className={styles.meta}>March 21, 2026<span className={styles.postMetaDot} />8 min read</div>
         </div>
         <div className={styles.postGrid}>
           {POSTS.map(post => (
             <article key={post.title} className={styles.postCard}>
               <div className={styles.postTag}>{post.tag}</div>
               <h2 className={styles.postTitle}>{post.title}</h2>
-              <div className={styles.postMeta}>{post.date} · {post.read} read</div>
+              <div className={styles.postMeta}>
+                {post.date}<span className={styles.postMetaDot} />{post.read} read
+              </div>
             </article>
           ))}
         </div>

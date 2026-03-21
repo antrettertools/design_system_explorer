@@ -18,6 +18,8 @@ const FEATURES = [
   },
 ]
 
+const FEATURE_ICON_CLASSES = ['featureIconBrand', 'featureIconSecondary', 'featureIconAccentA'] as const
+
 export function LandingTemplate() {
   return (
     <div className={styles.page}>
@@ -79,15 +81,31 @@ export function LandingTemplate() {
           Built for teams who move fast without breaking things.
         </p>
         <div className={styles.featureGrid}>
-          {FEATURES.map(f => (
+          {FEATURES.map((f, i) => (
             <div key={f.title} className={styles.featureCard}>
-              <div className={styles.featureIcon}>{f.icon}</div>
+              <div className={`${styles.featureIcon} ${styles[FEATURE_ICON_CLASSES[i % 3]]}`}>{f.icon}</div>
               <h3 className={styles.featureTitle}>{f.title}</h3>
               <p className={styles.featureBody}>{f.body}</p>
             </div>
           ))}
         </div>
       </section>
+
+      {/* STATUS ROW */}
+      <div className={styles.statusRow}>
+        {(['success', 'info', 'warning', 'error'] as const).map(s => (
+          <span
+            key={s}
+            className={styles.statusBadge}
+            style={{
+              background: `var(--color-${s}-container, #eee)`,
+              color: `var(--color-${s}, #333)`,
+            }}
+          >
+            {s}
+          </span>
+        ))}
+      </div>
 
       {/* TESTIMONIAL */}
       <section className={styles.testimonial}>

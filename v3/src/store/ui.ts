@@ -1,6 +1,6 @@
 export type AppMode = 'generator' | 'detail'
 export type DetailTab = 'colors' | 'typography' | 'spacing' | 'effects' | 'components' | 'showcase' | 'export'
-export type AppTheme = 'light' | 'dark'
+export type AppTheme = 'white' | 'light' | 'dark'
 export type ShowcaseTemplate = 'landing' | 'dashboard' | 'blog' | 'system'
 export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss' | 'figma'
 
@@ -17,7 +17,7 @@ export interface UIState {
 
 export interface UIActions {
   setMode: (mode: AppMode) => void
-  toggleTheme: () => void
+  setTheme: (theme: AppTheme) => void
   setActiveTab: (tab: DetailTab) => void
   setShowcaseTemplate: (template: ShowcaseTemplate) => void
   openExportPanel: () => void
@@ -45,11 +45,9 @@ export const defaultUIState: UIState = {
 export function createUIActions(set: any, get: any): UIActions {
   return {
     setMode: (mode) => set({ ui: { ...(get() as { ui: UIState }).ui, mode } }),
-    toggleTheme: () => {
-      const state = get() as { ui: UIState }
-      const theme = state.ui.theme === 'light' ? 'dark' : 'light'
+    setTheme: (theme) => {
       document.documentElement.setAttribute('data-theme', theme)
-      set({ ui: { ...state.ui, theme } })
+      set({ ui: { ...(get() as { ui: UIState }).ui, theme } })
     },
     setActiveTab: (activeTab) => set({ ui: { ...(get() as { ui: UIState }).ui, activeTab } }),
     setShowcaseTemplate: (showcaseTemplate) => set({ ui: { ...(get() as { ui: UIState }).ui, showcaseTemplate } }),
