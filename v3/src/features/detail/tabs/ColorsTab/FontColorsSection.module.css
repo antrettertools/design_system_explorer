@@ -1,0 +1,75 @@
+.section {
+  margin-bottom: 4px;
+}
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 10px;
+  font-family: sans-serif;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border, #e0dbd5);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.tokenLabel {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: 3px;
+}
+
+.specimen {
+  font-size: 13px;
+  font-family: var(--font-body, sans-serif);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.badgePass {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badgeFail {
+  background: #fee2e2;
+  color: #b91c1c;
+}
