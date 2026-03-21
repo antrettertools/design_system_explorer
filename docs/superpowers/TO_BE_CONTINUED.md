@@ -114,16 +114,148 @@ features/   → Feature panels. Import from store/ only.
 
 ---
 
-## What's Next — Phase 1E
+## What's Next — Phase 3
 
-**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1e-showcase-export-sharing.md`
+**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase3-components-figma-sessions.md`
 
-Phase 1E builds Showcase and Export tabs:
-- Detail mode shell is complete — add `'showcase'` and `'export'` cases to `renderTab()` in `DetailMode.tsx`
-- Export formatters are in `v3/src/core/export/index.ts` — call `formatTokens(format, tokens)` to get the code string
-- `buildTokenMap()` is in `v3/src/store/derived.ts` — call it to get the current token map
-- Live preview template switcher: use `useUI().showcaseTemplate` + `setShowcaseTemplate()`
-- Do not modify files under `v3/src/features/preview/` or `v3/src/store/`
+Phase 2 is complete and tagged `v3-phase2`. Phase 3 adds the Components tab — component token map, icon set selection from Lucide/Heroicons/Phosphor/Tabler/Radix, icon preview — plus Figma plugin export and save/load named sessions.
+
+---
+
+### Session 6 — 2026-03-21 — Phase 2: Spacing & Effects Tabs
+
+**Goal:** Add Spacing and Effects tabs to detail mode — all dimension and sensory tokens. Pure addition, zero changes to Phase 1 code.
+
+**What was built:**
+
+#### `v3/src/core/spacing/`
+- `types.ts` — `SpacingScale`, `RadiusScale`, `IconSizes`, `ZIndexMap`, `BreakpointMap`, `SpacingConfig` types.
+- `scale.ts` — `deriveSpacingScale({ baseUnit })` — 7 steps (xs→3xl) as multiples of baseUnit. `deriveRadiusScale()` — none/sm/md/lg/xl/full. `deriveIconSizes({ baseUnit })`. Constants: `BORDER_WIDTHS`, `OPACITY_SCALE`, `Z_INDEX_LAYERS`, `BREAKPOINTS`.
+- `index.ts` — re-exports.
+- `__tests__/scale.test.ts` — 11 tests, all pass.
+
+#### `v3/src/core/effects/`
+- `types.ts` — `ShadowPresets`, `FocusRing`, `EasingMap`, `DurationMap`, `MotionTokens`, `EffectsConfig`. Note: `EffectsConfig.shadowsNeutral` added (architecture fix — avoids feature components importing from core directly).
+- `shadows.ts` — `deriveShadowPresets(brandHex)` — brand-tinted shadows sm/md/lg/xl. `deriveNeutralShadows()` — pure grey shadows. `deriveFocusRing(brandHex)` — 2px ring in brand color.
+- `motion.ts` — `EASING_PRESETS` (easeIn/easeOut/easeInOut/spring/linear), `DURATION_SCALE` (100–500ms, 5 steps), `deriveMotionTokens()`.
+- `index.ts` — re-exports.
+- `__tests__/shadows.test.ts` — 7 tests, all pass.
+
+#### `v3/src/store/`
+- `spacing.ts` — `SpacingState`, `SpacingActions`. `setBaseUnit(4|8)` rebuilds config + resets overrides. `overrideStep`/`resetStep`/`resetAll` for individual value overrides.
+- `effects.ts` — `EffectsState`, `EffectsActions`. `shadowMode: 'colored' | 'neutral'`. `rebuildFromBrand(brandHex)` triggered by color subscription.
+- `derived.ts` — Extended `buildTokenMap()` signature with optional `spacing` and `effects` params. Injects `--spacing-*`, `--radius-*`, `--icon-size-*`, `--z-*`, `--breakpoint-*`, `--border-width-*`, `--shadow-*`, `--focus-ring-*`, `--ease-*`, `--duration-*`, `--transition-*` tokens to `:root`.
+- `index.ts` — Added `spacing`/`effects` slices + selectors `useSpacing`, `useSpacingActions`, `useEffects`, `useEffectsActions`. Added brand-color subscription → `rebuildFromBrand`. Extended `temporal` partialize to include spacing + effects.
+
+#### `v3/src/core/export/tailwindV3.ts`
+- Extended to emit `spacing`, `boxShadow`, `borderRadius`, `transitionDuration` in `theme.extend`.
+
+#### Spacing Tab: `v3/src/features/detail/tabs/SpacingTab/`
+- `SpacingScaleSection.tsx` — Visual ruler (bars + numeric inputs). 4pt/8pt base unit toggle. Per-step override with highlighted input + reset button.
+- `RadiusSection.tsx` — 3-column grid of 6 radius steps, each with a square preview box showing the actual border-radius.
+- `MiscSection.tsx` — Border widths (visual lines), icon sizes (visual boxes at actual size), opacity swatches (brand color at 5 opacities), z-index table, breakpoints table.
+- `SpacingTab.tsx` — Assembles all three sections.
+
+#### Effects Tab: `v3/src/features/detail/tabs/EffectsTab/`
+- `ShadowSection.tsx` — Brand-tinted / Neutral mode toggle. 2×2 grid of shadow cards (sm/md/lg/xl) with a white card showing each shadow live. Reads from `config.shadows` or `config.shadowsNeutral` — no core imports in feature component.
+- `FocusRingSection.tsx` — Two buttons side by side: unfocused + focused (with live brand-color outline). Token grid shows color swatch + width + offset values.
+- `MotionSection.tsx` — Easing cards (name + cubic-bezier), duration bars (proportional width), transition preset rows.
+- `EffectsTab.tsx` — Assembles Shadow → FocusRing → Motion.
+
+#### Wiring: `v3/src/features/detail/DetailMode.tsx`
+- Added `import { SpacingTab }` + `import { EffectsTab }`.
+- `PHASE_1_TABS` → `ALL_TABS`, `PHASE_1_IMPLEMENTED` → `IMPLEMENTED_TABS` (now includes `'spacing'` and `'effects'`).
+- Removed "Phase 2" coming-soon badge from Spacing and Effects tabs.
+- `renderTab()` now handles `case 'spacing'` and `case 'effects'`.
+
+#### URL Sharing: `v3/src/core/share/types.ts`
+- `ShareSnapshot` extended with optional `spacingBaseUnit?: 4 | 8` and `shadowMode?: 'colored' | 'neutral'`.
+
+#### URL Sharing: `v3/src/features/detail/tabs/ShowcaseTab/ShowcaseTab.tsx`
+- Snapshot now includes `spacingBaseUnit` and `shadowMode`.
+
+#### URL Sharing: `v3/src/App.tsx`
+- Restore logic reads `snapshot.spacingBaseUnit` → `spacingActions.setBaseUnit()` and `snapshot.shadowMode` → `effectsActions.setShadowMode()`.
+
+**Architecture note:** `ShadowSection.tsx` in the plan imported `deriveNeutralShadows` directly from `@/core/effects/shadows`, violating the layer rule (features must only import from store). Fixed by adding `shadowsNeutral: ShadowPresets` to `EffectsConfig` so both colored and neutral shadows are pre-computed in the store. Component reads `config.shadowsNeutral` — zero core imports in feature files.
+
+**Test results:** `tsc --noEmit` — zero errors. 67/67 tests pass (11 new tests in spacing + effects).
+
+**Git tag:** `v3-phase2` — Phase 2 complete.
+
+**Commits:**
+- `cd37059` feat(spacing): core — spacing scale, radius, icon sizes, z-index, breakpoints
+- `5b8ee79` feat(store): spacing + effects slices — tokens injected to :root
+- `980fe64` feat(export): Tailwind v3 — include spacing, shadow, radius, duration tokens
+- `6a47f82` feat(spacing-tab): spacing scale, border radius, icon sizes, z-index, breakpoints
+- `6452861` feat(effects-tab): shadows (brand-tinted + neutral), focus ring, motion tokens
+- `23eb118` feat(sharing): include spacing base unit + shadow mode in share URL
+
+**What Phase 3 receives from Phase 2:**
+- `useSpacing()` and `useEffects()` selectors available
+- `--spacing-*`, `--radius-*`, `--shadow-*`, `--ease-*`, `--duration-*`, `--focus-ring-*` all in `:root`
+- Export (CSS, SCSS, Tailwind v3/v4, W3C) includes all Phase 2 tokens automatically
+- URL sharing encodes spacing + effects state
+- Phase 3 only needs to add the Components tab — same additive pattern as Spacing and Effects
+- Do not modify files in `v3/src/features/detail/tabs/SpacingTab/` or `v3/src/features/detail/tabs/EffectsTab/`
+
+---
+
+### Session 5 — 2026-03-21 — Phase 1E: Showcase, Export & URL Sharing
+
+**Goal:** Complete Phase 1 by implementing the Showcase tab, Export tab, Export slide-up panel, all preview templates, and URL share link encode/decode.
+
+**What was built:**
+
+#### Feature: Template Switcher in LivePreview
+- `v3/src/features/preview/LivePreview.tsx` — Modified: reads `showcaseTemplate` + `mode` from store. In generator mode always shows `landing`. In detail mode switches between all 4 templates.
+
+#### Feature: DashboardTemplate
+- `v3/src/features/preview/templates/DashboardTemplate/DashboardTemplate.tsx` — Sidebar nav, stats grid (4 cards), bar chart area. All colors via CSS vars.
+- `v3/src/features/preview/templates/DashboardTemplate/DashboardTemplate.module.css`
+
+#### Feature: BlogTemplate
+- `v3/src/features/preview/templates/BlogTemplate/BlogTemplate.tsx` — Nav bar, featured hero article, 3-post grid. All colors + fonts via CSS vars.
+- `v3/src/features/preview/templates/BlogTemplate/BlogTemplate.module.css`
+
+#### Feature: SystemTemplate
+- `v3/src/features/preview/templates/SystemTemplate/SystemTemplate.tsx` — Screenshot-worthy design system document. Reads from store directly (`useColor`, `useTypography`), also calls `makeShadeScale`, `deriveBrandRoles`, `deriveNeutralRoles`, `deriveStateMoodRoles`, `generateDataVizPalette` for live rendering. Sections: header (wordmark + meta), Colors (brand scale full-width, compact secondary/accent scales, key semantic swatches, state color cards), Typography (heading + body specimens, character sets, weight rows), Data Viz (palette + mini bar chart).
+- `v3/src/features/preview/templates/SystemTemplate/SystemTemplate.module.css`
+
+#### Feature: ShowcaseTab
+- `v3/src/features/detail/tabs/ShowcaseTab/ShowcaseTab.tsx` — Template switcher 2×2 grid, Actions section (theme toggle, fullscreen, Copy share link). Share link uses `encodeShare()` from `@/core/share/encode` to build `#v3/<base64url(deflate(JSON))>` and writes to clipboard.
+- `v3/src/features/detail/tabs/ShowcaseTab/ShowcaseTab.module.css`
+- `v3/src/features/detail/DetailMode.tsx` — Modified: added `case 'showcase'` and `case 'export'` to `renderTab()`. Updated `PHASE_1_IMPLEMENTED` to include both.
+
+#### Feature: ExportTab (detail mode)
+- `v3/src/features/detail/tabs/ExportTab/ExportTab.tsx` — Format grid (5 formats), Options (prefix input), live code preview (scrollable `<pre>`), Copy + Download actions.
+- `v3/src/features/detail/tabs/ExportTab/ExportTab.module.css`
+
+#### Feature: ExportPanel (slide-up overlay)
+- `v3/src/features/export/ExportPanel.tsx` — Viewport-anchored overlay with backdrop. Format tab bar, scrollable code preview, footer with line/char count + Download + Copy. Closes on Escape, backdrop click, × button.
+- `v3/src/features/export/ExportPanel.module.css`
+- `v3/src/App.tsx` — Modified: `<ExportPanel />` mounted after `<SplitPane>`.
+
+#### Feature: URL Sharing — decode on load
+- `v3/src/core/share/loadFromHash.ts` — `loadFromHash()` — reads `window.location.hash`, returns null if not `#v3/`, else calls `decodeShare()`.
+- `v3/src/App.tsx` — Modified: `useEffect` now calls `loadFromHash()` first. If snapshot found, restores `color.slots`, `color.activeModel`, `typography.pairing`, `typography.locks`, `ui.theme`, `ui.mode`, `ui.activeTab` via `useStore.setState()`, then calls `typographyActions.generate()` to rebuild scale. Otherwise falls back to fresh cold generation.
+
+**Test results:** `tsc --noEmit` — zero errors. 49/49 tests pass.
+
+**Git tag:** `v3-phase1` — Phase 1 complete and shippable.
+
+**Commits:**
+- `7f6bb1b` feat(preview): template switcher wired + Dashboard + Blog templates
+- `24a72ba` feat(system-view): screenshot-worthy design system doc
+- `09e62cc` feat(showcase-tab): template switcher, share link copy, fullscreen
+- `6e03102` feat(export-panel): slide-up overlay
+- `3414525` feat(export-tab): full export controls
+- `64c4f39` feat(sharing): decode URL hash on load
+
+**What Phase 2 receives:**
+- Full Phase 1 shippable: generator + preview + detail (Colors, Typography, Showcase, Export) + URL sharing
+- Phase 2 adds `'spacing'` and `'effects'` cases to `renderTab()` in `DetailMode.tsx`
+- Do not modify files under `v3/src/features/preview/`, `v3/src/features/export/`, or `v3/src/store/`
 
 ---
 
