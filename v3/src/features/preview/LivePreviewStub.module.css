@@ -1,0 +1,10 @@
+.stub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: var(--color-surface);
+  color: var(--color-on-surface-subtle);
+  font-size: 14px;
+  font-family: sans-serif;
+}
