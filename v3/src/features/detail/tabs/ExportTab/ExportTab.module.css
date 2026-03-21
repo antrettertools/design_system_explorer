@@ -1,0 +1,99 @@
+.tab { display: flex; flex-direction: column; gap: 20px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: 10px;
+  font-family: sans-serif;
+}
+
+.formatGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.formatBtn {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.formatBtn.active {
+  border-color: var(--color-interactive, #e8543a);
+  background: var(--color-interactive-subtle, #fde8e3);
+  color: var(--color-interactive, #e8543a);
+  font-weight: 600;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+}
+
+.optionRow select, .optionRow input {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 5px;
+  font-size: 12px;
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #111);
+}
+
+.code {
+  font-family: 'SF Mono', monospace;
+  font-size: 10px;
+  line-height: 1.6;
+  background: var(--color-background, #f8f7f4);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  padding: 12px;
+  overflow-x: auto;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre;
+  color: var(--color-on-surface, #333);
+}
+
+.actions { display: flex; gap: 8px; }
+
+.copyBtn {
+  height: 36px;
+  padding: 0 20px;
+  background: var(--color-interactive, #e8543a);
+  color: var(--color-on-interactive, #fff);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: opacity 0.15s;
+}
+
+.copyBtn:hover { opacity: 0.85; }
+
+.downloadBtn {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  color: var(--color-on-surface, #333);
+  font-family: sans-serif;
+}
