@@ -19,7 +19,7 @@
 .backLink {
   background: none;
   border: none;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   cursor: pointer;
   padding: 0;
@@ -28,6 +28,7 @@
   gap: 4px;
   white-space: nowrap;
   transition: color 0.15s;
+  flex-shrink: 0;
 }
 
 .backLink:hover { color: var(--color-on-surface); }
@@ -36,13 +37,18 @@
   width: 1px;
   height: 16px;
   background: var(--color-border);
+  flex-shrink: 0;
 }
 
 .tabs {
   display: flex;
   gap: 0;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
 }
 
 .tabs::-webkit-scrollbar { display: none; }
@@ -53,7 +59,7 @@
   border-bottom: 2px solid transparent;
   padding: 0 14px;
   height: 46px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-on-surface-subtle);
   cursor: pointer;
@@ -61,6 +67,11 @@
   letter-spacing: 0.01em;
   transition: color 0.15s, border-color 0.15s;
   font-family: sans-serif;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .tab:hover { color: var(--color-on-surface); }
@@ -68,6 +79,22 @@
 .tab.active {
   color: var(--color-interactive);
   border-bottom-color: var(--color-interactive);
+}
+
+/* Responsive label switching */
+.tabFullLabel { display: inline; }
+.tabShortLabel { display: none; }
+
+@media (max-width: 900px) {
+  .tabFullLabel { display: none; }
+  .tabShortLabel { display: inline; }
+}
+
+.tabBadge {
+  font-size: 13px;
+  opacity: 0.4;
+  margin-left: 3px;
+  line-height: 1;
 }
 
 .content {
