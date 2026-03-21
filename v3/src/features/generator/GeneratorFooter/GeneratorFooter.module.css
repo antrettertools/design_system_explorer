@@ -9,7 +9,7 @@
 }
 
 .hint {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   font-family: sans-serif;
   flex: 1;
@@ -23,7 +23,7 @@
   border: 1px solid var(--color-border-strong);
   border-radius: 3px;
   font-family: monospace;
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .actions {
@@ -39,7 +39,7 @@
   background: none;
   border: 1px dashed var(--color-border);
   border-radius: 14px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--color-on-surface-subtle);
   cursor: not-allowed;
   font-family: sans-serif;
@@ -51,7 +51,7 @@
   background: none;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
   color: var(--color-on-surface);
   font-family: sans-serif;
@@ -68,7 +68,7 @@
   color: var(--color-on-interactive);
   border: none;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   font-family: sans-serif;

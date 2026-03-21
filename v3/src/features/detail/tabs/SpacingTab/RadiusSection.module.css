@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
@@ -34,14 +34,14 @@
 }
 
 .label {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
 .value {
-  font-size: 9px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle, #aaa);
 }

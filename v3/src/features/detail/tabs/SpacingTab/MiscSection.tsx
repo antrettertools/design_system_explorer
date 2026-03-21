@@ -36,7 +36,7 @@ export function MiscSection() {
                   title={`icon-size-${step}: ${size}px`}
                 />
                 <span className={styles.iconLabel}>{step}</span>
-                <span style={{ fontSize: 8, fontFamily: 'monospace', color: 'var(--color-on-surface-subtle)' }}>{size}px</span>
+                <span className={styles.iconLabel}>{size}px</span>
               </div>
             )
           })}
@@ -54,7 +54,7 @@ export function MiscSection() {
                 style={{ opacity }}
                 title={`opacity: ${opacity}`}
               />
-              <span style={{ fontSize: 8, fontFamily: 'monospace', color: 'var(--color-on-surface-subtle)' }}>
+              <span className={styles.iconLabel}>
                 {Math.round(opacity * 100)}%
               </span>
             </div>
@@ -82,7 +82,7 @@ export function MiscSection() {
               <tr key={name}>
                 <td>{name}</td>
                 <td>≥ {value}px</td>
-                <td style={{ color: 'var(--color-on-surface-subtle)', fontSize: 9 }}>--breakpoint-{name}</td>
+                <td className={styles.tokenName}>--breakpoint-{name}</td>
               </tr>
             ))}
           </tbody>

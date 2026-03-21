@@ -1,7 +1,7 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
@@ -14,7 +14,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 14px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
@@ -24,7 +24,7 @@
   border: 1px solid var(--color-border, #e8e4df);
   border-radius: 5px;
   background: none;
-  font-size: 11px;
+  font-size: 13px;
   cursor: pointer;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle, #888);
@@ -64,14 +64,14 @@
 }
 
 .label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
 .value {
-  font-size: 8px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle, #aaa);
   word-break: break-all;

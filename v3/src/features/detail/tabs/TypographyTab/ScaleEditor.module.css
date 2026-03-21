@@ -1,7 +1,7 @@
 .section { margin-bottom: 24px; }
 
 .sectionTitle {
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -177,7 +177,7 @@
 }
 
 .metaItem {
-  font-size: 9px;
+  font-size: 13px;
   font-family: monospace;
   color: var(--color-on-surface-subtle);
   min-width: 40px;

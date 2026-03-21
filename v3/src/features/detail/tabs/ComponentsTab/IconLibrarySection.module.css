@@ -78,7 +78,7 @@
   background: var(--color-background);
   color: var(--color-text-secondary);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.12s;
 }
