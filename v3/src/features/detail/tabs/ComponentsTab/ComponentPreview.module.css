@@ -1,0 +1,223 @@
+/* Structural layout only — all brand colors via CSS vars */
+
+/* ---- Button ---- */
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-md);
+}
+
+.btnDefault {
+  background: var(--component-button-bg);
+  color: var(--component-button-text);
+  border: 1px solid var(--component-button-border);
+  border-radius: var(--component-button-radius);
+  box-shadow: var(--component-button-shadow);
+  padding: 8px 16px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  cursor: pointer;
+}
+
+.btnDefault:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btnHover {
+  background: var(--component-button-bg-hover);
+  color: var(--component-button-text);
+  border: 1px solid var(--component-button-border);
+  border-radius: var(--component-button-radius);
+  box-shadow: var(--component-button-shadow);
+  padding: 8px 16px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  cursor: pointer;
+}
+
+/* ---- Input ---- */
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+.inputField {
+  background: var(--component-input-bg);
+  color: var(--component-input-text);
+  border: 1px solid var(--component-input-border);
+  border-radius: var(--component-input-radius);
+  padding: 7px 10px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  outline: none;
+}
+
+.inputFieldFocused {
+  background: var(--component-input-bg);
+  color: var(--component-input-text);
+  border: 2px solid var(--component-input-focus-border);
+  border-radius: var(--component-input-radius);
+  padding: 7px 10px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  outline: none;
+}
+
+.inputFieldError {
+  background: var(--component-input-bg);
+  color: var(--component-input-text);
+  border: 2px solid var(--color-error, #c0392b);
+  border-radius: var(--component-input-radius);
+  padding: 7px 10px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  outline: none;
+}
+
+/* ---- Card ---- */
+.card {
+  background: var(--component-card-bg);
+  border: 1px solid var(--component-card-border);
+  border-radius: var(--component-card-radius);
+  box-shadow: var(--component-card-shadow);
+  overflow: hidden;
+  margin: var(--spacing-md);
+}
+
+.cardTitle {
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-xs);
+  font-family: var(--font-heading, sans-serif);
+  font-size: var(--font-size-body, 14px);
+  font-weight: 600;
+  color: var(--color-on-surface);
+}
+
+.cardBody {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--font-size-label, 13px);
+  color: var(--color-on-surface-subtle);
+  line-height: 1.5;
+}
+
+.cardFooter {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-top: 1px solid var(--component-card-border);
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--font-size-label, 13px);
+  color: var(--color-on-surface-subtle);
+}
+
+/* ---- Badge ---- */
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-md);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--component-badge-bg);
+  color: var(--component-badge-text);
+  border: 1px solid var(--component-badge-border);
+  border-radius: var(--component-badge-radius);
+  padding: 2px 8px;
+  font-size: var(--font-size-label, 13px);
+  font-family: var(--font-body, sans-serif);
+}
+
+/* ---- Tag ---- */
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-md);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--component-tag-bg);
+  color: var(--component-tag-text);
+  border: 1px solid var(--component-tag-border);
+  border-radius: var(--component-tag-radius);
+  padding: 3px 8px;
+  font-size: var(--font-size-label, 13px);
+  font-family: var(--font-body, sans-serif);
+}
+
+.tagRemove {
+  background: none;
+  border: none;
+  color: var(--component-tag-text);
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.tagRemove:hover {
+  opacity: 1;
+}
+
+/* ---- Tooltip ---- */
+.tooltipWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+}
+
+.tooltipTrigger {
+  background: var(--color-surface-raised);
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 6px 12px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  cursor: default;
+}
+
+.tooltip {
+  background: var(--component-tooltip-bg);
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 6px 10px;
+  font-size: var(--font-size-label, 13px);
+  font-family: var(--font-body, sans-serif);
+  max-width: 260px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- Alert ---- */
+.alertStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+}
+
+.alert {
+  border-radius: var(--component-alert-radius);
+  padding: 10px 14px;
+  font-size: var(--font-size-body, 14px);
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface);
+  text-transform: capitalize;
+}

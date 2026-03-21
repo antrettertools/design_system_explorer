@@ -493,3 +493,193 @@ Phase 4C starts with the following in place:
 | Test count | 116 (was 106) |
 | TypeScript | `tsc --noEmit` clean; pre-existing `tsc -b` errors unchanged |
 | Vite build | ✓ 309 modules |
+
+---
+
+---
+
+# palette. Phase 4C — Components Completeness: Implementation Log
+
+> **Branch:** `feat/v4-phase4c-components` (based on `feat/v3-phase1a`)
+> **Date:** 2026-03-21
+> **Baseline:** 116 tests → **116 tests passing** after phase (no new tests added — feature-only phase)
+> **TypeScript:** Pre-existing errors unchanged; zero new errors introduced
+> **Build:** `npx vite build` — ✓ 343 KB unminified / 110 KB gzipped JS (named imports, tree-shaken)
+
+---
+
+## What Was Built
+
+Phase 4C delivers live component previews for all 7 component types, color pickers on token color fields in the Components tab, and real Lucide icons in the icon grid with a size selector.
+
+---
+
+## Task 1 — Install `lucide-react`
+
+**Commit:** `d91ebc9`
+
+**Package:** `lucide-react@^0.577.0` added to `v3/package.json` under `dependencies`.
+
+**Bundle note:** Initial implementation used `import * as LucideIcons` which caused the bundle to jump from 309 → 2024 modules (274 KB gzipped). Switched to named imports in a follow-up commit → bundle dropped to 110 KB gzipped.
+
+---
+
+## Task 2 — `ComponentPreview` component
+
+**Files created:**
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentPreview.tsx`
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentPreview.module.css`
+
+**Commit:** `52a688a`
+
+**API:**
+```typescript
+interface ComponentPreviewProps {
+  componentName: ComponentName  // 'button' | 'input' | 'card' | 'badge' | 'tag' | 'tooltip' | 'alert'
+}
+```
+
+**What it renders:**
+
+| Component | Specimen |
+|-----------|---------|
+| button | Primary + Hover + Disabled states |
+| input | Default + Focused (thick border) + Error (red border) states |
+| card | Title + Body + Footer with card background/border/shadow |
+| badge | Default + Success (green) + Error (red) variants |
+| tag | 3 tags ("Design", "System", "Tokens") each with × remove button |
+| tooltip | Trigger button + tooltip bubble below |
+| alert | 4 variants: info / warning / error / success |
+
+**Architecture:**
+- All `--component-{name}-*` CSS vars drive structural colors (background, border, radius, shadow)
+- Alert and badge state variants use inline styles for `--color-{state}-container` / `--color-{state}` — acceptable for state colors that are not `--component-*` vars (plan-approved pattern)
+- No imports from `core/` (only `type ComponentName` from `@/core/components/types` — type-only, zero runtime cost)
+- All layout in `.module.css`, no inline structural styles
+
+---
+
+## Task 3 — Wire `ComponentPreview` into `ComponentTokenSection`
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentTokenSection.tsx`
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentTokenSection.module.css`
+
+**Commit:** `b4394d8`
+
+**Changes:**
+- Removed the button-only hardcoded preview block (lines 107–142)
+- Added `import { ComponentPreview }` from sibling file
+- All 7 component accordions now show `<ComponentPreview componentName={comp} />` when open
+- Added `.previewWrapper` (top border separator) and updated `.previewLabel` in CSS module
+
+---
+
+## Task 4 — Color pickers on token color fields
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentTokenSection.tsx`
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentTokenSection.module.css`
+
+**Commit:** `6af938a`
+
+**What changed:**
+
+State management added to `ComponentTokenSection`:
+```typescript
+const [openPicker, setOpenPicker] = useState<string | null>(null)
+const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
+```
+
+Color key detection:
+```typescript
+const COLOR_KEYS = new Set(['bg', 'bgHover', 'text', 'border', 'focusBorder', 'placeholder', 'iconColor'])
+```
+
+For each token row whose key is in `COLOR_KEYS`:
+- An 18×18px color swatch div is rendered before the text input
+- Clicking the swatch opens `ColorPickerPopover` for that field
+- `swatchRefs.current[pickerId]` stores the DOM element via callback ref
+- `ColorPickerPopover` is passed `anchorRef={{ current: swatchRefs.current[pickerId] } as React.RefObject<HTMLElement>}`
+- If `currentValue` is a CSS var reference (not a hex), picker starts at `#888888`
+- Picking a color overrides the token to an explicit hex — making the "derived from tokens" into an explicit override
+- The ↺ reset button reverts back to the derived CSS var reference
+
+**Swatch CSS:** 18×18px, `border-radius: var(--radius-sm)`, hover scales to 1.15× for click affordance.
+
+---
+
+## Task 5 — Real Lucide icons in `IconLibrarySection`
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ComponentsTab/IconLibrarySection.tsx`
+- `v3/src/features/detail/tabs/ComponentsTab/IconLibrarySection.module.css`
+
+**Commits:** `bc17cae`, `192ed29`
+
+**What changed:**
+
+Replaced all placeholder SVG paths with real Lucide icon components. Key implementation details:
+
+**Named imports (tree-shaking):**
+```typescript
+import {
+  Home, Search, Settings, User, Heart, Star,
+  Bell, Mail, Calendar, Clock, Camera, Image,
+  File, Folder, Trash2, Pencil, Plus, Minus,
+  Check, X, ArrowRight, ArrowLeft, ChevronDown, Menu,
+} from 'lucide-react'
+```
+
+**Static lookup map** (avoids dynamic string→component resolution at runtime):
+```typescript
+const LUCIDE_ICON_MAP: Record<string, LucideIconComponent> = {
+  home: Home, search: Search, /* ... all 24 */ }
+```
+
+**Icon name mappings (non-obvious):**
+- `trash` → `Trash2` (Lucide's standard trash icon is `Trash2`)
+- `edit` → `Pencil` (the `Edit` icon was renamed to `Pencil` in recent Lucide versions)
+
+**Size selector:** 5-option segmented button group (XS 12px / SM 16px / MD 20px / LG 24px / XL 32px) above the icon grid. `useState(20)` default.
+
+**Non-Lucide libraries:** Show a placeholder panel with install instructions:
+```
+{lib.label} not installed
+Run npm install {lib.packageName} to use this library
+```
+
+**CSS changes:**
+- `.iconSlot` replaced with `.iconCell` (36×36px, centered, hover background)
+- Removed `iconPlaceholder` SVG styling
+- Added `.previewHeader` (flex row with label + size selector)
+- Added `.sizeSelector`, `.sizeBtn`, `.sizeBtnActive` (segmented control pattern)
+- Added `.libraryPlaceholder`, `.libraryPlaceholderTitle`, `.libraryPlaceholderHint`
+- Added `.iconMissing` (fallback `?` text)
+
+---
+
+## Architecture Compliance
+
+All Phase 4C work follows the Engineering Guide:
+- No `core/` function imports in React components — only `type ComponentName` (zero runtime)
+- All structural layout in `.module.css` — no inline structural styles
+- State/color inline styles only for semantic state colors on badge/alert specimens (plan-approved exception)
+- `ComponentPreview` placed in `features/detail/tabs/ComponentsTab/` — not a shared primitive (feature-specific)
+- `lucide-react` uses named imports → tree-shaken to 24 icons only
+
+---
+
+## What Phase 4D Receives
+
+Phase 4D starts with the following in place:
+
+| Item | State |
+|------|-------|
+| `ComponentPreview` | All 7 component types show live specimens |
+| `ColorPickerPopover` | Used in 3 places: ColorSlotCard, ShadeScaleSection, ComponentTokenSection |
+| Lucide icons | Installed (`lucide-react@^0.577.0`), 24 real icons rendering |
+| Icon size selector | XS/SM/MD/LG/XL segmented control |
+| Test count | 116 (unchanged — no store changes in this phase) |
+| TypeScript | Pre-existing errors unchanged; zero new errors |
+| Build | ✓ 110 KB gzipped JS (named Lucide imports, tree-shaken) |

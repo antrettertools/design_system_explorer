@@ -52,10 +52,50 @@
   padding: var(--spacing-md);
 }
 
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
 .previewLabel {
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
-  margin-bottom: var(--spacing-sm);
+  margin: 0;
+}
+
+.sizeSelector {
+  display: flex;
+  gap: 2px;
+}
+
+.sizeBtn {
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.sizeBtn:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.sizeBtn:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.sizeBtnActive {
+  background: var(--color-interactive);
+  border-color: var(--color-interactive);
+  color: var(--color-on-interactive, #fff);
+  font-weight: 600;
 }
 
 .iconGrid {
@@ -64,21 +104,45 @@
   gap: var(--spacing-sm);
 }
 
-.iconSlot {
+.iconCell {
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
-  border-radius: var(--radius-sm);
-  transition: background 0.1s;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+  transition: background 0.12s;
 }
 
-.iconSlot:hover {
+.iconCell:hover {
   background: var(--color-surface-raised);
 }
 
-.iconPlaceholder {
-  color: var(--color-text-secondary);
+.iconMissing {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.libraryPlaceholder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.libraryPlaceholderTitle {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.libraryPlaceholderHint {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
 }
 
 .sizeMappingTable {
