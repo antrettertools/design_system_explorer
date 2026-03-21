@@ -14,15 +14,68 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 14px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+  flex-wrap: wrap;
+}
+
+.hint {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.presetGroup {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.presetBtn {
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: none;
+  font-size: 13px;
+  font-family: monospace;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  transition: all 0.15s;
+}
+
+.presetBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.presetActive {
+  background: var(--color-interactive-subtle, #fde8e3);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+  font-weight: 700;
+}
+
+.customRatioInput {
+  width: 72px;
+  font-size: 13px;
+  font-family: monospace;
+  padding: 3px 6px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
   color: var(--color-on-surface-subtle);
 }
 
-.ratioValue {
-  font-family: monospace;
+.customRatioActive {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
   font-weight: 700;
-  color: var(--color-on-surface);
+}
+
+.customRatioInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
 }
 
 .scaleList { display: flex; flex-direction: column; gap: 4px; }
@@ -35,6 +88,77 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.overridden {
+  border-left: 3px solid var(--color-interactive);
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-on-surface-subtle);
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.expandBtn:hover { color: var(--color-on-surface); }
+
+.expandedControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 0 4px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 4px;
+  align-items: center;
+}
+
+.overrideLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 13px;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.overrideInput {
+  width: 72px;
+  font-size: 13px;
+  font-family: monospace;
+  padding: 3px 6px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-on-surface);
+}
+
+.overrideInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+}
+
+.resetStepBtn {
+  font-size: 13px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 3px 10px;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  align-self: flex-end;
+  transition: all 0.15s;
+}
+
+.resetStepBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
 }
 
 .specimen {
@@ -61,10 +185,10 @@
 }
 
 .stepLabel {
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
-  width: 36px;
+  width: 48px;
   flex-shrink: 0;
 }
