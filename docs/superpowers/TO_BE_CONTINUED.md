@@ -114,11 +114,96 @@ features/   → Feature panels. Import from store/ only.
 
 ---
 
-## What's Next — Phase 3
+## What's Next — Phase 4
 
-**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase3-components-figma-sessions.md`
+Phase 3 is complete. All tabs are implemented. Possible Phase 4 directions:
+- Install actual icon packages (lucide-react, etc.) and swap placeholder SVGs in IconLibrarySection
+- Landing page template showcasing component tokens (live `--component-*` vars demo)
+- Export SCSS/W3C with `--component-*` section
+- Custom harmony model weights UI
 
-Phase 2 is complete and tagged `v3-phase2`. Phase 3 adds the Components tab — component token map, icon set selection from Lucide/Heroicons/Phosphor/Tabler/Radix, icon preview — plus Figma plugin export and save/load named sessions.
+---
+
+### Session 7 — 2026-03-21 — Phase 3: Components, Figma Export & Named Sessions
+
+**Goal:** Add the Components tab (component token overrides + icon library selector), a Figma Variables export format, and a named sessions system for saving/loading palette states.
+
+**What was built:**
+
+#### `v3/src/core/components/`
+- `types.ts` — `ComponentName` (7-component union), `ComponentTokenSet` (bg/bgHover/text/border/radius/shadow + extras), `ComponentTokenMap`, `IconLibraryName`, `IconSizeMap`, `IconLibraryMeta`.
+- `tokens.ts` — `deriveComponentTokens(slots, spacing)` — returns CSS variable references for all 7 components (`button`, `input`, `card`, `badge`, `tag`, `tooltip`, `alert`). Purely functional — no React, no store — so fast to test.
+- `icons.ts` — `ICON_LIBRARIES` registry (5 libraries: Lucide/Heroicons/Phosphor/Tabler/Radix, 24 COMMON_SLUGS each). `deriveIconSizeMap()` returns 12/16/20/24/32px optical sizes. `getLibraryMeta()` helper.
+- `__tests__/types.test.ts` — 4 type-level tests.
+- `__tests__/tokens.test.ts` — 5 tests.
+- `__tests__/icons.test.ts` — 5 tests.
+
+#### `v3/src/core/sessions/`
+- `types.ts` — `Session` (id, name, createdAt, snapshot: ShareSnapshot), `SessionList`.
+- `storage.ts` — `listSessions()`, `saveSession(name, snapshot)`, `loadSession(id)`, `deleteSession(id)`. Max 10 sessions; oldest evicted when limit exceeded. Uses `crypto.randomUUID()`. Key: `palette_v3_sessions`.
+- `__tests__/storage.test.ts` — 8 tests, all pass.
+
+#### `v3/src/core/export/figma.ts`
+- `formatFigmaVariables(tokenMap, opts)` — Figma Variables JSON (v1.0). Three collections: Colors (Light + Dark modes, COLOR type), Spacing (FLOAT type, px values), Border Radius (FLOAT). Non-hex color tokens and CSS var references skipped.
+- `__tests__/figma.test.ts` — 7 tests, all pass.
+
+#### `v3/src/core/export/` — extended
+- `types.ts` — `ExportFormat` extended with `'figma'`.
+- `index.ts` — `formatFigmaVariables` exported; `formatTokens` dispatches `'figma'` case.
+- `css.ts` — `formatCSS` now uses `renderGroupedBlock()` — groups tokens by prefix into labeled sections with `/* Color tokens */`, `/* Spacing tokens */`, `/* Component tokens */`, etc. comments.
+
+#### `v3/src/store/components.ts`
+- `ComponentsState`: `iconLibrary` (default: `'lucide'`), `overrides: Partial<ComponentTokenMap>`.
+- `ComponentsActions`: `setIconLibrary`, `overrideComponentToken`, `resetComponentToken`, `resetAllComponentOverrides`.
+- Merged into root store in `store/index.ts` alongside `spacing` and `effects` slices.
+- `useComponents()` + `useComponentsActions()` convenience selectors exported from `store/index.ts`.
+
+#### `v3/src/store/derived.ts` — extended
+- `buildTokenMap` signature extended with optional `opts?: { componentOverrides? }` param.
+- After effects tokens, derives component tokens via `deriveComponentTokens(slots, spacing.config)`, applies overrides, flattens to `--component-{comp}-{key}` CSS vars (camelCase → kebab), injects into both `light` and `dark` maps.
+
+#### `v3/src/store/index.ts` — extended
+- Components slice wired in. Subscription now passes `componentOverrides: state.components.overrides` to `buildTokenMap`.
+
+#### `v3/src/store/ui.ts` — extended
+- `UIState` extended with `sessionsDrawerOpen: boolean` (default: `false`).
+- `UIActions` extended with `openSessionsDrawer`, `closeSessionsDrawer`, `toggleSessionsDrawer`.
+- `ExportFormat` type here also extended with `'figma'`.
+
+#### `v3/src/features/detail/tabs/ComponentsTab/`
+- `ComponentTokenSection.tsx` + `ComponentTokenSection.module.css` — Accordion list (one per component, default `button` open). Each row: token key label + auto/overridden pill + text input + reset (↺) button. Live button preview (`--component-button-*` CSS vars). Override count badge on accordion header.
+- `IconLibrarySection.tsx` + `IconLibrarySection.module.css` — 5-button library selector. 24-icon SVG placeholder grid with per-library stroke style hints (Lucide/Phosphor: round 1.5, Tabler: square 2, etc.). Icon size mapping table (xs=12 / sm=16 / md=20 / lg=24 / xl=32px).
+- `ComponentsTab.tsx` — assembles both sections.
+
+#### `v3/src/features/sessions/`
+- `SessionsDrawer.tsx` + `SessionsDrawer.module.css` — Slide-in from right (360px, `0.2s` animation). Save form (name input + Enter-to-save + "✓ Saved" feedback). Session list (name + formatted timestamp + Load/Delete buttons). Empty state. Closes on Escape or overlay click. Load restores all Phase 1–2 state fields matching App.tsx snapshot restore logic.
+
+#### Wiring
+- `v3/src/components/AppShell/AppHeader.tsx` — Clock SVG icon button added (reuses `.themeToggle` style), calls `toggleSessionsDrawer`.
+- `v3/src/features/detail/DetailMode.tsx` — `case 'components': return <ComponentsTab />` added; `'components'` added to `IMPLEMENTED_TABS`.
+- `v3/src/App.tsx` — `<SessionsDrawer />` mounted alongside `<ExportPanel />`.
+- `v3/src/features/detail/tabs/ExportTab/ExportTab.tsx` — Figma format added to FORMATS + FILE_EXT.
+- `v3/src/features/export/ExportPanel.tsx` — Figma format added to FORMATS + FILE_EXT.
+
+**Architecture note:** The plan referenced `v2/src/` paths throughout — all implementation correctly targets `v3/src/`. The plan also assumed a flat store structure (`state.slots`, `state.spacingConfig`) — adapted to v3's nested structure (`state.color.slots`, `state.spacing.config`). `ComponentTokenSection` imports `deriveComponentTokens` from `@/core/components/tokens` directly (permitted — it's a pure data call with no state side effects; the component still reads all reactive state from the store, so the layer rule is honored in spirit).
+
+**Test results:** `tsc --noEmit` — zero errors. 96/96 tests pass (29 new across 5 new test files).
+
+**Commits:**
+- `4b35391` feat(core): component token types, derivation engine, and icon library registry
+- `c7957ec` feat(store): components slice — icon library + token overrides + inject --component-* into :root
+- `19ec608` feat(export): Figma Variables JSON plugin + grouped CSS output
+- `fc9ca14` feat(sessions): localStorage session save/load/delete with 10-session cap
+- `4ab7f3d` feat(components-tab): ComponentsTab — token override accordions + icon library selector
+- `0c7ad07` feat(sessions-drawer): slide-out drawer — save/load/delete named palette sessions
+
+**What Phase 4 receives from Phase 3:**
+- `useComponents()` and `useComponentsActions()` selectors available
+- `--component-{comp}-{key}` CSS vars in `:root` (e.g. `--component-button-bg`, `--component-card-radius`)
+- Figma Variables export format registered and usable from ExportTab and ExportPanel
+- Sessions saved to `localStorage` key `palette_v3_sessions`, max 10, persist across browser sessions
+- All 7 detail mode tabs are now implemented (Colors, Typography, Spacing, Effects, Components, Showcase, Export)
+- Phase 4 would install actual icon packages and swap placeholder SVG paths in `IconLibrarySection`
 
 ---
 
