@@ -22,7 +22,7 @@ docs/
       2026-03-21-v3-phase1a-foundation.md        ← DONE
       2026-03-21-v3-phase1b-generator-ui.md      ← DONE
       2026-03-21-v3-phase1c-live-preview.md      ← DONE
-      2026-03-21-v3-phase1d-detail-colors-typography.md  ← NEXT
+      2026-03-21-v3-phase1d-detail-colors-typography.md  ← DONE
       2026-03-21-v3-phase1d-detail-colors-typography.md
       2026-03-21-v3-phase1e-showcase-export-sharing.md
       2026-03-21-v3-phase2-spacing-effects.md
@@ -114,18 +114,56 @@ features/   → Feature panels. Import from store/ only.
 
 ---
 
-## What's Next — Phase 1D
+## What's Next — Phase 1E
 
-**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1d-detail-colors-typography.md`
+**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1e-showcase-export-sharing.md`
 
-Phase 1D builds the Detail Mode — the tabbed editor for deep control:
-- The store already has `useUI().mode` — when it becomes `'detail'`, render `<DetailMode />` instead of `<GeneratorPanel />`
-- Tabs: Colors, Typography, Spacing, Effects, Components, Showcase, Export
-- The "Detail Mode →" button in `GeneratorFooter` already calls `setMode('detail')`
-- `<LivePreview />` stays mounted on the right — Phase 1D should also add a template switcher (landing / system view)
+Phase 1E builds Showcase and Export tabs:
+- Detail mode shell is complete — add `'showcase'` and `'export'` cases to `renderTab()` in `DetailMode.tsx`
+- Export formatters are in `v3/src/core/export/index.ts` — call `formatTokens(format, tokens)` to get the code string
+- `buildTokenMap()` is in `v3/src/store/derived.ts` — call it to get the current token map
+- Live preview template switcher: use `useUI().showcaseTemplate` + `setShowcaseTemplate()`
 - Do not modify files under `v3/src/features/preview/` or `v3/src/store/`
 
-**Key reminder for Phase 1D:** `showcaseTemplate` is already in `UIState` — use `setShowcaseTemplate()` to switch templates in the preview.
+---
+
+### Session 4 — 2026-03-21 — Phase 1D: Detail Mode — Colors & Typography
+
+**Goal:** Implement the Detail Mode shell and the Colors + Typography tabs with full deep-dive functionality.
+
+**What was built:**
+
+#### Core: `v3/src/core/color/scales.ts`
+- Added `getWcagLevels(ratio)` — returns `{ aaLargeText, aaBodyText, aaaLargeText, aaaBodyText }` boolean flags.
+
+#### Feature: `v3/src/features/detail/`
+- `DetailMode.tsx` + `DetailMode.module.css` — Shell with sticky top bar: "← Generator" back link, scrollable tab bar. All 7 tabs rendered; Colors and Typography are live, others show "coming in Phase 2+" placeholder. CSS-var driven, no hardcoded colors.
+- `App.tsx` — Wired: `const leftPanel = mode === 'detail' ? <DetailMode /> : <GeneratorPanel />`
+
+#### Colors Tab: `v3/src/features/detail/tabs/ColorsTab/`
+- `ShadeScaleSection.tsx` — Full 11-step OKLCH shade scale per color slot. Hex + OKLCH label in header. Click-to-copy any step. Steps expand on hover.
+- `SemanticRolesSection.tsx` — Brand roles grid (6 roles, color bar + hex). Neutral roles as light/dark paired rows. State/mood grid (error/warning/success/info with base + container swatches).
+- `DataVizSection.tsx` — N-color categorical palette (4–20 colors, OKLCH-equidistant). N selector. Mini bar chart preview. Click-to-copy.
+- `ContrastGrid.tsx` — WCAG AA/AAA matrix for semantic pairs (on-surface/background, on-interactive/interactive, etc.) + slot-vs-slot pairs. Ratio displayed.
+- `ColorsTab.tsx` — Assembles all four sections.
+
+#### Typography Tab: `v3/src/features/detail/tabs/TypographyTab/`
+- `FontBrowserGrid.tsx` — 2-column grid of all fonts from pairings.json (deduped). IntersectionObserver lazy-loads fonts as cells scroll into view. Skeleton placeholder until loaded. Selection state per heading/body mode.
+- `FontBrowser.tsx` — Heading/Body mode toggle. Scrollable quick-picks row (first 20 pairings). Search input filters grid. Applies pairing via `setHeadingFont`/`setBodyFont`.
+- `ScaleEditor.tsx` — 9-step scale list (display→label). Each row: step label, specimen string in actual font (capped at 28px), size/weight/line-height metadata.
+- `ReadabilityScore.tsx` — APCA Lc score computed with `apca-w3`. Graded Excellent/Good/Low. WCAG ratio alongside. Sample body text rendered in active body font.
+- `CharacterSet.tsx` — Full A–Z/a–z/0–9/punctuation/diacritics displayed in heading and body fonts. 5-weight sample row.
+- `TypographyTab.tsx` — Assembles FontBrowser → ScaleEditor → ReadabilityScore → CharacterSet.
+
+**Test results:** `tsc --noEmit` — zero errors. All 25 new files created.
+
+**Commits:**
+- `bf6dbe0` feat(1D): detail mode Colors + Typography tabs complete
+
+**What Phase 1E receives from 1D:**
+- Detail mode shell complete — `renderTab()` in `DetailMode.tsx` handles `'colors'` and `'typography'`; add `'showcase'` and `'export'` cases
+- Colors and Typography tabs fully functional
+- `ui.showcaseTemplate` and `setShowcaseTemplate()` ready for live preview template switching
 
 ---
 
