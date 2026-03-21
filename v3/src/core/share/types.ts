@@ -16,4 +16,7 @@ export interface ShareSnapshot {
   mode: 'generator' | 'detail'
   activeTab: string | null
   theme: 'light' | 'dark'
+  // Phase 2 — optional so v3 shares without them still decode
+  spacingBaseUnit?: 4 | 8
+  shadowMode?: 'colored' | 'neutral'
 }

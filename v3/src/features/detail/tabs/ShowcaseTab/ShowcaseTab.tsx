@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useUI, useUIActions, useColor, useTypography } from '@/store'
+import { useUI, useUIActions, useColor, useTypography, useSpacing, useEffects } from '@/store'
 import { encodeShare } from '@/core/share/encode'
 import type { ShareSnapshot } from '@/core/share/types'
 import type { ShowcaseTemplate } from '@/store/ui'
@@ -17,6 +17,8 @@ export function ShowcaseTab() {
   const { setShowcaseTemplate, toggleTheme } = useUIActions()
   const { slots, activeModel, dataVizN } = useColor()
   const { pairing, scale, locks } = useTypography()
+  const { baseUnit } = useSpacing()
+  const { shadowMode } = useEffects()
   const [copied, setCopied] = useState(false)
 
   const copyShareLink = async () => {
@@ -31,6 +33,8 @@ export function ShowcaseTab() {
       mode,
       activeTab,
       theme,
+      spacingBaseUnit: baseUnit,
+      shadowMode,
     }
     const hash = await encodeShare(snapshot)
     const url = `${window.location.origin}${window.location.pathname}${hash}`

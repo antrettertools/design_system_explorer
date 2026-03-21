@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useColorActions, useTypographyActions, useUI, useUIActions, temporalUndo, temporalRedo, useStore } from './store'
 import type { DetailTab } from './store/ui'
+import type { SpacingState } from './store/spacing'
 import { AppHeader } from './components/AppShell/AppHeader'
 import { SplitPane } from './components/SplitPane/SplitPane'
 import { GeneratorPanel } from './features/generator/GeneratorPanel'
@@ -46,6 +47,13 @@ export default function App() {
         document.documentElement.setAttribute('data-theme', snapshot.theme)
         // Generate typography scale for the restored pairing
         useStore.getState().typographyActions.generate()
+        // Restore Phase 2 spacing + effects state
+        if (snapshot.spacingBaseUnit) {
+          useStore.getState().spacingActions.setBaseUnit(snapshot.spacingBaseUnit as SpacingState['baseUnit'])
+        }
+        if (snapshot.shadowMode) {
+          useStore.getState().effectsActions.setShadowMode(snapshot.shadowMode)
+        }
       } else {
         // Fresh start — cold random generation
         useStore.getState().colorActions.generate()
