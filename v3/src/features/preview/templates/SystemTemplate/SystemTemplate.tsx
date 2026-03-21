@@ -203,6 +203,54 @@ export function SystemTemplate() {
           ))}
         </div>
       </div>
+
+      {/* CSS CUSTOM PROPERTIES */}
+      <CssVarsSection />
+    </div>
+  )
+}
+
+const COLOR_VAR_NAMES = [
+  '--color-background', '--color-surface', '--color-surface-raised',
+  '--color-on-surface', '--color-on-surface-subtle',
+  '--color-border', '--color-border-strong',
+  '--color-interactive', '--color-on-interactive',
+  '--color-interactive-subtle', '--color-interactive-hover', '--color-interactive-container',
+  '--color-error', '--color-error-container',
+  '--color-warning', '--color-warning-container',
+  '--color-success', '--color-success-container',
+  '--color-info', '--color-info-container',
+]
+
+function CssVarsSection() {
+  const rows = COLOR_VAR_NAMES.map(name => ({
+    name,
+    value: getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '',
+  })).filter(r => r.value)
+
+  return (
+    <div className={styles.section}>
+      <div className={styles.sectionLabel}>CSS Custom Properties</div>
+      <table className={styles.cssVarTable}>
+        <thead>
+          <tr>
+            <th className={styles.cssVarTh}>Variable</th>
+            <th className={styles.cssVarTh}>Value</th>
+            <th className={styles.cssVarTh}>Swatch</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ name, value }) => (
+            <tr key={name} className={styles.cssVarRow}>
+              <td className={styles.cssVarName}>{name}</td>
+              <td className={styles.cssVarValue}>{value}</td>
+              <td>
+                <div className={styles.cssVarSwatch} style={{ background: value }} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

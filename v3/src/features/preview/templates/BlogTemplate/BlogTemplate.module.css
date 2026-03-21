@@ -75,12 +75,16 @@
 .postCard:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
 
 .postTag {
+  display: inline-block;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--color-interactive, #e8543a);
-  margin-bottom: 6px;
+  background: var(--color-secondary-100, var(--color-interactive-subtle, #fde8e3));
+  color: var(--color-secondary-500, var(--color-interactive, #e8543a));
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 8px;
 }
 
 .postTitle {
@@ -94,3 +98,26 @@
 }
 
 .postMeta { font-size: 11px; color: var(--color-on-surface-subtle, #aaa); }
+
+.postMetaDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accentA-500, var(--color-interactive, #e8543a));
+  margin: 0 4px;
+  vertical-align: middle;
+}
+
+.pullQuote {
+  background: var(--color-accentB-100, var(--color-surface, #fff));
+  border-left: 3px solid var(--color-accentB-500, var(--color-interactive, #e8543a));
+  padding: 14px 18px;
+  margin: 24px 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-on-surface, #333);
+  font-family: var(--font-heading, Georgia, serif);
+}
