@@ -88,11 +88,12 @@ useStore.subscribe(
     spacing: state.spacing,
     effects: state.effects,
     componentOverrides: state.components.overrides,
+    theme: state.ui.theme,
   }),
-  ({ slots, pairing, scale, dataVizN, spacing, effects, componentOverrides }) => {
+  ({ slots, pairing, scale, dataVizN, spacing, effects, componentOverrides, theme }) => {
     if (slots.length === 0) return
-    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides })
-    injectTokensToDOM(tokens)
+    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides }, theme)
+    injectTokensToDOM(tokens, theme)
   },
   { equalityFn: (a, b) => JSON.stringify(a) === JSON.stringify(b) },
 )
