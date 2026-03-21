@@ -5,19 +5,27 @@ import { temporal } from 'zundo'
 import { defaultColorState, createColorActions } from './color'
 import { defaultTypographyState, createTypographyActions } from './typography'
 import { defaultUIState, createUIActions } from './ui'
+import { defaultSpacingState, createSpacingActions } from './spacing'
+import { defaultEffectsState, createEffectsActions } from './effects'
 import { buildTokenMap, injectTokensToDOM } from './derived'
 
 import type { ColorState, ColorActions } from './color'
 import type { TypographyState, TypographyActions } from './typography'
 import type { UIState, UIActions } from './ui'
+import type { SpacingState, SpacingActions } from './spacing'
+import type { EffectsState, EffectsActions } from './effects'
 
 export interface AppStore {
   color: ColorState
   typography: TypographyState
   ui: UIState
+  spacing: SpacingState
+  effects: EffectsState
   colorActions: ColorActions
   typographyActions: TypographyActions
   uiActions: UIActions
+  spacingActions: SpacingActions
+  effectsActions: EffectsActions
 }
 
 export const useStore = create<AppStore>()(
@@ -28,14 +36,20 @@ export const useStore = create<AppStore>()(
         color: defaultColorState,
         typography: defaultTypographyState,
         ui: defaultUIState,
+        spacing: defaultSpacingState,
+        effects: defaultEffectsState,
         colorActions: createColorActions(set, get),
         typographyActions: createTypographyActions(set, get),
         uiActions: createUIActions(set, get),
+        spacingActions: createSpacingActions(set, get),
+        effectsActions: createEffectsActions(set, get),
       }),
       {
         partialize: (state) => ({
           color: state.color,
           typography: state.typography,
+          spacing: state.spacing,
+          effects: state.effects,
         }),
         limit: 50,
       },
@@ -50,16 +64,35 @@ export const useTypography = () => useStore(s => s.typography)
 export const useTypographyActions = () => useStore(s => s.typographyActions)
 export const useUI = () => useStore(s => s.ui)
 export const useUIActions = () => useStore(s => s.uiActions)
+export const useSpacing = () => useStore(s => s.spacing)
+export const useSpacingActions = () => useStore(s => s.spacingActions)
+export const useEffects = () => useStore(s => s.effects)
+export const useEffectsActions = () => useStore(s => s.effectsActions)
 
 // Subscribe to state changes → rebuild derived tokens → inject to DOM
 useStore.subscribe(
-  (state) => ({ slots: state.color.slots, pairing: state.typography.pairing, scale: state.typography.scale, dataVizN: state.color.dataVizN }),
-  ({ slots, pairing, scale, dataVizN }) => {
+  (state) => ({
+    slots: state.color.slots,
+    pairing: state.typography.pairing,
+    scale: state.typography.scale,
+    dataVizN: state.color.dataVizN,
+    spacing: state.spacing,
+    effects: state.effects,
+  }),
+  ({ slots, pairing, scale, dataVizN, spacing, effects }) => {
     if (slots.length === 0) return
-    const tokens = buildTokenMap(slots, scale, pairing, dataVizN)
+    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects)
     injectTokensToDOM(tokens)
   },
   { equalityFn: (a, b) => JSON.stringify(a) === JSON.stringify(b) },
+)
+
+// When brand color changes, rebuild effects (focus ring + colored shadows)
+useStore.subscribe(
+  (state) => state.color.slots.find(s => s.role === 'brand')?.hex,
+  (brandHex) => {
+    if (brandHex) useStore.getState().effectsActions.rebuildFromBrand(brandHex)
+  },
 )
 
 // Undo/redo helpers

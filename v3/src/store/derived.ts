@@ -5,6 +5,8 @@ import { generateDataVizPalette } from '@/core/color/dataViz'
 import type { ColorSlot } from '@/core/color/types'
 import type { TypeScale } from '@/core/typography/types'
 import type { TokenMap } from '@/core/export/types'
+import type { SpacingState } from './spacing'
+import type { EffectsState } from './effects'
 
 /**
  * Build the full token map from the current store state.
@@ -16,6 +18,8 @@ export function buildTokenMap(
   scale: TypeScale | null,
   pairing: { heading: string; body: string } | null,
   dataVizN: number,
+  spacing?: SpacingState,
+  effects?: EffectsState,
 ): TokenMap {
   const light: Record<string, string> = {}
   const dark: Record<string, string> = {}
@@ -76,6 +80,62 @@ export function buildTokenMap(
       light[`--font-weight-${stepName}`] = String(s.weight)
       light[`--line-height-${stepName}`] = String(s.lineHeight)
       light[`--letter-spacing-${stepName}`] = s.letterSpacing
+    }
+  }
+
+  // SPACING TOKENS
+  if (spacing) {
+    const effectiveScale = { ...spacing.config.scale, ...spacing.overrides }
+    for (const [step, value] of Object.entries(effectiveScale)) {
+      light[`--spacing-${step}`] = `${value}px`
+    }
+
+    const radius = spacing.config.radius
+    for (const [step, value] of Object.entries(radius)) {
+      light[`--radius-${step}`] = step === 'full' ? '9999px' : `${value}px`
+    }
+
+    for (const [step, value] of Object.entries(spacing.config.iconSizes)) {
+      light[`--icon-size-${step}`] = `${value}px`
+    }
+
+    for (const [step, value] of Object.entries(spacing.config.zIndex)) {
+      light[`--z-${step}`] = String(value)
+    }
+
+    for (const [name, value] of Object.entries(spacing.config.breakpoints)) {
+      light[`--breakpoint-${name}`] = `${value}px`
+    }
+
+    spacing.config.borderWidths.forEach((w, i) => {
+      light[`--border-width-${i + 1}`] = `${w}px`
+    })
+  }
+
+  // EFFECTS TOKENS
+  if (effects) {
+    const baseShadows = effects.shadowMode === 'colored'
+      ? effects.config.shadows
+      : effects.config.shadowsNeutral
+    const shadows = { ...baseShadows, ...effects.shadowOverrides }
+    for (const [step, value] of Object.entries(shadows)) {
+      light[`--shadow-${step}`] = value
+    }
+
+    const { focusRing } = effects.config
+    light['--focus-ring-width'] = focusRing.width
+    light['--focus-ring-color'] = focusRing.color
+    light['--focus-ring-offset'] = focusRing.offset
+
+    const { motion } = effects.config
+    for (const [name, value] of Object.entries(motion.easings)) {
+      light[`--ease-${name}`] = value
+    }
+    for (const [step, value] of Object.entries(motion.durations)) {
+      light[`--duration-${step}`] = `${value}ms`
+    }
+    for (const [step, value] of Object.entries(motion.transitions)) {
+      light[`--transition-${step}`] = value
     }
   }
 
