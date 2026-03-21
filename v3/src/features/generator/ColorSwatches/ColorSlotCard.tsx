@@ -1,6 +1,8 @@
+import { useState, useRef } from 'react'
 import { useColorActions } from '@/store'
 import type { ColorSlot } from '@/core/color/types'
 import { ShadeStrip } from './ShadeStrip'
+import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import styles from './ColorSlotCard.module.css'
 
 const ROLE_LABELS: Record<string, string> = {
@@ -32,8 +34,10 @@ export function ColorSlotCard({
   onDragOver,
   onDrop,
 }: ColorSlotCardProps) {
-  const { toggleLock, removeSlot } = useColorActions()
+  const { toggleLock, removeSlot, overrideHex } = useColorActions()
   const isLight = isLightColor(slot.hex)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const swatchRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -44,12 +48,17 @@ export function ColorSlotCard({
       onDragOver={(e) => { e.preventDefault(); onDragOver?.(slot.id) }}
       onDrop={onDrop}
     >
-      <div className={styles.swatch} style={{ background: slot.hex }}>
+      <div
+        ref={swatchRef}
+        className={styles.swatch}
+        style={{ background: slot.hex }}
+        onClick={() => setPickerOpen(true)}
+      >
         <div className={styles.topRow}>
           <span className={styles.roleLabel}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
           <button
             className={styles.lockBtn}
-            onClick={() => toggleLock(slot.id)}
+            onClick={(e) => { e.stopPropagation(); toggleLock(slot.id) }}
             aria-label={slot.locked ? 'Unlock color' : 'Lock color'}
             title={slot.locked ? 'Click to unlock' : 'Click to lock'}
           >
@@ -62,7 +71,7 @@ export function ColorSlotCard({
         {canRemove && slot.role !== 'brand' && (
           <button
             className={styles.removeBtn}
-            onClick={() => removeSlot(slot.id)}
+            onClick={(e) => { e.stopPropagation(); removeSlot(slot.id) }}
             aria-label={`Remove ${ROLE_LABELS[slot.role] ?? slot.role} color`}
             title="Remove color"
           >
@@ -71,6 +80,14 @@ export function ColorSlotCard({
         )}
       </div>
       {slot.locked && <ShadeStrip hex={slot.hex} role={ROLE_LABELS[slot.role] ?? slot.role} />}
+      {pickerOpen && (
+        <ColorPickerPopover
+          hex={slot.hex}
+          onChange={hex => overrideHex(slot.id, hex)}
+          onClose={() => setPickerOpen(false)}
+          anchorRef={swatchRef as React.RefObject<HTMLElement>}
+        />
+      )}
     </div>
   )
 }
