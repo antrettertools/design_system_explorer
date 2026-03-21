@@ -1,7 +1,4 @@
-import { useColor } from '@/store'
-import { makeShadeScale } from '@/core/color/scales'
-import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles } from '@/core/color/semantic'
-import { deriveDarkModeRoles } from '@/core/color/darkMode'
+import { useColor, useColorTokens } from '@/store'
 import styles from './SemanticRolesSection.module.css'
 
 const BRAND_ROLES = [
@@ -25,16 +22,14 @@ const NEUTRAL_ROLES = [
 
 const STATE_PREFIXES = ['error', 'warning', 'success', 'info'] as const
 
-export function SemanticRolesSection() {
-  const { slots } = useColor()
-  const brandSlot = slots.find(s => s.role === 'brand') ?? slots[0]
-  const brandHex = brandSlot?.hex ?? '#888888'
-  const brandScale = makeShadeScale(brandHex)
+function getCssVar(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
+}
 
-  const brandRoles = deriveBrandRoles(brandScale)
-  const neutralRoles = deriveNeutralRoles(brandScale)
-  const stateMoodRoles = deriveStateMoodRoles(brandHex)
-  const darkRoles = deriveDarkModeRoles(brandScale)
+export function SemanticRolesSection() {
+  // Subscribe to color changes for reactivity
+  useColor()
+  const tokenMap = useColorTokens()
 
   return (
     <div className={styles.section}>
@@ -44,7 +39,7 @@ export function SemanticRolesSection() {
       <div className={styles.subsectionTitle}>Brand</div>
       <div className={styles.rolesGrid}>
         {BRAND_ROLES.map(role => {
-          const hex = brandRoles[role] ?? '#888'
+          const hex = getCssVar(`--color-${role}`)
           return (
             <div key={role} className={styles.roleCard}>
               <div className={styles.roleColorBar} style={{ background: hex }} />
@@ -60,8 +55,8 @@ export function SemanticRolesSection() {
       {/* Neutral roles with light/dark comparison */}
       <div className={styles.subsectionTitle}>Neutral</div>
       {NEUTRAL_ROLES.map(role => {
-        const lightHex = neutralRoles[role] ?? '#888'
-        const darkHex = darkRoles[role] ?? '#888'
+        const lightHex = getCssVar(`--color-${role}`)
+        const darkHex = tokenMap.dark[`--color-${role}`] ?? '#888'
         return (
           <div key={role} className={styles.pairedRow}>
             <div className={styles.pairedSwatch} style={{ background: lightHex }} title={`Light: ${lightHex}`} />
@@ -82,8 +77,8 @@ export function SemanticRolesSection() {
       <div className={styles.subsectionTitle} style={{ marginTop: 16 }}>State & Mood</div>
       <div className={styles.stateGrid}>
         {STATE_PREFIXES.map(prefix => {
-          const baseHex = stateMoodRoles[prefix] ?? '#888'
-          const containerHex = stateMoodRoles[`${prefix}-container`] ?? '#eee'
+          const baseHex = getCssVar(`--color-${prefix}`)
+          const containerHex = getCssVar(`--color-${prefix}-container`)
           return (
             <div key={prefix} className={styles.stateCard}>
               <div className={styles.statePair}>
