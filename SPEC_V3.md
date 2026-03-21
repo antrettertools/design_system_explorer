@@ -1,0 +1,414 @@
+# PALETTE — Design System Builder v3
+## Living Design Document
+
+> This document is extended after every design decision round. It is the single source of truth for v3.
+> Last updated: 2026-03-21 (round 3)
+
+---
+
+## 1. Vision
+
+A browser-based design system generator aimed primarily at **vibe coders** — developers who code by feel and intuition, often with AI tools, and who struggle to produce a solid visual design system quickly. The tool is playful and fast by default, with the depth to satisfy professional designers and design engineers when they need it.
+
+**Core loop:** Hit space. A complete design system is generated (colors + typography). Lock what you love. Unlocked slots re-harmonize around what is locked. Export immediately or go deeper into detail mode.
+
+**Name (working):** `palette.` — minimal wordmark in the UI header.
+
+---
+
+## 2. Target Users
+
+**Primary:** Vibe coders — developers willing to pay a small amount for a quick, solid design system they can create playfully and ship immediately. They want magic output and copy-pasteable code, not design jargon.
+
+**Secondary (equal weight):** Designers (Figma-oriented, visual thinkers) and design engineers / developers (want CSS vars, Tailwind config, token JSON).
+
+---
+
+## 3. Tech Stack
+
+Carries forward from v2. No changes.
+
+| Layer | Choice |
+|---|---|
+| Framework | React 18 + TypeScript 5 |
+| Build | Vite 5 |
+| State | Zustand + zundo (undo/redo) |
+| Color math | culori (OKLCH-native) |
+| Font loading | Google Fonts API v2 + Fontshare + Bunny Fonts |
+| Styling | CSS Modules + CSS custom properties |
+| Token export | Custom plugin system |
+
+---
+
+## 4. Layout
+
+### 4.1 Default split
+50/50 horizontal split. Left panel: generator / detail controls. Right panel: live preview.
+
+The divider is **draggable** — user can resize the split freely. Default is 50/50.
+
+### 4.2 Theme
+**Light theme by default.** Dark mode available via a toggle in the app header. The toggle affects both panels.
+
+### 4.3 Mobile
+On mobile, only the **generator panel** is shown (full width). A "Preview →" button slides in the preview panel, replacing the generator. Back swipe / button returns to generator. Export is accessible from both views. Detail mode on mobile: tabs at top, scrollable content below.
+
+---
+
+## 5. Two Modes
+
+### 5.1 Generator Mode (default, entry experience)
+
+The full split is the generator. No steps, no wizard. Everything is visible at once:
+- Left: color swatches + typography specimen (Approach C)
+- Right: single fixed landing page template, live-updated
+
+**No personality/archetype picker.** Removed from v3. Generation starts cold.
+
+### 5.2 Detail Mode (power layer)
+
+Entered via "Detail Mode →" button in the generator panel (bottom of left panel). Left panel becomes a tabbed editor. Right panel gains a template switcher. A persistent "← Back to generator" link returns to generator with all state preserved — nothing is ever lost.
+
+---
+
+## 6. Generator Panel — Left Side
+
+### 6.1 Color swatches (Approach C: Hybrid swatches + instant scale)
+
+- **Large color columns** filling the top portion of the left panel (~110px tall)
+- Each column shows: role label (Brand / Secondary / Accent A / Accent B), hex value, lock/unlock icon
+- **Locked columns** show a 9-step shade strip immediately below them (full width of that column)
+- **Unlocked columns** have no shade strip — clean, indicates they are in flux
+- Role labels are visible from the very first generation — vibe coders immediately understand "brand color"
+
+### 6.2 Color count
+- **Default:** 4 colors (Brand, Secondary, Accent A, Accent B)
+- **Min:** 1 color (Brand only)
+- **Max:** 8 colors
+- **"+" button:** adds a new slot with a harmonically derived color; appears below swatches
+- **"−" button:** appears on hover on any non-Brand slot; removes that slot
+- **Brand slot** cannot be removed but another slot can be dragged into the Brand role
+- **Role reassignment:** drag-to-reorder changes which color holds which semantic role
+
+### 6.3 Color theory hint
+A subtle green hint bar below the shade strips, visible when at least one color is locked:
+> "Unlocked colors are harmonizing with your Brand — analogous hues in OKLCH"
+Names the active harmony model. Disappears when nothing is locked (pure cold random mode).
+
+### 6.4 Typography specimen
+Below the color section, with visible whitespace separation:
+- **Big heading specimen** (~26px in the panel): renders actual heading font — "The quick brown fox"
+- **Body text specimen:** 2 lines in body font
+- **Scale pills:** H1 / H2 / H3 / Body / sm / xs — each showing size + weight
+- **Font names:** "Heading: Fraunces · Body: Inter"
+- **Lock toggle** (per heading font, per body font, per scale ratio — independently lockable)
+
+### 6.5 Bottom of generator panel
+- "SPACE to generate" hint (keyboard shortcut reminder)
+- "✦ vibe" chip — opens a mood/keyword filter (optional, doesn't replace space)
+- "+ Add color" button
+- "Detail Mode →" primary CTA (brand color)
+- "Export ↓" — always visible (see Section 9)
+
+---
+
+## 7. Live Preview Panel — Right Side
+
+### 7.1 Generator mode
+A **single fixed template**: a SaaS landing page. It renders immediately with every generation. No template switcher in generator mode — the preview is always the same structure. Colors and typography update live.
+
+### 7.2 Detail mode
+Template switcher appears in the preview panel header:
+- **Landing** (same as generator)
+- **Dashboard**
+- **Blog**
+- **System** — the design system itself rendered beautifully: color swatches, shade scales, semantic roles, type specimens, character sets
+
+The **System view** is a top-quality visual that users would want to screenshot and share.
+
+---
+
+## 8. Color Science
+
+### 8.1 Generation algorithm
+
+Every space press — including the first cold one — executes:
+
+1. Pick a random **base hue** H ∈ [0°, 360°)
+2. Pick a random **harmony model** from the 7 below
+3. Derive N hue positions from the model's formula
+4. For each hue position, sample L and C from the **model's OKLCH envelope** (each model has its own L/C personality, not a fixed range)
+5. Assign roles: highest-chroma → Brand; harmonic opposite or strongest contrast → Secondary; remaining → Accents
+6. Simultaneously draw a font pairing (see Section 9)
+
+### 8.2 Harmony models (7 total)
+
+| Model | Hue relationships | Character | OKLCH envelope |
+|---|---|---|---|
+| **Monochromatic** | All same hue, dramatically different L + C | Sophisticated, premium; near-identical colors are valid | Consistent C, dramatic L spread (0.3 → 0.75) |
+| **Analogous** | 0–45° apart | Warm, cohesive, natural | Consistent L, slight C variation |
+| **Complementary** | Base + 180° + small variations of each | High contrast, bold, energetic | Brand: high C; complement: slightly lower C |
+| **Split-complementary** | Base + 150° + 210° | Softer than comp, very versatile | — |
+| **Triadic** | 120° apart | Vibrant, playful, balanced | — |
+| **Tetradic/Square** | 90° apart (4 equally spaced) | Rich, complex; excellent for 4-slot default | — |
+| **Compound** | Analogous base + complementary accent | Sophisticated complexity — near-similar group + strong contrast | — |
+
+**Weighting:** Split-complementary and compound appear more often (slightly higher random weight). Tetradic appears less often.
+
+Near-similar colors (especially monochromatic, analogous) are **first-class outcomes** — not bugs.
+
+### 8.3 When slots are locked
+
+Locked slots anchor the current harmony model. Unlocked slots re-sample within the same model's remaining hue positions on each press. The model is preserved — not replaced — until the user presses space with everything unlocked (which triggers a full new cold random draw including a new model).
+
+The active harmony model is named in the UI hint bar.
+
+### 8.4 Shade scales
+
+9-step OKLCH interpolation per locked color: 50 → 950. Lightness spread evenly; chroma preserves the character of the source hue. Shown as a strip below the locked swatch in the generator panel.
+
+### 8.5 Semantic color roles
+
+Derived automatically from shade scales. Two tiers:
+
+**Brand-derived roles** (per color):
+- interactive, on-interactive, interactive-container, on-interactive-container, interactive-subtle, interactive-hover
+
+**State/mood roles** (global, auto-derived, tuned to harmonize with brand OKLCH profile):
+- Error (red hue range): error, on-error, error-container, on-error-container
+- Warning (amber): warning, on-warning, warning-container, on-warning-container
+- Success (green): success, on-success, success-container, on-success-container
+- Info (blue): info, on-info, info-container, on-info-container
+- Neutral (brand hue at near-zero chroma): background, surface, surface-raised, on-surface, on-surface-subtle, border, border-strong
+
+All semantic roles are visible in the **Colors tab of detail mode** under a "Semantic" section. All pass WCAG AA by derivation; the UI shows which pass AAA. A contrast grid is available.
+
+Dark mode values are derived simultaneously and toggled via the theme switch.
+
+### 8.6 Data visualization / categorical palette
+
+A dedicated palette for charts, graphs, and figures with multiple data series (8–12 lines, segments, etc.).
+
+**Generation algorithm:**
+1. Take the brand hue as anchor point (H₀)
+2. Distribute N hues evenly: H₀, H₀ + 360/N, H₀ + 2×360/N, …
+3. Hold L and C constant across all N colors at a perceptually mid-bright level (L ≈ 0.65, C ≈ 0.15) — this ensures each color is equally prominent in a chart
+4. Result: a set of N colors that are perceptually equidistant (maximally distinct from each other) while harmonizing with the brand through shared lightness/chroma profile
+
+**User controls (in Colors tab, "Data Viz" section):**
+- N selector: 8 (default), up to 20
+- Each color in the set can be individually overridden
+- Each gets its own shade scale for use in more complex data scenarios (e.g., light fill + dark stroke of the same series color)
+- Preview: a mini chart (bar + line) rendered with the palette
+
+**Why this matters:** Generic rainbow palettes (HSL-spaced) are perceptually uneven — yellow and cyan appear brighter than red and blue at the same saturation. OKLCH spacing produces a set where every color carries equal visual weight, which is critical for fair data representation.
+
+---
+
+## 9. Typography System
+
+### 9.1 Font pairing pool
+
+~60 hand-curated pairings stored as a JSON config file. Sources:
+- **Google Fonts** (~40 pairings) — primary source, ~1500 fonts available
+- **Fontshare** by Indian Type Foundry (~15 pairings) — high-quality free fonts (Cabinet Grotesk, Satoshi, Clash Display, General Sans, Bogart, etc.)
+- **Bunny Fonts** (~5 pairings) — GDPR-friendly Google Fonts mirror
+
+Each pairing entry:
+```json
+{
+  "heading": "Fraunces",
+  "body": "Inter",
+  "source": "google",
+  "character": "editorial",
+  "harmonyAffinity": ["monochromatic", "compound"]
+}
+```
+
+Loose correlation: monochromatic/compound models slightly favor editorial/serif pairings; triadic/tetradic favor expressive/display. Not enforced — a random draw within a soft weight.
+
+### 9.2 Full scale auto-derivation
+
+Generated immediately on every space press:
+
+| Property | How derived |
+|---|---|
+| Scale ratio | Random draw from 1.25 (Major Third) → 1.5 (Perfect Fifth) |
+| Steps | Display 72, H1 56, H2 40, H3 28, H4 20, Body 16, Small 14, XS 12, Label 11px uppercase |
+| Weights | Derived from font's available axes; never hardcoded |
+| Line heights | From font x-height metric: tight for display (1.1), loose for body (1.55–1.65) |
+| Letter spacing | Display: -0.02em to -0.04em; body: 0; labels: +0.06em tracked |
+
+All values export immediately as CSS custom properties.
+
+### 9.3 Lock granularity
+
+- Lock heading font alone → space re-rolls body only
+- Lock body font alone → space re-rolls heading only
+- Lock full pairing → space doesn't touch fonts
+- Lock scale ratio → keeps size relationships even when fonts change
+- "↺ fonts" button re-rolls fonts independently of color cycling
+
+### 9.4 Detail mode — full font browser
+
+Full access to entire Google Fonts + Fontshare + Bunny catalog:
+- Search by name
+- Filter by: style (serif / sans / mono / display / handwriting), weight availability, variable font support
+- Live preview with custom sample text (user can type their own)
+- Pick heading + body independently
+- Curated pairings remain available as "Quick picks" at top
+
+### 9.5 Typography showcase (System view)
+
+The typography section of the System view must be visually exceptional:
+- Full type specimen in each scale step
+- Complete character set for each selected font: A–Z, a–z, 0–9, punctuation, diacritics, special characters — rendered in the actual loaded font
+- Weights shown side by side
+- Something worth screenshotting and sharing
+
+---
+
+## 10. Detail Mode
+
+### 10.1 Tab structure — complete picture
+
+Seven tabs total. Designed so each can be added in a later phase without interfering with existing tabs — each is a self-contained panel.
+
+| Tab | Phase | Contents |
+|---|---|---|
+| **Colors** | 1 | Shade scales per color, semantic roles (brand-derived + state/mood groups), data viz categorical palette, contrast grid (WCAG AA/AAA), dark mode derived palette, manual hex/OKLCH override, add/remove/reorder colors |
+| **Typography** | 1 | Full font browser (GF + Fontshare + Bunny), scale ratio picker, per-step size/weight/lh/ls override, live type specimen, full character set display (A–Z, a–z, 0–9, punctuation, diacritics), readability score (APCA), lock controls |
+| **Spacing** | 2 | Base unit + scale (4pt/8pt grid), named steps (xs → 3xl), border-radius scale, border widths (1/2/4px), opacity scale (5 values), icon size scale, z-index layers, breakpoints, visual ruler preview |
+| **Effects** | 2 | Elevation/shadow presets (sm/md/lg/xl), color-tinted shadows from brand hue, custom shadow builder, motion tokens (easing curves, duration scale 100–500ms, transition presets), focus ring style (color + width + offset, auto-derived from brand) |
+| **Components** | 3 | Component token map (button, input, card, badge, etc.), icon set selection + preview (Lucide / Heroicons / Phosphor / Tabler / Radix), icon size mapping to spacing scale |
+| **Showcase** | 1 | Switchable templates (Landing / Dashboard / Blog / System view), light/dark toggle, full-screen expand, share URL |
+| **Export** | 1 | CSS custom properties, Tailwind config (v3 + v4), W3C design token JSON, SCSS variables, copy to clipboard / download, naming convention picker, choose which token layers to include |
+
+**Grouping rationale:**
+- Spacing consolidates all "dimension" tokens (spacing, radius, borders, opacity, icon sizes, breakpoints) — they share a visual ruler metaphor and are all unitless-scale concerns
+- Effects consolidates shadows + motion + focus — things that affect how elements feel and move, sensory rather than structural
+- Components is the bridge between abstract tokens and real UI — icon set lives here because icons are component-level decisions
+
+**Independence guarantee:** Each tab reads from and writes to its own token slice in the store. Adding Phase 2 or Phase 3 tabs requires no changes to Phase 1 tabs.
+
+### 10.2 UX pattern per tab
+
+- Every value shows **"auto"** badge (derived from generator) or **"overridden"** indicator (user-set)
+- Overridden values have a **"reset"** affordance to return to derived value
+- WCAG contrast checked live — green/amber/red summary visible in Colors tab
+
+### 10.3 Transition
+
+Generator → Detail: click "Detail Mode →" button. Smooth panel transition. Opens on Colors tab by default. "← Back to generator" link always visible at top of left panel; returns with full state preserved.
+
+---
+
+## 11. Export
+
+### 11.1 Always-visible entry point
+
+A persistent **"Export ↓"** button lives in the app header, visible in **both** generator mode and detail mode.
+
+- **In generator mode:** clicking opens a compact slide-up panel with the top 3 formats (CSS vars, Tailwind, JSON), a live syntax-highlighted code preview, and one-click copy. Immediate, zero friction.
+- **In detail mode:** same header button works identically. Additionally, the **Export tab** in the sidebar gives full control: naming conventions, which token layers to include, partial exports, copy or download as file.
+
+### 11.2 Smart defaults (pre-selected, no configuration required)
+
+- **Format:** CSS custom properties — most universal, zero tooling required
+- **Secondary quick-pick:** Tailwind v3 — most common in vibe coder stacks
+- **Naming:** semantic kebab-case, no prefix
+- **Layers:** all included (primitives + semantic + typography)
+- **Action:** Copy is the primary CTA; Download is secondary
+
+The user gets something immediately useful without touching a single setting.
+
+### 11.3 Live code preview
+
+A syntax-highlighted code block updates in real time as the user changes format or naming options. Vibe coders see exactly what they're copying before they paste it. No surprises.
+
+### 11.4 Export formats
+
+| Format | Contents | Use case |
+|---|---|---|
+| **CSS custom properties** | All primitive + semantic tokens as `--var: value` in `:root`, plus `[data-theme="dark"]` overrides | Drop into any web project |
+| **Tailwind v3** | `theme.extend` object with colors, fontFamily, fontSize, spacing, boxShadow, transitionDuration | `tailwind.config.js` |
+| **Tailwind v4** | `@theme` block with CSS-native syntax | `app.css` in v4 projects |
+| **W3C Design Tokens JSON** | Standard `$value` / `$type` format — interoperable with Figma Variables, Style Dictionary | Cross-tool handoff |
+| **SCSS** | `$token-name: value` variables | Legacy SCSS codebases |
+
+### 11.5 Naming conventions (detail mode)
+
+User picks a prefix (blank by default, or "ds-", "app-", custom) and casing style (kebab-case, camelCase, snake_case). Applied consistently across all formats.
+
+### 11.6 Partial exports (detail mode only)
+
+Checkboxes for which layers to include: primitives only, semantic only, component tokens only, or any combination. For teams that already have part of a system and only need specific layers.
+
+### 11.7 Deferred to Phase 3
+- Figma Variables / plugin export
+- Style Dictionary config output
+- Storybook design tokens integration
+- Multi-file zip download (all formats at once)
+
+---
+
+## 12. Phase Plan
+
+### Phase 1 — Core loop (build first)
+- Generator mode: color swatches, harmony model generation (7 models), typography specimen, spacebar cycling, lock/unlock mechanics, add/remove color slots (1–8)
+- Single fixed landing page preview (live update)
+- Detail mode: Colors tab (brand palette + semantic roles + state/mood colors + data viz palette), Typography tab (font browser + full character set), Showcase tab (templates + System view), Export tab
+- Always-visible Export button in header (compact slide-up in generator, full tab in detail)
+- Light/dark theme toggle
+- Mobile layout (generator panel only, preview slide-in)
+- URL sharing (encode session state in hash)
+- 60 curated font pairings (Google Fonts + Fontshare + Bunny Fonts)
+
+### Phase 2 — Dimension + effects tokens
+- Spacing tab (scale, radius, border widths, opacity, icon sizes, z-index, breakpoints)
+- Effects tab (shadows, motion tokens, focus ring style)
+
+### Phase 3 — Component layer
+- Components tab (component token map, icon set selection from Lucide/Heroicons/Phosphor/Tabler/Radix, icon preview)
+- Figma plugin export
+- Save / load named sessions
+
+### Phase 4 — Growth + monetization
+- "Vibe" mood/keyword filter (optional seed for generation)
+- Team sharing / paid tier hooks
+- Additional export targets (Style Dictionary, Storybook tokens)
+
+---
+
+## 13. System View — Design Spec
+
+The System view is a scrollable, screenshot-worthy document rendered in the right panel of the Showcase tab. It must look beautiful enough to share with a client or teammate without explanation.
+
+**Structure (top to bottom, scrollable):**
+
+1. **Header** — working title ("palette." or user-set name), generation date, harmony model used, font pairing names
+2. **Colors**
+   - Brand shade scale (9 steps, full width, step numbers 50–950 labeled, color name "Brand" + hex + OKLCH shown above)
+   - Secondary, Accent A, Accent B: compact shade scales in a row, each labeled with its role name and source hex
+   - Semantic roles: 5–6 key swatches (interactive, interactive-subtle, surface, on-surface, border) with role name labels
+   - State colors: Error / Warning / Success / Info — base + container swatch pair each
+   - Data viz palette: N colored blocks + mini bar chart preview
+3. **Typography**
+   - Section clearly labeled "Typography"
+   - Heading font name prominently displayed (e.g. "Fraunces — Heading") before its specimens
+   - Type scale specimens: Display → H1 → H2 → H3 → Body, each with size + weight labeled
+   - Body font name prominently displayed (e.g. "Inter — Body") before its character set
+   - Full character set for both fonts: A–Z, a–z, 0–9, punctuation, diacritics; weights shown side by side
+4. **Data Viz** (if data viz palette is generated)
+   - Labeled "Data Visualization — N-color categorical palette"
+   - Color blocks + mini chart
+
+**Visual quality bar:** Think a Notion page or a Linear changelog — clean whitespace, generous type sizes, subtle dividers. Not a dev tool. Something worth screenshotting.
+
+---
+
+## 14. Open Questions
+
+- App name: "palette." is working title — confirm or pick final name before Phase 1 ships
+- Pricing model: not yet designed (Phase 3 concern)
+- Components tab: v2 had a component token mapper — confirmed deferred to Phase 3
