@@ -20,15 +20,16 @@ docs/
     specs/SPEC_V3.md                — Full product spec
     plans/                          — Phase-by-phase implementation plans
       2026-03-21-v3-phase1a-foundation.md        ← DONE
-      2026-03-21-v3-phase1b-generator-ui.md      ← NEXT
-      2026-03-21-v3-phase1c-live-preview.md
+      2026-03-21-v3-phase1b-generator-ui.md      ← DONE
+      2026-03-21-v3-phase1c-live-preview.md      ← DONE
+      2026-03-21-v3-phase1d-detail-colors-typography.md  ← NEXT
       2026-03-21-v3-phase1d-detail-colors-typography.md
       2026-03-21-v3-phase1e-showcase-export-sharing.md
       2026-03-21-v3-phase2-spacing-effects.md
       2026-03-21-v3-phase3-components-figma-sessions.md
 ```
 
-**Active branch:** `feat/v3-phase1a` (Phase 1B work committed here; Phase 1C should continue on this branch or a new `feat/v3-phase1c` branch)
+**Active branch:** `feat/v3-phase1a` (Phase 1C work committed here; Phase 1D should continue on this branch)
 
 ---
 
@@ -113,17 +114,59 @@ features/   → Feature panels. Import from store/ only.
 
 ---
 
-## What's Next — Phase 1C
+## What's Next — Phase 1D
 
-**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1c-live-preview.md`
+**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1d-detail-colors-typography.md`
 
-Phase 1C builds the right panel — the live landing page preview:
-- Replace `<LivePreviewStub />` at `v3/src/features/preview/LivePreviewStub.tsx` with the real `<LivePreview />`
-- Implement first landing page template using CSS custom properties (`var(--color-brand-500)` etc.)
-- All color/typography tokens are already injected on `:root` — just use them
-- Do not modify files under `v3/src/features/generator/` or `v3/src/store/`
+Phase 1D builds the Detail Mode — the tabbed editor for deep control:
+- The store already has `useUI().mode` — when it becomes `'detail'`, render `<DetailMode />` instead of `<GeneratorPanel />`
+- Tabs: Colors, Typography, Spacing, Effects, Components, Showcase, Export
+- The "Detail Mode →" button in `GeneratorFooter` already calls `setMode('detail')`
+- `<LivePreview />` stays mounted on the right — Phase 1D should also add a template switcher (landing / system view)
+- Do not modify files under `v3/src/features/preview/` or `v3/src/store/`
 
-**Key reminder for Phase 1C:** CSS custom properties are live on `:root` after every Space press. No additional wiring needed.
+**Key reminder for Phase 1D:** `showcaseTemplate` is already in `UIState` — use `setShowcaseTemplate()` to switch templates in the preview.
+
+---
+
+### Session 3 — 2026-03-21 — Phase 1C: Live Preview & Theme
+
+**Goal:** Replace the live preview stub with a fully implemented SaaS landing page template that updates in real time as the user generates new palettes.
+
+**What was built:**
+
+#### Feature: Landing Template
+- `v3/src/features/preview/templates/LandingTemplate/LandingTemplate.module.css` — Full SaaS landing page styles: nav, hero, app mockup, features grid, testimonial, CTA band, footer. **Every color, font, and type size uses CSS custom properties** — `var(--font-heading)`, `var(--color-interactive)`, `var(--color-background)`, etc. Fallback values in `var(...)` are safe design defaults.
+- `v3/src/features/preview/templates/LandingTemplate/LandingTemplate.tsx` — Static SaaS landing page JSX. Reads zero props — fully driven by CSS vars injected by the store. Sections: sticky nav with CTA, hero with badge/headline/sub/actions, app mockup wireframe (sidebar + content rows), 3-column features grid, testimonial block with brand-colored quotation marks, brand-color CTA band, footer.
+
+#### Feature: LivePreview wrapper
+- `v3/src/features/preview/LivePreview.module.css` — Panel wrapper (full height, overflow-y scroll, inset shadow). Mobile back button (hidden on desktop, sticky on mobile).
+- `v3/src/features/preview/LivePreview.tsx` — Thin wrapper: renders `<LandingTemplate />` inside scrollable panel. On mobile, shows "← Back to generator" sticky button that calls `hideMobilePreview()`.
+- `v3/src/App.tsx` — Replaced `<LivePreviewStub />` import with `<LivePreview />`. Added `no-transitions` class on mount (removed after double-RAF) to prevent flash of transition on initial load.
+
+#### Theme: Dark mode completeness
+- `v3/src/styles/globals.css` — Added global smooth transition rule (`background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease`) and `.no-transitions *` escape hatch for initial load.
+
+#### Feature: Mobile preview slide-in
+- `v3/src/store/ui.ts` — Added `mobileShowPreview: boolean` to `UIState` + `defaultUIState`. Added `showMobilePreview()` and `hideMobilePreview()` actions to `UIActions` + `createUIActions`.
+- `v3/src/components/SplitPane/SplitPane.module.css` — Extended mobile media query: `position: relative; overflow: hidden` on container. Left panel: `position: absolute`, `transform: translateX(0)`, gains `.slideOut` class (`translateX(-100%)`). Right panel: `position: absolute`, `transform: translateX(100%)`, gains `.slideIn` class (`translateX(0)`). Both transition `0.3s ease`.
+- `v3/src/components/SplitPane/SplitPane.tsx` — Reads `mobileShowPreview` from `useUI()`. Applies `styles.slideOut` to left panel and `styles.slideIn` to right panel based on state.
+- `v3/src/features/generator/GeneratorFooter/GeneratorFooter.module.css` — Added `.previewBtn` (hidden on desktop, shown on mobile as bordered button).
+- `v3/src/features/generator/GeneratorFooter/GeneratorFooter.tsx` — Added `showMobilePreview` from `useUIActions()`. Renders "Preview →" button (mobile only) before Generate button.
+
+**Test results:** `tsc --noEmit` — zero errors.
+
+**Commits:**
+- `67b4808` feat(preview): SaaS landing page template — all tokens from CSS vars
+- `52cdd85` feat(mobile): preview slide-in — store, SplitPane animation, Preview/Back buttons
+
+**What Phase 1D receives from 1C:**
+- Full split-pane app: generator left + landing template right, live-updating on every Space press
+- Dark mode works end-to-end with smooth transitions
+- Mobile: "Preview →" slides in landing page, "← Back" returns to generator
+- `useUI().mode` — set to `'detail'` by "Detail Mode →" button; Phase 1D renders `<DetailMode />` when mode is `'detail'`
+- `useUI().showcaseTemplate` — Phase 1D uses this to add a second template (system view) to `<LivePreview />`
+- Do not modify `v3/src/features/preview/` or `v3/src/store/`
 
 ---
 
