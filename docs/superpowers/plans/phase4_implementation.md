@@ -683,3 +683,241 @@ Phase 4D starts with the following in place:
 | Test count | 116 (unchanged — no store changes in this phase) |
 | TypeScript | Pre-existing errors unchanged; zero new errors |
 | Build | ✓ 110 KB gzipped JS (named Lucide imports, tree-shaken) |
+
+---
+
+---
+
+# palette. Phase 4D — UX Polish: Implementation Log
+
+> **Branch:** `feat/v4-phase4d-ux-polish` (based on `feat/v3-phase1a` after Phase 4C merge)
+> **Date:** 2026-03-21
+> **Baseline:** 116 tests → **117 tests passing** after phase
+> **TypeScript:** `tsc -p tsconfig.app.json --noEmit` — zero new errors
+> **Build:** `npx vite build` — ✓ built in 2.82s, 346.24 KB / 110.83 KB gzipped
+
+---
+
+## What Was Built
+
+Phase 4D is a polish pass: no new features, but improved UX coherence. Focus areas were font-size legibility, inline style elimination, context information in the header, tab navigation on narrow screens, and elimination of `core/` runtime imports from feature components.
+
+---
+
+## Task 1 — `useColorTokens` selector + temporal undo/redo helpers
+
+**Files modified:**
+- `v3/src/store/index.ts`
+
+**Files created:**
+- `v3/src/store/__tests__/color-tokens-selector.test.ts`
+
+**Commit:** `c51aca9`
+
+**What was added:**
+
+Module-level token cache updated on every store subscription run:
+```typescript
+let _cachedTokenMap: { light: Record<string, string>; dark: Record<string, string> } = { light: {}, dark: {} }
+export { _cachedTokenMap }
+// In subscription callback: _cachedTokenMap = tokens
+```
+
+Selector hook for components that need dark-mode token values (not readable from CSS `:root`):
+```typescript
+export function useColorTokens(): { light: Record<string, string>; dark: Record<string, string> } {
+  return useStore(state => {
+    void state.color.slots      // subscribe to palette changes
+    void state.typography.pairing
+    return _cachedTokenMap
+  })
+}
+```
+
+Imperative undo/redo helpers for AppHeader:
+```typescript
+export const temporalUndo = () => _temporal?.getState().undo()
+export const temporalRedo = () => _temporal?.getState().redo()
+```
+
+**Why `_cachedTokenMap` is needed:**
+Dark token values are written into a `<style id="palette-dark-tokens">` tag (for `@media (prefers-color-scheme: dark)`), not into `:root` CSS vars. Components reading dark values cannot use `getComputedStyle` — the cache is the only way to access them synchronously.
+
+**Tests:** 1 test — verifies token cache populates after `colorActions.generate()`.
+
+---
+
+## Task 2 — AppHeader: undo/redo buttons + context area
+
+**Files modified:**
+- `v3/src/components/AppShell/AppHeader.tsx`
+- `v3/src/components/AppShell/AppHeader.module.css`
+
+**Commit:** `fcdc299`
+
+**Undo/redo:**
+```typescript
+const temporal = (useStore as any).temporal
+const pastLen = useStore(() => temporal?.getState().pastStates?.length ?? 0)
+const futureLen = useStore(() => temporal?.getState().futureStates?.length ?? 0)
+const canUndo = pastLen > 0
+const canRedo = futureLen > 0
+```
+Two icon buttons (↩ / ↪) in `.historyGroup`; disabled when no history; call `temporalUndo()` / `temporalRedo()`.
+
+Sessions icon updated from clock SVG to bookmark SVG.
+
+**Context area:**
+```tsx
+<div className={styles.contextArea}>
+  {harmonyBadge && <span className={styles.harmonyBadge}>{harmonyBadge}</span>}
+  {pairingLabel && <span className={styles.pairingLabel}>{pairingLabel}</span>}
+  {contextLabel && (
+    <span className={styles.contextBreadcrumb}>
+      <span className={styles.breadcrumbSep}>/</span>
+      {contextLabel}
+    </span>
+  )}
+</div>
+```
+
+Derived from: `harmony` (generator mode badge), `pairing.display/body` (font pairing label), `activeTab` / `activeModel` (breadcrumb).
+
+**CSS new classes:** `.contextArea`, `.harmonyBadge`, `.pairingLabel`, `.contextBreadcrumb`, `.breadcrumbSep`, `.historyGroup`, `.historyBtn` — all ≥13px.
+
+---
+
+## Task 3 — DetailMode: scroll-snap tabs + responsive short labels
+
+**Files modified:**
+- `v3/src/features/detail/DetailMode.tsx`
+- `v3/src/features/detail/DetailMode.module.css`
+
+**Commit:** `e6d0dd7`
+
+Tabs extended with `short` labels (`Clr`, `Typ`, `Spc`, `Fx`, `Cmp`, `Exp`, `Shw`).
+
+Auto-scroll active tab into view via `useRef` + `useEffect`:
+```typescript
+const activeTabRef = useRef<HTMLButtonElement>(null)
+useEffect(() => {
+  activeTabRef.current?.scrollIntoView({ inline: 'nearest', behavior: 'smooth' })
+}, [activeTab])
+```
+
+Each tab renders `<span className={styles.tabFullLabel}>` and `<span className={styles.tabShortLabel}>` — CSS `@media (max-width: 900px)` toggles visibility.
+
+Tab badge moved from `style={{ fontSize: 9 }}` to `className={styles.tabBadge}` (13px).
+
+**CSS:** `.tabs` with `overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;` — tab rows scroll horizontally on overflow without visible scrollbar.
+
+---
+
+## Task 4 — Remove `core/` imports from ShadeScaleSection
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ColorsTab/ShadeScaleSection.tsx`
+- `v3/src/features/detail/tabs/ColorsTab/ShadeScaleSection.module.css`
+
+**Commit:** `9f4949b`
+
+Removed `makeShadeScale`, `SHADE_STEPS` from `@/core/color/scales`. Replaced with local constant + `getComputedStyle` reads:
+```typescript
+const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+function getShadeSteps(role: string): Record<number, string> { ... }
+```
+
+---
+
+## Task 5 — Remove `core/` imports from SemanticRolesSection
+
+**Files modified:**
+- `v3/src/features/detail/tabs/ColorsTab/SemanticRolesSection.tsx`
+- `v3/src/features/detail/tabs/ColorsTab/SemanticRolesSection.module.css`
+
+**Commit:** `ce35724`
+
+Removed all 4 core/color imports. Light values: `getCssVar('--color-{role}')`. Dark values: `useColorTokens().dark['--color-{role}']`.
+
+---
+
+## Task 6 — Remove `core/` imports from SystemTemplate
+
+**Files modified:**
+- `v3/src/features/preview/templates/SystemTemplate/SystemTemplate.tsx`
+
+**Commit:** `759ce68`
+
+Removed 6 core/color imports. All colour values now from `getComputedStyle(document.documentElement).getPropertyValue('--color-...')`.
+
+---
+
+## Task 7 — Remove `core/` imports from ContrastGrid, DataVizSection, ReadabilityScore, ShadeStrip
+
+**Files modified:** 4 TSX + 4 CSS modules
+
+**Commit:** `27a5ed8`
+
+**ContrastGrid:** Local `getLuminance()`, `contrastRatio()`, `getWcagLevels()` — standard WCAG formula. All colours from `getCssVar()`.
+
+**DataVizSection:** Palette from `--color-dataviz-N` CSS vars:
+```typescript
+const palette = Array.from({ length: dataVizN }, (_, i) =>
+  style.getPropertyValue(`--color-dataviz-${i + 1}`).trim() || '#888'
+)
+```
+
+**ReadabilityScore:** Local `getLuminance()`, `wcagRatio()`. Reads `--color-on-surface` / `--color-background`.
+
+**ShadeStrip:** Reads `--color-{role}-{step}` CSS vars. `hex` prop retained in interface for API compatibility, no longer used internally.
+
+---
+
+## Task 8 — Move ComponentsTab wrapper styles to CSS module
+
+**Files modified/created:**
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentsTab.tsx`
+- `v3/src/features/detail/tabs/ComponentsTab/ComponentsTab.module.css` (new)
+
+**Commit:** `22eba7d`
+
+Inline style object replaced with `.tab` CSS class.
+
+---
+
+## Task 9 — Eliminate sub-13px text across all CSS modules
+
+**Files modified:** 24 files
+
+**Commit:** `ba4c40b`
+
+All `font-size` values below 13px raised to `13px` across 26 CSS module files. Inline `fontSize` props removed from 4 TSX files and replaced with CSS classes. Icon library `package.json` dependencies committed (installed during Phase 4C).
+
+---
+
+## Architecture Notes
+
+### Why CSS vars instead of core/ re-computation
+
+`buildTokenMap()` already computes all derived values and injects them as CSS custom properties via `injectTokensToDOM()`. Components calling `makeShadeScale(hex)` or `deriveBrandRoles(hex)` were duplicating this work. The correct pattern: subscribe to store state → re-render → call `getComputedStyle` with fresh injected values. No need to import core functions.
+
+### Remaining `core/` imports in features (out of scope)
+
+`ComponentTokenSection`, `IconLibrarySection`, `ExportTab`, `ShowcaseTab`, `FontBrowser`, `FontBrowserGrid`, `ExportPanel`, `SessionsDrawer` still have runtime `core/` imports. These require store actions for font loading, export formatting, and session management — future phase work.
+
+---
+
+## What the Next Phase Receives
+
+| Item | State |
+|------|-------|
+| Font size minimum | 13px enforced across all CSS modules and TSX files |
+| Inline styles | Eliminated from app chrome — CSS modules only |
+| Undo/redo | Buttons in AppHeader, wired to zundo temporal store |
+| Context area | Harmony mode + font pairing + breadcrumb in AppHeader |
+| Tab navigation | Scroll-snap overflow + 3-letter abbreviations at ≤900px |
+| `useColorTokens` | Selector for accessing dark token values from cache |
+| Core/ imports | Eliminated from 9 components; 7 remaining require store action work |
+| Test count | 117 (was 116) |
+| TypeScript | `tsc -p tsconfig.app.json --noEmit` clean |
+| Build | ✓ 110.83 KB gzipped JS |
