@@ -34,7 +34,9 @@ Carries forward from v2. No changes.
 | Build | Vite 5 |
 | State | Zustand + zundo (undo/redo) |
 | Color math | culori (OKLCH-native) |
-| Font loading | Google Fonts API v2 + Fontshare + Bunny Fonts |
+| Contrast / readability | apca-w3 (APCA algorithm for Typography tab readability score) |
+| URL compression | fflate (deflate/inflate, tree-shakeable — for share URL encoding) |
+| Font loading | Google Fonts API v2 (catalog + CSS) + Fontshare (static list + CSS) + Bunny Fonts (CSS mirror) |
 | Styling | CSS Modules + CSS custom properties |
 | Token export | Custom plugin system |
 
@@ -52,6 +54,8 @@ The divider is **draggable** — user can resize the split freely. Default is 50
 
 ### 4.3 Mobile
 On mobile, only the **generator panel** is shown (full width). A "Preview →" button slides in the preview panel, replacing the generator. Back swipe / button returns to generator. Export is accessible from both views. Detail mode on mobile: tabs at top, scrollable content below.
+
+**Mobile generation trigger:** The spacebar shortcut is keyboard-only and unavailable on touch devices. A prominent **"Generate ✦"** button is always visible at the bottom of the generator panel on mobile (equivalent to pressing space). Tapping it triggers the same cold-random or harmony-constrained generation as the spacebar does on desktop.
 
 ---
 
@@ -90,6 +94,8 @@ Entered via "Detail Mode →" button in the generator panel (bottom of left pane
 - **Brand slot** cannot be removed but another slot can be dragged into the Brand role
 - **Role reassignment:** drag-to-reorder changes which color holds which semantic role
 
+**Lock follows color, not slot.** When the user drags a locked color to a new position, the lock state travels with the color value. The shade strip also moves with the color. Slot positions are just ordering — the lock is a property of the color. This preserves harmony model anchoring (Section 8.3) regardless of visual order.
+
 ### 6.3 Color theory hint
 A subtle green hint bar below the shade strips, visible when at least one color is locked:
 > "Unlocked colors are harmonizing with your Brand — analogous hues in OKLCH"
@@ -104,11 +110,11 @@ Below the color section, with visible whitespace separation:
 - **Lock toggle** (per heading font, per body font, per scale ratio — independently lockable)
 
 ### 6.5 Bottom of generator panel
-- "SPACE to generate" hint (keyboard shortcut reminder)
-- "✦ vibe" chip — opens a mood/keyword filter (optional, doesn't replace space)
+- "SPACE to generate" hint (keyboard shortcut reminder); replaced by "Generate ✦" button on mobile
+- "✦ vibe" chip — **Phase 4 placeholder.** Rendered in Phase 1 as a visible but disabled chip with a tooltip "Coming soon." Does not open anything in Phase 1. Serves as a UI anchor for Phase 4 implementation without requiring rework.
 - "+ Add color" button
 - "Detail Mode →" primary CTA (brand color)
-- "Export ↓" — always visible (see Section 9)
+- "Export ↓" — always visible (see Section 11)
 
 ---
 
@@ -148,10 +154,10 @@ Every space press — including the first cold one — executes:
 | **Monochromatic** | All same hue, dramatically different L + C | Sophisticated, premium; near-identical colors are valid | Consistent C, dramatic L spread (0.3 → 0.75) |
 | **Analogous** | 0–45° apart | Warm, cohesive, natural | Consistent L, slight C variation |
 | **Complementary** | Base + 180° + small variations of each | High contrast, bold, energetic | Brand: high C; complement: slightly lower C |
-| **Split-complementary** | Base + 150° + 210° | Softer than comp, very versatile | — |
-| **Triadic** | 120° apart | Vibrant, playful, balanced | — |
-| **Tetradic/Square** | 90° apart (4 equally spaced) | Rich, complex; excellent for 4-slot default | — |
-| **Compound** | Analogous base + complementary accent | Sophisticated complexity — near-similar group + strong contrast | — |
+| **Split-complementary** | Base + 150° + 210° | Softer than comp, very versatile | L: 0.50–0.70, C: 0.12–0.20; base gets highest C, split positions slightly lower |
+| **Triadic** | 120° apart | Vibrant, playful, balanced | L: 0.55–0.70, C: 0.14–0.20; all three positions equal C, slight L variation |
+| **Tetradic/Square** | 90° apart (4 equally spaced) | Rich, complex; excellent for 4-slot default | L: 0.55–0.68, C: 0.12–0.18; all four equal C and equal L for visual balance |
+| **Compound** | Analogous base (0–30°) + complementary accent (180°) | Sophisticated complexity — near-similar group + strong contrast | Analogous group: L 0.55–0.70, C 0.10–0.16; accent: L 0.55–0.65, C 0.18–0.22 (pushed higher for contrast) |
 
 **Weighting:** Split-complementary and compound appear more often (slightly higher random weight). Tetradic appears less often.
 
@@ -183,9 +189,31 @@ Derived automatically from shade scales. Two tiers:
 
 All semantic roles are visible in the **Colors tab of detail mode** under a "Semantic" section. All pass WCAG AA by derivation; the UI shows which pass AAA. A contrast grid is available.
 
-Dark mode values are derived simultaneously and toggled via the theme switch.
+### 8.6 Dark mode derivation
 
-### 8.6 Data visualization / categorical palette
+Dark mode values are computed from the same shade scales simultaneously with light mode. The mapping inverts the lightness axis:
+
+| Semantic role | Light mode step | Dark mode step |
+|---|---|---|
+| background | 50 | 950 |
+| surface | 100 | 900 |
+| surface-raised | 50 (white) | 850 |
+| on-surface | 900 | 100 |
+| on-surface-subtle | 600 | 400 |
+| border | 200 | 800 |
+| border-strong | 400 | 600 |
+| interactive | 500 | 400 (slightly lighter for contrast on dark bg) |
+| on-interactive | white | white |
+| interactive-subtle | 50 | 900 |
+| interactive-hover | 600 | 300 |
+
+State/mood roles (error, warning, success, info) follow the same inversion pattern: containers become dark-shade steps, base colors lighten slightly for dark backgrounds.
+
+Dark mode tokens export as `[data-theme="dark"] { ... }` in CSS. Individual dark token overrides are available in the Colors tab of detail mode — each semantic role shows its light and dark value side by side with independent override inputs.
+
+**Implementation:** The light/dark derivation runs as part of the same synchronous color derivation pass — no separate computation step. `deriveTokens(palette) → { light: {...}, dark: {...} }`.
+
+### 8.7 Data visualization / categorical palette
 
 A dedicated palette for charts, graphs, and figures with multiple data series (8–12 lines, segments, etc.).
 
@@ -209,10 +237,10 @@ A dedicated palette for charts, graphs, and figures with multiple data series (8
 
 ### 9.1 Font pairing pool
 
-~60 hand-curated pairings stored as a JSON config file. Sources:
-- **Google Fonts** (~40 pairings) — primary source, ~1500 fonts available
-- **Fontshare** by Indian Type Foundry (~15 pairings) — high-quality free fonts (Cabinet Grotesk, Satoshi, Clash Display, General Sans, Bogart, etc.)
-- **Bunny Fonts** (~5 pairings) — GDPR-friendly Google Fonts mirror
+~60 hand-curated pairings stored as a **static JSON config file** in the codebase. Sources:
+- **Google Fonts** (~40 pairings) — primary source; fonts loaded via CSS `@import` from `fonts.googleapis.com`; catalog browsable via Google Fonts API v2
+- **Fontshare** by Indian Type Foundry (~15 pairings) — Fontshare has no public catalog API; fonts are served via CSS imports from `api.fontshare.com`; the available Fontshare font list is maintained as a static JSON array in the codebase (curated manually, ~100 fonts total)
+- **Bunny Fonts** (~5 pairings) — mirrors the Google Fonts catalog; uses the same CSS import pattern; Google Fonts API list is reused for catalog browsing
 
 Each pairing entry:
 ```json
@@ -229,17 +257,21 @@ Loose correlation: monochromatic/compound models slightly favor editorial/serif 
 
 ### 9.2 Full scale auto-derivation
 
-Generated immediately on every space press:
+Generated immediately on every space press using a **true modular scale**: all step sizes are computed as `base × ratio^n`, where base = 16px and ratio is randomly drawn from 1.25–1.5. The pixel values below are illustrative examples for ratio ≈ 1.4 — the implementation must derive them from the formula, not hardcode them.
 
-| Property | How derived |
-|---|---|
-| Scale ratio | Random draw from 1.25 (Major Third) → 1.5 (Perfect Fifth) |
-| Steps | Display 72, H1 56, H2 40, H3 28, H4 20, Body 16, Small 14, XS 12, Label 11px uppercase |
-| Weights | Derived from font's available axes; never hardcoded |
-| Line heights | From font x-height metric: tight for display (1.1), loose for body (1.55–1.65) |
-| Letter spacing | Display: -0.02em to -0.04em; body: 0; labels: +0.06em tracked |
+| Step | Formula (ratio = 1.4) | Example px | Weight | Line height | Letter spacing |
+|---|---|---|---|---|---|
+| Display | base × ratio⁴ | ~62px | 800–900 | 1.05 | -0.04em |
+| H1 | base × ratio³ | ~44px | 800 | 1.1 | -0.03em |
+| H2 | base × ratio² | ~31px | 700 | 1.15 | -0.02em |
+| H3 | base × ratio¹ | ~22px | 700 | 1.25 | -0.01em |
+| H4 | base × ratio⁰·⁵ | ~19px | 600 | 1.35 | 0 |
+| Body | base (16px) | 16px | 400 | 1.55–1.65 | 0 |
+| Small | base × ratio⁻¹ | ~11px | 400 | 1.5 | 0 |
+| XS | base × ratio⁻¹·⁵ | ~10px | 400 | 1.4 | 0 |
+| Label | base × ratio⁻² | ~8px | 500 | 1.2 | +0.06em uppercase |
 
-All values export immediately as CSS custom properties.
+Weights are derived from the font's available axes — checked at load time, never hardcoded. Line heights are computed from the font's x-height metric where available, otherwise use the values above. All values export immediately as CSS custom properties.
 
 ### 9.3 Lock granularity
 
@@ -249,14 +281,22 @@ All values export immediately as CSS custom properties.
 - Lock scale ratio → keeps size relationships even when fonts change
 - "↺ fonts" button re-rolls fonts independently of color cycling
 
-### 9.4 Detail mode — full font browser
+### 9.4 Font loading strategy
+
+Fonts are loaded **on-demand only** — never eagerly for the full catalog:
+- The 60 curated pairings: heading + body fonts loaded when the pairing is active (current generation). Previous pairing fonts are not unloaded immediately — kept for 2 cycles, then released.
+- Font browser catalog: fonts load when their grid cell becomes visible (`IntersectionObserver`). Each cell shows a skeleton placeholder until the font loads. A short sample string ("Aa Bb 123") is used for preview loading, not the full character set.
+- Error fallback: if a font fails to load (network error, CDN unavailable), the slot falls back to the next font in the pairing pool and logs a console warning. No user-visible error for a single font failure.
+- Full character set display (Section 9.5, System view): loaded only when the System view is opened, not at generation time.
+
+### 9.5 Detail mode — full font browser
 
 Full access to entire Google Fonts + Fontshare + Bunny catalog:
 - Search by name
 - Filter by: style (serif / sans / mono / display / handwriting), weight availability, variable font support
 - Live preview with custom sample text (user can type their own)
 - Pick heading + body independently
-- Curated pairings remain available as "Quick picks" at top
+- **Quick picks** at top of browser: the 60 curated pairings shown as a scrollable row. Clicking one applies both heading and body instantly. Quick picks supplement (not replace) the spacebar cycling — cycling in detail mode is not available, but the user can click any Quick pick or browse freely.
 
 ### 9.5 Typography showcase (System view)
 
@@ -289,7 +329,7 @@ Seven tabs total. Designed so each can be added in a later phase without interfe
 - Effects consolidates shadows + motion + focus — things that affect how elements feel and move, sensory rather than structural
 - Components is the bridge between abstract tokens and real UI — icon set lives here because icons are component-level decisions
 
-**Independence guarantee:** Each tab reads from and writes to its own token slice in the store. Adding Phase 2 or Phase 3 tabs requires no changes to Phase 1 tabs.
+**Store architecture:** Each tab reads from and writes to its own named slice in the Zustand store. See Section 10.3 for dependency mapping.
 
 ### 10.2 UX pattern per tab
 
@@ -297,7 +337,21 @@ Seven tabs total. Designed so each can be added in a later phase without interfe
 - Overridden values have a **"reset"** affordance to return to derived value
 - WCAG contrast checked live — green/amber/red summary visible in Colors tab
 
-### 10.3 Transition
+**Showcase tab — left panel:** The Showcase tab's left panel contains only: the template switcher (Landing / Dashboard / Blog / System), the light/dark theme toggle, a full-screen expand button, and a "Copy share link" button. There are no editable token controls in the Showcase tab's left panel. The right panel renders the selected template using the current token state from all other tabs.
+
+### 10.3 Store architecture and tab independence
+
+Each tab reads from and writes to its own **named slice** in the Zustand store: `colorSlice`, `typographySlice`, `spacingSlice`, `effectsSlice`, `componentsSlice`. The generator's derived output writes to a `derivedTokens` object that all slices read as their default values. Tab-specific overrides are stored separately from derived values, enabling the "auto" / "overridden" distinction.
+
+**Known inter-slice dependencies** (mapping them explicitly rather than claiming full isolation):
+- The Spacing tab's icon size scale references the spacing base unit (intra-slice, no cross-dependency)
+- The Effects tab's focus ring color references `colorSlice.interactive` (cross-slice read, read-only)
+- The Components tab reads from all slices to build component tokens (cross-slice read, read-only)
+- No slice writes to another slice — all writes are to the owning slice only
+
+Adding a Phase 2 or Phase 3 tab requires adding a new slice and registering it in the store — zero changes to existing slices.
+
+### 10.4 Transition
 
 Generator → Detail: click "Detail Mode →" button. Smooth panel transition. Opens on Colors tab by default. "← Back to generator" link always visible at top of left panel; returns with full state preserved.
 
@@ -309,8 +363,8 @@ Generator → Detail: click "Detail Mode →" button. Smooth panel transition. O
 
 A persistent **"Export ↓"** button lives in the app header, visible in **both** generator mode and detail mode.
 
-- **In generator mode:** clicking opens a compact slide-up panel with the top 3 formats (CSS vars, Tailwind, JSON), a live syntax-highlighted code preview, and one-click copy. Immediate, zero friction.
-- **In detail mode:** same header button works identically. Additionally, the **Export tab** in the sidebar gives full control: naming conventions, which token layers to include, partial exports, copy or download as file.
+- **In generator mode:** clicking opens a compact **slide-up panel** anchored to the bottom of the viewport, overlaying both panels. It closes on Escape, on click-outside, or on a close (×) button in its top-right corner. On mobile, it slides up from the bottom of the screen as a bottom sheet. Contents: format tabs (CSS / Tailwind / JSON), a live syntax-highlighted code preview block, and a prominent "Copy" CTA. One-click, zero friction.
+- **In detail mode:** same header button opens the same slide-up panel. The **Export tab** in the sidebar additionally gives full control: naming conventions, which token layers to include, partial exports, copy or download as file. "Copy share link" lives in the Showcase tab left panel only (not in the Export slide-up).
 
 ### 11.2 Smart defaults (pre-selected, no configuration required)
 
@@ -334,7 +388,7 @@ A syntax-highlighted code block updates in real time as the user changes format 
 | **Tailwind v3** | `theme.extend` object with colors, fontFamily, fontSize, spacing, boxShadow, transitionDuration | `tailwind.config.js` |
 | **Tailwind v4** | `@theme` block with CSS-native syntax | `app.css` in v4 projects |
 | **W3C Design Tokens JSON** | Standard `$value` / `$type` format — interoperable with Figma Variables, Style Dictionary | Cross-tool handoff |
-| **SCSS** | `$token-name: value` variables | Legacy SCSS codebases |
+| **SCSS** | `$token-name: value` variables | Legacy SCSS codebases | Phase 1 |
 
 ### 11.5 Naming conventions (detail mode)
 
@@ -407,7 +461,29 @@ The System view is a scrollable, screenshot-worthy document rendered in the righ
 
 ---
 
-## 14. Open Questions
+## 14. URL Sharing
+
+URL sharing is a Phase 1 deliverable. The share link encodes the current session state in the URL hash.
+
+**What is encoded:**
+- All color values and their lock states
+- Active harmony model
+- Font pairing (heading + body font names + source)
+- Typography lock states (heading locked, body locked, scale locked)
+- Active mode (generator / detail) and active detail tab
+- Theme (light / dark)
+
+**Encoding:** JSON serialized, then compressed with `fflate` (pako/deflate-compatible, tree-shakeable), then base64url encoded. Prefix: `#v3/`. Example: `#v3/eJyrVkrNKynKLFayUlAqS8...`
+
+**Copy trigger:** A "Copy share link" button in the Showcase tab left panel. Also accessible via keyboard shortcut (Cmd/Ctrl+Shift+C).
+
+**Error handling:** If the hash is present but fails to decode (corrupt, wrong version prefix, or missing fields), the app silently ignores it and starts fresh. No error shown to the user — a broken share link just opens the tool normally.
+
+**Version compatibility:** The `#v3/` prefix allows future versions to detect and reject stale hashes gracefully. If a `#v2/` hash is detected, it is ignored (v2 format is incompatible with v3 state shape).
+
+---
+
+## 15. Open Questions
 
 - App name: "palette." is working title — confirm or pick final name before Phase 1 ships
 - Pricing model: not yet designed (Phase 3 concern)
