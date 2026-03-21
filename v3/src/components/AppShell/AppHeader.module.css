@@ -43,6 +43,32 @@
   background: var(--color-interactive-subtle);
 }
 
+.themeSegment {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.themeBtn {
+  padding: 4px 8px;
+  font-size: 13px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--color-border);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  transition: background 0.12s, color 0.12s;
+  line-height: 1;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.themeBtn:last-child { border-right: none; }
+.themeBtn:hover { background: var(--color-surface); color: var(--color-on-surface); }
+.themeBtnActive { background: var(--color-interactive-subtle); color: var(--color-interactive); font-weight: 600; }
+
 .exportBtn {
   height: 32px;
   padding: 0 12px;

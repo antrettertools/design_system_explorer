@@ -1,13 +1,20 @@
 import styles from './AppHeader.module.css'
 import { useUI, useUIActions } from '@/store'
+import type { AppTheme } from '@/store/ui'
 
 interface AppHeaderProps {
   onExportClick: () => void
 }
 
+const THEME_OPTIONS: { value: AppTheme; label: string; title: string }[] = [
+  { value: 'white', label: '☀', title: 'White background' },
+  { value: 'light', label: '◑', title: 'Light background' },
+  { value: 'dark',  label: '◐', title: 'Dark background' },
+]
+
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme } = useUI()
-  const { toggleTheme, toggleSessionsDrawer } = useUIActions()
+  const { setTheme, toggleSessionsDrawer } = useUIActions()
 
   return (
     <header className={styles.header}>
@@ -24,14 +31,19 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             <polyline points="12,6 12,12 16,14"/>
           </svg>
         </button>
-        <button
-          className={styles.themeToggle}
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '◐' : '○'}
-        </button>
+        <div className={styles.themeSegment} role="group" aria-label="Background mode">
+          {THEME_OPTIONS.map(opt => (
+            <button
+              key={opt.value}
+              className={`${styles.themeBtn} ${theme === opt.value ? styles.themeBtnActive : ''}`}
+              onClick={() => setTheme(opt.value)}
+              title={opt.title}
+              aria-pressed={theme === opt.value}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
         <button className={styles.exportBtn} onClick={onExportClick}>
           Export ↓
         </button>
