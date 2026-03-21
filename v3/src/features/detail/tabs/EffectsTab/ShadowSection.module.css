@@ -38,9 +38,9 @@
   font-weight: 600;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.builderList {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 

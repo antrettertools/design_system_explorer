@@ -1,12 +1,13 @@
 import { useEffects, useEffectsActions } from '@/store'
 import type { ShadowPresets } from '@/core/effects/types'
+import { ShadowBuilder } from './ShadowBuilder'
 import styles from './ShadowSection.module.css'
 
 const SHADOW_STEPS: (keyof ShadowPresets)[] = ['sm', 'md', 'lg', 'xl']
 
 export function ShadowSection() {
   const { config, shadowMode, shadowOverrides } = useEffects()
-  const { setShadowMode } = useEffectsActions()
+  const { setShadowMode, overrideShadow, resetShadow } = useEffectsActions()
 
   const baseShadows = shadowMode === 'colored' ? config.shadows : config.shadowsNeutral
   const activeShadows = { ...baseShadows, ...shadowOverrides }
@@ -33,16 +34,16 @@ export function ShadowSection() {
         </button>
       </div>
 
-      <div className={styles.grid} role="list">
+      <div className={styles.builderList} role="list">
         {SHADOW_STEPS.map(step => (
-          <div key={step} className={styles.card} role="listitem">
-            <div
-              className={styles.preview}
-              style={{ boxShadow: activeShadows[step] }}
-              title={`shadow-${step}`}
+          <div key={step} role="listitem">
+            <ShadowBuilder
+              step={step}
+              value={activeShadows[step]}
+              onOverride={v => overrideShadow(step, v)}
+              onReset={() => resetShadow(step)}
+              isOverridden={step in shadowOverrides}
             />
-            <span className={styles.label}>shadow-{step}</span>
-            <span className={styles.value}>{activeShadows[step]}</span>
           </div>
         ))}
       </div>
