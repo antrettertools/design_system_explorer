@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { buildTokenMap } from '../derived'
+import type { ColorSlot } from '@/core/color/types'
 
-const minSlots = [{ id: '1', role: 'brand', hex: '#e8543a', locked: false }]
+const minSlots: ColorSlot[] = [{ id: '1', role: 'brand', hex: '#e8543a', locked: false }]
 
 describe('buildTokenMap white mode', () => {
   it('sets background to #ffffff in white mode', () => {

@@ -33,7 +33,7 @@ export function GreyscaleSection() {
     <section className={styles.section}>
       <div className={styles.sectionTitle}>Greyscale / Neutrals</div>
       <div className={styles.strip}>
-        {resolvedColors.map(({ label, token, hex }) => (
+        {resolvedColors.map(({ token, hex }) => (
           <button
             key={token}
             className={styles.swatch}
