@@ -1,0 +1,185 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.description {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.accordionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.accordion {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.accordionHeader:hover {
+  background: var(--color-surface-raised);
+}
+
+.accordionLabel {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+}
+
+.overrideCount {
+  font-size: var(--font-size-label);
+  color: var(--color-interactive);
+  background: var(--color-brand-100);
+  border-radius: var(--radius-full);
+  padding: 0 6px;
+  line-height: 18px;
+}
+
+.chevron {
+  color: var(--color-text-muted);
+  transition: transform 0.2s;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.accordionBody {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.tokenTable {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--color-border);
+}
+
+.tokenRow {
+  display: contents;
+}
+
+.tokenKey {
+  background: var(--color-surface);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.tokenValue {
+  background: var(--color-surface);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.autoPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-full);
+  padding: 0 8px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.overriddenPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-label);
+  color: var(--color-interactive);
+  background: var(--color-brand-100);
+  border-radius: var(--radius-full);
+  padding: 0 8px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.tokenInput {
+  flex: 1;
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-label);
+  padding: 2px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.tokenInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.resetBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.resetBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.componentPreview {
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.previewLabel {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+}
