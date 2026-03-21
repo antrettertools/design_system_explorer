@@ -9,8 +9,9 @@ const FORMATS: { id: ExportFormat; label: string; desc: string }[] = [
   { id: 'css', label: 'CSS Custom Properties', desc: 'Drop into any project' },
   { id: 'tailwind-v3', label: 'Tailwind v3', desc: 'theme.extend config' },
   { id: 'tailwind-v4', label: 'Tailwind v4', desc: '@theme CSS syntax' },
-  { id: 'w3c', label: 'W3C Design Tokens', desc: 'Figma / Style Dictionary' },
+  { id: 'w3c', label: 'W3C Design Tokens', desc: 'Style Dictionary / Tokens Studio' },
   { id: 'scss', label: 'SCSS Variables', desc: 'Legacy codebases' },
+  { id: 'figma', label: 'Figma Variables', desc: 'Import directly into Figma' },
 ]
 
 const FILE_EXT: Record<ExportFormat, string> = {
@@ -19,6 +20,7 @@ const FILE_EXT: Record<ExportFormat, string> = {
   'tailwind-v4': 'tokens.css',
   'w3c': 'tokens.json',
   'scss': 'tokens.scss',
+  'figma': 'figma-variables.json',
 }
 
 export function ExportTab() {

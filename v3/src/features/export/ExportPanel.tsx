@@ -11,6 +11,7 @@ const FORMATS: { id: ExportFormat; label: string }[] = [
   { id: 'tailwind-v4', label: 'Tailwind v4' },
   { id: 'w3c', label: 'W3C JSON' },
   { id: 'scss', label: 'SCSS' },
+  { id: 'figma', label: 'Figma' },
 ]
 
 const FILE_EXT: Record<ExportFormat, string> = {
@@ -19,6 +20,7 @@ const FILE_EXT: Record<ExportFormat, string> = {
   'tailwind-v4': 'tokens.css',
   'w3c': 'tokens.json',
   'scss': 'tokens.scss',
+  'figma': 'figma-variables.json',
 }
 
 export function ExportPanel() {

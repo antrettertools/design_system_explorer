@@ -2,7 +2,7 @@ export type AppMode = 'generator' | 'detail'
 export type DetailTab = 'colors' | 'typography' | 'spacing' | 'effects' | 'components' | 'showcase' | 'export'
 export type AppTheme = 'light' | 'dark'
 export type ShowcaseTemplate = 'landing' | 'dashboard' | 'blog' | 'system'
-export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss'
+export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss' | 'figma'
 
 export interface UIState {
   mode: AppMode
@@ -12,6 +12,7 @@ export interface UIState {
   exportPanelOpen: boolean
   activeExportFormat: ExportFormat
   mobileShowPreview: boolean
+  sessionsDrawerOpen: boolean
 }
 
 export interface UIActions {
@@ -24,6 +25,9 @@ export interface UIActions {
   setExportFormat: (format: ExportFormat) => void
   showMobilePreview: () => void
   hideMobilePreview: () => void
+  openSessionsDrawer: () => void
+  closeSessionsDrawer: () => void
+  toggleSessionsDrawer: () => void
 }
 
 export const defaultUIState: UIState = {
@@ -34,6 +38,7 @@ export const defaultUIState: UIState = {
   exportPanelOpen: false,
   activeExportFormat: 'css',
   mobileShowPreview: false,
+  sessionsDrawerOpen: false,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,5 +58,11 @@ export function createUIActions(set: any, get: any): UIActions {
     setExportFormat: (activeExportFormat) => set({ ui: { ...(get() as { ui: UIState }).ui, activeExportFormat } }),
     showMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: true } }),
     hideMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: false } }),
+    openSessionsDrawer: () => set({ ui: { ...(get() as { ui: UIState }).ui, sessionsDrawerOpen: true } }),
+    closeSessionsDrawer: () => set({ ui: { ...(get() as { ui: UIState }).ui, sessionsDrawerOpen: false } }),
+    toggleSessionsDrawer: () => {
+      const state = get() as { ui: UIState }
+      set({ ui: { ...state.ui, sessionsDrawerOpen: !state.ui.sessionsDrawerOpen } })
+    },
   }
 }

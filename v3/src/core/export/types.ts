@@ -1,4 +1,4 @@
-export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss'
+export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss' | 'figma'
 
 export type TokenCasing = 'kebab-case' | 'camelCase' | 'snake_case'
 
