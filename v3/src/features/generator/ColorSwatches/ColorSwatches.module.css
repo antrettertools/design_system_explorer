@@ -1,0 +1,10 @@
+.grid {
+  display: flex;
+  gap: 6px;
+  padding: 16px 16px 0;
+}
+
+.grid > * {
+  flex: 1;
+  min-width: 0;
+}
