@@ -1,0 +1,87 @@
+.section {
+  padding: 20px 16px 16px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 16px;
+}
+
+.fontNames {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.fontNameLabel {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle);
+  font-family: sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.lockRow {
+  display: flex;
+  gap: 6px;
+}
+
+.lockBtn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 10px;
+  padding: 2px 6px;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  transition: all 0.15s;
+}
+
+.lockBtn.locked {
+  background: var(--color-interactive-subtle);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.heading {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-on-surface);
+  margin-bottom: 8px;
+  font-family: var(--font-heading, Georgia, serif);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body, sans-serif);
+  margin-bottom: 14px;
+}
+
+.scalePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle);
+}
+
+.pillLabel {
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-family: sans-serif;
+}
