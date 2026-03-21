@@ -13,6 +13,8 @@ export interface EffectsActions {
   overrideShadow: (key: keyof ShadowPresets, value: string) => void
   resetShadow: (key: keyof ShadowPresets) => void
   rebuildFromBrand: (brandHex: string) => void
+  setFocusRing: (partial: Partial<{ color: string; width: string; offset: string }>) => void
+  setDuration: (step: string, ms: number) => void
 }
 
 function buildConfig(brandHex: string): EffectsConfig {
@@ -56,6 +58,36 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
           ...state.effects,
           config: buildConfig(brandHex),
           shadowOverrides: {},  // reset overrides when brand changes
+        },
+      })
+    },
+
+    setFocusRing(partial) {
+      const state = get() as { effects: EffectsState }
+      set({
+        effects: {
+          ...state.effects,
+          config: {
+            ...state.effects.config,
+            focusRing: { ...state.effects.config.focusRing, ...partial },
+          },
+        },
+      })
+    },
+
+    setDuration(step, ms) {
+      const state = get() as { effects: EffectsState }
+      const clamped = Math.max(0, Math.min(2000, ms))
+      set({
+        effects: {
+          ...state.effects,
+          config: {
+            ...state.effects.config,
+            motion: {
+              ...state.effects.config.motion,
+              durations: { ...state.effects.config.motion.durations, [step]: clamped },
+            },
+          },
         },
       })
     },
