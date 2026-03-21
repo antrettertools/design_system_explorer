@@ -2,9 +2,11 @@ import { makeShadeScale } from '@/core/color/scales'
 import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles } from '@/core/color/semantic'
 import { deriveDarkModeRoles } from '@/core/color/darkMode'
 import { generateDataVizPalette } from '@/core/color/dataViz'
+import { deriveComponentTokens } from '@/core/components/tokens'
 import type { ColorSlot } from '@/core/color/types'
 import type { TypeScale } from '@/core/typography/types'
 import type { TokenMap } from '@/core/export/types'
+import type { ComponentName, ComponentTokenMap } from '@/core/components/types'
 import type { SpacingState } from './spacing'
 import type { EffectsState } from './effects'
 
@@ -20,6 +22,9 @@ export function buildTokenMap(
   dataVizN: number,
   spacing?: SpacingState,
   effects?: EffectsState,
+  opts?: {
+    componentOverrides?: Partial<ComponentTokenMap>
+  },
 ): TokenMap {
   const light: Record<string, string> = {}
   const dark: Record<string, string> = {}
@@ -136,6 +141,33 @@ export function buildTokenMap(
     }
     for (const [step, value] of Object.entries(motion.transitions)) {
       light[`--transition-${step}`] = value
+    }
+  }
+
+  // COMPONENT TOKENS
+  // All values are CSS variable references — they point to semantic tokens already
+  // injected above, so they automatically react to palette changes.
+  if (spacing) {
+    const componentTokens = deriveComponentTokens(slots, spacing.config)
+    const finalComponents: ComponentTokenMap = { ...componentTokens }
+
+    if (opts?.componentOverrides) {
+      for (const [comp, overrideSet] of Object.entries(opts.componentOverrides)) {
+        finalComponents[comp as ComponentName] = {
+          ...finalComponents[comp as ComponentName],
+          ...overrideSet,
+        }
+      }
+    }
+
+    for (const [comp, tokenSet] of Object.entries(finalComponents)) {
+      for (const [key, value] of Object.entries(tokenSet)) {
+        // camelCase → kebab-case: bgHover → bg-hover
+        const kebabKey = key.replace(/([A-Z])/g, (m) => `-${m.toLowerCase()}`)
+        light[`--component-${comp}-${kebabKey}`] = value
+        // Component tokens reference semantic vars which already flip in dark mode
+        dark[`--component-${comp}-${kebabKey}`] = value
+      }
     }
   }
 

@@ -7,6 +7,7 @@ import { defaultTypographyState, createTypographyActions } from './typography'
 import { defaultUIState, createUIActions } from './ui'
 import { defaultSpacingState, createSpacingActions } from './spacing'
 import { defaultEffectsState, createEffectsActions } from './effects'
+import { defaultComponentsState, createComponentsActions } from './components'
 import { buildTokenMap, injectTokensToDOM } from './derived'
 
 import type { ColorState, ColorActions } from './color'
@@ -14,6 +15,7 @@ import type { TypographyState, TypographyActions } from './typography'
 import type { UIState, UIActions } from './ui'
 import type { SpacingState, SpacingActions } from './spacing'
 import type { EffectsState, EffectsActions } from './effects'
+import type { ComponentsState, ComponentsActions } from './components'
 
 export interface AppStore {
   color: ColorState
@@ -21,11 +23,13 @@ export interface AppStore {
   ui: UIState
   spacing: SpacingState
   effects: EffectsState
+  components: ComponentsState
   colorActions: ColorActions
   typographyActions: TypographyActions
   uiActions: UIActions
   spacingActions: SpacingActions
   effectsActions: EffectsActions
+  componentsActions: ComponentsActions
 }
 
 export const useStore = create<AppStore>()(
@@ -38,11 +42,13 @@ export const useStore = create<AppStore>()(
         ui: defaultUIState,
         spacing: defaultSpacingState,
         effects: defaultEffectsState,
+        components: defaultComponentsState,
         colorActions: createColorActions(set, get),
         typographyActions: createTypographyActions(set, get),
         uiActions: createUIActions(set, get),
         spacingActions: createSpacingActions(set, get),
         effectsActions: createEffectsActions(set, get),
+        componentsActions: createComponentsActions(set, get),
       }),
       {
         partialize: (state) => ({
@@ -50,6 +56,7 @@ export const useStore = create<AppStore>()(
           typography: state.typography,
           spacing: state.spacing,
           effects: state.effects,
+          components: state.components,
         }),
         limit: 50,
       },
@@ -68,6 +75,8 @@ export const useSpacing = () => useStore(s => s.spacing)
 export const useSpacingActions = () => useStore(s => s.spacingActions)
 export const useEffects = () => useStore(s => s.effects)
 export const useEffectsActions = () => useStore(s => s.effectsActions)
+export const useComponents = () => useStore(s => s.components)
+export const useComponentsActions = () => useStore(s => s.componentsActions)
 
 // Subscribe to state changes → rebuild derived tokens → inject to DOM
 useStore.subscribe(
@@ -78,10 +87,11 @@ useStore.subscribe(
     dataVizN: state.color.dataVizN,
     spacing: state.spacing,
     effects: state.effects,
+    componentOverrides: state.components.overrides,
   }),
-  ({ slots, pairing, scale, dataVizN, spacing, effects }) => {
+  ({ slots, pairing, scale, dataVizN, spacing, effects, componentOverrides }) => {
     if (slots.length === 0) return
-    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects)
+    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides })
     injectTokensToDOM(tokens)
   },
   { equalityFn: (a, b) => JSON.stringify(a) === JSON.stringify(b) },
