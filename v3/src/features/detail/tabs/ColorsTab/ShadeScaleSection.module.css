@@ -1,0 +1,87 @@
+.section { margin-bottom: 28px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.colorRow {
+  margin-bottom: 16px;
+}
+
+.colorHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.roleName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-family: sans-serif;
+}
+
+.colorMeta {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle);
+  font-family: monospace;
+}
+
+.scaleRow {
+  display: flex;
+  gap: 3px;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 40px;
+}
+
+.scaleCell {
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+  transition: flex 0.15s;
+}
+
+.scaleCell:hover { flex: 1.6; }
+
+.scaleCellLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.scaleCell:hover .scaleCellLabel { opacity: 1; }
+.scaleCell:first-child .scaleCellLabel,
+.scaleCell:last-child .scaleCellLabel { opacity: 0.5; }
+
+.scaleCellStep {
+  font-size: 7px;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+.scaleCellHex {
+  font-size: 7px;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+}
+
+/* For light cells */
+.scaleCellLight .scaleCellStep { color: rgba(0,0,0,0.5); background: rgba(0,0,0,0.08); }
+.scaleCellLight .scaleCellHex { color: rgba(0,0,0,0.4); }

@@ -1,0 +1,59 @@
+.section { margin-bottom: 24px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.score {
+  font-size: 36px;
+  font-weight: 800;
+  font-family: monospace;
+  color: var(--color-on-surface);
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 11px;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.grade {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.gradeGood { background: #dcfce7; color: #15803d; }
+.gradeMedium { background: #fef3c7; color: #d97706; }
+.gradePoor { background: #fee2e2; color: #dc2626; }
+
+.sampleText {
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body, sans-serif);
+}

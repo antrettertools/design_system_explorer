@@ -1,0 +1,65 @@
+.section { margin-bottom: 28px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.nControl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.nControl select {
+  padding: 3px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 12px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.palette {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.paletteCell {
+  flex: 1;
+  border-radius: 0;
+  cursor: pointer;
+  transition: flex 0.15s;
+}
+
+.paletteCell:hover { flex: 1.5; }
+
+/* Mini bar chart */
+.chart {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 64px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.3s ease;
+}

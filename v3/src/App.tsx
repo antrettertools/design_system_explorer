@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
-import { useColorActions, useTypographyActions, useUIActions, temporalUndo, temporalRedo } from './store'
+import { useColorActions, useTypographyActions, useUI, useUIActions, temporalUndo, temporalRedo } from './store'
 import { AppHeader } from './components/AppShell/AppHeader'
 import { SplitPane } from './components/SplitPane/SplitPane'
 import { GeneratorPanel } from './features/generator/GeneratorPanel'
+import { DetailMode } from './features/detail/DetailMode'
 import { LivePreview } from './features/preview/LivePreview'
 import appStyles from './App.module.css'
 
 export default function App() {
   const colorActions = useColorActions()
   const typographyActions = useTypographyActions()
+  const { mode } = useUI()
   const { openExportPanel } = useUIActions()
 
   useEffect(() => {
@@ -55,12 +57,14 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [colorActions, typographyActions])
 
+  const leftPanel = mode === 'detail' ? <DetailMode /> : <GeneratorPanel />
+
   return (
     <div className={appStyles.app}>
       <AppHeader onExportClick={openExportPanel} />
       <div className={appStyles.body}>
         <SplitPane
-          left={<GeneratorPanel />}
+          left={leftPanel}
           right={<LivePreview />}
         />
       </div>

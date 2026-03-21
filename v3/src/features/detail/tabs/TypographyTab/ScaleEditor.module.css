@@ -1,0 +1,70 @@
+.section { margin-bottom: 24px; }
+
+.sectionTitle {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.ratioRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.ratioValue {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+
+.scaleList { display: flex; flex-direction: column; gap: 4px; }
+
+.scaleRow {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  gap: 10px;
+}
+
+.specimen {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-on-surface);
+}
+
+.meta {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.metaItem {
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle);
+  min-width: 40px;
+  text-align: right;
+}
+
+.stepLabel {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+  width: 36px;
+  flex-shrink: 0;
+}

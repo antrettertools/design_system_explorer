@@ -1,0 +1,72 @@
+import { converter } from 'culori'
+import { useColor } from '@/store'
+import { makeShadeScale } from '@/core/color/scales'
+import { SHADE_STEPS } from '@/core/color/types'
+import styles from './ShadeScaleSection.module.css'
+
+const toOklch = converter('oklch')
+
+const ROLE_LABELS: Record<string, string> = {
+  brand: 'Brand',
+  secondary: 'Secondary',
+  accentA: 'Accent A',
+  accentB: 'Accent B',
+}
+
+function isLightStep(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return (r * 299 + g * 587 + b * 114) / 1000 > 150
+}
+
+function hexToOklchLabel(hex: string): string {
+  const c = toOklch(hex)
+  if (!c) return hex
+  return `oklch(${(c.l ?? 0).toFixed(2)} ${(c.c ?? 0).toFixed(2)} ${Math.round(c.h ?? 0)})`
+}
+
+export function ShadeScaleSection() {
+  const { slots } = useColor()
+
+  return (
+    <div className={styles.section}>
+      <div className={styles.sectionTitle}>Shade Scales</div>
+      {slots.map(slot => {
+        const scale = makeShadeScale(slot.hex)
+        const oklchLabel = hexToOklchLabel(slot.hex)
+        return (
+          <div key={slot.id} className={styles.colorRow}>
+            <div className={styles.colorHeader}>
+              <span className={styles.roleName}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
+              <span className={styles.colorMeta}>{slot.hex.toUpperCase()} · {oklchLabel}</span>
+            </div>
+            <div className={styles.scaleRow} role="list" aria-label={`${ROLE_LABELS[slot.role] ?? slot.role} shade scale`}>
+              {SHADE_STEPS.map(step => {
+                const stepHex = scale[step]
+                const isLight = isLightStep(stepHex)
+                return (
+                  <div
+                    key={step}
+                    className={`${styles.scaleCell} ${isLight ? styles.scaleCellLight : ''}`}
+                    style={{ background: stepHex }}
+                    role="listitem"
+                    title={`${slot.role}-${step}: ${stepHex}`}
+                    onClick={() => { navigator.clipboard?.writeText(stepHex) }}
+                    tabIndex={0}
+                    onKeyDown={e => { if (e.key === 'Enter') navigator.clipboard?.writeText(stepHex) }}
+                    aria-label={`Step ${step}: ${stepHex}`}
+                  >
+                    <div className={styles.scaleCellLabel}>
+                      <span className={styles.scaleCellStep}>{step}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}

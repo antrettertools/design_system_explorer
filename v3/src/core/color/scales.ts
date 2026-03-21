@@ -68,3 +68,17 @@ export function getWcagContrastRatio(fg: string, bg: string): number {
   const [light, dark] = l1 > l2 ? [l1, l2] : [l2, l1]
   return (light + 0.05) / (dark + 0.05)
 }
+
+export function getWcagLevels(ratio: number): {
+  aaLargeText: boolean
+  aaBodyText: boolean
+  aaaLargeText: boolean
+  aaaBodyText: boolean
+} {
+  return {
+    aaLargeText: ratio >= 3,
+    aaBodyText: ratio >= 4.5,
+    aaaLargeText: ratio >= 4.5,
+    aaaBodyText: ratio >= 7,
+  }
+}
