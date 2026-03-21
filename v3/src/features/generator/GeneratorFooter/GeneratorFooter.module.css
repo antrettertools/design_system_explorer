@@ -1,0 +1,103 @@
+.footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: var(--color-surface);
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--color-on-surface-subtle);
+  font-family: sans-serif;
+  flex: 1;
+  min-width: 120px;
+}
+
+.hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.vibeChip {
+  height: 28px;
+  padding: 0 10px;
+  background: none;
+  border: 1px dashed var(--color-border);
+  border-radius: 14px;
+  font-size: 11px;
+  color: var(--color-on-surface-subtle);
+  cursor: not-allowed;
+  font-family: sans-serif;
+}
+
+.addBtn {
+  height: 28px;
+  padding: 0 10px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--color-on-surface);
+  font-family: sans-serif;
+  transition: background 0.15s;
+}
+
+.addBtn:hover { background: var(--color-interactive-subtle); }
+.addBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.detailBtn {
+  height: 28px;
+  padding: 0 12px;
+  background: var(--color-interactive);
+  color: var(--color-on-interactive);
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: opacity 0.15s;
+}
+
+.detailBtn:hover { opacity: 0.85; }
+
+.generateMobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hint { display: none; }
+  .footer {
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .generateMobile {
+    display: block;
+    flex: 1;
+    height: 40px;
+    background: var(--color-on-surface);
+    color: var(--color-background);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
