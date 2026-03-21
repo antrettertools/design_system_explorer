@@ -2,3 +2,11 @@
 :root { color-scheme: light; }
 [data-theme="dark"] { color-scheme: dark; }
 body { font-family: sans-serif; background: var(--color-background, #f8f7f4); color: var(--color-on-surface, #111); }
+
+:focus-visible {
+  outline: 2px solid var(--color-interactive, #e8543a);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+button:focus:not(:focus-visible) { outline: none; }

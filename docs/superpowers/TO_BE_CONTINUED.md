@@ -28,7 +28,7 @@ docs/
       2026-03-21-v3-phase3-components-figma-sessions.md
 ```
 
-**Active branch:** `feat/v3-phase1a` (merged from `claude/design-system-architecture-BM2jR`)
+**Active branch:** `feat/v3-phase1a` (Phase 1B work committed here; Phase 1C should continue on this branch or a new `feat/v3-phase1c` branch)
 
 ---
 
@@ -113,19 +113,55 @@ features/   → Feature panels. Import from store/ only.
 
 ---
 
-## What's Next — Phase 1B
+## What's Next — Phase 1C
 
-**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1b-generator-ui.md`
+**Plan file:** `docs/superpowers/plans/2026-03-21-v3-phase1c-live-preview.md`
 
-Phase 1B builds the Generator mode UI on top of the foundation:
-- Left panel: color swatches with lock icons + shade strips for locked slots
-- Left panel: typography specimen (heading + body font preview)
-- Right panel: live landing page preview (first template)
-- Space bar → `colorActions.generate()` + `typographyActions.generate()`
-- "Detail Mode →" button wired to `uiActions.setMode('detail')`
-- App shell: two-column split layout with AppShell component
+Phase 1C builds the right panel — the live landing page preview:
+- Replace `<LivePreviewStub />` at `v3/src/features/preview/LivePreviewStub.tsx` with the real `<LivePreview />`
+- Implement first landing page template using CSS custom properties (`var(--color-brand-500)` etc.)
+- All color/typography tokens are already injected on `:root` — just use them
+- Do not modify files under `v3/src/features/generator/` or `v3/src/store/`
 
-**Key reminder for Phase 1B:** CSS Modules only. All colors via `var(--color-*)`. Never import from `core/` in components.
+**Key reminder for Phase 1C:** CSS custom properties are live on `:root` after every Space press. No additional wiring needed.
+
+---
+
+### Session 2 — 2026-03-21 — Phase 1B: App Shell & Generator UI
+
+**Goal:** Build the full interactive generator left panel and app shell. Right panel is a placeholder stub.
+
+**What was built:**
+
+#### App Shell
+- `v3/src/App.tsx` — Full app shell: initial generation on mount, spacebar handler (generate), Ctrl+Z undo, Ctrl+Shift+Z / Ctrl+Y redo. Uses `AppHeader` + `SplitPane` layout.
+- `v3/src/App.module.css` — App layout styles (100vh flex column, background/color from CSS vars)
+- `v3/src/components/AppShell/AppHeader.tsx` + `AppHeader.module.css` — "palette." wordmark (Georgia serif), theme toggle (◐/○), Export ↓ button. Reads `useUI`, calls `useUIActions`.
+- `v3/src/components/SplitPane/SplitPane.tsx` + `SplitPane.module.css` — Draggable 50/50 split pane. Mouse drag updates leftPercent (clamped 20–80%). Mobile: divider hidden, panels full-width.
+
+#### Feature: Generator Left Panel
+- `v3/src/features/generator/GeneratorPanel.tsx` + `GeneratorPanel.module.css` — Assembles ColorSwatches → HarmonyHint → TypographySpecimen (flex-1 content) + GeneratorFooter (sticky bottom).
+- `v3/src/features/generator/ColorSwatches/ColorSwatches.tsx` + `ColorSwatches.module.css` — Flex grid of `ColorSlotCard`s. HTML5 drag-to-reorder using `useRef` + `dragOver` state.
+- `v3/src/features/generator/ColorSwatches/ColorSlotCard.tsx` + `ColorSlotCard.module.css` — 110px swatch column. Role label top-left, lock icon top-right, hex bottom-left. `data-light` attribute adapts text contrast. Remove button (×) on hover for non-brand slots. Shows `ShadeStrip` when locked.
+- `v3/src/features/generator/ColorSwatches/ShadeStrip.tsx` + `ShadeStrip.module.css` — 11-step shade strip (50–950) using `makeShadeScale`. Cells expand on hover. Step labels at 50/500/950.
+- `v3/src/features/generator/HarmonyHint.tsx` + `HarmonyHint.module.css` — Green hint bar visible only when ≥1 slot is locked. Names the active harmony model. Green on light, dark green on dark mode (CSS `[data-theme='dark']`).
+- `v3/src/features/generator/TypographySpecimen/TypographySpecimen.tsx` + `TypographySpecimen.module.css` — Heading specimen (26px, actual font), body text preview, scale pills (H1/H2/H3/Body/sm/xs with size+weight), per-lock buttons for heading/body/scale.
+- `v3/src/features/generator/GeneratorFooter/GeneratorFooter.tsx` + `GeneratorFooter.module.css` — SPACE hint with `<kbd>`, disabled ✦ vibe chip, + Add color (disabled at 8 slots), Detail Mode → (calls `setMode('detail')`). Mobile: sticky bottom Generate ✦ button.
+
+#### Feature: Preview Stub
+- `v3/src/features/preview/LivePreviewStub.tsx` + `LivePreviewStub.module.css` — Placeholder for Phase 1C. Shows "Live preview — coming in Phase 1C" centered.
+
+#### Accessibility & Polish
+- `v3/src/styles/globals.css` — Added `focus-visible` outline (2px, `--color-interactive`) and `button:focus:not(:focus-visible) { outline: none }`.
+- All interactive elements have `aria-label`, `title`, `aria-pressed`, `aria-live` as appropriate.
+
+**Test results:** 49/49 tests pass. Zero TypeScript errors (`tsc --noEmit` clean).
+
+**What Phase 1C receives from 1B:**
+- Fully interactive generator panel (left) — color swatches, typography specimen, footer
+- `<LivePreviewStub />` at `v3/src/features/preview/LivePreviewStub.tsx` — replace its internals with real template
+- CSS custom properties are already injected on `:root` — use `var(--color-brand-500)`, `var(--font-heading)`, etc. freely
+- Do not modify files under `v3/src/features/generator/` or `v3/src/store/`
 
 ---
 
