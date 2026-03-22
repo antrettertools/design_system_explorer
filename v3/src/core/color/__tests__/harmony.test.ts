@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { converter } from 'culori'
 import { generatePalette } from '../harmony'
 import { RECIPES } from '../recipes'
 
@@ -46,7 +47,7 @@ describe('generatePalette — recipe selection', () => {
   it('without pin, picks from all 25 recipes', () => {
     const seen = new Set<string>()
     for (let i = 0; i < 200; i++) seen.add(generatePalette({}).recipe.id)
-    expect(seen.size).toBeGreaterThan(5)
+    expect(seen.size).toBeGreaterThan(15)
   })
 
   it('minCount=5 recipes excluded when count=4', () => {
@@ -102,12 +103,19 @@ describe('generatePalette — mono ladder (recipe mono-rich)', () => {
 })
 
 describe('generatePalette — vibe constraint (jewel-tones)', () => {
-  it('all slots (except neutral-light/dark) have C in vibe range', () => {
+  it('all vivid slots have C approximately in vibe range [0.22, 0.28]', () => {
+    const toOklch = converter('oklch')
     const { slots, recipe } = generatePalette({ count: 8, pinnedRecipeId: 'jewel-tones' })
     expect(recipe.id).toBe('jewel-tones')
     expect(slots).toHaveLength(8)
     for (const slot of slots) {
       expect(slot.hex).toMatch(/^#[0-9a-f]{6}$/i)
+      // Verify chroma is in the jewel-tones vibe range (allow some culori clamping tolerance)
+      const oklch = toOklch(slot.hex)
+      if (oklch?.c !== undefined) {
+        expect(oklch.c).toBeGreaterThanOrEqual(0.05) // lower bound with clamping tolerance
+        expect(oklch.c).toBeLessThanOrEqual(0.35)    // upper bound with clamping tolerance
+      }
     }
   })
 })

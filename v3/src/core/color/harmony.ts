@@ -1,6 +1,6 @@
 import { formatHex, clampChroma, converter } from 'culori'
 import { RECIPES } from './recipes'
-import { DEPTH_RANGES } from './types'
+import { DEPTH_RANGES, COLOR_ROLES } from './types'
 import type { ColorSlot, RecipeDef, PrimaryType, SlotType } from './types'
 
 // Re-export deprecated helpers so old imports don't break at runtime
@@ -122,8 +122,6 @@ function computeSlotColor(
   return oklchToHex(randomInRange(lMin, lMax), randomInRange(cMin, cMax), H)
 }
 
-const COLOR_ROLES = ['brand', 'secondary', 'accentA', 'accentB'] as const
-
 export function generatePalette(opts: GenerateOptions): GenerateResult {
   const count = opts.count ?? 4
   const existing = opts.existing ?? []
@@ -181,12 +179,24 @@ export function generatePalette(opts: GenerateOptions): GenerateResult {
       if (c > maxC) { maxC = c; brandIdx = slots.indexOf(slot) }
     }
     if (brandIdx >= 0 && brandIdx !== 0 && !slots[0].locked) {
+      // de-brand any slot that was previously brand (e.g. a locked slot from a prior generation)
+      for (let j = 0; j < slots.length; j++) {
+        if (j !== brandIdx && slots[j].role === 'brand') {
+          slots[j] = { ...slots[j], role: COLOR_ROLES[Math.min(1, COLOR_ROLES.length - 1)] }
+        }
+      }
       const tmp = slots[0]
       slots[0] = slots[brandIdx]
       slots[brandIdx] = tmp
       slots[0].role = 'brand'
       slots[brandIdx].role = COLOR_ROLES[Math.min(brandIdx, COLOR_ROLES.length - 1)]
     } else if (brandIdx >= 0) {
+      // de-brand any slot that was previously brand (e.g. a locked slot from a prior generation)
+      for (let j = 0; j < slots.length; j++) {
+        if (j !== brandIdx && slots[j].role === 'brand') {
+          slots[j] = { ...slots[j], role: COLOR_ROLES[Math.min(1, COLOR_ROLES.length - 1)] }
+        }
+      }
       slots[brandIdx].role = 'brand'
     }
     // Assign remaining roles by position
