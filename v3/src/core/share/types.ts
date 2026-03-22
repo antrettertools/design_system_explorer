@@ -4,7 +4,7 @@ import type { FontPairing } from '../typography/types'
 export interface ShareSnapshot {
   v: 3
   colors: ColorSlot[]
-  harmonyModel: string | null   // stores recipe id (e.g. 'triadic-accent') or null
+  harmonyModel: string | null // stores recipe id (e.g. 'triadic-accent'); legacy HarmonyModelName strings degrade gracefully to null on load
   pairing: FontPairing
   typographyLocks: {
     heading: boolean

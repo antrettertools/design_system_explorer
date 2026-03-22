@@ -44,6 +44,7 @@ export function createColorActions(set: any, get: any): ColorActions {
     generate() {
       const state = get() as { color: ColorState }
       const existing = state.color.slots
+      // Only pass existing slots when some are locked — avoids passing stale hex values to unlocked slots
       const hasLocked = existing.some(s => s.locked)
       const { slots: newSlots, recipe, baseHue } = generatePalette({
         count: existing.length || 4,
@@ -65,6 +66,7 @@ export function createColorActions(set: any, get: any): ColorActions {
     addSlot() {
       const state = get() as { color: ColorState }
       if (state.color.slots.length >= 8) return
+      // Fall back to RECIPES[0] when activeRecipe is null (pre-generate edge case) to ensure a specific recipe is used, preserving visual coherence
       const { slots: newSlots, recipe } = generatePalette({
         count: state.color.slots.length + 1,
         existing: state.color.slots,
