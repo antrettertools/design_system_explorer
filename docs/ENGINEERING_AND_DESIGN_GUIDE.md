@@ -759,18 +759,30 @@ The only exception: structural UI chrome (labels in the control panel, badge tex
 
 ### Font families
 
-```css
-/* Heading font — from the active pairing */
-font-family: var(--font-heading, Georgia, serif);
+palette. is self-referential: **the currently selected font pairing is used throughout the entire app UI**, not just in preview templates. This is intentional — the user should immediately feel what their font pair does to a real interface.
 
-/* Body font — from the active pairing */
+```css
+/* All UI chrome text — buttons, pills, labels, inputs, tab labels */
 font-family: var(--font-body, sans-serif);
 
-/* Interface chrome — always system-ui, never the design pairing */
-font-family: sans-serif;  /* or: -apple-system, BlinkMacSystemFont, sans-serif */
+/* Identity / result text — wordmark, section result names (e.g. "Warm Triadic", "Playfair + Inter") */
+font-family: var(--font-heading, Georgia, serif);
+
+/* Hex values, scale metadata, code, token displays */
+font-family: var(--ui-font-mono);
 ```
 
-Interface chrome (tab labels, badge text, form labels, button labels in the control panel) uses the system font stack. The design pairing (heading + body) is reserved for the preview templates and type specimens. This distinction is important: the app's own interface should not compete visually with the design it is displaying.
+**The three-way split:**
+
+| Text role | Font | Examples |
+|---|---|---|
+| **Body font** | `var(--font-body)` | Pill labels, button labels, section titles (the CAPS label), lock controls, input fields, swatch names, hex values (except monospace fields) |
+| **Heading font** | `var(--font-heading)` | Wordmark, section result names ("Warm Triadic", "Playfair Display + Inter") |
+| **Monospace** | `var(--ui-font-mono)` | Hex colour codes, scale size/weight metadata, exported code |
+
+**Why:** The tool exists to help users choose a design system. Seeing "how does Bebas Neue look on button labels?" directly inside palette. is useful signal — that is the point. The previous rule (system font for chrome) disconnected the UI from the design system being built.
+
+**Fallbacks matter:** `var(--font-body, sans-serif)` and `var(--font-heading, Georgia, serif)` must always have fallbacks. On cold load, before the Google Fonts request completes, the UI must still be readable.
 
 ### Font weights
 
@@ -1229,7 +1241,80 @@ The spec is thorough. If something is not in the spec, do not build it.
 
 ---
 
-## 21. Quick Reference Checklist
+## 21. Self-Referential UI Principle
+
+palette. uses its own generated design system throughout the app UI — not just in preview templates. This is the "eat your own cooking" principle and it is a core product decision.
+
+### What this means in practice
+
+**Fonts — everywhere:**
+Every text element in the app chrome (buttons, pills, labels, inputs, section titles, tooltips, badges) uses the currently selected font pairing. No element should use `sans-serif`, `system-ui`, or a hardcoded font stack.
+
+| Role | Token | Applied to |
+|---|---|---|
+| Body font | `var(--font-body, sans-serif)` | All chrome: pills, buttons, labels, input fields, tab labels, swatch names, footnotes |
+| Heading font | `var(--font-heading, Georgia, serif)` | Identity text only: wordmark, section result names ("Warm Triadic", "Playfair Display + Inter") |
+| Monospace | `var(--ui-font-mono)` | Hex codes, scale metadata (e.g. `26px · 800`), exported code |
+
+**Colors — everywhere:**
+The user's brand color drives all interactive states in the chrome. Use semantic tokens — they already update on every generation.
+
+| Semantic token | Usage |
+|---|---|
+| `--color-interactive` | Primary CTA background (Detail Mode button, Export button), active pill border |
+| `--color-interactive-subtle` | Active/locked pill background, hover fill on ghost buttons |
+| `--color-on-interactive` | Text on primary CTA buttons |
+| `--color-border` | Default pill borders, section dividers |
+| `--color-on-surface-subtle` | Muted labels (section titles, scale tags) |
+
+### Generator Panel visual hierarchy
+
+The generator panel follows a repeatable 3-layer anatomy for every section:
+
+```
+SECTION TITLE          ← 9px, uppercase, muted, body font
+Result name            ← 12px, semibold, heading font (below the title, not inline)
+[control pills]        ← unified pill grammar (see below)
+[preview content]      ← swatches / type scale rows — no chrome, just content
+```
+
+**Sections:**
+- **Colors** — result: current harmony recipe name (e.g. "Warm Triadic")
+- **Typography** — result: current font pair (e.g. "Playfair Display + Inter")
+
+### Unified pill grammar
+
+Both the harmony type selector (Colors section) and the font lock controls (Typography section) use **the same pill component and visual grammar**. No special-casing.
+
+```
+Default:   muted bg, muted text, subtle border
+Hover:     slightly brighter bg, brighter text
+Active:    --color-interactive-subtle bg, --color-interactive border + text
+Accent:    "Any" pill — uses interactive-subtle tint as base (reserved for the default/random state)
+```
+
+Lock pills show a lock icon before the label when locked. The icon is part of the pill content, not a separate element.
+
+### Specific Generator Panel elements
+
+| Element | Font | Color tokens |
+|---|---|---|
+| Wordmark "palette." | `--font-heading` | `--color-on-surface` |
+| Space hint bar | `--font-body` | `--color-on-surface-subtle` (text), `--color-border` (divider) |
+| Section title (e.g. "COLORS") | `--font-body` | `--color-on-surface-subtle` |
+| Section result (e.g. "Warm Triadic") | `--font-heading` | `--color-on-surface-subtle` |
+| Pill labels | `--font-body` | see unified pill grammar above |
+| Swatch role names (Brand, Secondary…) | `--font-body` | contrast-adaptive (white/black based on swatch luminance) |
+| Swatch hex codes | `--ui-font-mono` | contrast-adaptive, reduced opacity |
+| Scale row labels (H1, H2…) | `--font-body` | `--color-on-surface-subtle` |
+| Scale row specimen text | `--font-heading` (H1–H3) / `--font-body` (Body–xs) | `--color-on-surface` |
+| Scale row metadata (26px · 800) | `--ui-font-mono` | `--color-on-surface-subtle` |
+| Editable specimen inputs | `--font-heading` (heading input) / `--font-body` (body input) | standard input tokens |
+| "Detail Mode →" button | `--font-body` | `--color-interactive` bg, `--color-on-interactive` text |
+
+---
+
+## 22. Quick Reference Checklist
 
 Use this before every commit and pull request.
 
@@ -1252,7 +1337,7 @@ Use this before every commit and pull request.
 - [ ] No hardcoded colors in component CSS (fallbacks in template CSS are OK)
 - [ ] All interactive elements have hover + focus-visible + disabled states
 - [ ] All spacing values are multiples of 4px
-- [ ] Font families use `var(--font-heading)` / `var(--font-body)` in templates; system font in UI chrome
+- [ ] Font families: `var(--font-body)` for all chrome text; `var(--font-heading)` for identity/result names; `var(--ui-font-mono)` for hex codes and scale metadata — never a hardcoded system font stack
 - [ ] Dark mode works by CSS vars — no JS conditional rendering for themes
 
 ### Testing
