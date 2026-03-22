@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Font Strategy</title>
+<script src="helper.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@400;600;700&family=Bebas+Neue&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #111;
+  color: #e0e0e0;
+  padding: 28px 24px 80px;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+.page-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: -0.02em; }
+.page-sub { font-size: 12px; color: #555; margin-bottom: 32px; }
+
+/* ── APPROACH GRID ──────────────────────────────────── */
+.approaches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+.approach-wrap { display: flex; flex-direction: column; gap: 10px; }
+.approach-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 2px; }
+.approach-label.a { color: #60a5fa; }
+.approach-label.b { color: #a78bfa; }
+.approach-desc { font-size: 11px; color: #555; line-height: 1.5; padding: 0 2px; }
+
+/* ── PANEL ────────────────────────────────────────── */
+.panel {
+  background: #1a1a1c;
+  border: 1px solid #282828;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ── HEADER ───────────────────────────────────────── */
+.app-header {
+  height: 42px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 14px;
+  background: #131314; border-bottom: 1px solid #242424;
+}
+.wordmark { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.header-badge {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 99px; background: rgba(255,255,255,0.07);
+  color: #888; border: 1px solid rgba(255,255,255,0.1);
+}
+.header-actions { display: flex; gap: 4px; }
+.header-icon-btn {
+  width: 26px; height: 26px; border-radius: 5px; display: flex;
+  align-items: center; justify-content: center; font-size: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid #242424; color: #666;
+  cursor: pointer;
+}
+
+/* ── SPACE BAR ────────────────────────────────────── */
+.space-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px; padding: 6px 14px; font-size: 11px;
+  background: rgba(255,255,255,0.015); border-bottom: 1px solid #1e1e1e;
+  color: #3d3d3d;
+}
+kbd {
+  background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 4px; padding: 1px 6px;
+  font-size: 10px; font-family: 'SF Mono', monospace; color: #666;
+}
+
+/* ── BODY ─────────────────────────────────────────── */
+.panel-body { padding: 14px 14px 0; }
+
+/* ── SECTION ──────────────────────────────────────── */
+.section { margin-bottom: 0; }
+.section + .section { border-top: 1px solid #222; padding-top: 14px; margin-top: 14px; }
+
+.section-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #333; margin-bottom: 3px;
+  display: block;
+}
+.section-result {
+  font-size: 12px; font-weight: 600; color: #888;
+  display: block; margin-bottom: 8px;
+}
+.section-controls {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.ctrl-pill {
+  height: 22px; padding: 0 9px; border-radius: 99px;
+  font-size: 10px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.28); letter-spacing: 0.02em;
+}
+.ctrl-pill.active {
+  background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.75);
+}
+.ctrl-pill.accent {
+  background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.22);
+  color: rgba(165,180,252,0.7);
+}
+.ctrl-pill.accent.active { background: rgba(99,102,241,0.22); color: #a5b4fc; }
+
+/* ── SWATCHES ─────────────────────────────────────── */
+.swatches { display: flex; gap: 5px; padding-bottom: 14px; }
+.swatch {
+  flex: 1; height: 80px; border-radius: 7px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 7px 7px; min-width: 0;
+}
+.swatch-name { font-size: 9px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+.swatch-hex { font-size: 9px; font-family: 'SF Mono', monospace; }
+.on-dark .swatch-name, .on-dark .swatch-hex { color: rgba(255,255,255,0.6); }
+.on-light .swatch-name, .on-light .swatch-hex { color: rgba(0,0,0,0.48); }
+.swatch-add {
+  flex: 0 0 32px; height: 80px; border-radius: 7px;
+  border: 1.5px dashed #2a2a2a; display: flex; align-items: center;
+  justify-content: center; font-size: 15px; color: #333; cursor: pointer;
+}
+
+/* ── TYPE SCALE ───────────────────────────────────── */
+.specimen-inputs { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.specimen-row { display: flex; align-items: center; gap: 6px; }
+.specimen-tag {
+  width: 24px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #333; flex-shrink: 0;
+}
+.specimen-input {
+  flex: 1; background: rgba(255,255,255,0.04); border: 1px solid #242424;
+  border-radius: 5px; padding: 4px 8px; font-size: 11px; color: #888;
+  outline: none; font-family: inherit;
+}
+
+.scale-rows { display: flex; flex-direction: column; }
+.scale-row {
+  display: flex; align-items: baseline; gap: 8px; padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.scale-row:last-child { border-bottom: none; }
+.scale-tag {
+  width: 24px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #2e2e2e; flex-shrink: 0;
+}
+.scale-text { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #d0d0d0; line-height: 1.3; }
+.scale-meta { font-size: 9px; font-family: 'SF Mono', monospace; color: #2e2e2e; flex-shrink: 0; }
+.scale-gap { height: 6px; }
+
+/* ── FOOTER ───────────────────────────────────────── */
+.panel-footer {
+  padding: 10px 14px; border-top: 1px solid #222;
+  display: flex; justify-content: flex-end;
+}
+.detail-btn {
+  height: 26px; padding: 0 12px; border-radius: 6px;
+  background: #e8543a; color: #fff; border: none;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* ── FONT STRATEGY CLASSES ────────────────────────── */
+
+/* A: Selected fonts everywhere */
+.font-a .wordmark,
+.font-a .header-badge,
+.font-a .space-bar,
+.font-a .section-title,
+.font-a .section-result,
+.font-a .ctrl-pill,
+.font-a .detail-btn,
+.font-a .specimen-tag,
+.font-a .scale-tag,
+.font-a .specimen-input,
+.font-a .swatch-name { font-family: 'Inter', sans-serif; }
+
+.font-a .wordmark { font-family: 'Playfair Display', serif; }
+.font-a .section-result { font-family: 'Playfair Display', serif; }
+
+/* B: System UI font for all chrome */
+.font-b .wordmark,
+.font-b .header-badge,
+.font-b .space-bar,
+.font-b .section-title,
+.font-b .section-result,
+.font-b .ctrl-pill,
+.font-b .detail-btn,
+.font-b .specimen-tag,
+.font-b .scale-tag,
+.font-b .specimen-input,
+.font-b .swatch-name { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+/* ── FONT PAIR ROWS ───────────────────────────────── */
+.font-pairs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.pair-card {
+  background: #161618;
+  border: 1px solid #242424;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.pair-card:hover { border-color: #3a3a3a; }
+.pair-heading { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; line-height: 1.2; letter-spacing: -0.01em; }
+.pair-body { font-size: 12px; color: #666; line-height: 1.5; }
+.pair-name { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #3a3a3a; margin-top: 8px; }
+
+/* ── OPTIONS ──────────────────────────────────────── */
+.options-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+.option-card {
+  background: #161618; border: 2px solid #242424; border-radius: 8px;
+  padding: 16px; cursor: pointer; transition: border-color 0.15s;
+  data-choice: "";
+}
+.option-card:hover { border-color: #3a3a3a; }
+.option-card.selected { border-color: #e8543a; }
+.option-letter { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+.option-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.option-sub { font-size: 11px; color: #555; line-height: 1.5; }
+
+.section-sep {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #333; margin: 28px 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-sep::after { content: ''; flex: 1; height: 1px; background: #1e1e1e; }
+</style>
+</head>
+<body>
+
+<h1>Generator Panel</h1>
+<div class="page-title">Font strategy + result-below-header layout</div>
+<div class="page-sub">Updated hierarchy: result drops below the section title. Two font strategies compared.</div>
+
+<!-- FONT PAIRS PREVIEW -->
+<div class="section-sep">Font pairs look very different in chrome</div>
+<div class="font-pairs">
+  <div class="pair-card">
+    <div class="pair-heading" style="font-family:'Playfair Display',serif;">The quick brown fox</div>
+    <div class="pair-body" style="font-family:'Inter',sans-serif;">Body text in Inter — clean and readable</div>
+    <div class="pair-name">Playfair Display + Inter</div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-heading" style="font-family:'DM Serif Display',serif;">The quick brown fox</div>
+    <div class="pair-body" style="font-family:'Space Grotesk',sans-serif;">Body text in Space Grotesk</div>
+    <div class="pair-name">DM Serif Display + Space Grotesk</div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-heading" style="font-family:'Bebas Neue',sans-serif; letter-spacing:0.05em;">THE QUICK BROWN FOX</div>
+    <div class="pair-body" style="font-family:'Roboto',sans-serif;">Body text in Roboto — fine for body</div>
+    <div class="pair-name">Bebas Neue + Roboto ← extreme case</div>
+  </div>
+</div>
+
+<!-- OPTIONS -->
+<div class="options-row">
+  <div class="option-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="option-letter">Option A — Recommended</div>
+    <div class="option-title">Body font for chrome · heading font for identity</div>
+    <div class="option-sub">All buttons, pills, labels use the selected <em>body</em> font. The wordmark + section result names use the <em>heading</em> font. You feel the font pairing throughout the app. With Playfair+Inter it's beautiful. With Bebas+Roboto, the chrome stays readable (body = Roboto) while the wordmark gets personality.</div>
+  </div>
+  <div class="option-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="option-letter">Option B</div>
+    <div class="option-title">System font everywhere (current behaviour)</div>
+    <div class="option-sub">App chrome always uses the OS system font (SF Pro, Segoe UI). The specimen area shows the selected fonts. Safe and predictable — but the chrome feels disconnected from the design system you're building.</div>
+  </div>
+</div>
+
+<!-- SIDE BY SIDE PANELS -->
+<div class="section-sep">Same panel · same font pair (Playfair Display + Inter) · two strategies</div>
+
+<div class="approaches">
+
+  <!-- A: Body font for chrome -->
+  <div class="approach-wrap">
+    <div class="approach-label a">A — Body font in chrome, heading font for identity</div>
+    <div class="panel font-a">
+      <div class="app-header">
+        <div class="wordmark">palette.</div>
+        <div class="header-right">
+          <div class="header-actions">
+            <div class="header-icon-btn">↩</div>
+            <div class="header-icon-btn">↪</div>
+          </div>
+          <div class="header-badge">Playfair + Inter</div>
+        </div>
+      </div>
+      <div class="space-bar">Hit <kbd>SPACE</kbd> to regenerate</div>
+      <div class="panel-body">
+        <div class="section">
+          <span class="section-title">Colors</span>
+          <span class="section-result" style="font-family:'Playfair Display',serif;">Warm Triadic</span>
+          <div class="section-controls">
+            <div class="ctrl-pill accent active">Any</div>
+            <div class="ctrl-pill">Triadic</div>
+            <div class="ctrl-pill">Analogous</div>
+            <div class="ctrl-pill">Complement</div>
+            <div class="ctrl-pill">Split-Comp</div>
+            <div class="ctrl-pill">Mono</div>
+          </div>
+          <div class="swatches">
+            <div class="swatch on-dark" style="background:#C84A2E"><div class="swatch-name">Brand</div><div class="swatch-hex">#C84A2E</div></div>
+            <div class="swatch on-dark" style="background:#2E7BC8"><div class="swatch-name">2nd</div><div class="swatch-hex">#2E7BC8</div></div>
+            <div class="swatch on-light" style="background:#C8B42E"><div class="swatch-name">Acc A</div><div class="swatch-hex">#C8B42E</div></div>
+            <div class="swatch on-dark" style="background:#6B2EC8"><div class="swatch-name">Acc B</div><div class="swatch-hex">#6B2EC8</div></div>
+            <div class="swatch-add">+</div>
+          </div>
+        </div>
+        <div class="section">
+          <span class="section-title">Typography</span>
+          <span class="section-result" style="font-family:'Playfair Display',serif;">Playfair Display + Inter</span>
+          <div class="section-controls">
+            <div class="ctrl-pill active">⌒ Heading</div>
+            <div class="ctrl-pill">⌒ Body</div>
+            <div class="ctrl-pill">⌒ Scale</div>
+          </div>
+          <div class="specimen-inputs">
+            <div class="specimen-row">
+              <span class="specimen-tag">Hd</span>
+              <input class="specimen-input" style="font-family:'Playfair Display',serif;" value="The quick brown fox jumps over">
+            </div>
+            <div class="specimen-row">
+              <span class="specimen-tag">Bd</span>
+              <input class="specimen-input" style="font-family:'Inter',sans-serif;" value="How vexingly quick daft zebras jump!">
+            </div>
+          </div>
+          <div class="scale-rows">
+            <div class="scale-row"><span class="scale-tag">H1</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:23px;font-weight:800;letter-spacing:-0.02em;">The quick brown fox jumps over</span><span class="scale-meta">26px·800</span></div>
+            <div class="scale-row"><span class="scale-tag">H2</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">The quick brown fox jumps over</span><span class="scale-meta">21px·700</span></div>
+            <div class="scale-row"><span class="scale-tag">H3</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;">The quick brown fox jumps over</span><span class="scale-meta">17px·600</span></div>
+            <div class="scale-gap"></div>
+            <div class="scale-row"><span class="scale-tag">Bd</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:12px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">14px·400</span></div>
+            <div class="scale-row"><span class="scale-tag">sm</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:10px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">12px·400</span></div>
+            <div class="scale-row"><span class="scale-tag">xs</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:9px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">10px·400</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer"><div class="detail-btn">Detail Mode →</div></div>
+    </div>
+    <div style="font-size:11px; color:#444; line-height:1.6; padding: 0 2px;">
+      All pills, labels, buttons → <strong style="color:#666">Inter</strong>.
+      Wordmark + result names → <strong style="color:#666">Playfair Display</strong>.
+      Feels immersive. Try a different font pair and the whole app transforms.
+    </div>
+  </div>
+
+  <!-- B: System font -->
+  <div class="approach-wrap">
+    <div class="approach-label b">B — System font throughout</div>
+    <div class="panel font-b">
+      <div class="app-header">
+        <div class="wordmark">palette.</div>
+        <div class="header-right">
+          <div class="header-actions">
+            <div class="header-icon-btn">↩</div>
+            <div class="header-icon-btn">↪</div>
+          </div>
+          <div class="header-badge">Playfair + Inter</div>
+        </div>
+      </div>
+      <div class="space-bar">Hit <kbd>SPACE</kbd> to regenerate</div>
+      <div class="panel-body">
+        <div class="section">
+          <span class="section-title">Colors</span>
+          <span class="section-result">Warm Triadic</span>
+          <div class="section-controls">
+            <div class="ctrl-pill accent active">Any</div>
+            <div class="ctrl-pill">Triadic</div>
+            <div class="ctrl-pill">Analogous</div>
+            <div class="ctrl-pill">Complement</div>
+            <div class="ctrl-pill">Split-Comp</div>
+            <div class="ctrl-pill">Mono</div>
+          </div>
+          <div class="swatches">
+            <div class="swatch on-dark" style="background:#C84A2E"><div class="swatch-name">Brand</div><div class="swatch-hex">#C84A2E</div></div>
+            <div class="swatch on-dark" style="background:#2E7BC8"><div class="swatch-name">2nd</div><div class="swatch-hex">#2E7BC8</div></div>
+            <div class="swatch on-light" style="background:#C8B42E"><div class="swatch-name">Acc A</div><div class="swatch-hex">#C8B42E</div></div>
+            <div class="swatch on-dark" style="background:#6B2EC8"><div class="swatch-name">Acc B</div><div class="swatch-hex">#6B2EC8</div></div>
+            <div class="swatch-add">+</div>
+          </div>
+        </div>
+        <div class="section">
+          <span class="section-title">Typography</span>
+          <span class="section-result">Playfair Display + Inter</span>
+          <div class="section-controls">
+            <div class="ctrl-pill active">⌒ Heading</div>
+            <div class="ctrl-pill">⌒ Body</div>
+            <div class="ctrl-pill">⌒ Scale</div>
+          </div>
+          <div class="specimen-inputs">
+            <div class="specimen-row">
+              <span class="specimen-tag">Hd</span>
+              <input class="specimen-input" style="font-family:'Playfair Display',serif;" value="The quick brown fox jumps over">
+            </div>
+            <div class="specimen-row">
+              <span class="specimen-tag">Bd</span>
+              <input class="specimen-input" style="font-family:'Inter',sans-serif;" value="How vexingly quick daft zebras jump!">
+            </div>
+          </div>
+          <div class="scale-rows">
+            <div class="scale-row"><span class="scale-tag">H1</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:23px;font-weight:800;letter-spacing:-0.02em;">The quick brown fox jumps over</span><span class="scale-meta">26px·800</span></div>
+            <div class="scale-row"><span class="scale-tag">H2</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">The quick brown fox jumps over</span><span class="scale-meta">21px·700</span></div>
+            <div class="scale-row"><span class="scale-tag">H3</span><span class="scale-text" style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;">The quick brown fox jumps over</span><span class="scale-meta">17px·600</span></div>
+            <div class="scale-gap"></div>
+            <div class="scale-row"><span class="scale-tag">Bd</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:12px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">14px·400</span></div>
+            <div class="scale-row"><span class="scale-tag">sm</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:10px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">12px·400</span></div>
+            <div class="scale-row"><span class="scale-tag">xs</span><span class="scale-text" style="font-family:'Inter',sans-serif;font-size:9px;">How vexingly quick daft zebras jump!</span><span class="scale-meta">10px·400</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer"><div class="detail-btn">Detail Mode →</div></div>
+    </div>
+    <div style="font-size:11px; color:#444; line-height:1.6; padding: 0 2px;">
+      All chrome → <strong style="color:#666">system UI font</strong>.
+      Specimen area shows Playfair + Inter.
+      Predictable, but the interface feels like a separate tool rather than the thing itself.
+    </div>
+  </div>
+
+</div>
+
+<p style="font-size:12px; color:#444; text-align:center; margin-top: 8px;">Click an option above to select · or just tell me in the terminal</p>
+
+</body>
+</html>

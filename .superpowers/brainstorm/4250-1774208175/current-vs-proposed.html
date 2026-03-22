@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Panel — Current vs Proposed</title>
+<script src="helper.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    color: #e8e8e8;
+    min-height: 100vh;
+    padding: 32px 24px 64px;
+  }
+
+  h1 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .page-sub {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 36px;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .panel-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .panel-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0 4px;
+  }
+  .panel-label.bad { color: #f87171; }
+  .panel-label.good { color: #4ade80; }
+
+  /* ── MOCK PANEL SHELL ───────────────────────────────── */
+  .panel {
+    background: #1c1c1e;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a2a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ── MOCK HEADER ────────────────────────────────────── */
+  .mock-header {
+    height: 44px;
+    background: #141414;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+  }
+  .mock-wordmark {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .mock-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mock-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 99px;
+    letter-spacing: 0.04em;
+  }
+  .mock-badge.harmony { background: rgba(99,102,241,0.18); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+  .mock-badge.font { background: rgba(255,255,255,0.07); color: #aaa; border: 1px solid rgba(255,255,255,0.1); }
+
+  /* ── PANEL BODY ─────────────────────────────────────── */
+  .panel-body {
+    padding: 14px 14px 0;
+  }
+
+  /* ── RECIPE PILLS ────────────────────────────────────── */
+  .recipe-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .recipe-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .recipe-pill.active {
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+  }
+  .recipe-pill.any {
+    background: rgba(99,102,241,0.15);
+    color: rgba(165,180,252,0.85);
+    border: 1px solid rgba(99,102,241,0.25);
+  }
+  .recipe-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 10px;
+  }
+
+  /* ── COLOR SWATCHES ──────────────────────────────────── */
+  .swatches {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0;
+  }
+  .swatch {
+    flex: 1;
+    height: 90px;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 7px 8px;
+    cursor: pointer;
+    min-width: 0;
+  }
+  .swatch-name {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+  }
+  .swatch-hex {
+    font-size: 9px;
+    font-family: monospace;
+    color: rgba(255,255,255,0.55);
+  }
+  .swatch.light .swatch-name { color: rgba(0,0,0,0.55); }
+  .swatch.light .swatch-hex { color: rgba(0,0,0,0.45); }
+
+  /* ── HARMONY HINT (current — the green thing) ──────── */
+  .harmony-hint {
+    margin: 10px 0;
+    padding: 8px 12px;
+    background: #052e16;
+    border: 1px solid #166534;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #86efac;
+  }
+
+  /* ── TYPOGRAPHY SECTION ──────────────────────────────── */
+  .type-section {
+    border-top: 1px solid #2a2a2a;
+    margin-top: 12px;
+    padding: 14px 0 12px;
+  }
+  .type-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .type-meta-label {
+    font-size: 11px;
+    color: #666;
+  }
+  .type-lock-row {
+    display: flex;
+    gap: 4px;
+  }
+  .type-lock-btn {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #2a2a2a;
+    background: none;
+    color: #555;
+    cursor: pointer;
+  }
+  .heading-specimen {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 6px;
+    font-family: Georgia, serif;
+  }
+  .body-specimen {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .scale-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .scale-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #2a2a2a;
+    color: #555;
+    font-family: monospace;
+    display: flex;
+    gap: 4px;
+  }
+  .scale-pill b { color: #888; font-family: sans-serif; }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  .mock-footer {
+    padding: 10px 14px;
+    border-top: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-hint {
+    font-size: 11px;
+    color: #555;
+    flex: 1;
+  }
+  .footer-hint kbd {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-family: monospace;
+    color: #888;
+  }
+  .footer-btn {
+    height: 26px;
+    padding: 0 10px;
+    font-size: 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .footer-btn.vibe {
+    background: none;
+    border: 1px dashed #333;
+    color: #555;
+  }
+  .footer-btn.add {
+    background: none;
+    border: 1px solid #2a2a2a;
+    color: #888;
+  }
+  .footer-btn.detail {
+    background: #e8543a;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ── ANNOTATION CALLOUTS ─────────────────────────────── */
+  .annotations {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 12px;
+  }
+  .ann {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .ann.issue {
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: #fca5a5;
+  }
+  .ann.fix {
+    background: rgba(74,222,128,0.07);
+    border: 1px solid rgba(74,222,128,0.2);
+    color: #86efac;
+  }
+  .ann-icon { flex-shrink: 0; font-size: 12px; }
+  .ann-text strong { display: block; font-weight: 700; margin-bottom: 2px; }
+
+  /* ── PROPOSED PANEL SPECIFICS ────────────────────────── */
+  .space-hint-bar {
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid #222;
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #555;
+  }
+  .space-hint-bar kbd {
+    background: #222;
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-family: monospace;
+    color: #888;
+  }
+  .space-hint-bar span { color: #444; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .section-actions {
+    display: flex;
+    gap: 4px;
+  }
+
+  .swatch-add {
+    flex: 1;
+    height: 90px;
+    border-radius: 8px;
+    border: 1.5px dashed #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-width: 0;
+    color: #444;
+    font-size: 18px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .proposed-footer {
+    padding: 10px 14px;
+    border-top: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .proposed-footer .footer-btn.detail {
+    background: #e8543a;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 0 14px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+  }
+
+  .type-section-proposed {
+    border-top: 1px solid #2a2a2a;
+    margin-top: 12px;
+    padding: 12px 0 12px;
+  }
+  .type-header-proposed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .type-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .type-font-name {
+    font-size: 10px;
+    color: #555;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .type-font-name strong { color: #999; font-weight: 600; }
+
+  .select-prompt {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+  }
+  .select-prompt strong { color: #888; }
+</style>
+</head>
+<body>
+
+<h1>Generator Panel UX</h1>
+<div class="page-title">Current state vs. Proposed redesign</div>
+<div class="page-sub">Review the annotated issues on the left and the proposed solution on the right.</div>
+
+<div class="split">
+
+  <!-- ══ LEFT: CURRENT ══════════════════════════════════ -->
+  <div class="panel-wrap">
+    <div class="panel-label bad">Current — 6 UX issues</div>
+    <div class="panel">
+      <!-- Header -->
+      <div class="mock-header">
+        <div class="mock-wordmark">palette.</div>
+        <div class="mock-header-right">
+          <div class="mock-badge harmony">Warm Triadic</div>
+          <div class="mock-badge font">Playfair + Inter</div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="panel-body">
+        <!-- Recipe pills — no section label -->
+        <div class="recipe-row">
+          <div class="recipe-pill any active">Any</div>
+          <div class="recipe-pill">Triadic</div>
+          <div class="recipe-pill">Analogous</div>
+          <div class="recipe-pill">Complement</div>
+          <div class="recipe-pill">Split-Comp</div>
+          <div class="recipe-pill">Mono</div>
+        </div>
+        <div class="recipe-label">Warm Triadic ↻</div>
+
+        <!-- Color swatches -->
+        <div class="swatches">
+          <div class="swatch" style="background:#C84A2E">
+            <div class="swatch-name">Brand</div>
+            <div class="swatch-hex">#C84A2E</div>
+          </div>
+          <div class="swatch" style="background:#2E7BC8">
+            <div class="swatch-name">Secondary</div>
+            <div class="swatch-hex">#2E7BC8</div>
+          </div>
+          <div class="swatch light" style="background:#C8B42E">
+            <div class="swatch-name">Accent A</div>
+            <div class="swatch-hex">#C8B42E</div>
+          </div>
+          <div class="swatch" style="background:#6B2EC8">
+            <div class="swatch-name">Accent B</div>
+            <div class="swatch-hex">#6B2EC8</div>
+          </div>
+        </div>
+
+        <!-- Harmony Hint — redundant green banner -->
+        <div class="harmony-hint">⬤ Warm Triadic</div>
+
+        <!-- Typography -->
+        <div class="type-section">
+          <div class="type-meta">
+            <div class="type-meta-label">Heading: <b style="color:#aaa">Playfair Display</b> · Body: <b style="color:#aaa">Inter</b></div>
+            <div class="type-lock-row">
+              <div class="type-lock-btn">Heading</div>
+              <div class="type-lock-btn">Body</div>
+              <div class="type-lock-btn">Scale</div>
+            </div>
+          </div>
+          <div class="heading-specimen">The quick brown fox</div>
+          <div class="body-specimen">How vexingly quick daft zebras jump! Pack my box with five dozen liquor jugs.</div>
+          <div class="scale-pills">
+            <div class="scale-pill"><b>H1</b> 26px · 800</div>
+            <div class="scale-pill"><b>H2</b> 21px · 700</div>
+            <div class="scale-pill"><b>H3</b> 17px · 600</div>
+            <div class="scale-pill"><b>Body</b> 14px · 400</div>
+            <div class="scale-pill"><b>sm</b> 12px · 400</div>
+            <div class="scale-pill"><b>xs</b> 10px · 400</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mock-footer">
+        <div class="footer-hint">Press <kbd>SPACE</kbd> to generate</div>
+        <div class="footer-btn vibe">✦ vibe</div>
+        <div class="footer-btn add">+ Add color</div>
+        <div class="footer-btn detail">Detail Mode →</div>
+      </div>
+    </div>
+
+    <!-- Annotations -->
+    <div class="annotations">
+      <div class="ann issue">
+        <div class="ann-icon">①</div>
+        <div class="ann-text"><strong>SPACE hint buried in footer</strong>The primary interaction — regenerating — is hidden at the bottom, mixed in with buttons. Most users never find it.</div>
+      </div>
+      <div class="ann issue">
+        <div class="ann-icon">②</div>
+        <div class="ann-text"><strong>"vibe" button is a dead end</strong>Disabled, dashed border, no explanation. Users click it and nothing happens. It damages trust in the UI.</div>
+      </div>
+      <div class="ann issue">
+        <div class="ann-icon">③</div>
+        <div class="ann-text"><strong>"Add color" is in the wrong place</strong>It's in the footer, far from the colors. Users look near the swatches to add a new one.</div>
+      </div>
+      <div class="ann issue">
+        <div class="ann-icon">④</div>
+        <div class="ann-text"><strong>Green harmony banner is redundant × 3</strong>The active recipe already appears in the AppHeader badge AND below the pills. The green box adds noise.</div>
+      </div>
+      <div class="ann issue">
+        <div class="ann-icon">⑤</div>
+        <div class="ann-text"><strong>No section hierarchy</strong>Colors and Typography run together with no headings. The panel feels like a flat list of widgets.</div>
+      </div>
+      <div class="ann issue">
+        <div class="ann-icon">⑥</div>
+        <div class="ann-text"><strong>Lock buttons compete with font names</strong>The font name label and lock controls fight for the same row. Hard to read, hard to scan.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT: PROPOSED ════════════════════════════════ -->
+  <div class="panel-wrap">
+    <div class="panel-label good">Proposed — clean hierarchy</div>
+    <div class="panel">
+      <!-- Header — same, but harmony badge removed (shown inline in panel now) -->
+      <div class="mock-header">
+        <div class="mock-wordmark">palette.</div>
+        <div class="mock-header-right">
+          <div class="mock-badge font">Playfair + Inter</div>
+        </div>
+      </div>
+
+      <!-- SPACE shortcut hint — top, always visible, subtle -->
+      <div class="space-hint-bar">
+        <span>Hit</span>
+        <kbd>SPACE</kbd>
+        <span>to regenerate a new palette</span>
+      </div>
+
+      <!-- Body -->
+      <div class="panel-body">
+        <!-- Colors section -->
+        <div class="section-header">
+          <div class="section-title">Colors</div>
+          <div class="recipe-label" style="margin-bottom:0; color:#555; font-size:10px;">Warm Triadic</div>
+        </div>
+
+        <!-- Recipe pills -->
+        <div class="recipe-row" style="margin-bottom:10px;">
+          <div class="recipe-pill any active">Any</div>
+          <div class="recipe-pill">Triadic</div>
+          <div class="recipe-pill">Analogous</div>
+          <div class="recipe-pill">Complement</div>
+          <div class="recipe-pill">Split-Comp</div>
+          <div class="recipe-pill">Mono</div>
+        </div>
+
+        <!-- Color swatches + inline Add card -->
+        <div class="swatches" style="margin-bottom: 16px;">
+          <div class="swatch" style="background:#C84A2E">
+            <div class="swatch-name">Brand</div>
+            <div class="swatch-hex">#C84A2E</div>
+          </div>
+          <div class="swatch" style="background:#2E7BC8">
+            <div class="swatch-name">Secondary</div>
+            <div class="swatch-hex">#2E7BC8</div>
+          </div>
+          <div class="swatch light" style="background:#C8B42E">
+            <div class="swatch-name">Accent A</div>
+            <div class="swatch-hex">#C8B42E</div>
+          </div>
+          <div class="swatch" style="background:#6B2EC8">
+            <div class="swatch-name">Accent B</div>
+            <div class="swatch-hex">#6B2EC8</div>
+          </div>
+          <!-- ✦ Add color as inline + card -->
+          <div class="swatch-add">+</div>
+        </div>
+
+        <!-- Typography section -->
+        <div class="type-section-proposed">
+          <div class="type-header-proposed">
+            <div class="type-title">Typography</div>
+            <div class="type-lock-row">
+              <div class="type-lock-btn">Heading</div>
+              <div class="type-lock-btn">Body</div>
+              <div class="type-lock-btn">Scale</div>
+            </div>
+          </div>
+          <!-- Font names on their own row, below the header -->
+          <div class="type-font-name" style="margin-bottom:10px;">
+            <strong>Playfair Display</strong>
+            <span style="color:#333">+</span>
+            <strong>Inter</strong>
+          </div>
+          <div class="heading-specimen">The quick brown fox</div>
+          <div class="body-specimen">How vexingly quick daft zebras jump! Pack my box with five dozen liquor jugs.</div>
+          <div class="scale-pills">
+            <div class="scale-pill"><b>H1</b> 26px · 800</div>
+            <div class="scale-pill"><b>H2</b> 21px · 700</div>
+            <div class="scale-pill"><b>H3</b> 17px · 600</div>
+            <div class="scale-pill"><b>Body</b> 14px · 400</div>
+            <div class="scale-pill"><b>sm</b> 12px · 400</div>
+            <div class="scale-pill"><b>xs</b> 10px · 400</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer — simplified, just the CTA -->
+      <div class="proposed-footer">
+        <div class="footer-btn detail">Detail Mode →</div>
+      </div>
+    </div>
+
+    <!-- Fixes -->
+    <div class="annotations">
+      <div class="ann fix">
+        <div class="ann-icon">①</div>
+        <div class="ann-text"><strong>SPACE hint at the top, always visible</strong>A subtle hint bar right below the AppHeader — the very first thing you see. Can't miss it.</div>
+      </div>
+      <div class="ann fix">
+        <div class="ann-icon">②</div>
+        <div class="ann-text"><strong>"vibe" removed</strong>Not removing the feature — just removing the broken-looking disabled button. If/when vibe ships, it gets a proper entry point.</div>
+      </div>
+      <div class="ann fix">
+        <div class="ann-icon">③</div>
+        <div class="ann-text"><strong>"+" card inline with the swatches</strong>A dashed ghost card sits at the end of the color row. Obvious, contextual, discoverable.</div>
+      </div>
+      <div class="ann fix">
+        <div class="ann-icon">④</div>
+        <div class="ann-text"><strong>Harmony info consolidated</strong>Active recipe shown once — as a small label in the Colors section header. Green banner removed.</div>
+      </div>
+      <div class="ann fix">
+        <div class="ann-icon">⑤</div>
+        <div class="ann-text"><strong>Clear "Colors" and "Typography" section headers</strong>Each section starts with a labelled header. Scannable at a glance.</div>
+      </div>
+      <div class="ann fix">
+        <div class="ann-icon">⑥</div>
+        <div class="ann-text"><strong>Font names and lock buttons separated</strong>Font names sit on their own row below the section header. Lock buttons stay aligned right in the header row.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="select-prompt">
+  Does this direction look right? Respond in the terminal — let me know what you'd change.
+</div>
+
+</body>
+</html>

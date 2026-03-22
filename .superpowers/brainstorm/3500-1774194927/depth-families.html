@@ -1,0 +1,135 @@
+<style>
+  .swatch {
+    border-radius: 8px; display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 5px 7px; position: relative;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: transform 0.15s; cursor: default;
+  }
+  .swatch:hover { transform: scaleY(1.08); transform-origin: bottom; }
+  .lbl { color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+  .lbl.dk { color: rgba(0,0,0,0.42); text-shadow: none; }
+  .badge {
+    position: absolute; top: 4px; right: 4px;
+    border-radius: 3px; font-size: 7px; padding: 1px 4px; font-weight: 800;
+  }
+  .b-p { background:rgba(255,255,255,0.25);color:white; }
+  .b-s { background:rgba(255,210,50,0.9);color:#1a1000; }
+  .b-pale { background:rgba(0,0,0,0.09);color:rgba(0,0,0,0.42); }
+  .b-deep { background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7); }
+  .b-n { background:rgba(140,140,140,0.3);color:white; }
+  .b-nl { background:rgba(0,0,0,0.09);color:rgba(0,0,0,0.38); }
+
+  .row { display:flex; gap:5px; margin-bottom:5px; }
+  .divider { border:none; border-top:1px solid rgba(255,255,255,0.07); margin:1.75rem 0; }
+  .col-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; opacity:0.4; text-align:center; margin-bottom:3px; }
+  .depth-col { display:flex; flex-direction:column; gap:5px; flex:1; }
+  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem; margin-bottom:1.5rem; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+  .card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem; }
+  .card-title { font-size:12px; font-weight:700; margin-bottom:2px; }
+  .card-sub { font-size:11px; opacity:0.5; margin-bottom:0.65rem; }
+  .insight { background:rgba(100,200,140,0.07); border:1px solid rgba(100,200,140,0.18); border-radius:10px; padding:0.9rem 1.1rem; font-size:12.5px; line-height:1.65; margin-bottom:1.5rem; }
+  .insight strong { color:#80d4a4; }
+  .depth-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; opacity:0.45; margin-bottom:0.35rem; }
+  .depth-row-wrap { display:flex; gap:0.75rem; margin-bottom:1.25rem; align-items:flex-start; }
+  .depth-tag { display:inline-block; border-radius:4px; padding:2px 7px; font-size:10px; font-weight:700; margin-right:4px; }
+  .dt-pale { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.55); }
+  .dt-vivid { background:rgba(255,255,255,0.2); color:white; }
+  .dt-deep { background:rgba(0,0,0,0.2); color:rgba(255,255,255,0.6); }
+</style>
+
+<h2>Depth Families — Every Hue Gets Pale · Vivid · Deep</h2>
+<p class="subtitle">Tints and shades aren't an afterthought — they're a first-class part of the slot system</p>
+
+<div class="insight">
+  <strong>New concept: "depth level" per hue.</strong> Each hue in the palette (primary or secondary) can appear at three depths: <span class="depth-tag dt-pale">pale</span> (L 0.86–0.93, C low — backgrounds, hovers), <span class="depth-tag dt-vivid">vivid</span> (L 0.52–0.72, C high — buttons, highlights), <span class="depth-tag dt-deep">deep</span> (L 0.22–0.38, C mid — text on light, dark surfaces). The slot fill queue picks from depth families intelligently so you never get two slots that look too similar.
+</div>
+
+<!-- DEPTH COLUMNS PER HUE -->
+<div class="depth-label">Three depth levels — same hue, radically different feel</div>
+<div class="grid3" style="margin-bottom:1.75rem;">
+  <div class="card">
+    <div class="card-title">Orange family (H≈40°)</div>
+    <div class="card-sub">Primary hue P1</div>
+    <div class="depth-col">
+      <div class="col-label">pale · L 0.90</div>
+      <div class="swatch" style="background:#f8e0c8;height:48px;border:1px solid rgba(0,0,0,0.07)"><span class="badge b-pale">pale</span><span class="lbl dk">peach</span></div>
+      <div class="col-label">vivid · L 0.64</div>
+      <div class="swatch" style="background:#d97a30;height:48px"><span class="badge b-p">vivid</span><span class="lbl">orange</span></div>
+      <div class="col-label">deep · L 0.30</div>
+      <div class="swatch" style="background:#7a3208;height:48px"><span class="badge b-deep">deep</span><span class="lbl">umber</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Teal family (H≈160°)</div>
+    <div class="card-sub">Primary hue P2</div>
+    <div class="depth-col">
+      <div class="col-label">pale · L 0.90</div>
+      <div class="swatch" style="background:#c0ecd8;height:48px;border:1px solid rgba(0,0,0,0.07)"><span class="badge b-pale">pale</span><span class="lbl dk">mint</span></div>
+      <div class="col-label">vivid · L 0.64</div>
+      <div class="swatch" style="background:#2ba870;height:48px"><span class="badge b-p">vivid</span><span class="lbl">teal</span></div>
+      <div class="col-label">deep · L 0.30</div>
+      <div class="swatch" style="background:#0e5030;height:48px"><span class="badge b-deep">deep</span><span class="lbl">forest</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Magenta family (H≈340°)</div>
+    <div class="card-sub">Secondary accent S1</div>
+    <div class="depth-col">
+      <div class="col-label">pale · L 0.90</div>
+      <div class="swatch" style="background:#f8d0e0;height:48px;border:1px solid rgba(0,0,0,0.07)"><span class="badge b-pale">pale</span><span class="lbl dk">blush</span></div>
+      <div class="col-label">vivid · L 0.58</div>
+      <div class="swatch" style="background:#d83068;height:48px"><span class="badge b-s">vivid</span><span class="lbl">mag</span></div>
+      <div class="col-label">deep · L 0.28</div>
+      <div class="swatch" style="background:#680830;height:48px"><span class="badge b-deep">deep</span><span class="lbl">wine</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FULL 8-SLOT EXAMPLE WITH DEPTH MIX -->
+<div class="depth-label" style="margin-bottom:0.5rem;">8-slot palette — triadic + split-comp secondary + depth spread</div>
+<div class="insight" style="margin-bottom:0.75rem; font-size:12px; padding:0.75rem 1rem;">
+  Slot fill order: <strong>neutral-light → P1-vivid → P2-vivid → P3-vivid → S1-vivid → P1-pale → S1-pale → neutral-dark.</strong> For fewer slots, drop from the right (pale slots first, then secondary slots).
+</div>
+
+<div class="row" style="height:80px; margin-bottom:0.5rem;">
+  <div class="swatch" style="background:#f8f2ec;border:1px solid rgba(0,0,0,0.08);flex:1"><span class="badge b-nl">wht</span><span class="lbl dk">near-white</span></div>
+  <div class="swatch" style="background:#d97a30;flex:1.5"><span class="badge b-p">P1 vivid</span><span class="lbl">brand / orange</span></div>
+  <div class="swatch" style="background:#2ba870;flex:1"><span class="badge b-p">P2 vivid</span><span class="lbl">teal</span></div>
+  <div class="swatch" style="background:#7050d8;flex:1"><span class="badge b-p">P3 vivid</span><span class="lbl">violet</span></div>
+  <div class="swatch" style="background:#d83068;flex:1"><span class="badge b-s">S1 vivid</span><span class="lbl">magenta</span></div>
+  <div class="swatch" style="background:#f8e0c8;border:1px solid rgba(0,0,0,0.06);flex:1"><span class="badge b-pale">P1 pale</span><span class="lbl dk">peach</span></div>
+  <div class="swatch" style="background:#f8d0e0;border:1px solid rgba(0,0,0,0.06);flex:1"><span class="badge b-pale">S1 pale</span><span class="lbl dk">blush</span></div>
+  <div class="swatch" style="background:#18120e;flex:1"><span class="badge b-n">blk</span><span class="lbl">near-black</span></div>
+</div>
+
+<div class="grid2" style="margin-top:1.25rem;">
+  <div class="card">
+    <div class="card-title">6-slot — same mode, drops S1-pale</div>
+    <div class="card-sub">Palette still fully usable — no gaps</div>
+    <div class="row" style="height:56px;">
+      <div class="swatch" style="background:#f8f2ec;border:1px solid rgba(0,0,0,0.08);flex:1"><span class="badge b-nl">wht</span><span class="lbl dk">wht</span></div>
+      <div class="swatch" style="background:#d97a30;flex:1.4"><span class="badge b-p">P1</span><span class="lbl">brand</span></div>
+      <div class="swatch" style="background:#2ba870;flex:1"><span class="badge b-p">P2</span><span class="lbl">teal</span></div>
+      <div class="swatch" style="background:#7050d8;flex:1"><span class="badge b-p">P3</span><span class="lbl">vlt</span></div>
+      <div class="swatch" style="background:#d83068;flex:1"><span class="badge b-s">S1</span><span class="lbl">mag</span></div>
+      <div class="swatch" style="background:#18120e;flex:1"><span class="badge b-n">blk</span><span class="lbl">blk</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">8-slot variant — deep shades instead of pales</div>
+    <div class="card-sub">User toggle: "dark-leaning" vs "light-leaning" fill order</div>
+    <div class="row" style="height:56px;">
+      <div class="swatch" style="background:#f8f2ec;border:1px solid rgba(0,0,0,0.08);flex:1"><span class="badge b-nl">wht</span><span class="lbl dk">wht</span></div>
+      <div class="swatch" style="background:#d97a30;flex:1.4"><span class="badge b-p">P1</span><span class="lbl">orange</span></div>
+      <div class="swatch" style="background:#2ba870;flex:1"><span class="badge b-p">P2</span><span class="lbl">teal</span></div>
+      <div class="swatch" style="background:#7050d8;flex:1"><span class="badge b-p">P3</span><span class="lbl">vlt</span></div>
+      <div class="swatch" style="background:#d83068;flex:1"><span class="badge b-s">S1</span><span class="lbl">mag</span></div>
+      <div class="swatch" style="background:#7a3208;flex:1"><span class="badge b-deep">P1 deep</span><span class="lbl">umber</span></div>
+      <div class="swatch" style="background:#680830;flex:1"><span class="badge b-deep">S1 deep</span><span class="lbl">wine</span></div>
+      <div class="swatch" style="background:#18120e;flex:1"><span class="badge b-n">blk</span><span class="lbl">blk</span></div>
+    </div>
+  </div>
+</div>

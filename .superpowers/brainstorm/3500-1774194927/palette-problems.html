@@ -1,0 +1,248 @@
+<style>
+  .palette-section { margin-bottom: 2rem; }
+  .palette-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.55; margin-bottom: 0.5rem; font-weight: 600; }
+  .palette-desc { font-size: 13px; opacity: 0.7; margin-bottom: 0.75rem; line-height: 1.5; }
+  .swatches { display: flex; gap: 6px; align-items: stretch; margin-bottom: 0.5rem; }
+  .swatch {
+    flex: 1;
+    height: 64px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 5px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    mix-blend-mode: normal;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .swatch.light-text { color: rgba(0,0,0,0.5); text-shadow: none; }
+  .swatch:hover { transform: scaleY(1.05); transform-origin: bottom; }
+  .repeat-badge {
+    position: absolute;
+    top: 5px; right: 5px;
+    background: rgba(255,0,0,0.75);
+    border-radius: 4px;
+    font-size: 8px;
+    padding: 1px 4px;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+  .slot-type {
+    position: absolute;
+    top: 5px; left: 5px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 4px;
+    font-size: 8px;
+    padding: 1px 4px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: white;
+    text-shadow: none;
+  }
+  .slot-type.dark { background: rgba(255,255,255,0.2); }
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin: 2rem 0;
+  }
+  .problem-tag {
+    display: inline-block;
+    background: rgba(255,80,80,0.15);
+    color: #ff8080;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .good-tag {
+    display: inline-block;
+    background: rgba(80,220,140,0.12);
+    color: #60d090;
+    border: 1px solid rgba(80,220,140,0.25);
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .strategy { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 1rem; border: 1px solid rgba(255,255,255,0.07); }
+  .strategy h3 { font-size: 13px; margin: 0 0 0.4rem; }
+  .strategy p { font-size: 12px; opacity: 0.6; margin: 0 0 0.75rem; line-height: 1.5; }
+  .mini-swatches { display: flex; gap: 4px; }
+  .mini-swatch { height: 36px; flex: 1; border-radius: 5px; }
+</style>
+
+<h2>Color Generation — Problems &amp; Fix Strategies</h2>
+<p class="subtitle">What breaks today, and three paths to richer palettes</p>
+
+<div class="palette-section">
+  <div class="problem-tag">TODAY: Triadic + 8 slots = repeating garbage</div>
+  <div class="palette-desc">
+    Triadic has only 3 hue offsets. With 8 slots, the code wraps: hues cycle as 0°→120°→240°→0°→120°→240°→… and all colors share the same narrow L/C range (±7% lightness, ±4% chroma). Result: near-identical swatches.
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#cc7535">
+      <span class="slot-type">brand</span>
+      orange
+    </div>
+    <div class="swatch" style="background:#2b9a5a">
+      <span class="slot-type">second</span>
+      green
+    </div>
+    <div class="swatch" style="background:#7849db">
+      <span class="slot-type">accentA</span>
+      purple
+    </div>
+    <div class="swatch" style="background:#cd7637">
+      <span class="repeat-badge">repeat</span>
+      <span class="slot-type">accentB</span>
+      orange&#x2082;
+    </div>
+    <div class="swatch" style="background:#2d9a5c">
+      <span class="repeat-badge">repeat</span>
+      green&#x2082;
+    </div>
+    <div class="swatch" style="background:#7a4add">
+      <span class="repeat-badge">repeat</span>
+      purple&#x2082;
+    </div>
+    <div class="swatch" style="background:#cc7636">
+      <span class="repeat-badge">repeat</span>
+      orange&#x2083;
+    </div>
+    <div class="swatch" style="background:#2c9b5b">
+      <span class="repeat-badge">repeat</span>
+      green&#x2083;
+    </div>
+  </div>
+  <p class="palette-desc" style="color:#ff8080; font-size:12px;">
+    Three distinct hues. Eight near-identical colors. No neutrals. No light or dark anchors. No variation in saturation.
+  </p>
+</div>
+
+<hr class="divider">
+
+<h3 style="margin-bottom:1.25rem;">Three strategies for richer generation</h3>
+
+<div class="strategy-grid">
+
+  <div class="strategy">
+    <div class="good-tag">A</div>
+    <h3>Slot Roles — Vivid + Tint + Shade</h3>
+    <p>Extra slots beyond the harmony count get assigned as tint (lighter, lower C) or shade (darker) of an existing hue. Each hue gets 1 vivid + 1 tint + optionally 1 shade.</p>
+    <div class="swatches" style="flex-wrap:wrap; gap:4px;">
+      <div class="swatch light-text" style="background:#f0c49a; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">tint</span>orange tint
+      </div>
+      <div class="swatch" style="background:#d4793a; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>orange
+      </div>
+      <div class="swatch" style="background:#7a3a10; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">shade</span>orn shade
+      </div>
+      <div class="swatch light-text" style="background:#90d4b0; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">tint</span>green tint
+      </div>
+      <div class="swatch" style="background:#2d9e5c; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>green
+      </div>
+      <div class="swatch" style="background:#155a30; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">shade</span>grn shade
+      </div>
+      <div class="swatch light-text" style="background:#c0b0f0; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">tint</span>purp tint
+      </div>
+      <div class="swatch" style="background:#7c4ee0; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>purple
+      </div>
+    </div>
+    <p style="margin-top:0.5rem; font-size:11px;">+ Each harmony hue gets its own tint/shade. More variety, but no neutral anchors.</p>
+  </div>
+
+  <div class="strategy">
+    <div class="good-tag">B</div>
+    <h3>Neutral Anchors — Light + Dark Always Present</h3>
+    <p>Reserve 2 slots always for a near-white (L≈0.96) and near-black (L≈0.14). Remaining slots get the harmony hues + muted variants. Gives every palette a usable light/dark base.</p>
+    <div class="swatches" style="flex-wrap:wrap; gap:4px;">
+      <div class="swatch light-text" style="background:#f5f0eb; height:48px; border-radius:6px; font-size:8px; border:1px solid rgba(0,0,0,0.08);">
+        <span class="slot-type dark">anchor</span>near-white
+      </div>
+      <div class="swatch" style="background:#d4793a; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>orange
+      </div>
+      <div class="swatch" style="background:#2d9e5c; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>green
+      </div>
+      <div class="swatch" style="background:#7c4ee0; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">vivid</span>purple
+      </div>
+      <div class="swatch light-text" style="background:#e8b890; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">muted</span>orn muted
+      </div>
+      <div class="swatch light-text" style="background:#8ecfaa; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">muted</span>grn muted
+      </div>
+      <div class="swatch light-text" style="background:#b8a8e8; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type dark">muted</span>purp muted
+      </div>
+      <div class="swatch" style="background:#1a1520; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">anchor</span>near-black
+      </div>
+    </div>
+    <p style="margin-top:0.5rem; font-size:11px;">+ Every palette instantly usable for UI (text, bg, surfaces). But 2 slots "spent" on neutrals.</p>
+  </div>
+
+  <div class="strategy">
+    <div class="good-tag">C</div>
+    <h3>Enriched Harmony — Wide L/C + Hue Jitter</h3>
+    <p>Keep the harmony hue structure but dramatically widen the L (0.20–0.90) and C (0.02–0.25) sampling ranges. Add small random hue jitter (±8°) per slot. Extra slots pick from a fresh hue derived from the model.</p>
+    <div class="swatches" style="flex-wrap:wrap; gap:4px;">
+      <div class="swatch" style="background:#f5f0eb; height:48px; border-radius:6px; font-size:8px; border:1px solid rgba(0,0,0,0.08); color:#555; text-shadow:none;">
+        <span class="slot-type dark">L=0.95</span>near-wht
+      </div>
+      <div class="swatch" style="background:#e08a3c; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.68</span>orange
+      </div>
+      <div class="swatch" style="background:#35b870; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.68</span>green
+      </div>
+      <div class="swatch" style="background:#8860e8; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.62</span>purple
+      </div>
+      <div class="swatch" style="background:#8a3510; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.30</span>orn dark
+      </div>
+      <div class="swatch" style="background:#c8e8b0; height:48px; border-radius:6px; font-size:8px; color:#555; text-shadow:none;">
+        <span class="slot-type dark">L=0.88</span>grn pale
+      </div>
+      <div class="swatch" style="background:#3030a0; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.28</span>purp dark
+      </div>
+      <div class="swatch" style="background:#1a1520; height:48px; border-radius:6px; font-size:8px;">
+        <span class="slot-type">L=0.14</span>near-blk
+      </div>
+    </div>
+    <p style="margin-top:0.5rem; font-size:11px;">+ Most variety. Hue stays "in family" but L/C spread creates radically different moods per slot.</p>
+  </div>
+
+</div>
+
+<hr class="divider">
+
+<div class="palette-section">
+  <div class="palette-label">Also needed: model override UI</div>
+  <div class="palette-desc">
+    Currently the harmony mode (triadic, analogous, etc.) shows <em>only</em> when slots are locked.
+    We need a persistent mode selector — either a pill row or dropdown — so you can pin or force the mode before generating.
+  </div>
+</div>

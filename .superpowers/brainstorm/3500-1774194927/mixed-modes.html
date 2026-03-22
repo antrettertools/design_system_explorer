@@ -1,0 +1,133 @@
+<style>
+  .palette-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-bottom: 0.4rem; font-weight: 700; }
+  .palette-note { font-size: 12px; opacity: 0.65; margin-bottom: 0.75rem; line-height: 1.55; }
+  .swatches { display: flex; gap: 5px; margin-bottom: 0.4rem; }
+  .swatch {
+    flex: 1; height: 68px; border-radius: 8px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 5px 6px; position: relative;
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; transition: transform 0.15s;
+  }
+  .swatch:hover { transform: scaleY(1.06); transform-origin: bottom; }
+  .swatch .label { color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+  .swatch .label.dk { color: rgba(0,0,0,0.45); text-shadow: none; }
+  .badge {
+    position: absolute; top: 5px; right: 5px;
+    border-radius: 4px; font-size: 7.5px; padding: 1px 5px;
+    font-weight: 800; letter-spacing: 0.02em;
+  }
+  .badge.primary { background: rgba(255,255,255,0.22); color: white; }
+  .badge.secondary { background: rgba(255,210,60,0.85); color: #1a1200; }
+  .badge.tint { background: rgba(255,255,255,0.18); color: rgba(0,0,0,0.5); }
+  .badge.neutral { background: rgba(150,150,150,0.3); color: white; }
+
+  .strategy { margin-bottom: 2.5rem; background: rgba(255,255,255,0.04); border-radius: 14px; padding: 1.25rem 1.25rem 1rem; border: 1px solid rgba(255,255,255,0.07); }
+  .strategy-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.25rem; }
+  .strategy-letter { font-size: 22px; font-weight: 800; opacity: 0.9; }
+  .strategy-title { font-size: 15px; font-weight: 600; }
+  .legend { display: flex; gap: 12px; margin-top: 0.6rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; opacity: 0.65; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 0.5rem 0 1.75rem; }
+  .verdict { background: rgba(80,200,140,0.08); border: 1px solid rgba(80,200,140,0.2); border-radius: 10px; padding: 1rem 1.25rem; margin-top: 1.5rem; font-size: 13px; line-height: 1.6; }
+  .verdict strong { color: #70d4a0; }
+</style>
+
+<h2>Mixed-Mode Palette Generation</h2>
+<p class="subtitle">Triadic as the base — three ways to fill the extra slots from a different "angle"</p>
+
+<!-- BASE REFERENCE -->
+<div style="margin-bottom:1.5rem;">
+  <div class="palette-label">Base: Triadic — hue=40° (orange) — 3 core hues always fixed</div>
+  <div class="swatches" style="max-width:280px;">
+    <div class="swatch" style="background:#d97a30"><span class="badge primary">0°</span><span class="label">40° orange</span></div>
+    <div class="swatch" style="background:#2ba870"><span class="badge primary">+120°</span><span class="label">160° teal</span></div>
+    <div class="swatch" style="background:#7050d8"><span class="badge primary">+240°</span><span class="label">280° violet</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- STRATEGY A -->
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="strategy-letter">A</span>
+    <span class="strategy-title">Triadic core + Analogous neighbours of the dominant hue</span>
+  </div>
+  <div class="palette-note">
+    The 3 triadic hues stay vivid. Extra slots pick analogous neighbours of the <em>brand hue</em> (±25°, ±45°), at varied L so they read as warm/cool variants rather than duplicates. You get a warm cluster around the brand plus cool contrasts from the triadic pair.
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#f0b060"><span class="badge secondary">+25°</span><span class="label dk">65° golden</span></div>
+    <div class="swatch" style="background:#d97a30"><span class="badge primary">core</span><span class="label">40° orange</span></div>
+    <div class="swatch" style="background:#c04520"><span class="badge secondary">−25°</span><span class="label">15° red-orn</span></div>
+    <div class="swatch" style="background:#2ba870"><span class="badge primary">core</span><span class="label">160° teal</span></div>
+    <div class="swatch" style="background:#7050d8"><span class="badge primary">core</span><span class="label">280° violet</span></div>
+    <div class="swatch" style="background:#d8a0f0" style="color:#555"><span class="badge secondary">+25°</span><span class="label dk">305° pink</span></div>
+    <div class="swatch" style="background:#f5f0eb; border:1px solid rgba(0,0,0,0.08)"><span class="badge neutral">anchor</span><span class="label dk">near-wht</span></div>
+    <div class="swatch" style="background:#18120e"><span class="badge neutral">anchor</span><span class="label">near-blk</span></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#fff3;border:1.5px solid #fff4"></div> Core triadic (primary)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffd23c"></div> Analogous neighbours (secondary mode)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#888"></div> Neutral anchors</div>
+  </div>
+</div>
+
+<!-- STRATEGY B -->
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="strategy-letter">B</span>
+    <span class="strategy-title">Triadic core + Tints/Shades of each hue (L ladder)</span>
+  </div>
+  <div class="palette-note">
+    Core hues stay at mid L (±0.62). Each extra slot is a <em>tint</em> (L+0.20, C×0.5) or <em>shade</em> (L−0.25, C×0.8) of the triadic hue closest in rotation. You keep the same hue spectrum but dramatically expand the lightness range — exactly like Tailwind's 50–950 scale, but just 2–3 steps per hue.
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#f5c490"><span class="badge secondary">tint</span><span class="label dk">orn light</span></div>
+    <div class="swatch" style="background:#d97a30"><span class="badge primary">core</span><span class="label">orange</span></div>
+    <div class="swatch" style="background:#7a3808"><span class="badge secondary">shade</span><span class="label">orn dark</span></div>
+    <div class="swatch" style="background:#90dcc0"><span class="badge secondary">tint</span><span class="label dk">teal light</span></div>
+    <div class="swatch" style="background:#2ba870"><span class="badge primary">core</span><span class="label">teal</span></div>
+    <div class="swatch" style="background:#c8b4f8"><span class="badge secondary">tint</span><span class="label dk">vlt light</span></div>
+    <div class="swatch" style="background:#7050d8"><span class="badge primary">core</span><span class="label">violet</span></div>
+    <div class="swatch" style="background:#2c1870"><span class="badge secondary">shade</span><span class="label">vlt dark</span></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#fff3;border:1.5px solid #fff4"></div> Core triadic (primary)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffd23c"></div> Tint / shade of same hue (secondary)</div>
+  </div>
+</div>
+
+<!-- STRATEGY C -->
+<div class="strategy">
+  <div class="strategy-header">
+    <span class="strategy-letter">C</span>
+    <span class="strategy-title">Triadic core + Split-complement accent cluster + Neutral anchors</span>
+  </div>
+  <div class="palette-note">
+    The 3 triadic hues fill slots 1–3. A <em>split-complement</em> of the brand hue generates 1–2 accent slots that feel "different but related". A near-white and near-black round out the set. This is closest to how real design systems (Radix, Material) build their palettes — structured hue theory + intentional neutrals.
+  </div>
+  <div class="swatches">
+    <div class="swatch" style="background:#f5f0eb; border:1px solid rgba(0,0,0,0.08)"><span class="badge neutral">anchor</span><span class="label dk">near-wht</span></div>
+    <div class="swatch" style="background:#d97a30"><span class="badge primary">core</span><span class="label">orange</span></div>
+    <div class="swatch" style="background:#2ba870"><span class="badge primary">core</span><span class="label">teal</span></div>
+    <div class="swatch" style="background:#7050d8"><span class="badge primary">core</span><span class="label">violet</span></div>
+    <div class="swatch" style="background:#e83860"><span class="badge secondary">split−c</span><span class="label">220°→ magenta</span></div>
+    <div class="swatch" style="background:#2060d0"><span class="badge secondary">split−c</span><span class="label">220°+→ blue</span></div>
+    <div class="swatch" style="background:#d8a060"><span class="badge tint">tint</span><span class="label dk">orn muted</span></div>
+    <div class="swatch" style="background:#18120e"><span class="badge neutral">anchor</span><span class="label">near-blk</span></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#fff3;border:1.5px solid #fff4"></div> Core triadic (primary)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffd23c"></div> Split-complement accents (secondary mode)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#aaa;border:1px solid #ccc"></div> Tint / muted</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#555"></div> Neutral anchors</div>
+  </div>
+</div>
+
+<div class="verdict">
+  <strong>My read:</strong> A gives the warmest, most cohesive feel but risks looking too monothematic. B gives the most "design system ready" tint/shade ladder. C gives the most visual surprise — the split-complement accents feel genuinely unexpected while the anchors make it immediately usable. <strong>Which direction feels closest to what you want?</strong> We can also combine (e.g. B's tint ladder + C's neutral anchors).
+</div>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section Hierarchy Design</title>
+<script src="helper.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #111;
+  color: #e0e0e0;
+  padding: 32px 28px 80px;
+  min-height: 100vh;
+}
+h1 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+.page-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: -0.02em; }
+.page-sub { font-size: 12px; color: #555; margin-bottom: 36px; }
+
+/* ── LAYOUT ──────────────────────────────────────────── */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+.col-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.col-label.dark-label { color: #4ade80; }
+.col-label.light-label { color: #60a5fa; }
+
+/* ── PANEL SHELL ──────────────────────────────────────── */
+.panel {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+.panel.dark-theme {
+  background: #1a1a1c;
+  border-color: #282828;
+}
+.panel.light-theme {
+  background: #f8f7f4;
+  border-color: #e2ddd8;
+}
+
+/* ── APPHEADER ────────────────────────────────────────── */
+.app-header {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid;
+}
+.dark-theme .app-header { background: #131314; border-color: #242424; }
+.light-theme .app-header { background: #fff; border-color: #e8e4df; }
+
+.wordmark { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; }
+.dark-theme .wordmark { color: #fff; }
+.light-theme .wordmark { color: #111; }
+
+.header-right { display: flex; align-items: center; gap: 6px; }
+.header-badge {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 99px; letter-spacing: 0.03em;
+}
+.dark-theme .header-badge { background: rgba(255,255,255,0.07); color: #888; border: 1px solid rgba(255,255,255,0.1); }
+.light-theme .header-badge { background: rgba(0,0,0,0.05); color: #666; border: 1px solid rgba(0,0,0,0.08); }
+
+/* ── SPACE HINT BAR ───────────────────────────────────── */
+.space-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px; padding: 6px 14px; font-size: 11px;
+  border-bottom: 1px solid;
+}
+.dark-theme .space-bar { background: rgba(255,255,255,0.02); border-color: #222; color: #4a4a4a; }
+.light-theme .space-bar { background: rgba(0,0,0,0.02); border-color: #e8e4df; color: #aaa; }
+
+kbd {
+  border-radius: 4px; padding: 1px 6px;
+  font-size: 10px; font-family: 'SF Mono', monospace;
+}
+.dark-theme kbd { background: #222; border: 1px solid #2e2e2e; color: #888; }
+.light-theme kbd { background: #fff; border: 1px solid #d0ccc7; color: #666; }
+
+/* ── PANEL BODY ───────────────────────────────────────── */
+.panel-body { padding: 14px 14px 0; }
+
+/* ── SECTION PATTERN ──────────────────────────────────── */
+/*
+  REPEATABLE ANATOMY:
+  ┌─ identity row: label + result + [controls] ──────────┐
+  │  content: preview / swatches / type scale            │
+  └──────────────────────────────────────────────────────┘
+*/
+
+.section {
+  margin-bottom: 0;
+}
+.section + .section {
+  border-top: 1px solid;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+.dark-theme .section + .section { border-color: #242424; }
+.light-theme .section + .section { border-color: #e8e4df; }
+
+/* Identity row */
+.section-identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+.section-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; flex-shrink: 0;
+}
+.dark-theme .section-title { color: #3d3d3d; }
+.light-theme .section-title { color: #bbb; }
+
+.section-result {
+  font-size: 11px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dark-theme .section-result { color: #666; }
+.light-theme .section-result { color: #999; }
+
+/* Controls row — directly below identity */
+.section-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* Lock buttons — same visual grammar as pills */
+.ctrl-pill {
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+.dark-theme .ctrl-pill {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.3);
+}
+.light-theme .ctrl-pill {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: rgba(0,0,0,0.35);
+}
+.dark-theme .ctrl-pill.active {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.75);
+}
+.light-theme .ctrl-pill.active {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.2);
+  color: rgba(0,0,0,0.65);
+}
+.ctrl-pill.accent {
+  /* "Any" / random — subtly highlighted */
+}
+.dark-theme .ctrl-pill.accent {
+  background: rgba(99,102,241,0.12);
+  border-color: rgba(99,102,241,0.22);
+  color: rgba(165,180,252,0.7);
+}
+.light-theme .ctrl-pill.accent {
+  background: rgba(99,102,241,0.07);
+  border-color: rgba(99,102,241,0.18);
+  color: rgba(79,70,229,0.6);
+}
+.dark-theme .ctrl-pill.accent.active {
+  background: rgba(99,102,241,0.22);
+  border-color: rgba(99,102,241,0.35);
+  color: #a5b4fc;
+}
+
+/* ── COLOR SWATCHES ───────────────────────────────────── */
+.swatches { display: flex; gap: 6px; margin-bottom: 0; padding-bottom: 14px; }
+.swatch {
+  flex: 1; height: 84px; border-radius: 7px;
+  display: flex; flex-direction: column;
+  justify-content: space-between; padding: 7px 8px;
+  min-width: 0; cursor: pointer; position: relative;
+}
+.swatch-name { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.swatch-hex { font-size: 9px; font-family: 'SF Mono', monospace; }
+.swatch.on-dark .swatch-name, .swatch.on-dark .swatch-hex { color: rgba(255,255,255,0.65); }
+.swatch.on-light .swatch-name, .swatch.on-light .swatch-hex { color: rgba(0,0,0,0.5); }
+.swatch-add {
+  flex: 0 0 36px; height: 84px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer; flex-shrink: 0;
+  transition: all 0.15s;
+}
+.dark-theme .swatch-add { border: 1.5px dashed #2a2a2a; color: #333; }
+.light-theme .swatch-add { border: 1.5px dashed #d0ccc7; color: #bbb; }
+
+/* ── TYPOGRAPHY SCALE ─────────────────────────────────── */
+.type-scale { padding-bottom: 14px; }
+
+/* Editable specimen input */
+.specimen-input-row {
+  display: flex; gap: 6px; margin-bottom: 12px;
+}
+.specimen-input {
+  flex: 1; min-width: 0;
+  border-radius: 5px; border: 1px solid;
+  padding: 5px 9px; font-size: 11px;
+  outline: none; font-family: inherit;
+}
+.dark-theme .specimen-input {
+  background: rgba(255,255,255,0.04); border-color: #2a2a2a;
+  color: #aaa;
+}
+.light-theme .specimen-input {
+  background: #fff; border-color: #e0dbd5; color: #555;
+}
+.specimen-input::placeholder { color: #444; }
+.light-theme .specimen-input::placeholder { color: #bbb; }
+.specimen-input-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; align-self: center; flex-shrink: 0; width: 28px;
+}
+.dark-theme .specimen-input-label { color: #3a3a3a; }
+.light-theme .specimen-input-label { color: #ccc; }
+
+/* Scale rows */
+.scale-rows { display: flex; flex-direction: column; gap: 0; }
+.scale-row {
+  display: flex; align-items: baseline;
+  gap: 10px; padding: 4px 0;
+  border-bottom: 1px solid;
+}
+.dark-theme .scale-row { border-color: rgba(255,255,255,0.04); }
+.light-theme .scale-row { border-color: rgba(0,0,0,0.04); }
+.scale-row:last-child { border-bottom: none; }
+
+.scale-tag {
+  flex-shrink: 0; width: 28px; font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; padding-top: 1px;
+}
+.dark-theme .scale-tag { color: #3a3a3a; }
+.light-theme .scale-tag { color: #ccc; }
+
+.scale-text {
+  flex: 1; min-width: 0; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.dark-theme .scale-text { color: #d0d0d0; }
+.light-theme .scale-text { color: #1a1a1a; }
+
+.scale-meta {
+  flex-shrink: 0; font-size: 9px; font-family: 'SF Mono', monospace;
+  line-height: 1; align-self: center;
+}
+.dark-theme .scale-meta { color: #333; }
+.light-theme .scale-meta { color: #ccc; }
+
+/* heading / body divider in scale */
+.scale-divider { height: 8px; }
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.panel-footer {
+  padding: 10px 14px;
+  border-top: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.dark-theme .panel-footer { border-color: #242424; }
+.light-theme .panel-footer { border-color: #e8e4df; }
+
+.detail-btn {
+  height: 26px; padding: 0 12px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 5px; border: none;
+}
+.dark-theme .detail-btn { background: #e8543a; color: #fff; }
+.light-theme .detail-btn { background: #e8543a; color: #fff; }
+
+/* ── ANATOMY LEGEND ───────────────────────────────────── */
+.legend {
+  margin-top: 32px;
+  padding: 20px 22px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  background: #151515;
+}
+.legend-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #555; margin-bottom: 16px;
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.legend-item {}
+.legend-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 99px; font-size: 10px;
+  font-weight: 700; margin-bottom: 6px;
+}
+.chip-label { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc; }
+.chip-control { background: rgba(234,179,8,0.12); border: 1px solid rgba(234,179,8,0.25); color: #fbbf24; }
+.chip-result { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.22); color: #4ade80; }
+.legend-desc { font-size: 11px; color: #555; line-height: 1.5; }
+.legend-examples { font-size: 10px; color: #3d3d3d; margin-top: 4px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>Generator Panel UX</h1>
+<div class="page-title">Repeatable section hierarchy</div>
+<div class="page-sub">Same anatomy for Colors and Typography — dark and light mode. Editable specimen text. Full type scale display.</div>
+
+<div class="columns">
+
+  <!-- ══ DARK MODE ════════════════════════════════════ -->
+  <div>
+    <div class="col-label dark-label">Dark mode</div>
+    <div class="panel dark-theme">
+
+      <div class="app-header">
+        <div class="wordmark">palette.</div>
+        <div class="header-right">
+          <div class="header-badge">Playfair + Inter</div>
+        </div>
+      </div>
+
+      <div class="space-bar">
+        <span>Hit</span><kbd>SPACE</kbd><span>to regenerate</span>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- ── COLORS SECTION ──────────────────────── -->
+        <div class="section">
+
+          <!-- Identity row: label + result -->
+          <div class="section-identity">
+            <div class="section-left">
+              <span class="section-title">Colors</span>
+              <span class="section-result">Warm Triadic</span>
+            </div>
+          </div>
+
+          <!-- Controls: harmony type pills -->
+          <div class="section-controls">
+            <div class="ctrl-pill accent active">Any</div>
+            <div class="ctrl-pill">Triadic</div>
+            <div class="ctrl-pill">Analogous</div>
+            <div class="ctrl-pill">Complement</div>
+            <div class="ctrl-pill">Split-Comp</div>
+            <div class="ctrl-pill">Mono</div>
+            <div class="ctrl-pill">Tetradic</div>
+          </div>
+
+          <!-- Preview: swatches -->
+          <div class="swatches">
+            <div class="swatch on-dark" style="background:#C84A2E">
+              <div class="swatch-name">Brand</div>
+              <div class="swatch-hex">#C84A2E</div>
+            </div>
+            <div class="swatch on-dark" style="background:#2E7BC8">
+              <div class="swatch-name">2nd</div>
+              <div class="swatch-hex">#2E7BC8</div>
+            </div>
+            <div class="swatch on-light" style="background:#C8B42E">
+              <div class="swatch-name">Acc A</div>
+              <div class="swatch-hex">#C8B42E</div>
+            </div>
+            <div class="swatch on-dark" style="background:#6B2EC8">
+              <div class="swatch-name">Acc B</div>
+              <div class="swatch-hex">#6B2EC8</div>
+            </div>
+            <div class="swatch-add">+</div>
+          </div>
+
+        </div>
+
+        <!-- ── TYPOGRAPHY SECTION ───────────────────── -->
+        <div class="section">
+
+          <!-- Identity row: label + result + lock controls -->
+          <div class="section-identity">
+            <div class="section-left">
+              <span class="section-title">Typography</span>
+              <span class="section-result">Playfair Display + Inter</span>
+            </div>
+          </div>
+
+          <!-- Controls: lock pills — same grammar as recipe pills -->
+          <div class="section-controls">
+            <div class="ctrl-pill active">⌒ Heading</div>
+            <div class="ctrl-pill">⌒ Body</div>
+            <div class="ctrl-pill">⌒ Scale</div>
+          </div>
+
+          <!-- Editable specimen text inputs -->
+          <div class="specimen-input-row">
+            <span class="specimen-input-label">Hd</span>
+            <input class="specimen-input" value="The quick brown fox jumps over" placeholder="Heading text…">
+          </div>
+          <div class="specimen-input-row">
+            <span class="specimen-input-label">Bd</span>
+            <input class="specimen-input" value="How vexingly quick daft zebras jump!" placeholder="Body text…">
+          </div>
+
+          <!-- Full type scale — all levels rendered at actual size -->
+          <div class="type-scale">
+            <div class="scale-rows">
+              <div class="scale-row">
+                <span class="scale-tag">H1</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:24px; font-weight:800; letter-spacing:-0.02em;">The quick brown fox jumps over</span>
+                <span class="scale-meta">26px · 800</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">H2</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:19px; font-weight:700; letter-spacing:-0.01em;">The quick brown fox jumps over</span>
+                <span class="scale-meta">21px · 700</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">H3</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:15px; font-weight:600;">The quick brown fox jumps over</span>
+                <span class="scale-meta">17px · 600</span>
+              </div>
+              <div class="scale-divider"></div>
+              <div class="scale-row">
+                <span class="scale-tag">Bd</span>
+                <span class="scale-text" style="font-size:13px; font-weight:400; line-height:1.5;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">14px · 400</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">sm</span>
+                <span class="scale-text" style="font-size:11px; font-weight:400;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">12px · 400</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">xs</span>
+                <span class="scale-text" style="font-size:9.5px; font-weight:400;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">10px · 400</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="detail-btn">Detail Mode →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LIGHT MODE ════════════════════════════════════ -->
+  <div>
+    <div class="col-label light-label">Light mode</div>
+    <div class="panel light-theme">
+
+      <div class="app-header">
+        <div class="wordmark">palette.</div>
+        <div class="header-right">
+          <div class="header-badge">Playfair + Inter</div>
+        </div>
+      </div>
+
+      <div class="space-bar">
+        <span>Hit</span><kbd>SPACE</kbd><span>to regenerate</span>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- ── COLORS SECTION ──────────────────────── -->
+        <div class="section">
+          <div class="section-identity">
+            <div class="section-left">
+              <span class="section-title">Colors</span>
+              <span class="section-result">Warm Triadic</span>
+            </div>
+          </div>
+          <div class="section-controls">
+            <div class="ctrl-pill accent active">Any</div>
+            <div class="ctrl-pill">Triadic</div>
+            <div class="ctrl-pill">Analogous</div>
+            <div class="ctrl-pill">Complement</div>
+            <div class="ctrl-pill">Split-Comp</div>
+            <div class="ctrl-pill">Mono</div>
+            <div class="ctrl-pill">Tetradic</div>
+          </div>
+          <div class="swatches">
+            <div class="swatch on-dark" style="background:#C84A2E">
+              <div class="swatch-name">Brand</div>
+              <div class="swatch-hex">#C84A2E</div>
+            </div>
+            <div class="swatch on-dark" style="background:#2E7BC8">
+              <div class="swatch-name">2nd</div>
+              <div class="swatch-hex">#2E7BC8</div>
+            </div>
+            <div class="swatch on-light" style="background:#C8B42E">
+              <div class="swatch-name">Acc A</div>
+              <div class="swatch-hex">#C8B42E</div>
+            </div>
+            <div class="swatch on-dark" style="background:#6B2EC8">
+              <div class="swatch-name">Acc B</div>
+              <div class="swatch-hex">#6B2EC8</div>
+            </div>
+            <div class="swatch-add">+</div>
+          </div>
+        </div>
+
+        <!-- ── TYPOGRAPHY SECTION ───────────────────── -->
+        <div class="section">
+          <div class="section-identity">
+            <div class="section-left">
+              <span class="section-title">Typography</span>
+              <span class="section-result">Playfair Display + Inter</span>
+            </div>
+          </div>
+          <div class="section-controls">
+            <div class="ctrl-pill active">⌒ Heading</div>
+            <div class="ctrl-pill">⌒ Body</div>
+            <div class="ctrl-pill">⌒ Scale</div>
+          </div>
+
+          <div class="specimen-input-row">
+            <span class="specimen-input-label">Hd</span>
+            <input class="specimen-input" value="The quick brown fox jumps over" placeholder="Heading text…">
+          </div>
+          <div class="specimen-input-row">
+            <span class="specimen-input-label">Bd</span>
+            <input class="specimen-input" value="How vexingly quick daft zebras jump!" placeholder="Body text…">
+          </div>
+
+          <div class="type-scale">
+            <div class="scale-rows">
+              <div class="scale-row">
+                <span class="scale-tag">H1</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:24px; font-weight:800; letter-spacing:-0.02em;">The quick brown fox jumps over</span>
+                <span class="scale-meta">26px · 800</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">H2</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:19px; font-weight:700; letter-spacing:-0.01em;">The quick brown fox jumps over</span>
+                <span class="scale-meta">21px · 700</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">H3</span>
+                <span class="scale-text" style="font-family:'Georgia',serif; font-size:15px; font-weight:600;">The quick brown fox jumps over</span>
+                <span class="scale-meta">17px · 600</span>
+              </div>
+              <div class="scale-divider"></div>
+              <div class="scale-row">
+                <span class="scale-tag">Bd</span>
+                <span class="scale-text" style="font-size:13px; font-weight:400; line-height:1.5;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">14px · 400</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">sm</span>
+                <span class="scale-text" style="font-size:11px; font-weight:400;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">12px · 400</span>
+              </div>
+              <div class="scale-row">
+                <span class="scale-tag">xs</span>
+                <span class="scale-text" style="font-size:9.5px; font-weight:400;">How vexingly quick daft zebras jump!</span>
+                <span class="scale-meta">10px · 400</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="detail-btn">Detail Mode →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── ANATOMY LEGEND ─────────────────────────────────── -->
+<div class="legend">
+  <div class="legend-title">Repeatable section anatomy — 3-layer hierarchy</div>
+  <div class="legend-grid">
+    <div class="legend-item">
+      <div class="legend-chip chip-label">Section identity</div>
+      <div class="legend-desc">Label + current result (what the system picked). Read-only, muted. Always top-left.</div>
+      <div class="legend-examples">e.g. "Colors · Warm Triadic" / "Typography · Playfair + Inter"</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-chip chip-control">Controls</div>
+      <div class="legend-desc">Pill row — same visual grammar in both sections. What the user can set or lock. Clearly interactive.</div>
+      <div class="legend-examples">Colors: harmony type pills. Typography: Heading / Body / Scale lock pills.</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-chip chip-result">Preview / result</div>
+      <div class="legend-desc">What the system generated, shown at full fidelity. No chrome, just content.</div>
+      <div class="legend-examples">Colors: swatch cards. Typography: full scale rows at actual sizes.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
