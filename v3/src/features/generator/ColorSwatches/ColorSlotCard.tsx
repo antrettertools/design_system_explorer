@@ -125,7 +125,7 @@ export function ColorSlotCard({
           </button>
         )}
       </div>
-      {slot.locked && <ShadeStrip hex={slot.hex} role={displayName} />}
+      {slot.locked && <ShadeStrip hex={slot.hex} role={slot.role} />}
       {pickerOpen && (
         <ColorPickerPopover
           hex={slot.hex}
