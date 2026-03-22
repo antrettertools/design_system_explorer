@@ -1,0 +1,52 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+.row::-webkit-scrollbar { display: none; }
+
+.pill {
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  background: var(--color-surface-raised, rgba(255,255,255,0.07));
+  color: var(--color-on-surface-muted, rgba(255,255,255,0.45));
+  transition: background 0.12s, color 0.12s;
+}
+.pill:hover {
+  background: var(--color-surface-overlay, rgba(255,255,255,0.12));
+  color: var(--color-on-surface, rgba(255,255,255,0.8));
+}
+.pill.active {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,0.25);
+}
+.pill.any {
+  background: rgba(120,100,255,0.15);
+  color: rgba(180,170,255,0.85);
+  border: 1px solid rgba(120,100,255,0.25);
+}
+.pill.any.active {
+  background: rgba(120,100,255,0.3);
+  color: #fff;
+}
+
+.recipeLabel {
+  padding: 0 2px 6px;
+  font-size: 10px;
+  color: var(--color-on-surface-muted, rgba(255,255,255,0.35));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
