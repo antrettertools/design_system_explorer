@@ -53,10 +53,21 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
     generate(harmonyModel?: HarmonyModelName) {
       const state = get() as { typography: TypographyState }
       const locks = state.typography.locks
+      const existing = state.typography.pairing
 
-      const pairing = locks.heading && locks.body
-        ? state.typography.pairing!
-        : pickRandomPairing(harmonyModel)
+      let pairing: FontPairing
+      if (locks.heading && locks.body) {
+        // Both locked — keep entirely
+        pairing = existing!
+      } else {
+        // Pick a new candidate, then restore whichever individual fonts are locked
+        const candidate = pickRandomPairing(harmonyModel)
+        pairing = {
+          ...candidate,
+          heading: locks.heading && existing ? existing.heading : candidate.heading,
+          body:    locks.body    && existing ? existing.body    : candidate.body,
+        }
+      }
 
       // When scale is NOT locked, generate a fresh scale and clear step overrides
       // When scale IS locked, keep the existing scale (with its overrides intact)
