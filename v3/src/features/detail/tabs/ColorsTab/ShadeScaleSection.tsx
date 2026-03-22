@@ -3,7 +3,7 @@ import { converter } from 'culori'
 import { Pencil } from 'lucide-react'
 import { useColor, useColorActions } from '@/store'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
-import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
+import { POSITION_LABELS } from '@/core/color/types'
 import styles from './ShadeScaleSection.module.css'
 
 const toOklch = converter('oklch')
@@ -45,7 +45,7 @@ export function ShadeScaleSection() {
         const scale = getShadeSteps(slot.role)
         const oklchLabel = hexToOklchLabel(slot.hex)
         const anchorRef = { current: swatchRefs.current[slot.id] } as React.RefObject<HTMLElement>
-        const displayName = slot.name ?? ROLE_LABELS[slot.role] ?? slot.role
+        const displayName = slot.name ?? POSITION_LABELS[slot.role]
         return (
           <div key={slot.id} className={styles.colorRow}>
             <div className={styles.colorHeader}>

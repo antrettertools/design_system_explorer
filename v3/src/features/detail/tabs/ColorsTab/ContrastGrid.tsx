@@ -1,5 +1,5 @@
 import { useColor } from '@/store'
-import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
+import { POSITION_LABELS } from '@/core/color/types'
 import styles from './ContrastGrid.module.css'
 
 interface ContrastPair {
@@ -72,7 +72,7 @@ export function ContrastGrid() {
       slots
         .filter(s => s.id !== slot.id)
         .map(bg => ({
-          fgLabel: `${slot.name ?? ROLE_LABELS[slot.role] ?? slot.role} / ${bg.name ?? ROLE_LABELS[bg.role] ?? bg.role}`,
+          fgLabel: `${slot.name ?? POSITION_LABELS[slot.role]} / ${bg.name ?? ROLE_LABELS[bg.role] ?? bg.role}`,
           bgLabel: bg.name ?? ROLE_LABELS[bg.role] ?? bg.role,
           fgHex: slot.hex,
           bgHex: bg.hex,

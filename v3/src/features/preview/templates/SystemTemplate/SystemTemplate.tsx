@@ -1,5 +1,5 @@
 import { useColor, useTypography, useSpacing, useEffects } from '@/store'
-import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
+import { POSITION_LABELS } from '@/core/color/types'
 import styles from './SystemTemplate.module.css'
 
 const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
@@ -99,7 +99,7 @@ export function SystemTemplate() {
           <div className={styles.compactScaleRow}>
             {otherSlots.map(slot => (
               <div key={slot.id} className={styles.compactScaleBlock}>
-                <div className={styles.compactScaleLabel}>{slot.name ?? ROLE_LABELS[slot.role] ?? slot.role}</div>
+                <div className={styles.compactScaleLabel}>{slot.name ?? POSITION_LABELS[slot.role]}</div>
                 <div className={styles.compactScale}>
                   {SHADE_STEPS.map(step => (
                     <div
