@@ -1,4 +1,5 @@
 // Harmony model names
+/** @deprecated Use RecipeDef / RECIPES instead */
 export type HarmonyModelName =
   | 'monochromatic'
   | 'analogous'
@@ -24,6 +25,7 @@ export interface HarmonyModelDef {
   description: string
 }
 
+/** @deprecated Use RECIPES instead */
 export const HARMONY_MODELS: Record<HarmonyModelName, HarmonyModelDef> = {
   monochromatic: {
     hueOffsets: [0, 0, 0],   // All same hue, L/C vary dramatically
@@ -107,4 +109,47 @@ export interface ColorSlot {
   hex: string
   locked: boolean
   name?: string       // user-defined display name (falls back to role label)
+}
+
+// ─── Recipe engine types ────────────────────────────────────────────────────
+
+export type HueSource = 'P1' | 'P2' | 'P3' | 'P4' | 'S1' | 'S2'
+export type DepthLevel = 'pale' | 'vivid' | 'deep'
+export type SpecialSlot = 'neutral-light' | 'neutral-dark'
+export type SlotType = `${HueSource}-${DepthLevel}` | SpecialSlot
+
+export type PrimaryType =
+  | 'triadic' | 'analogous' | 'complementary' | 'split-comp'
+  | 'mono' | 'tetradic' | 'compound' | 'special'
+
+export interface DepthRange {
+  lRange: [number, number]
+  cRange: [number, number]
+}
+
+export const DEPTH_RANGES: Record<DepthLevel | 'neutral-light' | 'neutral-dark', DepthRange> = {
+  pale:          { lRange: [0.84, 0.93], cRange: [0.03, 0.08] },
+  vivid:         { lRange: [0.52, 0.72], cRange: [0.14, 0.26] },
+  deep:          { lRange: [0.22, 0.38], cRange: [0.08, 0.16] },
+  'neutral-light': { lRange: [0.92, 0.97], cRange: [0.01, 0.03] },
+  'neutral-dark':  { lRange: [0.10, 0.18], cRange: [0.01, 0.03] },
+}
+
+export interface VibeConstraint {
+  lRange: [number, number]
+  cRange: [number, number]
+  hueRange?: [number, number]
+}
+
+export interface RecipeDef {
+  id: string
+  label: string
+  primaryType: PrimaryType
+  primaryHueOffsets: number[]
+  secondaryHueOffsets?: number[]
+  secondaryChromaScale?: number
+  fillOrder: SlotType[]   // exactly 8 entries; trimmed to count from front
+  minCount?: number       // recipe excluded from pool when count < minCount
+  monoLadder?: true       // recipe 20: overrides depth L/C with evenly-spaced ladder
+  vibeConstraint?: VibeConstraint
 }
