@@ -1,10 +1,41 @@
 .grid {
   display: flex;
   gap: var(--ui-space-3);
-  padding: var(--ui-space-8) var(--ui-space-8) 0;
+  align-items: stretch;
 }
 
 .grid > * {
   flex: 1;
   min-width: 0;
+}
+
+.addCard {
+  flex: 0 0 36px !important;
+  height: 110px;
+  border-radius: var(--ui-radius-4);
+  border: 1.5px dashed var(--color-border);
+  background: none;
+  color: var(--color-on-surface-subtle);
+  font-size: 20px;
+  font-family: var(--font-body, sans-serif);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--ui-duration-2), color var(--ui-duration-2), background var(--ui-duration-2);
+  padding: 0;
+  line-height: 1;
+}
+
+.addCard:hover:not(:disabled) {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+  background: var(--color-interactive-subtle);
+}
+
+.addCard:active:not(:disabled) { transform: scale(0.95); }
+
+.addCard:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }

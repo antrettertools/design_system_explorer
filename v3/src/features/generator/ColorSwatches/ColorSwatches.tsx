@@ -5,7 +5,7 @@ import styles from './ColorSwatches.module.css'
 
 export function ColorSwatches() {
   const { slots } = useColor()
-  const { reorderSlots } = useColorActions()
+  const { reorderSlots, addSlot } = useColorActions()
   const dragFrom = useRef<string | null>(null)
   const [dragOverId, setDragOverId] = useState<string | null>(null)
 
@@ -22,6 +22,8 @@ export function ColorSwatches() {
     setDragOverId(null)
   }
 
+  const canAdd = slots.length < 8
+
   return (
     <div className={styles.grid}>
       {slots.map(slot => (
@@ -34,6 +36,15 @@ export function ColorSwatches() {
           onDrop={handleDrop}
         />
       ))}
+      <button
+        className={styles.addCard}
+        onClick={addSlot}
+        disabled={!canAdd}
+        aria-label="Add color"
+        title={canAdd ? 'Add color' : 'Maximum 8 colors'}
+      >
+        +
+      </button>
     </div>
   )
 }
