@@ -1,5 +1,11 @@
 import { generatePalette } from '@/core/color/harmony'
 import type { ColorSlot, RecipeDef, PrimaryType } from '@/core/color/types'
+import { COLOR_ROLES } from '@/core/color/types'
+
+/** After any reorder/remove, make slot.role strictly match array position */
+function reassignRolesByPosition(slots: ColorSlot[]): ColorSlot[] {
+  return slots.map((s, i) => ({ ...s, role: COLOR_ROLES[Math.min(i, COLOR_ROLES.length - 1)] }))
+}
 
 export type StateColorPrefix = 'error' | 'warning' | 'success' | 'info'
 
@@ -78,9 +84,9 @@ export function createColorActions(set: any, get: any): ColorActions {
 
     removeSlot(id: string) {
       const state = get() as { color: ColorState }
-      const slots = state.color.slots.filter(s => s.id !== id)
-      if (slots.length === 0) return  // keep at least 1
-      set({ color: { ...state.color, slots } })
+      const filtered = state.color.slots.filter(s => s.id !== id)
+      if (filtered.length === 0) return  // keep at least 1
+      set({ color: { ...state.color, slots: reassignRolesByPosition(filtered) } })
     },
 
     reorderSlots(fromIndex: number, toIndex: number) {
@@ -88,7 +94,7 @@ export function createColorActions(set: any, get: any): ColorActions {
       const slots = [...state.color.slots]
       const [moved] = slots.splice(fromIndex, 1)
       slots.splice(toIndex, 0, moved)
-      set({ color: { ...state.color, slots } })
+      set({ color: { ...state.color, slots: reassignRolesByPosition(slots) } })
     },
 
     setDataVizN(n: number) {

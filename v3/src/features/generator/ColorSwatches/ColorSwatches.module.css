@@ -1,12 +1,35 @@
 .grid {
   display: flex;
   gap: var(--ui-space-3);
-  align-items: stretch;
+  align-items: flex-end;
 }
 
 .grid > * {
   flex: 1;
   min-width: 0;
+}
+
+/* Wrapper column: role tag above + card below */
+.slotWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}
+
+/* Role label above each card — same grammar as TypographySpecimen .scaleTag */
+.roleTag {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body, sans-serif);
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 14px;
 }
 
 .addCard {

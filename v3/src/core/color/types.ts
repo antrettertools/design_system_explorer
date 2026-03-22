@@ -99,8 +99,20 @@ export const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
 export type ShadeStep = typeof SHADE_STEPS[number]
 export type ShadeScale = Record<ShadeStep, string>  // hex values
 
-export const COLOR_ROLES = ['brand', 'secondary', 'accentA', 'accentB'] as const
+export const COLOR_ROLES = ['brand', 'secondary', 'accentA', 'accentB', 'accentC', 'accentD', 'accentE', 'accentF'] as const
 export type ColorRole = typeof COLOR_ROLES[number]
+
+/** Human-readable label for each position in the slot array (index-stable) */
+export const POSITION_LABELS: Record<ColorRole, string> = {
+  brand:     'Brand',
+  secondary: 'Secondary',
+  accentA:   'Accent A',
+  accentB:   'Accent B',
+  accentC:   'Accent C',
+  accentD:   'Accent D',
+  accentE:   'Accent E',
+  accentF:   'Accent F',
+}
 
 // A single color slot in the generator
 export interface ColorSlot {

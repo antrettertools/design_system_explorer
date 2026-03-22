@@ -33,7 +33,7 @@ export function buildTokenMap(
   const light: Record<string, string> = {}
   const dark: Record<string, string> = {}
 
-  const brandSlot = slots.find(s => s.role === 'brand') ?? slots[0]
+  const brandSlot = slots[0]  // roles are position-based: slot[0] is always brand
   const brandHex = brandSlot?.hex ?? '#888888'
 
   // Shade scales for all slots

@@ -1,4 +1,4 @@
-import { formatHex, clampChroma, converter } from 'culori'
+import { formatHex, clampChroma } from 'culori'
 import { RECIPES } from './recipes'
 import { DEPTH_RANGES, COLOR_ROLES } from './types'
 import type { ColorSlot, RecipeDef, PrimaryType, SlotType } from './types'
@@ -6,7 +6,6 @@ import type { ColorSlot, RecipeDef, PrimaryType, SlotType } from './types'
 // Re-export deprecated helpers so old imports don't break at runtime
 export { pickHarmonyModel } from './harmonyLegacy'
 
-const toOklch = converter('oklch')
 
 function randomInRange(min: number, max: number): number {
   return min + Math.random() * (max - min)
@@ -168,44 +167,11 @@ export function generatePalette(opts: GenerateOptions): GenerateResult {
     })
   }
 
-  // Assign brand = unlocked slot with highest chroma
-  const unlocked = slots.filter(s => !s.locked)
-  if (unlocked.length > 0) {
-    let maxC = -1
-    let brandIdx = -1
-    for (const slot of unlocked) {
-      const oklch = toOklch(slot.hex)
-      const c = oklch?.c ?? 0
-      if (c > maxC) { maxC = c; brandIdx = slots.indexOf(slot) }
-    }
-    if (brandIdx >= 0 && brandIdx !== 0 && !slots[0].locked) {
-      // de-brand any slot that was previously brand (e.g. a locked slot from a prior generation)
-      for (let j = 0; j < slots.length; j++) {
-        if (j !== brandIdx && slots[j].role === 'brand') {
-          slots[j] = { ...slots[j], role: COLOR_ROLES[Math.min(1, COLOR_ROLES.length - 1)] }
-        }
-      }
-      const tmp = slots[0]
-      slots[0] = slots[brandIdx]
-      slots[brandIdx] = tmp
-      slots[0].role = 'brand'
-      slots[brandIdx].role = COLOR_ROLES[Math.min(brandIdx, COLOR_ROLES.length - 1)]
-    } else if (brandIdx >= 0) {
-      // de-brand any slot that was previously brand (e.g. a locked slot from a prior generation)
-      for (let j = 0; j < slots.length; j++) {
-        if (j !== brandIdx && slots[j].role === 'brand') {
-          slots[j] = { ...slots[j], role: COLOR_ROLES[Math.min(1, COLOR_ROLES.length - 1)] }
-        }
-      }
-      slots[brandIdx].role = 'brand'
-    }
-    // Assign remaining roles by position
-    slots.forEach((slot, i) => {
-      if (!slot.locked && slot.role !== 'brand') {
-        slot.role = COLOR_ROLES[Math.min(i, COLOR_ROLES.length - 1)]
-      }
-    })
-  }
+  // Roles are strictly position-based: slot[0] = brand, slot[1] = secondary, etc.
+  // Drag-and-drop (reorderSlots in the store) is how the user promotes a color to brand.
+  slots.forEach((slot, i) => {
+    slot.role = COLOR_ROLES[Math.min(i, COLOR_ROLES.length - 1)]
+  })
 
   return { slots, recipe, baseHue }
 }

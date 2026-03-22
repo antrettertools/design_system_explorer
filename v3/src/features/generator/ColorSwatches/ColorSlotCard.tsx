@@ -1,17 +1,11 @@
 import { useState, useRef } from 'react'
 import { useColorActions } from '@/store'
 import type { ColorSlot } from '@/core/color/types'
+import { nameFromHex } from '@/core/color/nameFromHex'
 import { ShadeStrip } from './ShadeStrip'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import { Lock, LockOpen, X } from 'lucide-react'
 import styles from './ColorSlotCard.module.css'
-
-export const ROLE_LABELS: Record<string, string> = {
-  brand: 'Brand',
-  secondary: 'Secondary',
-  accentA: 'Accent A',
-  accentB: 'Accent B',
-}
 
 function isLightColor(hex: string): boolean {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -22,6 +16,7 @@ function isLightColor(hex: string): boolean {
 
 interface ColorSlotCardProps {
   slot: ColorSlot
+  index: number
   canRemove: boolean
   onDragStart?: (id: string) => void
   onDragOver?: (id: string) => void
@@ -43,7 +38,9 @@ export function ColorSlotCard({
   const swatchRef = useRef<HTMLDivElement>(null)
   const nameInputRef = useRef<HTMLInputElement>(null)
 
-  const displayName = slot.name ?? ROLE_LABELS[slot.role] ?? slot.role
+  // Default to hue-based name; user override stored in slot.name
+  const autoName = nameFromHex(slot.hex)
+  const displayName = slot.name ?? autoName
 
   function startEditing(e: React.MouseEvent) {
     e.stopPropagation()
@@ -82,7 +79,7 @@ export function ColorSlotCard({
               ref={nameInputRef}
               className={styles.roleLabelInput}
               value={nameInput}
-              placeholder={ROLE_LABELS[slot.role] ?? slot.role}
+              placeholder={autoName}
               onChange={e => setNameInput(e.target.value)}
               onBlur={commitName}
               onKeyDown={e => {
