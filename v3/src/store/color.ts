@@ -1,4 +1,4 @@
-import { generatePalette, pickHarmonyModel } from '@/core/color/harmony'
+import { generatePalette } from '@/core/color/harmony'
 import type { ColorSlot, HarmonyModelName } from '@/core/color/types'
 
 export type StateColorPrefix = 'error' | 'warning' | 'success' | 'info'
@@ -6,6 +6,8 @@ export type StateColorPrefix = 'error' | 'warning' | 'success' | 'info'
 export interface ColorState {
   slots: ColorSlot[]
   activeModel: HarmonyModelName | null
+  activeRecipeId: string | null
+  activeBaseHue: number | null
   dataVizN: number
   stateOverrides: Partial<Record<StateColorPrefix, string>>
 }
@@ -26,6 +28,8 @@ export interface ColorActions {
 export const defaultColorState: ColorState = {
   slots: [],
   activeModel: null,
+  activeRecipeId: null,
+  activeBaseHue: null,
   dataVizN: 8,
   stateOverrides: {},
 }
@@ -37,13 +41,12 @@ export function createColorActions(set: any, get: any): ColorActions {
       const state = get() as { color: ColorState }
       const existing = state.color.slots
       const hasLocked = existing.some(s => s.locked)
-      const model = hasLocked ? state.color.activeModel ?? pickHarmonyModel() : pickHarmonyModel()
-      const newSlots = generatePalette({
+      const { slots: newSlots, recipe, baseHue } = generatePalette({
         count: existing.length || 4,
         existing: hasLocked ? existing : [],
-        forceModel: model,
+        pinnedRecipeId: hasLocked ? state.color.activeRecipeId : null,
       })
-      set({ color: { ...state.color, slots: newSlots, activeModel: model } })
+      set({ color: { ...state.color, slots: newSlots, activeRecipeId: recipe.id, activeBaseHue: baseHue } })
     },
 
     toggleLock(id: string) {
@@ -57,10 +60,11 @@ export function createColorActions(set: any, get: any): ColorActions {
     addSlot() {
       const state = get() as { color: ColorState }
       if (state.color.slots.length >= 8) return
-      const newSlots = generatePalette({
+      const { slots: newSlots } = generatePalette({
         count: state.color.slots.length + 1,
         existing: state.color.slots,
-        forceModel: state.color.activeModel ?? undefined,
+        pinnedRecipeId: state.color.activeRecipeId,
+        forceBaseHue: state.color.activeBaseHue ?? undefined,
       })
       set({ color: { ...state.color, slots: newSlots } })
     },
