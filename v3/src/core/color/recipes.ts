@@ -161,7 +161,7 @@ export const RECIPES: RecipeDef[] = [
     primaryType: 'tetradic',
     primaryHueOffsets: [0, 90, 180, 270],
     minCount: 5,
-    fillOrder: ['P1-vivid','P1-pale','P2-vivid','P2-pale','P3-vivid','P3-pale','P4-vivid','P4-pale'],
+    fillOrder: ['P1-vivid','P1-deep','P2-vivid','P2-deep','P3-vivid','P3-deep','P4-vivid','P4-deep'],
   },
   {
     id: 'tet-pure',
@@ -188,7 +188,7 @@ export const RECIPES: RecipeDef[] = [
     fillOrder: ['neutral-light','P1-pale','P2-pale','P3-pale','P4-pale','P1-vivid','P1-pale','P2-pale'],
   },
   {
-    id: 'compound-pure',
+    id: 'comp-compound',
     label: 'Compound · Pure',
     primaryType: 'compound',
     primaryHueOffsets: [0, 30, 180, 210],
