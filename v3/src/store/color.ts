@@ -1,13 +1,14 @@
 import { generatePalette } from '@/core/color/harmony'
-import type { ColorSlot, HarmonyModelName } from '@/core/color/types'
+import type { ColorSlot, RecipeDef, PrimaryType } from '@/core/color/types'
 
 export type StateColorPrefix = 'error' | 'warning' | 'success' | 'info'
 
 export interface ColorState {
   slots: ColorSlot[]
-  activeModel: HarmonyModelName | null
-  activeRecipeId: string | null
-  activeBaseHue: number | null
+  activeRecipe: RecipeDef | null
+  pinnedRecipeId: string | null
+  pinnedPrimaryType: PrimaryType | null
+  lastBaseHue: number
   dataVizN: number
   stateOverrides: Partial<Record<StateColorPrefix, string>>
 }
@@ -23,13 +24,16 @@ export interface ColorActions {
   renameSlot: (id: string, name: string) => void
   setStateColor: (prefix: StateColorPrefix, hex: string) => void
   resetStateColor: (prefix: StateColorPrefix) => void
+  pinRecipe: (id: string | null) => void
+  pinPrimaryType: (type: PrimaryType | null) => void
 }
 
 export const defaultColorState: ColorState = {
   slots: [],
-  activeModel: null,
-  activeRecipeId: null,
-  activeBaseHue: null,
+  activeRecipe: null,
+  pinnedRecipeId: null,
+  pinnedPrimaryType: null,
+  lastBaseHue: 0,
   dataVizN: 8,
   stateOverrides: {},
 }
@@ -44,9 +48,10 @@ export function createColorActions(set: any, get: any): ColorActions {
       const { slots: newSlots, recipe, baseHue } = generatePalette({
         count: existing.length || 4,
         existing: hasLocked ? existing : [],
-        pinnedRecipeId: hasLocked ? state.color.activeRecipeId : null,
+        pinnedRecipeId: hasLocked ? (state.color.pinnedRecipeId ?? state.color.activeRecipe?.id ?? null) : state.color.pinnedRecipeId,
+        pinnedPrimaryType: state.color.pinnedPrimaryType,
       })
-      set({ color: { ...state.color, slots: newSlots, activeRecipeId: recipe.id, activeBaseHue: baseHue } })
+      set({ color: { ...state.color, slots: newSlots, activeRecipe: recipe, lastBaseHue: baseHue } })
     },
 
     toggleLock(id: string) {
@@ -60,13 +65,13 @@ export function createColorActions(set: any, get: any): ColorActions {
     addSlot() {
       const state = get() as { color: ColorState }
       if (state.color.slots.length >= 8) return
-      const { slots: newSlots } = generatePalette({
+      const { slots: newSlots, recipe } = generatePalette({
         count: state.color.slots.length + 1,
         existing: state.color.slots,
-        pinnedRecipeId: state.color.activeRecipeId,
-        forceBaseHue: state.color.activeBaseHue ?? undefined,
+        pinnedRecipeId: state.color.activeRecipe?.id ?? null,
+        forceBaseHue: state.color.lastBaseHue,
       })
-      set({ color: { ...state.color, slots: newSlots } })
+      set({ color: { ...state.color, slots: newSlots, activeRecipe: recipe } })
     },
 
     removeSlot(id: string) {
@@ -114,6 +119,16 @@ export function createColorActions(set: any, get: any): ColorActions {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [prefix]: _removed, ...rest } = state.color.stateOverrides
       set({ color: { ...state.color, stateOverrides: rest as Partial<Record<StateColorPrefix, string>> } })
+    },
+
+    pinRecipe(id: string | null) {
+      const state = get() as { color: ColorState }
+      set({ color: { ...state.color, pinnedRecipeId: id, pinnedPrimaryType: null } })
+    },
+
+    pinPrimaryType(type: PrimaryType | null) {
+      const state = get() as { color: ColorState }
+      set({ color: { ...state.color, pinnedPrimaryType: type, pinnedRecipeId: null } })
     },
   }
 }
