@@ -127,7 +127,7 @@ export interface DepthRange {
   cRange: [number, number]
 }
 
-export const DEPTH_RANGES: Record<DepthLevel | 'neutral-light' | 'neutral-dark', DepthRange> = {
+export const DEPTH_RANGES: Record<DepthLevel | SpecialSlot, DepthRange> = {
   pale:          { lRange: [0.84, 0.93], cRange: [0.03, 0.08] },
   vivid:         { lRange: [0.52, 0.72], cRange: [0.14, 0.26] },
   deep:          { lRange: [0.22, 0.38], cRange: [0.08, 0.16] },
