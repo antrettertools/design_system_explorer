@@ -20,7 +20,7 @@ const SHADOW_STEPS = ['sm', 'md', 'lg', 'xl'] as const
 export function ShowcaseTab() {
   const { showcaseTemplate, theme, mode, activeTab } = useUI()
   const { setShowcaseTemplate } = useUIActions()
-  const { slots, activeModel, dataVizN } = useColor()
+  const { slots, activeRecipe, dataVizN } = useColor()
   const { pairing, scale, locks } = useTypography()
   const { baseUnit, config: spacingConfig, overrides: spacingOverrides, radiusOverrides } = useSpacing()
   const { config: effectsConfig, shadowMode, shadowOverrides } = useEffects()
@@ -31,7 +31,7 @@ export function ShowcaseTab() {
     const snapshot: ShareSnapshot = {
       v: 3,
       colors: slots,
-      harmonyModel: activeModel,
+      harmonyModel: activeRecipe?.id ?? null,
       pairing,
       typographyLocks: locks,
       scaleRatio: scale._ratio,

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { X } from 'lucide-react'
 import { useStore, useUI, useUIActions } from '@/store'
+import { RECIPES } from '@/core/color/recipes'
 import { listSessions, saveSession, deleteSession } from '@/core/sessions/storage'
 import type { Session } from '@/core/sessions/types'
 import type { ShareSnapshot } from '@/core/share/types'
@@ -46,7 +47,7 @@ export function SessionsDrawer() {
     const snapshot: ShareSnapshot = {
       v: 3,
       colors: state.color.slots,
-      harmonyModel: state.color.activeModel,
+      harmonyModel: state.color.activeRecipe?.id ?? null,
       pairing: state.typography.pairing ?? { heading: 'Inter', body: 'Inter', source: 'google' },
       typographyLocks: state.typography.locks,
       scaleRatio: 1.333,
@@ -70,7 +71,7 @@ export function SessionsDrawer() {
       color: {
         ...prev.color,
         slots: snapshot.colors,
-        activeModel: snapshot.harmonyModel,
+        activeRecipe: RECIPES.find(r => r.id === snapshot.harmonyModel) ?? null,
       },
       typography: {
         ...prev.typography,

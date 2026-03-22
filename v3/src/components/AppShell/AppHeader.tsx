@@ -20,7 +20,7 @@ const THEME_OPTIONS: ThemeOption[] = [
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
   const { setTheme, toggleSessionsDrawer } = useUIActions()
-  const { activeModel } = useColor()
+  const { activeRecipe } = useColor()
   const { pairing } = useTypography()
 
   // Access temporal store for undo/redo enabled state
@@ -35,7 +35,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
     ? activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
     : null
 
-  const harmonyBadge = mode === 'generator' && activeModel ? activeModel : null
+  const harmonyBadge = mode === 'generator' && activeRecipe ? activeRecipe.label : null
   const pairingLabel = mode === 'generator' && pairing ? `${pairing.heading} + ${pairing.body}` : null
 
   return (

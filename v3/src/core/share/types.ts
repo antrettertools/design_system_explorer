@@ -1,11 +1,10 @@
 import type { ColorSlot } from '../color/types'
 import type { FontPairing } from '../typography/types'
-import type { HarmonyModelName } from '../color/types'
 
 export interface ShareSnapshot {
   v: 3
   colors: ColorSlot[]
-  harmonyModel: HarmonyModelName | null
+  harmonyModel: string | null   // stores recipe id (e.g. 'triadic-accent') or null
   pairing: FontPairing
   typographyLocks: {
     heading: boolean

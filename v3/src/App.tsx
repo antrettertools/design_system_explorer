@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useColorActions, useTypographyActions, useUI, useUIActions, temporalUndo, temporalRedo, useStore } from './store'
+import { RECIPES } from '@/core/color/recipes'
 import type { DetailTab } from './store/ui'
 import type { SpacingState } from './store/spacing'
 import { AppHeader } from './components/AppShell/AppHeader'
@@ -30,7 +31,7 @@ export default function App() {
           color: {
             ...prev.color,
             slots: snapshot.colors,
-            activeModel: snapshot.harmonyModel,
+            activeRecipe: RECIPES.find(r => r.id === snapshot.harmonyModel) ?? null,
           },
           typography: {
             ...prev.typography,

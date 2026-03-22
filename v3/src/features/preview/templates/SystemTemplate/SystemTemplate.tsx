@@ -33,7 +33,7 @@ const RADIUS_STEPS = ['none', 'sm', 'md', 'lg', 'xl', 'full'] as const
 const SHADOW_STEPS = ['sm', 'md', 'lg', 'xl'] as const
 
 export function SystemTemplate() {
-  const { slots, dataVizN, activeModel } = useColor()
+  const { slots, dataVizN, activeRecipe } = useColor()
   const { pairing } = useTypography()
   const { config: spacingConfig, overrides: spacingOverrides, radiusOverrides, baseUnit } = useSpacing()
   const { config: effectsConfig, shadowMode, shadowOverrides } = useEffects()
@@ -62,7 +62,7 @@ export function SystemTemplate() {
         <div className={styles.wordmark}>palette.</div>
         <div className={styles.systemMeta}>
           Generated {TODAY}
-          {activeModel ? ` · ${activeModel} harmony` : ''}
+          {activeRecipe ? ` · ${activeRecipe.label}` : ''}
           {pairing ? ` · ${pairing.heading} + ${pairing.body}` : ''}
         </div>
       </div>
