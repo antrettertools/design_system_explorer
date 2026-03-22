@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-5);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 /* ---- TEMPLATE PICKER ---- */
@@ -24,7 +24,7 @@
   cursor: pointer;
   text-align: left;
   transition: all var(--ui-duration-3);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .templateBtn:hover {
@@ -61,7 +61,7 @@
   background: var(--color-surface, #fff);
   cursor: pointer;
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@
 .copied {
   color: #15803d; /* semantic success color — intentional */
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   margin-top: var(--ui-space-2);
 }
 
@@ -167,7 +167,7 @@
 
 .radiusName {
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle, #888);
 }
 
@@ -222,5 +222,5 @@
 .typeBody {
   font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #777);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }

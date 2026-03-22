@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .card {
@@ -33,14 +33,14 @@
   border: none;
   border-radius: var(--ui-radius-4); /* replaces phantom --radius-md */
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   cursor: default;
 }
 
 .previewLabel {
   font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #aaa);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .controlsGrid {

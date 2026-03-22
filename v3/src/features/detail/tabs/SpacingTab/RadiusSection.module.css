@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .grid {
@@ -36,7 +36,7 @@
 .label {
   font-size: var(--ui-text-sm);
   font-weight: 700;
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
 }
 

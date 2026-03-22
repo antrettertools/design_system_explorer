@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-5);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .formatGrid {
@@ -22,7 +22,7 @@
   background: var(--color-surface, #fff);
   cursor: pointer;
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
   text-align: left;
   transition: all var(--ui-duration-3);
@@ -40,7 +40,7 @@
   align-items: center;
   gap: var(--ui-space-5);
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
 }
 
@@ -80,7 +80,7 @@
   font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   transition: opacity var(--ui-duration-3);
 }
 
@@ -95,5 +95,5 @@
   cursor: pointer;
   background: none;
   color: var(--color-on-surface, #333);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }

@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .nControl {
@@ -15,7 +15,7 @@
   gap: var(--ui-space-5);
   margin-bottom: var(--ui-space-6);
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle);
 }
 

@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .ratioRow {
@@ -15,7 +15,7 @@
   gap: var(--ui-space-5);
   margin-bottom: var(--ui-space-7);
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle);
   flex-wrap: wrap;
 }
@@ -125,7 +125,7 @@
   flex-direction: column;
   gap: var(--ui-space-1);
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle);
 }
 
@@ -188,7 +188,7 @@
 .stepLabel {
   font-size: var(--ui-text-sm);
   font-weight: 700;
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle);
   width: 48px;
   flex-shrink: 0;

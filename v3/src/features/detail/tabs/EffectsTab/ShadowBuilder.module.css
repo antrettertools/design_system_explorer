@@ -17,7 +17,7 @@
 .stepLabel {
   font-size: var(--ui-text-sm);
   font-weight: 700;
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
 }
 
@@ -67,7 +67,7 @@
 
 .sliderLabel {
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle, #888);
   min-width: 40px;
   flex-shrink: 0;
@@ -108,7 +108,7 @@
 .infoNote {
   font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #aaa);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .textInput {

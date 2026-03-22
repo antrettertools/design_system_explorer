@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .subsection { margin-bottom: var(--ui-space-8); }
@@ -16,7 +16,7 @@
   font-weight: 700;
   color: var(--color-on-surface-subtle, #888);
   margin-bottom: var(--ui-space-4);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .tokenRow {
@@ -79,7 +79,7 @@
 
 .iconLabel {
   font-size: var(--ui-text-sm);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle, #aaa);
 }
 

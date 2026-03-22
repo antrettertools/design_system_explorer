@@ -45,13 +45,13 @@
   font-size: var(--ui-text-sm);
   font-weight: 600;
   color: var(--color-on-surface);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .cellSource {
   font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

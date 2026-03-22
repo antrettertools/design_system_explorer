@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .subsectionLabel {
@@ -14,7 +14,7 @@
   font-weight: 700;
   color: var(--color-on-surface-subtle, #888);
   margin-bottom: var(--ui-space-4);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .tokenRow {
@@ -64,7 +64,7 @@
 .easingName {
   font-size: var(--ui-text-sm);
   font-weight: 700;
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface, #333);
   min-width: 80px;
   flex-shrink: 0;

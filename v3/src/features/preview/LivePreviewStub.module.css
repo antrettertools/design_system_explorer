@@ -6,5 +6,5 @@
   background: var(--color-surface);
   color: var(--color-on-surface-subtle);
   font-size: var(--ui-text-md);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }

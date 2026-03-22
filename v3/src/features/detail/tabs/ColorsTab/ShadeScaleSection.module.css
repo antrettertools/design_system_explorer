@@ -6,7 +6,7 @@
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
   margin-bottom: var(--ui-space-7);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .colorRow {
@@ -56,7 +56,7 @@
   font-size: var(--ui-text-sm);
   font-weight: 700;
   color: var(--color-on-surface);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
 
 .colorMeta {

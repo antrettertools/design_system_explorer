@@ -27,6 +27,6 @@
     border: none;
     width: 100%;
     text-align: left;
-    font-family: sans-serif;
+    font-family: var(--font-body, sans-serif);
   }
 }

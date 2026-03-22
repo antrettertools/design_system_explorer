@@ -69,7 +69,7 @@
   white-space: nowrap;
   letter-spacing: 0.01em;
   transition: color var(--ui-duration-3), border-color var(--ui-duration-3);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
   scroll-snap-align: start;
   flex-shrink: 0;
   display: flex;
@@ -114,5 +114,5 @@
   height: 200px;
   color: var(--color-on-surface-subtle);
   font-size: var(--ui-text-md);
-  font-family: sans-serif;
+  font-family: var(--font-body, sans-serif);
 }
