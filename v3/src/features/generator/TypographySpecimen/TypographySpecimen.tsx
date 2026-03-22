@@ -1,88 +1,112 @@
+import { useState } from 'react'
 import { useTypography, useTypographyActions } from '@/store'
 import type { TypeScaleStep } from '@/core/typography/types'
 import { Lock, LockOpen } from 'lucide-react'
 import styles from './TypographySpecimen.module.css'
 
-const SPECIMEN_TEXT = 'The quick brown fox jumps over the lazy dog'
+const HEADING_KEYS = new Set(['h1', 'h2', 'h3'])
 
-const SCALE_PILLS: { key: 'h1' | 'h2' | 'h3' | 'body' | 'small' | 'xs'; label: string }[] = [
-  { key: 'h1', label: 'H1' },
-  { key: 'h2', label: 'H2' },
-  { key: 'h3', label: 'H3' },
-  { key: 'body', label: 'Body' },
-  { key: 'small', label: 'sm' },
-  { key: 'xs', label: 'xs' },
+const SCALE_ROWS: { key: 'h1' | 'h2' | 'h3' | 'body' | 'small' | 'xs'; tag: string }[] = [
+  { key: 'h1',    tag: 'H1' },
+  { key: 'h2',    tag: 'H2' },
+  { key: 'h3',    tag: 'H3' },
+  { key: 'body',  tag: 'Bd' },
+  { key: 'small', tag: 'sm' },
+  { key: 'xs',    tag: 'xs' },
+]
+
+const LOCK_PILLS: { key: 'heading' | 'body' | 'scale'; label: string }[] = [
+  { key: 'heading', label: 'Heading' },
+  { key: 'body',    label: 'Body' },
+  { key: 'scale',   label: 'Scale' },
 ]
 
 export function TypographySpecimen() {
   const { pairing, scale, locks } = useTypography()
   const { toggleLock } = useTypographyActions()
+  const [headingText, setHeadingText] = useState('The quick brown fox jumps over')
+  const [bodyText, setBodyText] = useState('How vexingly quick daft zebras jump!')
 
   if (!pairing || !scale) return null
 
   return (
     <div className={styles.section}>
-      <div className={styles.fontNames}>
-        <span className={styles.fontNameLabel}>
-          Heading: <strong>{pairing.heading}</strong> \u00b7 Body: <strong>{pairing.body}</strong>
-        </span>
-        <div className={styles.lockRow}>
+      {/* Section identity — mirrors GeneratorPanel sectionTitle/sectionResult */}
+      <span className={styles.sectionTitle}>Typography</span>
+      <span className={styles.sectionResult}>{pairing.heading} + {pairing.body}</span>
+
+      {/* Lock pills — same grammar as RecipePillRow */}
+      <div className={styles.controls} role="group" aria-label="Typography locks">
+        {LOCK_PILLS.map(({ key, label }) => (
           <button
-            className={`${styles.lockBtn} ${locks.heading ? styles.locked : ''}`}
-            onClick={() => toggleLock('heading')}
-            title={locks.heading ? 'Unlock heading font' : 'Lock heading font'}
-            aria-pressed={locks.heading}
+            key={key}
+            className={`${styles.pill} ${locks[key] ? styles.pillActive : ''}`}
+            onClick={() => toggleLock(key)}
+            aria-pressed={locks[key]}
+            title={locks[key] ? `Unlock ${label.toLowerCase()} font` : `Lock ${label.toLowerCase()} font`}
           >
-            {locks.heading ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
-            Heading
+            {locks[key]
+              ? <Lock size={10} strokeWidth={2.5} />
+              : <LockOpen size={10} strokeWidth={2.5} />}
+            {label}
           </button>
-          <button
-            className={`${styles.lockBtn} ${locks.body ? styles.locked : ''}`}
-            onClick={() => toggleLock('body')}
-            title={locks.body ? 'Unlock body font' : 'Lock body font'}
-            aria-pressed={locks.body}
-          >
-            {locks.body ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
-            Body
-          </button>
-          <button
-            className={`${styles.lockBtn} ${locks.scale ? styles.locked : ''}`}
-            onClick={() => toggleLock('scale')}
-            title={locks.scale ? 'Unlock scale ratio' : 'Lock scale ratio'}
-            aria-pressed={locks.scale}
-          >
-            {locks.scale ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
-            Scale
-          </button>
+        ))}
+      </div>
+
+      {/* Editable specimen inputs */}
+      <div className={styles.inputs}>
+        <div className={styles.inputRow}>
+          <span className={styles.inputTag}>Hd</span>
+          <input
+            className={styles.input}
+            value={headingText}
+            onChange={e => setHeadingText(e.target.value)}
+            placeholder="Heading specimen text…"
+            aria-label="Heading specimen text"
+            style={{ fontFamily: `"${pairing.heading}", Georgia, serif` }}
+          />
+        </div>
+        <div className={styles.inputRow}>
+          <span className={styles.inputTag}>Bd</span>
+          <input
+            className={styles.input}
+            value={bodyText}
+            onChange={e => setBodyText(e.target.value)}
+            placeholder="Body specimen text…"
+            aria-label="Body specimen text"
+            style={{ fontFamily: `"${pairing.body}", sans-serif` }}
+          />
         </div>
       </div>
 
-      <div
-        className={styles.heading}
-        style={{ fontFamily: `"${pairing.heading}", serif` }}
-        aria-label="Heading specimen"
-      >
-        {SPECIMEN_TEXT}
-      </div>
-
-      <div
-        className={styles.body}
-        style={{ fontFamily: `"${pairing.body}", sans-serif` }}
-        aria-label="Body specimen"
-      >
-        How vexingly quick daft zebras jump! Pack my box with five dozen liquor jugs.
-      </div>
-
-      <div className={styles.scalePills} role="list" aria-label="Type scale">
-        {SCALE_PILLS.map(({ key, label }) => {
+      {/* Full type scale rows */}
+      <div className={styles.scaleRows} role="list" aria-label="Type scale">
+        {SCALE_ROWS.map(({ key, tag }, index) => {
           const step = scale[key] as TypeScaleStep | undefined
           if (!step) return null
+          const isHeading = HEADING_KEYS.has(key)
+          const showDivider = index === 3 // gap between headings and body levels
+
           return (
-            <div key={key} className={styles.pill} role="listitem">
-              <span className={styles.pillLabel}>{label}</span>
-              <span>{Math.round(step.size)}px</span>
-              <span>\u00b7</span>
-              <span>{step.weight}</span>
+            <div key={key} role="listitem">
+              {showDivider && <div className={styles.scaleDivider} aria-hidden="true" />}
+              <div className={styles.scaleRow}>
+                <span className={styles.scaleTag}>{tag}</span>
+                <span
+                  className={styles.scaleText}
+                  style={{
+                    fontFamily: isHeading
+                      ? `"${pairing.heading}", Georgia, serif`
+                      : `"${pairing.body}", sans-serif`,
+                    fontSize: `${step.size}px`,
+                    fontWeight: step.weight,
+                    letterSpacing: key === 'h1' ? '-0.02em' : key === 'h2' ? '-0.01em' : undefined,
+                  }}
+                >
+                  {isHeading ? headingText : bodyText}
+                </span>
+                <span className={styles.scaleMeta}>{Math.round(step.size)}px·{step.weight}</span>
+              </div>
             </div>
           )
         })}
