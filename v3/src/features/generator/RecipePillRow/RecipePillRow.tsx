@@ -14,37 +14,30 @@ const TYPE_PILLS: { type: PrimaryType; label: string }[] = [
 ]
 
 export function RecipePillRow() {
-  const { pinnedPrimaryType, pinnedRecipeId, activeRecipe } = useColor()
+  const { pinnedPrimaryType, pinnedRecipeId } = useColor()
   const { pinPrimaryType } = useColorActions()
 
   const isUnpinned = pinnedPrimaryType === null && pinnedRecipeId === null
 
   return (
-    <>
-      <div className={styles.row} role="group" aria-label="Color harmony type">
+    <div className={styles.row} role="group" aria-label="Color harmony type">
+      <button
+        className={`${styles.pill} ${styles.accent} ${isUnpinned ? styles.active : ''}`}
+        onClick={() => pinPrimaryType(null)}
+        aria-pressed={isUnpinned}
+      >
+        Any
+      </button>
+      {TYPE_PILLS.map(({ type, label }) => (
         <button
-          className={`${styles.pill} ${styles.any} ${isUnpinned ? styles.active : ''}`}
-          onClick={() => pinPrimaryType(null)}
-          aria-pressed={isUnpinned}
+          key={type}
+          className={`${styles.pill} ${pinnedPrimaryType === type ? styles.active : ''}`}
+          onClick={() => pinPrimaryType(pinnedPrimaryType === type ? null : type)}
+          aria-pressed={pinnedPrimaryType === type}
         >
-          Any
+          {label}
         </button>
-        {TYPE_PILLS.map(({ type, label }) => (
-          <button
-            key={type}
-            className={`${styles.pill} ${pinnedPrimaryType === type ? styles.active : ''}`}
-            onClick={() => pinPrimaryType(pinnedPrimaryType === type ? null : type)}
-            aria-pressed={pinnedPrimaryType === type}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      {activeRecipe && (
-        <div className={styles.recipeLabel} aria-live="polite">
-          {activeRecipe.label} ↻
-        </div>
-      )}
-    </>
+      ))}
+    </div>
   )
 }
