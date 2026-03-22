@@ -1,6 +1,6 @@
 import type { JSX } from 'react'
 import styles from './AppHeader.module.css'
-import { useUI, useUIActions, useColor, useTypography, useStore, temporalUndo, temporalRedo } from '@/store'
+import { useUI, useUIActions, useStore, temporalUndo, temporalRedo } from '@/store'
 import type { AppTheme } from '@/store/ui'
 import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download } from 'lucide-react'
 
@@ -20,8 +20,6 @@ const THEME_OPTIONS: ThemeOption[] = [
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
   const { setTheme, toggleSessionsDrawer } = useUIActions()
-  const { activeRecipe } = useColor()
-  const { pairing } = useTypography()
 
   // Access temporal store for undo/redo enabled state
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,20 +33,11 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
     ? activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
     : null
 
-  const harmonyBadge = mode === 'generator' && activeRecipe ? activeRecipe.label : null
-  const pairingLabel = mode === 'generator' && pairing ? `${pairing.heading} + ${pairing.body}` : null
-
   return (
     <header className={styles.header}>
       <div className={styles.wordmark}>palette.</div>
 
       <div className={styles.contextArea}>
-        {harmonyBadge && (
-          <span className={styles.harmonyBadge}>{harmonyBadge}</span>
-        )}
-        {pairingLabel && (
-          <span className={styles.pairingLabel}>{pairingLabel}</span>
-        )}
         {contextLabel && (
           <span className={styles.contextBreadcrumb}>
             <span className={styles.breadcrumbSep}>/ </span>
