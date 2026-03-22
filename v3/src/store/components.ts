@@ -1,4 +1,4 @@
-import type { IconLibraryName, ComponentName, ComponentTokenMap } from '@/core/components/types'
+import type { IconLibraryName, ComponentVariantKey, ComponentTokenMap } from '@/core/components/types'
 
 export interface ComponentsState {
   iconLibrary: IconLibraryName
@@ -7,8 +7,8 @@ export interface ComponentsState {
 
 export interface ComponentsActions {
   setIconLibrary: (library: IconLibraryName) => void
-  overrideComponentToken: (component: ComponentName, key: string, value: string) => void
-  resetComponentToken: (component: ComponentName, key: string) => void
+  overrideComponentToken: (component: ComponentVariantKey, key: string, value: string) => void
+  resetComponentToken: (component: ComponentVariantKey, key: string) => void
   resetAllComponentOverrides: () => void
 }
 
@@ -25,7 +25,7 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
       set({ components: { ...state.components, iconLibrary: library } })
     },
 
-    overrideComponentToken(component: ComponentName, key: string, value: string) {
+    overrideComponentToken(component: ComponentVariantKey, key: string, value: string) {
       const state = get() as { components: ComponentsState }
       set({
         components: {
@@ -41,7 +41,7 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
       })
     },
 
-    resetComponentToken(component: ComponentName, key: string) {
+    resetComponentToken(component: ComponentVariantKey, key: string) {
       const state = get() as { components: ComponentsState }
       const existing = state.components.overrides[component]
       if (!existing) return
