@@ -1,35 +1,35 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--ui-space-6);
 }
 
 .sectionTitle {
   font-family: var(--font-heading);
-  font-size: var(--font-size-label);
+  font-size: var(--ui-text-sm);
   font-weight: 600;
-  color: var(--color-text-secondary);
+  color: var(--color-on-surface-subtle);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding-bottom: var(--spacing-xs);
+  padding-bottom: var(--ui-space-2);
   border-bottom: 1px solid var(--color-border);
 }
 
 .description {
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
   margin: 0;
 }
 
 .accordionList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--ui-space-2);
 }
 
 .accordion {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--ui-radius-4);
   overflow: hidden;
 }
 
@@ -37,11 +37,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--ui-space-4) var(--ui-space-6);
   background: var(--color-surface);
   cursor: pointer;
   user-select: none;
-  transition: background 0.15s;
+  transition: background var(--ui-duration-3);
 }
 
 .accordionHeader:hover {
@@ -50,24 +50,30 @@
 
 .accordionLabel {
   font-family: var(--font-heading);
-  font-size: var(--font-size-body);
+  font-size: var(--ui-text-md);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
   text-transform: capitalize;
 }
 
 .overrideCount {
-  font-size: var(--font-size-label);
+  font-size: var(--ui-text-sm);
   color: var(--color-interactive);
   background: var(--color-brand-100);
   border-radius: var(--radius-full);
-  padding: 0 6px;
+  padding: 0 var(--ui-space-3);
   line-height: 18px;
 }
 
+.accordionMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+}
+
 .chevron {
-  color: var(--color-text-muted);
-  transition: transform 0.2s;
+  color: var(--color-on-surface-subtle);
+  transition: transform var(--ui-duration-4);
 }
 
 .chevronOpen {
@@ -92,31 +98,31 @@
 
 .tokenKey {
   background: var(--color-surface);
-  padding: var(--spacing-xs) var(--spacing-md);
+  padding: var(--ui-space-2) var(--ui-space-6);
   font-family: var(--font-mono, monospace);
-  font-size: var(--font-size-label);
-  color: var(--color-text-secondary);
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
   display: flex;
   align-items: center;
 }
 
 .tokenValue {
   background: var(--color-surface);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--ui-space-2) var(--ui-space-4);
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--ui-space-2);
 }
 
 .autoPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-label);
-  color: var(--color-text-muted);
-  background: var(--color-neutral-100);
+  gap: var(--ui-space-2);
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  background: var(--color-surface-raised);
   border-radius: var(--radius-full);
-  padding: 0 8px;
+  padding: 0 var(--ui-space-4);
   height: 20px;
   flex-shrink: 0;
 }
@@ -124,12 +130,12 @@
 .overriddenPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-label);
+  gap: var(--ui-space-2);
+  font-size: var(--ui-text-sm);
   color: var(--color-interactive);
   background: var(--color-brand-100);
   border-radius: var(--radius-full);
-  padding: 0 8px;
+  padding: 0 var(--ui-space-4);
   height: 20px;
   flex-shrink: 0;
 }
@@ -137,13 +143,14 @@
 .tokenInput {
   flex: 1;
   font-family: var(--font-mono, monospace);
-  font-size: var(--font-size-label);
-  padding: 2px 6px;
+  font-size: var(--ui-text-sm);
+  padding: var(--ui-space-1) var(--ui-space-3);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--ui-radius-2);
   background: var(--color-background);
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
   min-width: 0;
+  min-height: 28px;
 }
 
 .tokenInput:focus {
@@ -156,9 +163,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-text-muted);
+  color: var(--color-on-surface-subtle);
   padding: 0;
-  font-size: 14px;
+  font-size: var(--ui-text-md);
   line-height: 1;
   display: flex;
   align-items: center;
@@ -166,17 +173,17 @@
 }
 
 .resetBtn:hover {
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
 }
 
 .tokenColorSwatch {
   width: 18px;
   height: 18px;
-  border-radius: var(--radius-sm, 3px);
+  border-radius: var(--ui-radius-2);
   border: 1px solid var(--color-border);
   cursor: pointer;
   flex-shrink: 0;
-  transition: transform 0.1s;
+  transition: transform var(--ui-duration-1);
 }
 
 .tokenColorSwatch:hover {
@@ -185,16 +192,36 @@
 }
 
 .previewWrapper {
-  margin-top: var(--spacing-md);
-  padding-top: var(--spacing-md);
+  margin-top: var(--ui-space-6);
+  padding-top: var(--ui-space-6);
   border-top: 1px solid var(--color-border);
 }
 
 .previewLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--ui-space-4);
   display: block;
   font-family: var(--font-body, sans-serif);
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--ui-space-6);
+}
+
+/* ---- Variant sub-sections within an accordion ---- */
+.variantSection {
+  border-top: 1px solid var(--color-border);
+}
+
+.variantSection:first-child {
+  border-top: none;
+}
+
+.variantHeader {
+  padding: var(--ui-space-2) var(--ui-space-6);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+  color: var(--color-on-surface-subtle);
+  background: var(--color-background);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: sans-serif;
 }
