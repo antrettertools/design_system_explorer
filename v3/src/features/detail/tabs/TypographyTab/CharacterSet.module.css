@@ -1,34 +1,34 @@
-.section { margin-bottom: 24px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .fontBlock {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-8);
+  margin-bottom: var(--ui-space-6);
 }
 
 .fontName {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 10px;
+  margin-bottom: var(--ui-space-5);
   font-family: sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .charset {
-  font-size: 16px;
+  font-size: var(--font-size-body, 16px); /* reflects user's body type scale */
   line-height: 1.8;
   letter-spacing: 0.03em;
   color: var(--color-on-surface);
@@ -39,12 +39,12 @@
 
 .weightRow {
   display: flex;
-  gap: 12px;
-  margin-top: 8px;
+  gap: var(--ui-space-6);
+  margin-top: var(--ui-space-4);
   flex-wrap: wrap;
 }
 
 .weightSample {
-  font-size: 14px;
+  font-size: var(--font-size-small, 14px); /* reflects user's small type scale */
   color: var(--color-on-surface);
 }

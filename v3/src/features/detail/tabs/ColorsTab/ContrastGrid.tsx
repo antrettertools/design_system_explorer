@@ -1,4 +1,5 @@
 import { useColor } from '@/store'
+import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
 import styles from './ContrastGrid.module.css'
 
 interface ContrastPair {
@@ -71,8 +72,8 @@ export function ContrastGrid() {
       slots
         .filter(s => s.id !== slot.id)
         .map(bg => ({
-          fgLabel: `${slot.role} / ${bg.role}`,
-          bgLabel: bg.role,
+          fgLabel: `${slot.name ?? ROLE_LABELS[slot.role] ?? slot.role} / ${bg.name ?? ROLE_LABELS[bg.role] ?? bg.role}`,
+          bgLabel: bg.name ?? ROLE_LABELS[bg.role] ?? bg.role,
           fgHex: slot.hex,
           bgHex: bg.hex,
         })),
@@ -97,7 +98,7 @@ export function ContrastGrid() {
                 <div className={styles.swatch} style={{ background: pair.fgHex }} />
                 <span className={styles.cellLabel}>{pair.fgLabel}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div className={styles.cellRight}>
                 <div className={styles.badges}>
                   <span className={`${styles.badge} ${levels.aaBodyText ? styles.badgePass : styles.badgeFail}`}>AA</span>
                   {levels.aaaBodyText && <span className={`${styles.badge} ${styles.badgeAAA}`}>AAA</span>}

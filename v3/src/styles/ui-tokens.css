@@ -1,0 +1,87 @@
+/*
+ * UI Chrome Tokens
+ * ================
+ * Static CSS custom properties for the app shell, panels, tabs, and controls.
+ * These are intentionally SEPARATE from the user's design system tokens
+ * (--color-*, --spacing-*, --radius-*, --font-size-*, etc.) which are
+ * user-configurable and generated at runtime by buildTokenMap().
+ *
+ * Rules:
+ *   - Never export these in the design system output formats
+ *   - Never reference user design system tokens here
+ *   - All values are static — no JS generation required
+ */
+
+:root {
+
+  /* ─── Typography ────────────────────────────────────────────
+   * For app chrome only: buttons, tabs, labels, breadcrumbs,
+   * drawer headers, badge text, monospace displays.
+   * Do NOT use for design-system content (use --font-size-* there).
+   */
+  --ui-text-sm:   13px;   /* primary chrome: buttons, tabs, labels, badges, code */
+  --ui-text-md:   14px;   /* secondary chrome: panel titles, breadcrumbs, control labels */
+  --ui-text-lg:   15px;   /* larger interactive elements: icon emoji buttons */
+  --ui-text-xl:   18px;   /* wordmark */
+  --ui-text-2xl:  20px;   /* overlay/drawer icon buttons and close controls */
+
+  /* ─── Monospace font stack ──────────────────────────────────
+   * For token displays, code blocks, hex values, and inputs.
+   */
+  --ui-font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+
+  /* ─── Spacing ───────────────────────────────────────────────
+   * 4px-grid numeric scale. Use for gap, padding, margin in chrome.
+   * These are FIXED values — they do not track the user's spacing tokens.
+   */
+  --ui-space-1:   2px;
+  --ui-space-2:   4px;
+  --ui-space-3:   6px;
+  --ui-space-4:   8px;
+  --ui-space-5:  10px;
+  --ui-space-6:  12px;
+  --ui-space-7:  14px;
+  --ui-space-8:  16px;
+  --ui-space-9:  20px;
+  --ui-space-10: 24px;
+
+  /* ─── Border Radii ──────────────────────────────────────────
+   * Numeric scale. Values are normalized from the actual usage
+   * in the codebase (e.g. 3/4/5px all collapse to --ui-radius-2).
+   * These are FIXED — they do not track the user's radius tokens.
+   */
+  --ui-radius-1:    2px;     /* chart bar corners, absolute minimum rounding */
+  --ui-radius-2:    4px;     /* normalizes 3, 4, 5px — small interactive elements */
+  --ui-radius-3:    6px;     /* standard buttons, form controls, tabs */
+  --ui-radius-4:    8px;     /* cards, popovers, color slot cards */
+  --ui-radius-5:   12px;     /* panels, modals, bottom sheets (normalizes 12, 14px) */
+  --ui-radius-6:   16px;     /* large bottom sheets, full-rounded areas (normalizes 16, 20px) */
+  --ui-radius-full: 9999px;  /* pills and fully-rounded elements */
+
+  /* ─── Fixed Sizes ───────────────────────────────────────────
+   * Named dimensions for recurring structural elements.
+   * Change here → changes everywhere consistently.
+   */
+  --ui-size-header:   48px;   /* AppHeader + DetailMode top bar height */
+  --ui-size-btn-sm:   28px;   /* small buttons, chips (GeneratorFooter, vibeChip) */
+  --ui-size-btn-md:   32px;   /* standard action buttons (themeToggle, themeBtn) */
+  --ui-size-btn-lg:   36px;   /* primary CTA buttons (exportBtn, copyBtn, navCta) */
+  --ui-size-btn-xl:   40px;   /* mobile touch-friendly buttons (generateMobile) */
+  --ui-size-divider:   4px;   /* SplitPane drag handle width */
+  --ui-size-drawer:  360px;   /* SessionsDrawer slide-in panel width */
+
+  /* ─── Transition Durations ──────────────────────────────────
+   * Fixed for app chrome. Independent from the user's motion tokens
+   * so chrome always feels snappy regardless of the user's design system.
+   *
+   * Note: --ui-bp-* breakpoints (768px, 900px) cannot be used in
+   * @media queries as CSS custom properties, so they appear as
+   * inline comments at each usage site.
+   */
+  --ui-duration-1:  0.10s;   /* instant micro-feedback (item hover, toggle) */
+  --ui-duration-2:  0.12s;   /* fast transitions (button state, icon changes) */
+  --ui-duration-3:  0.15s;   /* standard hover/focus feedback (~40 uses) */
+  --ui-duration-4:  0.20s;   /* overlay/drawer entry animations */
+  --ui-duration-5:  0.30s;   /* mobile panel slides, longer reveals */
+
+}

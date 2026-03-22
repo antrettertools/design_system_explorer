@@ -94,14 +94,15 @@ useStore.subscribe(
     pairing: state.typography.pairing,
     scale: state.typography.scale,
     dataVizN: state.color.dataVizN,
+    stateOverrides: state.color.stateOverrides,
     spacing: state.spacing,
     effects: state.effects,
     componentOverrides: state.components.overrides,
     theme: state.ui.theme,
   }),
-  ({ slots, pairing, scale, dataVizN, spacing, effects, componentOverrides, theme }) => {
+  ({ slots, pairing, scale, dataVizN, stateOverrides, spacing, effects, componentOverrides, theme }) => {
     if (slots.length === 0) return
-    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides }, theme)
+    const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides, stateOverrides }, theme)
     _cachedTokenMap = tokens
     injectTokensToDOM(tokens, theme)
   },

@@ -1,4 +1,7 @@
-import { useColor, useColorTokens } from '@/store'
+import { useRef, useState } from 'react'
+import { useColor, useColorActions, useColorTokens } from '@/store'
+import type { StateColorPrefix } from '@/store/color'
+import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import styles from './SemanticRolesSection.module.css'
 
 const BRAND_ROLES = [
@@ -20,16 +23,19 @@ const NEUTRAL_ROLES = [
   'border-strong',
 ] as const
 
-const STATE_PREFIXES = ['error', 'warning', 'success', 'info'] as const
+const STATE_PREFIXES: StateColorPrefix[] = ['error', 'warning', 'success', 'info']
 
 function getCssVar(name: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
 }
 
 export function SemanticRolesSection() {
-  // Subscribe to color changes for reactivity
   useColor()
   const tokenMap = useColorTokens()
+  const { stateOverrides } = useColor()
+  const { setStateColor, resetStateColor } = useColorActions()
+  const [openPicker, setOpenPicker] = useState<StateColorPrefix | null>(null)
+  const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   return (
     <div className={styles.section}>
@@ -73,19 +79,46 @@ export function SemanticRolesSection() {
         )
       })}
 
-      {/* State/mood roles */}
-      <div className={styles.subsectionTitle} style={{ marginTop: 16 }}>State & Mood</div>
+      {/* State/mood roles — editable */}
+      <div className={`${styles.subsectionTitle} ${styles.subsectionTitleSpaced}`}>State & Mood</div>
       <div className={styles.stateGrid}>
         {STATE_PREFIXES.map(prefix => {
           const baseHex = getCssVar(`--color-${prefix}`)
           const containerHex = getCssVar(`--color-${prefix}-container`)
+          const isOverridden = prefix in stateOverrides
           return (
-            <div key={prefix} className={styles.stateCard}>
+            <div key={prefix} className={`${styles.stateCard} ${isOverridden ? styles.stateCardOverridden : ''}`}>
               <div className={styles.statePair}>
-                <div className={styles.stateSwatch} style={{ background: baseHex }} title={`${prefix}: ${baseHex}`} />
-                <div className={styles.stateSwatch} style={{ background: containerHex }} title={`${prefix}-container: ${containerHex}`} />
+                <div
+                  ref={el => { swatchRefs.current[prefix] = el }}
+                  className={styles.stateSwatch}
+                  style={{ background: baseHex, cursor: 'pointer' }}
+                  onClick={() => setOpenPicker(openPicker === prefix ? null : prefix)}
+                  title={`Edit ${prefix} color`}
+                />
+                <div className={styles.stateSwatch} style={{ background: containerHex }} title={`${prefix}-container`} />
               </div>
-              <div className={styles.stateLabel}>{prefix}</div>
+              <div className={styles.stateFooter}>
+                <span className={styles.stateLabel}>{prefix}</span>
+                {isOverridden && (
+                  <button
+                    className={styles.stateResetBtn}
+                    onClick={() => resetStateColor(prefix)}
+                    title="Reset to auto-derived"
+                    aria-label={`Reset ${prefix} color`}
+                  >
+                    ↺
+                  </button>
+                )}
+              </div>
+              {openPicker === prefix && (
+                <ColorPickerPopover
+                  hex={baseHex}
+                  onChange={hex => setStateColor(prefix, hex)}
+                  onClose={() => setOpenPicker(null)}
+                  anchorRef={{ current: swatchRefs.current[prefix] } as React.RefObject<HTMLElement>}
+                />
+              )}
             </div>
           )
         })}

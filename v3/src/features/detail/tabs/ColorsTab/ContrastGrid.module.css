@@ -1,81 +1,91 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .grid {
   display: grid;
-  gap: 3px;
+  gap: var(--ui-space-1);
 }
 
 .cell {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 10px;
-  border-radius: 5px;
-  font-size: 13px;
-  font-family: monospace;
+  padding: var(--ui-space-3) var(--ui-space-5);
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  transition: outline var(--ui-duration-2);
+  outline: 2px solid transparent;
+}
+
+.cell:hover { outline-color: rgba(128, 128, 128, 0.25); }
+
+.cellRight {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
 }
 
 .cellColors {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--ui-space-3);
 }
 
 .swatch {
   width: 16px;
   height: 16px;
-  border-radius: 3px;
+  border-radius: var(--ui-radius-2);
   border: 1px solid rgba(0,0,0,0.1);
   flex-shrink: 0;
 }
 
 .cellLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: inherit;
   font-family: sans-serif;
 }
 
 .badges {
   display: flex;
-  gap: 4px;
+  gap: var(--ui-space-2);
 }
 
 .badge {
-  font-size: 13px;
-  padding: 1px 5px;
-  border-radius: 3px;
+  font-size: var(--ui-text-sm);
+  padding: 1px var(--ui-space-2);
+  border-radius: var(--ui-radius-2);
   font-family: sans-serif;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
 
 .badgePass {
-  background: #dcfce7;
-  color: #15803d;
+  background: var(--color-success-container, #dcfce7);
+  color: var(--color-success, #15803d);
 }
 
 .badgeFail {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--color-error-container, #fee2e2);
+  color: var(--color-error, #dc2626);
 }
 
 .badgeAAA {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: var(--color-info-container, #dbeafe);
+  color: var(--color-info, #1d4ed8);
 }
 
 .ratio {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
-  font-family: monospace;
-  margin-left: 8px;
+  font-family: var(--ui-font-mono);
+  margin-left: var(--ui-space-4);
 }

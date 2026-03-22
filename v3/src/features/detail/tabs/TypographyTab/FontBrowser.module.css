@@ -1,14 +1,14 @@
-.browser { margin-bottom: 24px; }
+.browser { margin-bottom: var(--ui-space-10); }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: var(--ui-space-6);
 }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
@@ -17,14 +17,14 @@
 
 .modeSwitch {
   display: flex;
-  gap: 4px;
+  gap: var(--ui-space-2);
 }
 
 .modeBtn {
-  padding: 3px 10px;
+  padding: var(--ui-space-1) var(--ui-space-5);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
   background: none;
   cursor: pointer;
   color: var(--color-on-surface-subtle);
@@ -40,17 +40,17 @@
 
 .searchRow {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: var(--ui-space-4);
+  margin-bottom: var(--ui-space-6);
 }
 
 .search {
   flex: 1;
-  height: 32px;
-  padding: 0 10px;
+  height: var(--ui-size-btn-md);
+  padding: 0 var(--ui-space-5);
   border: 1px solid var(--color-border);
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   background: var(--color-surface);
   color: var(--color-on-surface);
   font-family: sans-serif;
@@ -64,27 +64,27 @@
 /* Quick picks row */
 .quickPicks {
   display: flex;
-  gap: 6px;
+  gap: var(--ui-space-3);
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: var(--ui-space-4);
   scrollbar-width: none;
-  margin-bottom: 8px;
+  margin-bottom: var(--ui-space-4);
 }
 
 .quickPicks::-webkit-scrollbar { display: none; }
 
 .quickPick {
   flex-shrink: 0;
-  padding: 5px 10px;
+  padding: var(--ui-space-2) var(--ui-space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface);
   white-space: nowrap;
-  transition: all 0.15s;
+  transition: all var(--ui-duration-3);
 }
 
 .quickPick:hover {
@@ -93,8 +93,8 @@
 }
 
 .quickPickLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
   display: block;
-  margin-bottom: 2px;
+  margin-bottom: var(--ui-space-1);
 }

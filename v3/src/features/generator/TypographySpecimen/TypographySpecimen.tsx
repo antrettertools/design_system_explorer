@@ -1,5 +1,6 @@
 import { useTypography, useTypographyActions } from '@/store'
 import type { TypeScaleStep } from '@/core/typography/types'
+import { Lock, LockOpen } from 'lucide-react'
 import styles from './TypographySpecimen.module.css'
 
 const SPECIMEN_TEXT = 'The quick brown fox jumps over the lazy dog'
@@ -32,7 +33,8 @@ export function TypographySpecimen() {
             title={locks.heading ? 'Unlock heading font' : 'Lock heading font'}
             aria-pressed={locks.heading}
           >
-            {locks.heading ? '\uD83D\uDD12' : '\uD83D\uDD13'} Heading
+            {locks.heading ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
+            Heading
           </button>
           <button
             className={`${styles.lockBtn} ${locks.body ? styles.locked : ''}`}
@@ -40,7 +42,8 @@ export function TypographySpecimen() {
             title={locks.body ? 'Unlock body font' : 'Lock body font'}
             aria-pressed={locks.body}
           >
-            {locks.body ? '\uD83D\uDD12' : '\uD83D\uDD13'} Body
+            {locks.body ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
+            Body
           </button>
           <button
             className={`${styles.lockBtn} ${locks.scale ? styles.locked : ''}`}
@@ -48,7 +51,8 @@ export function TypographySpecimen() {
             title={locks.scale ? 'Unlock scale ratio' : 'Lock scale ratio'}
             aria-pressed={locks.scale}
           >
-            {locks.scale ? '\uD83D\uDD12' : '\uD83D\uDD13'} Scale
+            {locks.scale ? <Lock size={10} strokeWidth={2.5} /> : <LockOpen size={10} strokeWidth={2.5} />}
+            Scale
           </button>
         </div>
       </div>

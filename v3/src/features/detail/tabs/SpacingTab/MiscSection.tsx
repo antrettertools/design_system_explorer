@@ -16,7 +16,7 @@ export function MiscSection() {
         {config.borderWidths.map((w, i) => (
           <div key={w} className={styles.tokenRow}>
             <span className={styles.tokenName}>--border-width-{i + 1}</span>
-            <div style={{ height: `${w}px`, width: 60, background: 'var(--color-on-surface, #333)' }} />
+            <div className={styles.borderWidthBar} style={{ height: `${w}px` }} />
             <span className={styles.tokenValue}>{w}px</span>
           </div>
         ))}
@@ -29,7 +29,7 @@ export function MiscSection() {
           {ICON_ORDER.map(step => {
             const size = config.iconSizes[step]
             return (
-              <div key={step} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+              <div key={step} className={styles.iconSizeItem}>
                 <div
                   className={styles.iconBox}
                   style={{ width: size, height: size }}
@@ -48,7 +48,7 @@ export function MiscSection() {
         <div className={styles.subsectionLabel}>Opacity Scale</div>
         <div className={styles.opacityRow}>
           {config.opacityScale.map((opacity, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <div key={i} className={styles.opacityScaleItem}>
               <div
                 className={styles.opacitySwatch}
                 style={{ opacity }}

@@ -1,46 +1,46 @@
 .section { margin-bottom: 28px; }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .nControl {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  font-size: 13px;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-6);
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
 }
 
 .nControl select {
-  padding: 3px 8px;
+  padding: var(--ui-space-1) var(--ui-space-4);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
   background: var(--color-surface);
   color: var(--color-on-surface);
 }
 
 .paramHint {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   opacity: 0.6;
   color: var(--color-on-surface-subtle);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
 }
 
 .palette {
   display: flex;
-  gap: 4px;
-  margin-bottom: 10px;
+  gap: var(--ui-space-2);
+  margin-bottom: var(--ui-space-5);
   height: 44px;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   overflow: hidden;
 }
 
@@ -48,7 +48,7 @@
   flex: 1;
   border-radius: 0;
   cursor: pointer;
-  transition: flex 0.15s;
+  transition: flex var(--ui-duration-3);
 }
 
 .paletteCell:hover { flex: 1.5; }
@@ -57,16 +57,16 @@
 .chart {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: 10px 12px;
+  border-radius: var(--ui-radius-3);
+  padding: var(--ui-space-5) var(--ui-space-6);
   display: flex;
   align-items: flex-end;
-  gap: 4px;
+  gap: var(--ui-space-2);
   height: 64px;
 }
 
 .bar {
   flex: 1;
-  border-radius: 2px 2px 0 0;
-  transition: height 0.3s ease;
+  border-radius: var(--ui-radius-1) var(--ui-radius-1) 0 0;
+  transition: height var(--ui-duration-5) ease;
 }

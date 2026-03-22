@@ -1,58 +1,58 @@
-.section { margin-bottom: 24px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-8);
 }
 
 .scoreRow {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: var(--ui-space-6);
+  margin-bottom: var(--ui-space-6);
 }
 
 .score {
-  font-size: 36px;
+  font-size: 36px; /* hero score display — intentional large size */
   font-weight: 800;
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface);
   line-height: 1;
 }
 
 .scoreLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
 }
 
 .grade {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: var(--ui-space-1) var(--ui-space-4);
+  border-radius: var(--ui-radius-2);
 }
 
-.gradeGood { background: #dcfce7; color: #15803d; }
-.gradeMedium { background: #fef3c7; color: #d97706; }
-.gradePoor { background: #fee2e2; color: #dc2626; }
+.gradeGood   { background: var(--color-success-container, #dcfce7); color: var(--color-success, #15803d); }
+.gradeMedium { background: var(--color-warning-container, #fef3c7); color: var(--color-warning, #d97706); }
+.gradePoor   { background: var(--color-error-container, #fee2e2);   color: var(--color-error, #dc2626); }
 
 .sampleText {
-  font-size: 16px;
+  font-size: var(--font-size-body, 16px);
   line-height: 1.6;
-  padding: 10px 12px;
-  border-radius: 6px;
+  padding: var(--ui-space-5) var(--ui-space-6);
+  border-radius: var(--ui-radius-3);
   background: var(--color-background);
   color: var(--color-on-surface);
   font-family: var(--font-body, sans-serif);

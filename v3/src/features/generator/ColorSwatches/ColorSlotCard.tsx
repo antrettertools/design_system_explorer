@@ -3,9 +3,10 @@ import { useColorActions } from '@/store'
 import type { ColorSlot } from '@/core/color/types'
 import { ShadeStrip } from './ShadeStrip'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
+import { Lock, LockOpen, X } from 'lucide-react'
 import styles from './ColorSlotCard.module.css'
 
-const ROLE_LABELS: Record<string, string> = {
+export const ROLE_LABELS: Record<string, string> = {
   brand: 'Brand',
   secondary: 'Secondary',
   accentA: 'Accent A',
@@ -34,10 +35,31 @@ export function ColorSlotCard({
   onDragOver,
   onDrop,
 }: ColorSlotCardProps) {
-  const { toggleLock, removeSlot, overrideHex } = useColorActions()
+  const { toggleLock, removeSlot, overrideHex, renameSlot } = useColorActions()
   const isLight = isLightColor(slot.hex)
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [editingName, setEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
   const swatchRef = useRef<HTMLDivElement>(null)
+  const nameInputRef = useRef<HTMLInputElement>(null)
+
+  const displayName = slot.name ?? ROLE_LABELS[slot.role] ?? slot.role
+
+  function startEditing(e: React.MouseEvent) {
+    e.stopPropagation()
+    setNameInput(slot.name ?? '')
+    setEditingName(true)
+    setTimeout(() => nameInputRef.current?.focus(), 0)
+  }
+
+  function commitName() {
+    renameSlot(slot.id, nameInput)
+    setEditingName(false)
+  }
+
+  function cancelEdit() {
+    setEditingName(false)
+  }
 
   return (
     <div
@@ -52,17 +74,41 @@ export function ColorSlotCard({
         ref={swatchRef}
         className={styles.swatch}
         style={{ background: slot.hex }}
-        onClick={() => setPickerOpen(true)}
+        onClick={() => !editingName && setPickerOpen(true)}
       >
         <div className={styles.topRow}>
-          <span className={styles.roleLabel}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
+          {editingName ? (
+            <input
+              ref={nameInputRef}
+              className={styles.roleLabelInput}
+              value={nameInput}
+              placeholder={ROLE_LABELS[slot.role] ?? slot.role}
+              onChange={e => setNameInput(e.target.value)}
+              onBlur={commitName}
+              onKeyDown={e => {
+                if (e.key === 'Enter') { e.preventDefault(); commitName() }
+                if (e.key === 'Escape') { e.preventDefault(); cancelEdit() }
+                e.stopPropagation()
+              }}
+              onClick={e => e.stopPropagation()}
+              maxLength={20}
+            />
+          ) : (
+            <span
+              className={styles.roleLabel}
+              onClick={startEditing}
+              title="Click to rename"
+            >
+              {displayName}
+            </span>
+          )}
           <button
             className={styles.lockBtn}
             onClick={(e) => { e.stopPropagation(); toggleLock(slot.id) }}
             aria-label={slot.locked ? 'Unlock color' : 'Lock color'}
             title={slot.locked ? 'Click to unlock' : 'Click to lock'}
           >
-            {slot.locked ? '🔒' : '🔓'}
+            {slot.locked ? <Lock size={11} strokeWidth={2.5} /> : <LockOpen size={11} strokeWidth={2.5} />}
           </button>
         </div>
         <div className={styles.bottomRow}>
@@ -72,14 +118,14 @@ export function ColorSlotCard({
           <button
             className={styles.removeBtn}
             onClick={(e) => { e.stopPropagation(); removeSlot(slot.id) }}
-            aria-label={`Remove ${ROLE_LABELS[slot.role] ?? slot.role} color`}
+            aria-label={`Remove ${displayName} color`}
             title="Remove color"
           >
-            ×
+            <X size={10} strokeWidth={2.5} />
           </button>
         )}
       </div>
-      {slot.locked && <ShadeStrip hex={slot.hex} role={ROLE_LABELS[slot.role] ?? slot.role} />}
+      {slot.locked && <ShadeStrip hex={slot.hex} role={displayName} />}
       {pickerOpen && (
         <ColorPickerPopover
           hex={slot.hex}

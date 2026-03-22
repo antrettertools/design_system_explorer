@@ -1,4 +1,5 @@
 import { useColor, useColorActions, useUIActions, useTypographyActions } from '@/store'
+import { ArrowRight, Sparkles, Plus } from 'lucide-react'
 import styles from './GeneratorFooter.module.css'
 
 export function GeneratorFooter() {
@@ -22,10 +23,11 @@ export function GeneratorFooter() {
         <button
           className={styles.vibeChip}
           disabled
-          title="Coming soon \u2014 vibe-based generation (Phase 4)"
+          title="Coming soon — vibe-based generation (Phase 4)"
           aria-disabled="true"
         >
-          \u2726 vibe
+          <Sparkles size={12} strokeWidth={1.75} />
+          vibe
         </button>
         <button
           className={styles.addBtn}
@@ -33,14 +35,16 @@ export function GeneratorFooter() {
           disabled={slots.length >= 8}
           aria-label="Add color slot"
         >
-          + Add color
+          <Plus size={13} strokeWidth={2} />
+          Add color
         </button>
         <button
           className={styles.detailBtn}
           onClick={() => setMode('detail')}
           aria-label="Enter detail mode"
         >
-          Detail Mode \u2192
+          Detail Mode
+          <ArrowRight size={13} strokeWidth={2} />
         </button>
       </div>
       <button
@@ -48,14 +52,16 @@ export function GeneratorFooter() {
         onClick={showMobilePreview}
         aria-label="Show live preview"
       >
-        Preview &rarr;
+        Preview
+        <ArrowRight size={13} strokeWidth={2} />
       </button>
       <button
         className={styles.generateMobile}
         onClick={handleGenerate}
         aria-label="Generate new palette"
       >
-        Generate \u2726
+        Generate
+        <Sparkles size={14} strokeWidth={1.75} />
       </button>
     </div>
   )

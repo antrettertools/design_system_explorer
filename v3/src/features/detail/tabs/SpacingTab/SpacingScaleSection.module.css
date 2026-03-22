@@ -1,26 +1,26 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .baseUnitRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  font-size: 13px;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-8);
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
 .baseUnitHint {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #aaa);
   opacity: 0.7;
 }
@@ -28,19 +28,19 @@
 .baseUnitToggle {
   display: flex;
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   overflow: hidden;
 }
 
 .unitBtn {
-  padding: 4px 12px;
+  padding: var(--ui-space-2) var(--ui-space-6);
   border: none;
   background: none;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   cursor: pointer;
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle, #888);
-  transition: all 0.15s;
+  transition: all var(--ui-duration-3);
 }
 
 .unitBtn.active {
@@ -49,18 +49,18 @@
   font-weight: 700;
 }
 
-.ruler { display: flex; flex-direction: column; gap: 6px; }
+.ruler { display: flex; flex-direction: column; gap: var(--ui-space-3); }
 
 .rulerRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--ui-space-5);
 }
 
 .stepLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle, #888);
   width: 28px;
   flex-shrink: 0;
@@ -69,19 +69,19 @@
 .bar {
   height: 20px;
   background: var(--color-interactive, #e8543a);
-  border-radius: 3px;
+  border-radius: var(--ui-radius-2);
   opacity: 0.7;
-  transition: width 0.3s ease;
+  transition: width var(--ui-duration-5) ease;
   flex-shrink: 0;
 }
 
 .valueInput {
   width: 52px;
-  padding: 2px 6px;
+  padding: var(--ui-space-1) var(--ui-space-3);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: monospace;
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   background: var(--color-surface, #fff);
   color: var(--color-on-surface, #111);
   text-align: right;
@@ -96,15 +96,15 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #bbb);
-  padding: 0 4px;
+  padding: 0 var(--ui-space-2);
 }
 
 .resetBtn:hover { color: var(--color-interactive, #e8543a); }
 
 .pxLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #bbb);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
 }

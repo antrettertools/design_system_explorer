@@ -1,0 +1,101 @@
+<style>
+.approach-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+.approach { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; cursor: pointer; transition: border-color 0.15s; }
+.approach:hover { border-color: #6366f1; }
+.approach.recommended { border: 2px solid #6366f1; position: relative; }
+.rec-badge { position: absolute; top: -10px; right: 14px; background: #6366f1; color: white; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; }
+.approach-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 6px; }
+.approach-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+.approach-desc { font-size: 12px; color: #475569; line-height: 1.6; margin-bottom: 14px; }
+.scope-list { list-style: none; padding: 0; margin: 0; }
+.scope-list li { font-size: 12px; padding: 3px 0; display: flex; gap: 8px; align-items: flex-start; }
+.dot-yes { color: #059669; font-size: 14px; line-height: 1.2; }
+.dot-no { color: #dc2626; font-size: 14px; line-height: 1.2; }
+.dot-warn { color: #d97706; font-size: 14px; line-height: 1.2; }
+.tradeoff { margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+.tradeoff-title { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin: 2px 2px 2px 0; }
+.tag.effort-sm { background: #d1fae5; color: #065f46; }
+.tag.effort-md { background: #fef3c7; color: #92400e; }
+.tag.effort-lg { background: #fee2e2; color: #991b1b; }
+.tag.risk-low { background: #ede9fe; color: #4c1d95; }
+.tag.risk-med { background: #fef3c7; color: #92400e; }
+</style>
+
+<h2>How Should We Fix It?</h2>
+<p class="subtitle">Three approaches — pick what fits best</p>
+
+<div class="approach-grid">
+
+  <div class="option approach" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <div class="approach-label">Option A</div>
+      <div class="approach-title">Critical + High Only</div>
+      <div class="approach-desc">Fix the 11 critical/high issues that break correctness or are visually broken. Skip medium issues and UX suggestions for now — those are polish, not bugs.</div>
+      <ul class="scope-list">
+        <li><span class="dot-yes">✓</span> Replace all emoji/text/SVG with Lucide icons</li>
+        <li><span class="dot-yes">✓</span> Wire TypographySpecimen to actual type scale</li>
+        <li><span class="dot-yes">✓</span> Fix WCAG badge + readability grade colors → semantic tokens</li>
+        <li><span class="dot-yes">✓</span> Fix Export "copied" state color</li>
+        <li><span class="dot-yes">✓</span> Fix remove button display→opacity animation</li>
+        <li><span class="dot-no">✗</span> Inline styles (medium)</li>
+        <li><span class="dot-no">✗</span> :active states &amp; split pane hit area</li>
+      </ul>
+      <div class="tradeoff">
+        <div class="tradeoff-title">Trade-offs</div>
+        <span class="tag effort-sm">Smaller scope</span>
+        <span class="tag risk-low">Low risk</span>
+        <p style="font-size:11px;color:#64748b;margin-top:6px">Fast to execute, lower risk. Leaves some rough edges but unblocks the correctness issues.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="option approach recommended" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="rec-badge">Recommended</div>
+    <div class="content">
+      <div class="approach-label">Option B</div>
+      <div class="approach-title">Full Fix — All 20 Issues</div>
+      <div class="approach-desc">Fix everything in one coherent pass: icons, token wiring, animations, inline styles, and UX polish. The result is a properly polished, production-quality UI.</div>
+      <ul class="scope-list">
+        <li><span class="dot-yes">✓</span> All Critical + High fixes (icons, type scale, colors)</li>
+        <li><span class="dot-yes">✓</span> Move all inline styles → CSS modules</li>
+        <li><span class="dot-yes">✓</span> :active states on all interactive buttons</li>
+        <li><span class="dot-yes">✓</span> Fix swatch edit indicator on light colors</li>
+        <li><span class="dot-yes">✓</span> SplitPane wider drag hit area</li>
+        <li><span class="dot-yes">✓</span> Specimen text clipping → line-clamp</li>
+        <li><span class="dot-yes">✓</span> ShadeStrip adaptive label colors</li>
+        <li><span class="dot-yes">✓</span> ContrastGrid hover + sessions drawer polish</li>
+      </ul>
+      <div class="tradeoff">
+        <div class="tradeoff-title">Trade-offs</div>
+        <span class="tag effort-md">Full scope</span>
+        <span class="tag risk-low">Low risk</span>
+        <p style="font-size:11px;color:#64748b;margin-top:6px">All changes are in CSS/TSX, no architectural changes. Each fix is isolated and testable. The right call for a design-system tool that needs to eat its own cooking.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="option approach" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <div class="approach-label">Option C</div>
+      <div class="approach-title">Full Fix + Lucide Everywhere in App Chrome</div>
+      <div class="approach-desc">Like B, but goes further: standardize the entire app chrome to always use Lucide (regardless of the user's selected icon library). The selected library only applies to component preview sections.</div>
+      <ul class="scope-list">
+        <li><span class="dot-yes">✓</span> Everything in Option B</li>
+        <li><span class="dot-yes">✓</span> App chrome statically imports Lucide — not reactive to icon library choice</li>
+        <li><span class="dot-warn">~</span> Creates explicit separation: "app chrome = Lucide" vs "component previews = selected library"</li>
+        <li><span class="dot-warn">~</span> Slightly larger refactor in AppHeader / DrawerClose patterns</li>
+      </ul>
+      <div class="tradeoff">
+        <div class="tradeoff-title">Trade-offs</div>
+        <span class="tag effort-lg">Larger scope</span>
+        <span class="tag risk-low">Low risk</span>
+        <p style="font-size:11px;color:#64748b;margin-top:6px">Architecturally cleaner separation. The app chrome is <em>always</em> consistent and doesn't shift when you switch icon sets. Worth it if you expect to add more icons to the shell.</p>
+      </div>
+    </div>
+  </div>
+
+</div>

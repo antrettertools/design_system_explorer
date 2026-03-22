@@ -1,16 +1,20 @@
-import { useRef } from 'react'
+import type { JSX } from 'react'
 import styles from './AppHeader.module.css'
 import { useUI, useUIActions, useColor, useTypography, useStore, temporalUndo, temporalRedo } from '@/store'
 import type { AppTheme } from '@/store/ui'
+import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download } from 'lucide-react'
 
 interface AppHeaderProps {
   onExportClick: () => void
 }
 
-const THEME_OPTIONS: { value: AppTheme; label: string; title: string }[] = [
-  { value: 'white', label: '☀', title: 'White background' },
-  { value: 'light', label: '◑', title: 'Light background' },
-  { value: 'dark',  label: '◐', title: 'Dark background' },
+const ICON_SIZE = 15
+
+type ThemeOption = { value: AppTheme; icon: JSX.Element; title: string }
+const THEME_OPTIONS: ThemeOption[] = [
+  { value: 'white', icon: <Sun size={ICON_SIZE} />,    title: 'White background' },
+  { value: 'light', icon: <SunDim size={ICON_SIZE} />, title: 'Light background' },
+  { value: 'dark',  icon: <Moon size={ICON_SIZE} />,   title: 'Dark background' },
 ]
 
 export function AppHeader({ onExportClick }: AppHeaderProps) {
@@ -62,7 +66,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             title="Undo (Cmd+Z)"
             aria-label="Undo"
           >
-            ↩
+            <Undo2 size={14} strokeWidth={1.75} />
           </button>
           <button
             className={styles.historyBtn}
@@ -71,7 +75,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             title="Redo (Cmd+Shift+Z)"
             aria-label="Redo"
           >
-            ↪
+            <Redo2 size={14} strokeWidth={1.75} />
           </button>
         </div>
         <button
@@ -80,9 +84,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
           aria-label="Saved sessions"
           title="Saved sessions"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-          </svg>
+          <Bookmark size={15} strokeWidth={1.75} />
         </button>
         <div className={styles.themeSegment} role="group" aria-label="Background mode">
           {THEME_OPTIONS.map(opt => (
@@ -93,12 +95,13 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
               title={opt.title}
               aria-pressed={theme === opt.value}
             >
-              {opt.label}
+              {opt.icon}
             </button>
           ))}
         </div>
         <button className={styles.exportBtn} onClick={onExportClick}>
-          Export ↓
+          <Download size={13} strokeWidth={2} />
+          Export
         </button>
       </div>
     </header>

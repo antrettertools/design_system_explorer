@@ -1,28 +1,28 @@
 .section {
-  margin-bottom: 4px;
+  margin-bottom: var(--ui-space-2);
 }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: 10px;
+  margin-bottom: var(--ui-space-5);
   font-family: sans-serif;
 }
 
 .rows {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--ui-space-3);
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 6px;
+  gap: var(--ui-space-5);
+  padding: var(--ui-space-5) var(--ui-space-6);
+  border-radius: var(--ui-radius-3);
   border: 1px solid var(--color-border, #e0dbd5);
 }
 
@@ -40,14 +40,14 @@
 }
 
 .tokenLabel {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle, #888);
-  margin-bottom: 3px;
+  margin-bottom: var(--ui-space-1);
 }
 
 .specimen {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-family: var(--font-body, sans-serif);
   white-space: nowrap;
   overflow: hidden;
@@ -55,11 +55,11 @@
 }
 
 .badge {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 4px;
+  padding: var(--ui-space-1) var(--ui-space-3);
+  border-radius: var(--ui-radius-2);
   flex-shrink: 0;
   white-space: nowrap;
 }

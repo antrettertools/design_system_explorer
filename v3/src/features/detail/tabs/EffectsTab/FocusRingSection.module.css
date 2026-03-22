@@ -1,44 +1,44 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .card {
   background: var(--color-surface, #fff);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-9);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: var(--ui-space-8);
 }
 
 .preview {
   display: flex;
-  gap: 16px;
+  gap: var(--ui-space-8);
   align-items: center;
 }
 
 .focusedBtn {
-  padding: 8px 16px;
+  padding: var(--ui-space-4) var(--ui-space-8);
   background: var(--color-interactive, #e8543a);
   color: var(--color-on-interactive, #fff);
   border: none;
-  border-radius: var(--radius-md, 8px);
-  font-size: 13px;
+  border-radius: var(--ui-radius-4); /* replaces phantom --radius-md */
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   cursor: default;
 }
 
 .previewLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #aaa);
   font-family: sans-serif;
 }
@@ -46,19 +46,19 @@
 .controlsGrid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--ui-space-6);
   width: 100%;
 }
 
 .controlRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--ui-space-6);
 }
 
 .controlLabel {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle, #aaa);
   min-width: 160px;
   flex-shrink: 0;
@@ -67,31 +67,31 @@
 .colorField {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
 }
 
 .colorSwatch {
   width: 24px;
   height: 24px;
-  border-radius: 4px;
+  border-radius: var(--ui-radius-2);
   cursor: pointer;
   border: 1px solid var(--color-border, #e0dbd5);
-  transition: filter 0.15s;
+  transition: filter var(--ui-duration-3);
   flex-shrink: 0;
 }
 
 .colorSwatch:hover { filter: brightness(0.88); }
 
 .colorValue {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface, #333);
 }
 
 .sliderField {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
   flex: 1;
 }
 
@@ -101,8 +101,8 @@
 }
 
 .sliderValue {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface, #333);
   min-width: 36px;
   text-align: right;

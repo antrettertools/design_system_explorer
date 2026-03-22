@@ -1,14 +1,14 @@
 .hint {
-  margin: 8px 16px 0;
-  padding: 6px 10px;
+  margin: var(--ui-space-4) var(--ui-space-8) 0;
+  padding: var(--ui-space-3) var(--ui-space-5);
   background: #f0fdf4;
   border: 1px solid #86efac;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   color: #166534;
   font-family: sans-serif;
   letter-spacing: 0.01em;
-  transition: opacity 0.2s;
+  transition: opacity var(--ui-duration-4);
 }
 
 [data-theme='dark'] .hint {

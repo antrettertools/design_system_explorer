@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>palette. v3 — Critical Architecture & UX Review</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f13;
+    color: #e8e4df;
+    padding: 40px;
+    line-height: 1.5;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .page-subtitle {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 40px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Category legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #888;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-critical { background: #e85252; }
+  .dot-gap     { background: #e89c2a; }
+  .dot-ux      { background: #4a9eff; }
+  .dot-arch    { background: #9e6eff; }
+
+  /* Issue cards grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .issue {
+    background: #191921;
+    border: 1px solid #2a2a38;
+    border-radius: 10px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .issue::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+  .issue.critical::before { background: #e85252; }
+  .issue.gap::before      { background: #e89c2a; }
+  .issue.ux::before       { background: #4a9eff; }
+  .issue.arch::before     { background: #9e6eff; }
+
+  .issue-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .issue-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .critical .issue-badge { background: rgba(232,82,82,0.18); color: #e85252; }
+  .gap .issue-badge      { background: rgba(232,156,42,0.18); color: #e89c2a; }
+  .ux .issue-badge       { background: rgba(74,158,255,0.18); color: #4a9eff; }
+  .arch .issue-badge     { background: rgba(158,110,255,0.18); color: #9e6eff; }
+
+  .issue-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f0ece8;
+    line-height: 1.3;
+  }
+
+  .issue-body {
+    font-size: 12.5px;
+    color: #888;
+    line-height: 1.55;
+  }
+
+  .issue-code {
+    margin-top: 8px;
+    background: #111118;
+    border: 1px solid #222230;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    color: #b0a8f0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Section headers */
+  .section-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+    margin: 36px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #222;
+  }
+
+  /* Summary bar */
+  .summary {
+    background: #191921;
+    border: 1px solid #2a2a38;
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    align-items: center;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .stat-critical .stat-num { color: #e85252; }
+  .stat-gap .stat-num      { color: #e89c2a; }
+  .stat-ux .stat-num       { color: #4a9eff; }
+  .stat-arch .stat-num     { color: #9e6eff; }
+
+  .summary-divider {
+    width: 1px;
+    height: 40px;
+    background: #2a2a38;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">palette. v3 — Critical Architecture & UX Review</div>
+<div class="page-subtitle">Senior architect & UI/UX review · 2026-03-21</div>
+
+<div class="summary">
+  <div class="stat stat-critical">
+    <div class="stat-num">5</div>
+    <div class="stat-label">Critical (broken/missing)</div>
+  </div>
+  <div class="summary-divider"></div>
+  <div class="stat stat-gap">
+    <div class="stat-num">6</div>
+    <div class="stat-label">Feature gaps</div>
+  </div>
+  <div class="summary-divider"></div>
+  <div class="stat stat-ux">
+    <div class="stat-num">7</div>
+    <div class="stat-label">UI/UX problems</div>
+  </div>
+  <div class="summary-divider"></div>
+  <div class="stat stat-arch">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Architecture violations</div>
+  </div>
+</div>
+
+<!-- ================================ -->
+<div class="section-heading">Critical — Broken / Missing Core Functionality</div>
+
+<div class="grid">
+
+  <div class="issue critical">
+    <div class="issue-header">
+      <span class="issue-badge">Critical</span>
+      <div class="issue-title">No color editing in detail mode — entire Colors tab is read-only</div>
+    </div>
+    <div class="issue-body">
+      The detail mode Colors tab shows beautiful shade scales but <strong style="color:#e8b4b4">nothing is editable</strong>. Clicking a swatch only copies the hex to clipboard. There is no color picker, no hex input, no way to change any of the up-to-8 palette colors. <code style="font-size:11px;background:#111;padding:1px 4px;border-radius:3px">overrideHex()</code> exists in the store but is never called from any UI. This is the most fundamental gap — the whole point of detail mode is to refine.
+    </div>
+    <div class="issue-code">// store/color.ts has overrideHex() — but no UI calls it
+// ShadeScaleSection.tsx: onClick → clipboard copy only
+// Missing: &lt;input type="color"&gt; or hex input per slot</div>
+  </div>
+
+  <div class="issue critical">
+    <div class="issue-header">
+      <span class="issue-badge">Critical</span>
+      <div class="issue-title">Effects tab — 100% read-only despite store having full edit support</div>
+    </div>
+    <div class="issue-body">
+      The store has <code style="font-size:11px;background:#111;padding:1px 4px;border-radius:3px">overrideShadow()</code>, <code style="font-size:11px;background:#111;padding:1px 4px;border-radius:3px">resetShadow()</code> fully implemented — but <strong style="color:#e8b4b4">ShadowSection has no inputs</strong> to call them. FocusRingSection shows width/color/offset as display text only — no way to change them. MotionSection shows durations and easings as read-only labels. Users cannot modify a single effect token.
+    </div>
+    <div class="issue-code">// ShadowSection.tsx: toggles colored/neutral but no per-step editing
+// FocusRingSection.tsx: displays focusRing.color/width/offset — display only
+// MotionSection.tsx: all values are read-only labels</div>
+  </div>
+
+  <div class="issue critical">
+    <div class="issue-header">
+      <span class="issue-badge">Critical</span>
+      <div class="issue-title">Showcase templates only use the brand color — secondary/accent colors never appear</div>
+    </div>
+    <div class="issue-body">
+      All 4 templates (Landing, Dashboard, Blog, System) use exclusively <code style="font-size:11px;background:#111;padding:1px 4px;border-radius:3px">--color-interactive</code> (brand). Secondary, Accent A, Accent B are computed and injected into <code>:root</code> but <strong style="color:#e8b4b4">never referenced in any template CSS</strong>. State colors (error/warning/success/info) also never appear in templates. A 6-color palette looks identical to a 1-color palette in the showcase — completely defeating the multi-color system.
+    </div>
+  </div>
+
+  <div class="issue critical">
+    <div class="issue-header">
+      <span class="issue-badge">Critical</span>
+      <div class="issue-title">Dark/light mode: missing three-way background control + incomplete token coverage</div>
+    </div>
+    <div class="issue-body">
+      Two problems: (1) The theme toggle is binary light/dark — but the user wants <strong style="color:#e8b4b4">white / light-bg / dark-bg</strong> as three distinct options. (2) The dark token map only gets the outputs of <code>deriveDarkModeRoles()</code> — neutral and brand interactive roles. Many light-only tokens (state/mood colors, data viz, spacing, effects) have no dark counterpart, so hardcoded fallback colors bleed through in dark mode.
+    </div>
+    <div class="issue-code">// store/derived.ts dark map only gets deriveDarkModeRoles() output
+// State/mood colors (--color-error, --color-success) have no dark version
+// AppTheme type = 'light' | 'dark' — needs third 'white' option</div>
+  </div>
+
+  <div class="issue critical">
+    <div class="issue-header">
+      <span class="issue-badge">Critical</span>
+      <div class="issue-title">Type scale ratio is display-only — cannot be changed</div>
+    </div>
+    <div class="issue-body">
+      ScaleEditor shows the scale ratio (e.g. 1.250) as a read-only label. The store has <code>setScaleRatio()</code> but it's never surfaced. Users can change the heading/body font via FontBrowser, but <strong style="color:#e8b4b4">cannot change the modular scale ratio</strong>, font weights, line heights, or individual step sizes — all of which are the primary controls a designer would reach for in a typography detail mode.
+    </div>
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<div class="section-heading">Feature Gaps — Partially Implemented or Missing Sections</div>
+
+<div class="grid">
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">Colors tab: missing Greyscale section</div>
+    </div>
+    <div class="issue-body">
+      The Colors tab has ShadeScales, SemanticRoles, DataViz, ContrastGrid. But there is <strong style="color:#e8c8a4">no greyscale palette section</strong>. Greyscale is the invisible backbone of every UI — neutral surfaces, dividers, text hierarchy. The neutral roles exist in the token map (<code>--color-background</code>, <code>--color-surface</code>, etc.) but they're buried in SemanticRoles. There should be a dedicated visual greyscale strip from white to black.
+    </div>
+  </div>
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">Colors tab: missing Font Colors / Text Hierarchy section</div>
+    </div>
+    <div class="issue-body">
+      Typical font colors (primary text, secondary text, disabled text, link color, placeholder) are semantic tokens already in the system (<code>--color-on-surface</code>, <code>--color-on-surface-subtle</code>, etc.) but <strong style="color:#e8c8a4">completely invisible to users</strong>. There's no section showing what text colors will look like on the current backgrounds, no ability to override them, no visual hierarchy preview.
+    </div>
+  </div>
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">Components tab: only Button has a preview — 6 others are blind</div>
+    </div>
+    <div class="issue-body">
+      Token overrides for input, card, badge, tag, tooltip, and alert can be typed into text inputs — but <strong style="color:#e8c8a4">there's no visual preview</strong> to see the effect. The Button accordion shows a "Preview: [Button] [Hover]" section. Every other component is text-in, void-out. Users are flying blind. Minimum: a rendered specimen for each component using its own <code>--component-*</code> vars.
+    </div>
+  </div>
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">Icon libraries: placeholder SVGs only — no real icons</div>
+    </div>
+    <div class="issue-body">
+      IconLibrarySection shows a grid of 24 generic placeholder SVG circles with stroke hints — but <strong style="color:#e8c8a4">clicking Lucide, Heroicons, Phosphor, Tabler, or Radix shows the same squares</strong>. No actual icon packages are installed. Switching library changes store state but the visual output is identical for all 5. Phase 4 was meant to install lucide-react etc. — this is still outstanding.
+    </div>
+  </div>
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">ShowcaseTab has no useful controls — "Data Viz Colors" is static text</div>
+    </div>
+    <div class="issue-body">
+      The Showcase tab currently offers: template picker (4 options), theme toggle, fullscreen button, and share link. The "Data Viz Colors" section is a <strong style="color:#e8c8a4">single line of read-only text</strong>: "5-color categorical palette — adjust in Colors tab". No swatch preview, no inline control — just a breadcrumb to somewhere else. This entire section should be removed or replaced with a real mini-preview or an inline count stepper.
+    </div>
+  </div>
+
+  <div class="issue gap">
+    <div class="issue-header">
+      <span class="issue-badge">Gap</span>
+      <div class="issue-title">Spacing tab: radius and misc sections have no visual editing</div>
+    </div>
+    <div class="issue-body">
+      SpacingScaleSection has proper number inputs with live bar visualization. But RadiusSection and MiscSection likely follow the same text-only or read-only pattern. Border radius especially benefits from a <strong style="color:#e8c8a4">visual preview of rounded corners</strong> at each step — showing a box with the applied radius — rather than just a number.
+    </div>
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<div class="section-heading">UI/UX Problems — Readability, Affordance, Hierarchy</div>
+
+<div class="grid">
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">Text sizes too small throughout the app — accessibility failure</div>
+    </div>
+    <div class="issue-body">
+      Multiple places use 10–12px text in critical UI chrome — not just the live preview template. Examples: ScaleEditor ratio row has inline <code>fontSize: 10</code>. ShowcaseTab has <code>fontSize: 11</code>. SpacingScaleSection "base unit" hint: <code>fontSize: 10</code>. The engineering guide says body = 16px, label = smallest usable. <strong style="color:#a8c8ff">Minimum readable size for UI chrome is 12px; for labels indicating state, 13px.</strong> The app itself should model good type scale practice.
+    </div>
+    <div class="issue-code">// ScaleEditor.tsx:29 — fontSize: 10 inline
+// ShowcaseTab.tsx:95 — fontSize: 11 inline
+// SpacingScaleSection.tsx:37 — fontSize: 10 inline
+// Multiple CSS modules use 10–11px sectionTitle labels</div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">Color swatches have no edit affordance — zero discoverability</div>
+    </div>
+    <div class="issue-body">
+      In generator mode, hovering a ColorSlotCard does nothing to suggest it's editable. There's no edit icon, no cursor change, no "click to change" tooltip. Users who want to pick a specific color have <strong style="color:#a8c8ff">no discoverable path</strong> to do so. At minimum, an edit icon (✎) or color-picker swatch overlay should appear on hover to signal editability.
+    </div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">Theme toggle uses cryptic symbols — ◐ and ○ are not universally understood</div>
+    </div>
+    <div class="issue-body">
+      The AppHeader theme toggle uses <code>◐</code> for light mode and <code>○</code> for dark mode. These are not standard icons — a half-circle and empty circle have no universal meaning for theme switching. Standard practice is a sun (☀) / moon (🌙) or a filled/outlined variant. The ShowcaseTab also toggles theme with "◐ Switch to dark mode" — same confusing symbol. <strong style="color:#a8c8ff">With the planned three-option background system, this needs a redesign anyway.</strong>
+    </div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">AppHeader is too minimal — no visual hierarchy or context</div>
+    </div>
+    <div class="issue-body">
+      The header has: wordmark "palette." + a clock SVG icon (sessions) + a cryptic symbol (theme) + "Export ↓" button. The sessions icon (clock SVG) gives no indication it opens a sessions drawer. <strong style="color:#a8c8ff">There's no current mode indicator, no undo/redo controls, no hint at keyboard shortcuts.</strong> The header should communicate state: what mode you're in, what harmony model is active, whether you're looking at a saved session.
+    </div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">DetailMode top bar: tab navigation is too compressed at small widths</div>
+    </div>
+    <div class="issue-body">
+      The detail mode nav shows: ← Generator | Colors | Typography | Spacing | Effects | Components | Showcase | Export — all in one line. With 7 tabs plus a back button, this is <strong style="color:#a8c8ff">extremely tight on any non-wide viewport</strong>. There's no overflow handling, no active tab highlighting that draws the eye, no keyboard shortcut to jump between tabs. Tab labels are the only navigation — no icons.
+    </div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">Contrast grid is isolated — no inline WCAG pass/fail explanation</div>
+    </div>
+    <div class="issue-body">
+      The ContrastGrid presumably shows contrast ratios between color combinations. But <strong style="color:#a8c8ff">there's no legend explaining what the numbers mean</strong>, no color-coding to indicate AA (4.5:1) vs AAA (7:1) pass/fail, no context about which text sizes these ratios apply to. A contrast grid without WCAG context is just numbers.
+    </div>
+  </div>
+
+  <div class="issue ux">
+    <div class="issue-header">
+      <span class="issue-badge">UX</span>
+      <div class="issue-title">Generator panel: undo/redo (Cmd+Z) is invisible — no UI hint</div>
+    </div>
+    <div class="issue-body">
+      The app supports full undo/redo via Zustand temporal middleware (up to 50 states), but this is <strong style="color:#a8c8ff">completely undiscoverable</strong> — there are no undo/redo buttons, no history indicator, no mention in the UI. Only keyboard shortcuts (Cmd+Z / Cmd+Shift+Z) work, and only users who read the code would know. This is a major feature that should be surfaced.
+    </div>
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<div class="section-heading">Architecture Violations</div>
+
+<div class="grid">
+
+  <div class="issue arch">
+    <div class="issue-header">
+      <span class="issue-badge">Arch</span>
+      <div class="issue-title">ComponentsTab.tsx uses inline styles — violates CSS Modules rule</div>
+    </div>
+    <div class="issue-body">
+      The engineering guide is explicit: "CSS Modules only. No inline styles." <code>ComponentsTab.tsx</code> wraps its content in a <code>&lt;div&gt;</code> with <code>style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xl)', ... }}</code>. This is a direct violation. The wrapper styles should be in <code>ComponentsTab.module.css</code>.
+    </div>
+    <div class="issue-code">// ComponentsTab.tsx:6-13 — inline style block
+// Should be: &lt;div className={styles.tab}&gt;
+// With .tab { display: flex; flex-direction: column; ... } in .module.css</div>
+  </div>
+
+  <div class="issue arch">
+    <div class="issue-header">
+      <span class="issue-badge">Arch</span>
+      <div class="issue-title">Multiple components import from core/ directly — bypassing the store contract</div>
+    </div>
+    <div class="issue-body">
+      Rule: "Components and features import only from store/. Never from core/ directly." Violations found: <code>ShadeScaleSection.tsx</code> imports <code>makeShadeScale</code> from <code>@/core/color/scales</code>. <code>SemanticRolesSection.tsx</code> imports from <code>@/core/color/semantic</code> and <code>@/core/color/darkMode</code>. <code>SystemTemplate.tsx</code> imports from 4 core modules directly. This creates hidden dependencies that bypass the store as the single source of truth.
+    </div>
+    <div class="issue-code">// ShadeScaleSection.tsx:3 — import makeShadeScale from '@/core/color/scales'
+// SemanticRolesSection.tsx:2–4 — 3 core imports
+// SystemTemplate.tsx:1–5 — 4 core imports
+// These should derive from store-computed token map instead</div>
+  </div>
+
+</div>
+
+<div style="margin-top:40px; padding:20px 24px; background:#191921; border:1px solid #2a2a38; border-radius:10px; font-size:13px; color:#666; line-height:1.6;">
+  <strong style="color:#888">Recommended sequencing:</strong> Fix the critical issues first (color editing, effects editing, showcase colors, dark mode coverage). Then address feature gaps (greyscale, font colors, component previews). UX and arch improvements can be batched. The two arch violations should be fixed opportunistically during any file touch.
+</div>
+
+</body>
+</html>

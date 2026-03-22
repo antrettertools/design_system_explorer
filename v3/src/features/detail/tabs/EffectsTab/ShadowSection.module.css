@@ -1,34 +1,34 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .modeRow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
-  font-size: 13px;
+  gap: var(--ui-space-4);
+  margin-bottom: var(--ui-space-7);
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
 .modeBtn {
-  padding: 4px 10px;
+  padding: var(--ui-space-2) var(--ui-space-5);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 5px;
+  border-radius: var(--ui-radius-2);
   background: none;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   cursor: pointer;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle, #888);
-  transition: all 0.15s;
+  transition: all var(--ui-duration-3);
 }
 
 .modeBtn.active {
@@ -41,38 +41,38 @@
 .builderList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--ui-space-5);
 }
 
 .card {
   background: var(--color-surface, #fff);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: var(--ui-space-5);
 }
 
 .preview {
   width: 48px;
   height: 48px;
   background: var(--color-surface, #fff);
-  border-radius: 8px;
+  border-radius: var(--ui-radius-4);
   border: 1px solid var(--color-border, #e8e4df);
 }
 
 .label {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
 .value {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle, #aaa);
   word-break: break-all;
   text-align: center;

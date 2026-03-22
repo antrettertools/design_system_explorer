@@ -106,4 +106,5 @@ export interface ColorSlot {
   role: ColorRole
   hex: string
   locked: boolean
+  name?: string       // user-defined display name (falls back to role label)
 }

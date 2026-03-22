@@ -1,4 +1,4 @@
-import { makeShadeScale } from '@/core/color/scales'
+import { makeShadeScale, getContrastColor } from '@/core/color/scales'
 import { deriveBrandRoles, deriveStateMoodRoles, deriveNeutralRoles, deriveDarkStateMoodRoles } from '@/core/color/semantic'
 import { deriveDarkModeRoles } from '@/core/color/darkMode'
 import { generateDataVizPalette } from '@/core/color/dataViz'
@@ -9,6 +9,7 @@ import type { TokenMap } from '@/core/export/types'
 import type { ComponentName, ComponentTokenMap } from '@/core/components/types'
 import type { SpacingState } from './spacing'
 import type { EffectsState } from './effects'
+import type { StateColorPrefix } from './color'
 import type { AppTheme } from './ui'
 
 /**
@@ -25,6 +26,7 @@ export function buildTokenMap(
   effects?: EffectsState,
   opts?: {
     componentOverrides?: Partial<ComponentTokenMap>
+    stateOverrides?: Partial<Record<StateColorPrefix, string>>
   },
   theme: AppTheme = 'light',
 ): TokenMap {
@@ -59,6 +61,18 @@ export function buildTokenMap(
   const stateMoodRoles = deriveStateMoodRoles(brandHex)
   for (const [k, v] of Object.entries(stateMoodRoles)) {
     light[`--color-${k}`] = v
+  }
+
+  // Apply user state color overrides — re-derive container/on- tokens from override hex
+  if (opts?.stateOverrides) {
+    for (const [prefix, overrideHex] of Object.entries(opts.stateOverrides)) {
+      if (!overrideHex) continue
+      const scale = makeShadeScale(overrideHex)
+      light[`--color-${prefix}`] = scale[500]
+      light[`--color-on-${prefix}`] = getContrastColor(scale[500])
+      light[`--color-${prefix}-container`] = scale[100]
+      light[`--color-on-${prefix}-container`] = scale[800]
+    }
   }
 
   // Dark mode equivalents
@@ -111,8 +125,8 @@ export function buildTokenMap(
       light[`--spacing-${step}`] = `${value}px`
     }
 
-    const radius = spacing.config.radius
-    for (const [step, value] of Object.entries(radius)) {
+    const effectiveRadius = { ...spacing.config.radius, ...spacing.radiusOverrides }
+    for (const [step, value] of Object.entries(effectiveRadius)) {
       light[`--radius-${step}`] = step === 'full' ? '9999px' : `${value}px`
     }
 

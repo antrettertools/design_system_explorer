@@ -1,10 +1,11 @@
 import { deriveSpacingScale, deriveRadiusScale, deriveIconSizes, BORDER_WIDTHS, OPACITY_SCALE, Z_INDEX_LAYERS, BREAKPOINTS } from '@/core/spacing/scale'
-import type { SpacingConfig, SpacingScale } from '@/core/spacing/types'
+import type { SpacingConfig, SpacingScale, RadiusScale } from '@/core/spacing/types'
 
 export interface SpacingState {
   baseUnit: 4 | 8           // 4pt grid or 8pt grid
   config: SpacingConfig
-  overrides: Partial<SpacingScale>  // user-set overrides to individual steps
+  overrides: Partial<SpacingScale>        // user-set overrides to spacing steps
+  radiusOverrides: Partial<RadiusScale>   // user-set overrides to radius steps
 }
 
 export interface SpacingActions {
@@ -12,6 +13,8 @@ export interface SpacingActions {
   overrideStep: (step: keyof SpacingScale, value: number) => void
   resetStep: (step: keyof SpacingScale) => void
   resetAll: () => void
+  overrideRadius: (step: keyof RadiusScale, value: number) => void
+  resetRadius: (step: keyof RadiusScale) => void
 }
 
 function buildConfig(baseUnit: 4 | 8): SpacingConfig {
@@ -31,6 +34,7 @@ export const defaultSpacingState: SpacingState = {
   baseUnit: 4,
   config: buildConfig(4),
   overrides: {},
+  radiusOverrides: {},
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,6 +71,23 @@ export function createSpacingActions(set: any, get: any): SpacingActions {
     resetAll() {
       const state = get() as { spacing: SpacingState }
       set({ spacing: { ...state.spacing, overrides: {} } })
+    },
+
+    overrideRadius(step, value) {
+      const state = get() as { spacing: SpacingState }
+      set({
+        spacing: {
+          ...state.spacing,
+          radiusOverrides: { ...state.spacing.radiusOverrides, [step]: value },
+        },
+      })
+    },
+
+    resetRadius(step) {
+      const state = get() as { spacing: SpacingState }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [step]: _removed, ...rest } = state.spacing.radiusOverrides
+      set({ spacing: { ...state.spacing, radiusOverrides: rest as Partial<RadiusScale> } })
     },
   }
 }

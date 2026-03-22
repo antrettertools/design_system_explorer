@@ -77,13 +77,13 @@
 .colorMeta {
   font-size: 9px;
   color: var(--color-on-surface-subtle, #aaa);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
 }
 
 .brandScale {
   display: flex;
   gap: 3px;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   overflow: hidden;
   height: 44px;
 }
@@ -99,7 +99,7 @@
 .brandScaleStep {
   font-size: 7px;
   color: rgba(255,255,255,0.5);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
 }
 
 .brandScaleStepDark {
@@ -125,7 +125,7 @@
 .compactScale {
   display: flex;
   gap: 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm, 4px);
   overflow: hidden;
   height: 20px;
 }
@@ -141,7 +141,7 @@
 }
 
 .semanticSwatch {
-  border-radius: 5px;
+  border-radius: var(--radius-sm, 4px);
   height: 32px;
   border: 1px solid rgba(0,0,0,0.06);
   margin-bottom: 3px;
@@ -165,7 +165,7 @@
   flex: 1;
   background: var(--color-surface, #fff);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 6px);
   padding: 8px;
 }
 
@@ -178,7 +178,7 @@
 .stateSwatch {
   width: 14px;
   height: 14px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm, 3px);
 }
 
 .stateLabel {
@@ -245,7 +245,7 @@
 
 .bodySpec {
   font-family: var(--font-body, sans-serif);
-  font-size: 14px;
+  font-size: var(--font-size-body, 14px);
   line-height: 1.65;
   color: var(--color-on-surface-subtle, #555);
   max-width: 480px;
@@ -254,7 +254,7 @@
 
 .charsetBlock {
   background: var(--color-surface, #fff);
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   padding: 14px 16px;
   border: 1px solid var(--color-border, #e8e4df);
   margin-bottom: 12px;
@@ -270,7 +270,7 @@
 }
 
 .charset {
-  font-size: 14px;
+  font-size: var(--font-size-body, 14px);
   line-height: 1.75;
   letter-spacing: 0.03em;
   color: var(--color-on-surface, #333);
@@ -284,7 +284,7 @@
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: var(--ui-text-sm, 13px);
   color: var(--color-on-surface, #333);
 }
 
@@ -293,7 +293,7 @@
   display: flex;
   gap: 5px;
   height: 44px;
-  border-radius: 6px;
+  border-radius: var(--radius-md, 6px);
   overflow: hidden;
   margin-bottom: 10px;
 }
@@ -303,7 +303,7 @@
 .miniChart {
   background: var(--color-surface, #fff);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 6px);
   padding: 10px 12px;
   display: flex;
   align-items: flex-end;
@@ -316,12 +316,140 @@
   border-radius: 2px 2px 0 0;
 }
 
+/* SPACING SECTION */
+.spacingTable {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spacingRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spacingStepName {
+  font-size: 9px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #888);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.spacingBar {
+  flex: 1;
+  height: 12px;
+  background: var(--color-border, #e8e4df);
+  border-radius: var(--radius-sm, 4px);
+  overflow: hidden;
+}
+
+.spacingBarFill {
+  height: 100%;
+  border-radius: var(--radius-sm, 4px);
+  opacity: 0.7;
+}
+
+.spacingValue {
+  font-size: 9px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #888);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* RADIUS SECTION */
+.radiusRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.radiusCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.radiusBox {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-border, #e8e4df);
+  background: var(--color-surface, #fff);
+}
+
+.radiusLabel {
+  font-size: 9px;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.radiusValue {
+  font-size: 8px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #bbb);
+}
+
+/* EFFECTS SECTION */
+.shadowRow {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.shadowCard {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--radius-md, 8px);
+  width: 80px;
+  height: 64px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.shadowCardLabel {
+  font-size: 8px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #bbb);
+}
+
+.focusRingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.focusRingSample {
+  outline-style: solid;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--radius-sm, 4px);
+  padding: 5px 12px;
+  font-size: 10px;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+  background: var(--color-surface, #fff);
+}
+
+.focusRingMeta {
+  font-size: 9px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #888);
+}
+
 /* CSS CUSTOM PROPERTIES TABLE */
 .cssVarTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 11px;
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
 }
 
 .cssVarTh {
@@ -344,21 +472,21 @@
 .cssVarName {
   padding: 5px 8px;
   color: var(--color-on-surface-subtle, #888);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
   font-size: 11px;
 }
 
 .cssVarValue {
   padding: 5px 8px;
   color: var(--color-on-surface, #333);
-  font-family: monospace;
+  font-family: var(--ui-font-mono);
   font-size: 11px;
 }
 
 .cssVarSwatch {
   width: 18px;
   height: 18px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm, 4px);
   border: 1px solid rgba(0,0,0,0.08);
   margin: 4px 8px;
 }

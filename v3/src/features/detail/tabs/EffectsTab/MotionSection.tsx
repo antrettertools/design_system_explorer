@@ -58,7 +58,7 @@ export function MotionSection() {
         </div>
       ))}
 
-      <div className={styles.subsectionLabel} style={{ marginTop: 12 }}>Transition Presets</div>
+      <div className={`${styles.subsectionLabel} ${styles.subsectionLabelSpaced}`}>Transition Presets</div>
       {Object.entries(motion.transitions).map(([step, value]) => (
         <div key={step} className={styles.tokenRow}>
           <span className={styles.tokenName}>--transition-{step}</span>

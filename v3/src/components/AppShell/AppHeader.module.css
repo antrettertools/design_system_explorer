@@ -1,16 +1,16 @@
 .header {
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  height: 48px;
+  padding: 0 var(--ui-space-9);
+  height: var(--ui-size-header);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
   flex-shrink: 0;
-  gap: 12px;
+  gap: var(--ui-space-6);
 }
 
 .wordmark {
-  font-size: 18px;
+  font-size: var(--ui-text-xl);
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--color-on-surface);
@@ -23,26 +23,26 @@
 .contextArea {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
   flex: 1;
   min-width: 0;
   overflow: hidden;
 }
 
 .harmonyBadge {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 600;
   color: var(--color-interactive);
   background: var(--color-interactive-subtle);
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: var(--ui-space-1) var(--ui-space-4);
+  border-radius: var(--ui-radius-2);
   white-space: nowrap;
   text-transform: capitalize;
   flex-shrink: 0;
 }
 
 .pairingLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
   white-space: nowrap;
   overflow: hidden;
@@ -51,42 +51,41 @@
 }
 
 .contextBreadcrumb {
-  font-size: 14px;
+  font-size: var(--ui-text-md);
   color: var(--color-on-surface-subtle);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-.breadcrumbSep { margin-right: 2px; opacity: 0.4; }
+.breadcrumbSep { margin-right: var(--ui-space-1); opacity: 0.4; }
 
 /* Actions row */
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
   flex-shrink: 0;
 }
 
 /* Undo/redo history group */
 .historyGroup {
   display: flex;
-  gap: 2px;
+  gap: var(--ui-space-1);
   align-items: center;
 }
 
 .historyBtn {
-  width: 28px;
-  height: 28px;
+  width: var(--ui-size-btn-sm);
+  height: var(--ui-size-btn-sm);
   background: transparent;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--ui-radius-2);
   cursor: pointer;
-  font-size: 15px;
   color: var(--color-on-surface-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.12s, color 0.12s;
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
 }
 
 .historyBtn:hover:not(:disabled) {
@@ -94,47 +93,51 @@
   color: var(--color-on-surface);
 }
 
+.historyBtn:active:not(:disabled) { transform: scale(0.9); }
+
 .historyBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* Sessions button */
 .themeToggle {
-  width: 32px;
-  height: 32px;
+  width: var(--ui-size-btn-md);
+  height: var(--ui-size-btn-md);
   border: 1px solid var(--color-border);
   background: transparent;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  transition: background 0.15s;
+  color: var(--color-on-surface-subtle);
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
 }
 
 .themeToggle:hover {
   background: var(--color-interactive-subtle);
+  color: var(--color-interactive);
 }
+
+.themeToggle:active { transform: scale(0.94); }
 
 .themeSegment {
   display: flex;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   overflow: hidden;
 }
 
 .themeBtn {
-  padding: 4px 8px;
-  font-size: 13px;
+  padding: 0 var(--ui-space-4);
   background: transparent;
   border: none;
   border-right: 1px solid var(--color-border);
   cursor: pointer;
   color: var(--color-on-surface-subtle);
-  transition: background 0.12s, color 0.12s;
-  line-height: 1;
-  height: 32px;
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
+  height: var(--ui-size-btn-md);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .themeBtn:last-child { border-right: none; }
@@ -142,17 +145,21 @@
 .themeBtnActive { background: var(--color-interactive-subtle); color: var(--color-interactive); font-weight: 600; }
 
 .exportBtn {
-  height: 32px;
-  padding: 0 12px;
+  height: var(--ui-size-btn-md);
+  padding: 0 var(--ui-space-6);
   background: var(--color-on-surface);
   color: var(--color-background);
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
   letter-spacing: 0.02em;
-  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  transition: opacity var(--ui-duration-2);
 }
 
 .exportBtn:hover { opacity: 0.8; }
+.exportBtn:active { transform: scale(0.97); }

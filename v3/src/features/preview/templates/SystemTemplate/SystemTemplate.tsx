@@ -1,11 +1,8 @@
-import { useColor, useTypography } from '@/store'
+import { useColor, useTypography, useSpacing, useEffects } from '@/store'
+import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
 import styles from './SystemTemplate.module.css'
 
 const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
-
-const ROLE_LABELS: Record<string, string> = {
-  brand: 'Brand', secondary: 'Secondary', accentA: 'Accent A', accentB: 'Accent B',
-}
 
 const TODAY = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
@@ -31,9 +28,22 @@ function getCssVar(name: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
 }
 
+const SPACING_STEPS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const
+const RADIUS_STEPS = ['none', 'sm', 'md', 'lg', 'xl', 'full'] as const
+const SHADOW_STEPS = ['sm', 'md', 'lg', 'xl'] as const
+
 export function SystemTemplate() {
   const { slots, dataVizN, activeModel } = useColor()
   const { pairing } = useTypography()
+  const { config: spacingConfig, overrides: spacingOverrides, radiusOverrides, baseUnit } = useSpacing()
+  const { config: effectsConfig, shadowMode, shadowOverrides } = useEffects()
+
+  const effectiveSpacing = { ...spacingConfig.scale, ...spacingOverrides }
+  const effectiveRadius = { ...spacingConfig.radius, ...radiusOverrides }
+  const effectiveShadows = {
+    ...(shadowMode === 'colored' ? effectsConfig.shadows : effectsConfig.shadowsNeutral),
+    ...shadowOverrides,
+  }
 
   const brandSlot = slots.find(s => s.role === 'brand') ?? slots[0]
   const brandHex = brandSlot?.hex ?? '#888888'
@@ -89,7 +99,7 @@ export function SystemTemplate() {
           <div className={styles.compactScaleRow}>
             {otherSlots.map(slot => (
               <div key={slot.id} className={styles.compactScaleBlock}>
-                <div className={styles.compactScaleLabel}>{ROLE_LABELS[slot.role] ?? slot.role}</div>
+                <div className={styles.compactScaleLabel}>{slot.name ?? ROLE_LABELS[slot.role] ?? slot.role}</div>
                 <div className={styles.compactScale}>
                   {SHADE_STEPS.map(step => (
                     <div
@@ -203,6 +213,84 @@ export function SystemTemplate() {
               style={{ background: hex, height: `${DEMO_HEIGHTS[i % DEMO_HEIGHTS.length]}%` }}
             />
           ))}
+        </div>
+      </div>
+
+      {/* SPACING */}
+      <div className={styles.section}>
+        <div className={styles.sectionLabel}>Spacing · {baseUnit}pt grid</div>
+        <div className={styles.spacingTable}>
+          {SPACING_STEPS.map(step => {
+            const value = effectiveSpacing[step]
+            const isOverridden = step in spacingOverrides
+            return (
+              <div key={step} className={styles.spacingRow}>
+                <div className={styles.spacingStepName}>{step}</div>
+                <div className={styles.spacingBar}>
+                  <div
+                    className={styles.spacingBarFill}
+                    style={{
+                      width: `${Math.min(value, 96)}px`,
+                      background: isOverridden ? 'var(--color-interactive, #e8543a)' : 'var(--color-brand-400, #e8543a)',
+                    }}
+                  />
+                </div>
+                <div className={styles.spacingValue}>{value}px</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* RADIUS */}
+      <div className={styles.section}>
+        <div className={styles.sectionLabel}>Border Radius</div>
+        <div className={styles.radiusRow}>
+          {RADIUS_STEPS.map(step => {
+            const value = effectiveRadius[step as keyof typeof effectiveRadius]
+            const isOverridden = step in radiusOverrides
+            const cssRadius = step === 'full' ? 9999 : value
+            return (
+              <div key={step} className={styles.radiusCell}>
+                <div
+                  className={styles.radiusBox}
+                  style={{
+                    borderRadius: `${cssRadius}px`,
+                    borderColor: isOverridden ? 'var(--color-interactive, #e8543a)' : 'var(--color-border, #e8e4df)',
+                  }}
+                />
+                <div className={styles.radiusLabel}>{step}</div>
+                <div className={styles.radiusValue}>{step === 'full' ? '∞' : `${value}px`}</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* EFFECTS */}
+      <div className={styles.section}>
+        <div className={styles.sectionLabel}>Effects · {shadowMode} shadows</div>
+        <div className={styles.shadowRow}>
+          {SHADOW_STEPS.map(step => (
+            <div key={step} className={styles.shadowCard} style={{ boxShadow: effectiveShadows[step as keyof typeof effectiveShadows] ?? 'none' }}>
+              <div className={styles.shadowCardLabel}>{step}</div>
+            </div>
+          ))}
+        </div>
+        <div className={styles.focusRingRow}>
+          <div
+            className={styles.focusRingSample}
+            style={{
+              outlineColor: effectsConfig.focusRing.color,
+              outlineWidth: effectsConfig.focusRing.width,
+              outlineOffset: effectsConfig.focusRing.offset,
+            }}
+          >
+            Focus ring
+          </div>
+          <div className={styles.focusRingMeta}>
+            {effectsConfig.focusRing.width} · {effectsConfig.focusRing.color}
+          </div>
         </div>
       </div>
 

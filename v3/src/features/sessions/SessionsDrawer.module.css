@@ -3,7 +3,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
   z-index: 200;
-  animation: fadeIn 0.15s ease;
+  animation: fadeIn var(--ui-duration-3) ease;
 }
 
 @keyframes fadeIn {
@@ -16,7 +16,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 360px;
+  width: var(--ui-size-drawer);
   max-width: 90vw;
   background: var(--color-surface);
   border-left: 1px solid var(--color-border);
@@ -24,7 +24,7 @@
   z-index: 201;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.2s ease;
+  animation: slideIn var(--ui-duration-4) ease;
 }
 
 @keyframes slideIn {
@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--ui-space-6) var(--ui-space-8);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -44,41 +44,43 @@
   font-family: var(--font-heading);
   font-size: var(--font-size-body);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
 }
 
 .closeBtn {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-text-muted);
-  font-size: 20px;
-  line-height: 1;
-  padding: 4px;
-  border-radius: var(--radius-sm);
+  color: var(--color-on-surface-subtle);
+  padding: var(--ui-space-2);
+  border-radius: var(--ui-radius-2);
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
 }
 
 .closeBtn:hover {
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
   background: var(--color-surface-raised);
 }
 
+.closeBtn:active { transform: scale(0.9); }
+
 .saveForm {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--ui-space-6) var(--ui-space-8);
   border-bottom: 1px solid var(--color-border);
   display: flex;
-  gap: var(--spacing-xs);
+  gap: var(--ui-space-2);
 }
 
 .saveInput {
   flex: 1;
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--ui-space-2) var(--ui-space-4);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--ui-radius-4);
   background: var(--color-background);
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
   font-family: var(--font-body);
   font-size: var(--font-size-body);
 }
@@ -90,9 +92,9 @@
 }
 
 .saveBtn {
-  padding: var(--spacing-xs) var(--spacing-md);
+  padding: var(--ui-space-2) var(--ui-space-6);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--ui-radius-4);
   background: var(--color-interactive);
   color: var(--color-on-interactive);
   font-family: var(--font-body);
@@ -103,7 +105,7 @@
 }
 
 .saveBtn:hover {
-  background: var(--color-interactive-hover);
+  opacity: 0.9;
 }
 
 .saveBtn:disabled {
@@ -114,23 +116,23 @@
 .sessionList {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-sm) 0;
+  padding: var(--ui-space-4) 0;
 }
 
 .emptyState {
-  padding: var(--spacing-xl) var(--spacing-lg);
+  padding: var(--ui-space-10) var(--ui-space-8);
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--color-on-surface-subtle);
   font-size: var(--font-size-body);
 }
 
 .sessionItem {
   display: flex;
   align-items: center;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  gap: var(--spacing-sm);
+  padding: var(--ui-space-4) var(--ui-space-8);
+  gap: var(--ui-space-4);
   border-bottom: 1px solid var(--color-border);
-  transition: background 0.1s;
+  transition: background var(--ui-duration-1);
 }
 
 .sessionItem:hover {
@@ -145,7 +147,7 @@
 .sessionName {
   font-size: var(--font-size-body);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-on-surface);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -153,25 +155,28 @@
 
 .sessionMeta {
   font-size: var(--font-size-label);
-  color: var(--color-text-muted);
-  margin-top: 2px;
+  color: var(--color-on-surface-subtle);
+  margin-top: var(--ui-space-1);
 }
 
 .sessionActions {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: var(--ui-space-2);
   flex-shrink: 0;
 }
 
 .actionBtn {
   background: none;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--ui-radius-2);
   cursor: pointer;
-  color: var(--color-text-secondary);
+  color: var(--color-on-surface-subtle);
   font-size: var(--font-size-label);
-  padding: 2px 8px;
-  transition: all 0.1s;
+  padding: var(--ui-space-1) var(--ui-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--ui-duration-2), color var(--ui-duration-2), background var(--ui-duration-2);
 }
 
 .actionBtn:hover {
@@ -185,9 +190,13 @@
 }
 
 .limitNote {
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--ui-space-4) var(--ui-space-8);
   font-size: var(--font-size-label);
-  color: var(--color-text-muted);
+  color: var(--color-on-surface-subtle);
   border-top: 1px solid var(--color-border);
   text-align: center;
+}
+
+.emptyStateHint {
+  margin-top: var(--ui-space-2);
 }

@@ -1,10 +1,13 @@
 import { generatePalette, pickHarmonyModel } from '@/core/color/harmony'
 import type { ColorSlot, HarmonyModelName } from '@/core/color/types'
 
+export type StateColorPrefix = 'error' | 'warning' | 'success' | 'info'
+
 export interface ColorState {
   slots: ColorSlot[]
   activeModel: HarmonyModelName | null
   dataVizN: number
+  stateOverrides: Partial<Record<StateColorPrefix, string>>
 }
 
 export interface ColorActions {
@@ -15,12 +18,16 @@ export interface ColorActions {
   reorderSlots: (fromIndex: number, toIndex: number) => void
   setDataVizN: (n: number) => void
   overrideHex: (id: string, hex: string) => void
+  renameSlot: (id: string, name: string) => void
+  setStateColor: (prefix: StateColorPrefix, hex: string) => void
+  resetStateColor: (prefix: StateColorPrefix) => void
 }
 
 export const defaultColorState: ColorState = {
   slots: [],
   activeModel: null,
   dataVizN: 8,
+  stateOverrides: {},
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,6 +89,27 @@ export function createColorActions(set: any, get: any): ColorActions {
       const state = get() as { color: ColorState }
       const slots = state.color.slots.map(s => s.id === id ? { ...s, hex } : s)
       set({ color: { ...state.color, slots } })
+    },
+
+    renameSlot(id: string, name: string) {
+      const state = get() as { color: ColorState }
+      const trimmed = name.trim()
+      const slots = state.color.slots.map(s =>
+        s.id === id ? { ...s, name: trimmed || undefined } : s,
+      )
+      set({ color: { ...state.color, slots } })
+    },
+
+    setStateColor(prefix, hex) {
+      const state = get() as { color: ColorState }
+      set({ color: { ...state.color, stateOverrides: { ...state.color.stateOverrides, [prefix]: hex } } })
+    },
+
+    resetStateColor(prefix) {
+      const state = get() as { color: ColorState }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [prefix]: _removed, ...rest } = state.color.stateOverrides
+      set({ color: { ...state.color, stateOverrides: rest as Partial<Record<StateColorPrefix, string>> } })
     },
   }
 }

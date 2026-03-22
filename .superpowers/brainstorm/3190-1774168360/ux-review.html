@@ -1,0 +1,246 @@
+<style>
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.issue-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+.issue-card.critical { border-left: 4px solid #dc2626; }
+.issue-card.high { border-left: 4px solid #d97706; }
+.issue-card.medium { border-left: 4px solid #2563eb; }
+.issue-card.suggestion { border-left: 4px solid #059669; }
+.issue-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; }
+.badge.critical { background: #fee2e2; color: #dc2626; }
+.badge.high { background: #fef3c7; color: #d97706; }
+.badge.medium { background: #dbeafe; color: #2563eb; }
+.badge.suggestion { background: #d1fae5; color: #059669; }
+.issue-items { list-style: none; margin: 0; padding: 0; }
+.issue-items li { font-size: 12px; color: #475569; padding: 3px 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 6px; }
+.issue-items li:last-child { border-bottom: none; }
+.code { font-family: 'SF Mono', 'Fira Code', monospace; background: #f8fafc; color: #0f172a; padding: 1px 5px; border-radius: 4px; font-size: 11px; white-space: nowrap; }
+.wrong { color: #dc2626; }
+.right { color: #059669; }
+.arrow { color: #94a3b8; font-size: 11px; }
+.section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin: 20px 0 8px; }
+.summary-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.summary-chip { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+.full-width { grid-column: 1 / -1; }
+.file-ref { font-size: 10px; color: #94a3b8; font-family: monospace; margin-top: 4px; }
+</style>
+
+<h2>Senior UI/UX Review — v3 Design System Explorer</h2>
+<p class="subtitle">Full audit of the current branch: icons, tokens, typography wiring, animations &amp; UX polish</p>
+
+<div class="summary-row">
+  <div class="summary-chip" style="background:#fee2e2;color:#dc2626">6 Critical</div>
+  <div class="summary-chip" style="background:#fef3c7;color:#d97706">5 High</div>
+  <div class="summary-chip" style="background:#dbeafe;color:#2563eb">4 Medium</div>
+  <div class="summary-chip" style="background:#d1fae5;color:#059669">5 UX Suggestions</div>
+</div>
+
+<div class="section-header">Icons — App chrome using text chars/emoji instead of Lucide</div>
+<div class="review-grid">
+
+  <div class="issue-card critical">
+    <div class="issue-title"><span class="badge critical">Critical</span> Emoji lock icons everywhere</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">🔒/🔓</span> <span class="arrow">→</span> <span class="code right">Lucide Lock/Unlock</span></li>
+      <li>Used in <span class="code">ColorSlotCard.tsx:65</span></li>
+      <li>Used in <span class="code">TypographySpecimen.tsx:35,40,45</span></li>
+      <li>Emoji don't inherit color, scale poorly, break on some systems</li>
+    </ul>
+    <div class="file-ref">ColorSlotCard.tsx, TypographySpecimen.tsx</div>
+  </div>
+
+  <div class="issue-card critical">
+    <div class="issue-title"><span class="badge critical">Critical</span> Text arrows / × chars as icons</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">↩ ↪</span> undo/redo <span class="arrow">→</span> <span class="code right">Lucide Undo2/Redo2</span></li>
+      <li><span class="code wrong">← Generator</span> back btn <span class="arrow">→</span> <span class="code right">Lucide ArrowLeft</span></li>
+      <li><span class="code wrong">Export ↓</span> <span class="arrow">→</span> <span class="code right">Lucide Download</span></li>
+      <li><span class="code wrong">× / ✕</span> close/delete <span class="arrow">→</span> <span class="code right">Lucide X</span></li>
+    </ul>
+    <div class="file-ref">AppHeader.tsx, DetailMode.tsx, SessionsDrawer.tsx</div>
+  </div>
+
+  <div class="issue-card high">
+    <div class="issue-title"><span class="badge high">High</span> Sessions button: inline SVG path</div>
+    <ul class="issue-items">
+      <li>Hardcoded <span class="code wrong">&lt;svg&gt; path</span> for bookmark icon</li>
+      <li>Should use <span class="code right">Lucide Bookmark</span> from icon library</li>
+      <li>Inconsistent with rest of app; won't update if icon set changes</li>
+    </ul>
+    <div class="file-ref">AppHeader.tsx:83-86</div>
+  </div>
+
+  <div class="issue-card high">
+    <div class="issue-title"><span class="badge high">High</span> Theme switcher unicode chars</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">☀ ◑ ◐</span> unicode for theme modes</li>
+      <li>Should use <span class="code right">Lucide Sun / Circle (half-filled) / Moon</span></li>
+      <li>Current chars render inconsistently across OS/font</li>
+    </ul>
+    <div class="file-ref">AppHeader.tsx:11-13</div>
+  </div>
+
+</div>
+
+<div class="section-header">Typography — Font sizes &amp; faces not wired to design system</div>
+<div class="review-grid">
+
+  <div class="issue-card critical">
+    <div class="issue-title"><span class="badge critical">Critical</span> Specimen preview ignores user's type scale</div>
+    <ul class="issue-items">
+      <li>Heading: <span class="code wrong">font-size: 26px</span> hardcoded</li>
+      <li>Body: <span class="code wrong">font-size: 14px</span> hardcoded</li>
+      <li>Should use <span class="code right">var(--font-size-h1)</span> and <span class="code right">var(--font-size-body)</span></li>
+      <li>Font <em>family</em> is wired correctly via inline style — only sizes are broken</li>
+    </ul>
+    <div class="file-ref">TypographySpecimen.module.css:44,57</div>
+  </div>
+
+  <div class="issue-card high">
+    <div class="issue-title"><span class="badge high">High</span> Readability score specimen fixed at 16px</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">font-size: 16px</span> for sample text</li>
+      <li>Should use <span class="code right">var(--font-size-body)</span> to reflect user's actual body size</li>
+    </ul>
+    <div class="file-ref">ReadabilityScore.module.css:53</div>
+  </div>
+
+</div>
+
+<div class="section-header">Colors — Hardcoded values instead of semantic tokens</div>
+<div class="review-grid">
+
+  <div class="issue-card critical">
+    <div class="issue-title"><span class="badge critical">Critical</span> WCAG badges use hardcoded Tailwind colors</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">#dcfce7 / #15803d</span> pass badge</li>
+      <li><span class="code wrong">#fee2e2 / #dc2626</span> fail badge</li>
+      <li><span class="code wrong">#dbeafe / #1d4ed8</span> AAA badge</li>
+      <li><span class="arrow">→</span> Should use <span class="code right">var(--color-success)</span>, <span class="code right">var(--color-error)</span>, <span class="code right">var(--color-info)</span></li>
+    </ul>
+    <div class="file-ref">ContrastGrid.module.css:62-74</div>
+  </div>
+
+  <div class="issue-card high">
+    <div class="issue-title"><span class="badge high">High</span> Readability grades + copied state hardcoded</div>
+    <ul class="issue-items">
+      <li>Same hardcoded green/yellow/red palette for grade good/medium/poor</li>
+      <li>Export "copied" state: <span class="code wrong">background: #15803d</span></li>
+      <li><span class="arrow">→</span> <span class="code right">var(--color-success)</span>, <span class="code right">var(--color-warning)</span>, <span class="code right">var(--color-error)</span></li>
+    </ul>
+    <div class="file-ref">ReadabilityScore.module.css:48-50, ExportPanel.module.css:142</div>
+  </div>
+
+</div>
+
+<div class="section-header">Animation &amp; Hover States</div>
+<div class="review-grid">
+
+  <div class="issue-card critical">
+    <div class="issue-title"><span class="badge critical">Critical</span> Remove button can't animate — display toggle</div>
+    <ul class="issue-items">
+      <li><span class="code wrong">display: none</span> <span class="arrow">→</span> <span class="code wrong">display: flex</span> on hover</li>
+      <li><span class="code">display</span> property can't be transitioned — abrupt pop-in</li>
+      <li>Fix: <span class="code right">opacity: 0; visibility: hidden</span> <span class="arrow">→</span> <span class="code right">opacity: 1; visibility: visible</span></li>
+      <li>Add <span class="code right">transition: opacity var(--ui-duration-3)</span></li>
+    </ul>
+    <div class="file-ref">ColorSlotCard.module.css:98-106</div>
+  </div>
+
+  <div class="issue-card medium">
+    <div class="issue-title"><span class="badge medium">Medium</span> Missing :active states on primary buttons</div>
+    <ul class="issue-items">
+      <li>Export, Detail Mode, Generate buttons have hover but no active feedback</li>
+      <li>Add <span class="code right">:active { transform: scale(0.97) }</span> for tactile feel</li>
+      <li>Undo/redo buttons also missing active state</li>
+    </ul>
+    <div class="file-ref">AppHeader.module.css, GeneratorFooter.module.css</div>
+  </div>
+
+  <div class="issue-card medium">
+    <div class="issue-title"><span class="badge medium">Medium</span> Lock btn hover relies only on global transition</div>
+    <ul class="issue-items">
+      <li>No explicit transition on <span class="code">.lockBtn:hover</span> in TypographySpecimen</li>
+      <li>Global transition fires too slowly for micro-interactions</li>
+      <li>Add <span class="code right">transition: all var(--ui-duration-2)</span> for snappier feel</li>
+    </ul>
+    <div class="file-ref">TypographySpecimen.module.css</div>
+  </div>
+
+  <div class="issue-card medium">
+    <div class="issue-title"><span class="badge medium">Medium</span> Swatch edit indicator broken on light colors</div>
+    <ul class="issue-items">
+      <li><span class="code">swatch::after</span> pencil always renders white</li>
+      <li>On light swatches (<span class="code">data-light=true</span>) it's invisible</li>
+      <li>Add: <span class="code right">[data-light='true'] .swatch::after { color: rgba(0,0,0,0.7) }</span></li>
+    </ul>
+    <div class="file-ref">ColorSlotCard.module.css:109-121</div>
+  </div>
+
+</div>
+
+<div class="section-header">Inline Styles &amp; Token Violations</div>
+<div class="review-grid">
+
+  <div class="issue-card medium full-width">
+    <div class="issue-title"><span class="badge medium">Medium</span> Inline styles that belong in CSS modules</div>
+    <ul class="issue-items" style="columns:2;gap:24px">
+      <li><span class="code">SemanticRolesSection.tsx:77</span> — <span class="code wrong">style={{ marginTop: 'var(--ui-space-8)' }}</span></li>
+      <li><span class="code">ContrastGrid.tsx:100</span> — inline flex/gap style</li>
+      <li><span class="code">MotionSection.tsx:61</span> — <span class="code wrong">style={{ marginTop: 'var(--ui-space-6)' }}</span></li>
+      <li><span class="code">MiscSection.tsx:32</span> — inline flex-column style</li>
+      <li><span class="code">MiscSection.tsx:19</span> — <span class="code wrong">width: 60</span> (number, not px string)</li>
+      <li><span class="code">SessionsDrawer.tsx:153</span> — <span class="code wrong">style={{ marginTop: '...' }}</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="section-header">Senior UX Suggestions</div>
+<div class="review-grid">
+
+  <div class="issue-card suggestion">
+    <div class="issue-title"><span class="badge suggestion">Suggestion</span> SplitPane divider hit area too small</div>
+    <ul class="issue-items">
+      <li>Divider is only 4px wide — very hard to grab</li>
+      <li>Add a transparent wider hit zone via <span class="code right">::before/::after</span> pseudo (e.g. 12px)</li>
+      <li>Or show a subtle center grip indicator on hover</li>
+    </ul>
+  </div>
+
+  <div class="issue-card suggestion">
+    <div class="issue-title"><span class="badge suggestion">Suggestion</span> TypographySpecimen heading clips text</div>
+    <ul class="issue-items">
+      <li><span class="code">white-space: nowrap; overflow: hidden; text-overflow: ellipsis</span></li>
+      <li>Heading specimen text gets silently clipped at certain widths</li>
+      <li>Change to 2-line max with <span class="code right">-webkit-line-clamp: 2</span></li>
+    </ul>
+  </div>
+
+  <div class="issue-card suggestion">
+    <div class="issue-title"><span class="badge suggestion">Suggestion</span> ShadeStrip label unreadable on light swatches</div>
+    <ul class="issue-items">
+      <li>Labels always use <span class="code wrong">rgba(255,255,255,0.55)</span></li>
+      <li>On very light shade cells this is invisible</li>
+      <li>Mirror the <span class="code">data-light</span> adaptive logic from ColorSlotCard</li>
+    </ul>
+  </div>
+
+  <div class="issue-card suggestion">
+    <div class="issue-title"><span class="badge suggestion">Suggestion</span> ContrastGrid cells lack hover feedback</div>
+    <ul class="issue-items">
+      <li>Cells are informational but don't indicate they're readable</li>
+      <li>A subtle scale or border highlight on hover would improve scannability</li>
+    </ul>
+  </div>
+
+  <div class="issue-card suggestion">
+    <div class="issue-title"><span class="badge suggestion">Suggestion</span> Sessions drawer close/delete icons need padding</div>
+    <ul class="issue-items">
+      <li>Text <span class="code wrong">×</span> and <span class="code wrong">✕</span> chars have poor tap targets</li>
+      <li>Lucide X with proper button padding = better accessibility</li>
+      <li>Also: add <span class="code right">transition: background var(--ui-duration-2)</span> to closeBtn</li>
+    </ul>
+  </div>
+
+</div>

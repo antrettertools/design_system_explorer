@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import styles from './DetailMode.module.css'
 import { useUI, useUIActions } from '@/store'
+import { ArrowLeft } from 'lucide-react'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
@@ -57,7 +58,8 @@ export function DetailMode() {
           onClick={() => setMode('generator')}
           aria-label="Back to generator"
         >
-          ← Generator
+          <ArrowLeft size={13} strokeWidth={2} />
+          Generator
         </button>
         <div className={styles.divider} />
         <nav className={styles.tabs} aria-label="Detail mode tabs">

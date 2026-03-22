@@ -1,19 +1,14 @@
 import { useState, useRef } from 'react'
 import { converter } from 'culori'
+import { Pencil } from 'lucide-react'
 import { useColor, useColorActions } from '@/store'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
+import { ROLE_LABELS } from '@/features/generator/ColorSwatches/ColorSlotCard'
 import styles from './ShadeScaleSection.module.css'
 
 const toOklch = converter('oklch')
 
 const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
-
-const ROLE_LABELS: Record<string, string> = {
-  brand: 'Brand',
-  secondary: 'Secondary',
-  accentA: 'Accent A',
-  accentB: 'Accent B',
-}
 
 function isLightStep(hex: string): boolean {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -50,6 +45,7 @@ export function ShadeScaleSection() {
         const scale = getShadeSteps(slot.role)
         const oklchLabel = hexToOklchLabel(slot.hex)
         const anchorRef = { current: swatchRefs.current[slot.id] } as React.RefObject<HTMLElement>
+        const displayName = slot.name ?? ROLE_LABELS[slot.role] ?? slot.role
         return (
           <div key={slot.id} className={styles.colorRow}>
             <div className={styles.colorHeader}>
@@ -58,16 +54,16 @@ export function ShadeScaleSection() {
                 className={styles.colorSwatch}
                 style={{ background: slot.hex }}
                 onClick={() => setOpenSlotId(slot.id)}
-                title={`Edit ${ROLE_LABELS[slot.role] ?? slot.role} color`}
+                title={`Edit ${displayName} color`}
               >
-                <span className={styles.swatchEditIcon}>✎</span>
+                <Pencil size={13} strokeWidth={2} className={styles.swatchEditIcon} />
               </div>
               <div className={styles.colorInfo}>
-                <span className={styles.roleName}>{ROLE_LABELS[slot.role] ?? slot.role}</span>
+                <span className={styles.roleName}>{displayName}</span>
                 <span className={styles.colorMeta}>{slot.hex.toUpperCase()} · {oklchLabel}</span>
               </div>
             </div>
-            <div className={styles.scaleRow} role="list" aria-label={`${ROLE_LABELS[slot.role] ?? slot.role} shade scale`}>
+            <div className={styles.scaleRow} role="list" aria-label={`${displayName} shade scale`}>
               {SHADE_STEPS.map(step => {
                 const stepHex = scale[step]
                 const isLight = isLightStep(stepHex)

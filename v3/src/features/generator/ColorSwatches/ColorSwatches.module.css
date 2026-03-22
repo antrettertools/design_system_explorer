@@ -1,7 +1,7 @@
 .grid {
   display: flex;
-  gap: 6px;
-  padding: 16px 16px 0;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-8) var(--ui-space-8) 0;
 }
 
 .grid > * {

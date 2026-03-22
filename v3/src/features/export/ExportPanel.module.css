@@ -6,7 +6,7 @@
   z-index: 200;
   display: flex;
   align-items: flex-end;
-  animation: fadeIn 0.15s ease;
+  animation: fadeIn var(--ui-duration-3) ease;
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -16,9 +16,9 @@
   max-width: 680px;
   margin: 0 auto;
   background: var(--color-surface, #fff);
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--ui-radius-5) var(--ui-radius-5) 0 0;
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.12);
-  animation: slideUp 0.2s ease;
+  animation: slideUp var(--ui-duration-4) ease;
   max-height: 75vh;
   display: flex;
   flex-direction: column;
@@ -33,25 +33,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px 0;
+  padding: var(--ui-space-8) var(--ui-space-9) 0;
   flex-shrink: 0;
 }
 
 .panelTitle {
-  font-size: 14px;
+  font-size: var(--ui-text-md);
   font-weight: 700;
   color: var(--color-on-surface, #111);
   font-family: sans-serif;
 }
 
 .closeBtn {
-  width: 28px;
-  height: 28px;
+  width: var(--ui-size-btn-sm);
+  height: var(--ui-size-btn-sm);
   background: none;
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-3);
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--ui-text-md);
   color: var(--color-on-surface-subtle, #888);
   display: flex;
   align-items: center;
@@ -62,24 +62,24 @@
 
 .formatTabs {
   display: flex;
-  gap: 4px;
-  padding: 12px 20px 0;
+  gap: var(--ui-space-2);
+  padding: var(--ui-space-6) var(--ui-space-9) 0;
   border-bottom: 1px solid var(--color-border, #e8e4df);
   flex-shrink: 0;
 }
 
 .formatTab {
-  padding: 6px 12px;
+  padding: var(--ui-space-3) var(--ui-space-6);
   border: none;
   background: none;
   border-bottom: 2px solid transparent;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
   color: var(--color-on-surface-subtle, #888);
   font-family: sans-serif;
   margin-bottom: -1px;
-  transition: color 0.15s;
+  transition: color var(--ui-duration-3);
 }
 
 .formatTab.active {
@@ -90,20 +90,20 @@
 .codeWrapper {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 20px;
+  padding: var(--ui-space-8) var(--ui-space-9);
   position: relative;
 }
 
 .code {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 13px;
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-text-sm);
   line-height: 1.6;
   color: var(--color-on-surface, #333);
   white-space: pre;
   background: var(--color-background, #f8f7f4);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
-  padding: 12px 14px;
+  border-radius: var(--ui-radius-3);
+  padding: var(--ui-space-6) var(--ui-space-7);
   overflow-x: auto;
 }
 
@@ -111,48 +111,53 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  padding: var(--ui-space-6) var(--ui-space-9);
   border-top: 1px solid var(--color-border, #e8e4df);
   flex-shrink: 0;
 }
 
 .meta {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle, #aaa);
   font-family: sans-serif;
 }
 
-.footerActions { display: flex; gap: 8px; }
+.footerActions { display: flex; gap: var(--ui-space-4); }
 
 .copyBtn {
-  height: 36px;
-  padding: 0 20px;
+  height: var(--ui-size-btn-lg);
+  padding: 0 var(--ui-space-9);
   background: var(--color-interactive, #e8543a);
   color: var(--color-on-interactive, #fff);
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
   font-family: sans-serif;
-  transition: opacity 0.15s;
+  transition: opacity var(--ui-duration-3);
 }
 
 .copyBtn:hover { opacity: 0.85; }
-.copyBtn.copied { background: #15803d; }
+.copyBtn:active { transform: scale(0.97); }
+.copyBtn.copied { background: var(--color-success, #15803d); }
 
 .downloadBtn {
-  height: 36px;
-  padding: 0 14px;
+  height: var(--ui-size-btn-lg);
+  padding: 0 var(--ui-space-7);
   background: none;
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   cursor: pointer;
   color: var(--color-on-surface, #333);
   font-family: sans-serif;
+  transition: background var(--ui-duration-2), border-color var(--ui-duration-2);
 }
 
-@media (max-width: 768px) {
-  .panel { border-radius: 16px 16px 0 0; max-height: 85vh; }
+.downloadBtn:hover { background: var(--color-surface-raised, var(--color-border)); }
+.downloadBtn:active { transform: scale(0.97); }
+
+@media (max-width: 768px) { /* --ui-bp-mobile */
+  .panel { border-radius: var(--ui-radius-6) var(--ui-radius-6) 0 0; max-height: 85vh; }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { X } from 'lucide-react'
 import { useStore, useUI, useUIActions } from '@/store'
 import { listSessions, saveSession, deleteSession } from '@/core/sessions/storage'
 import type { Session } from '@/core/sessions/types'
@@ -122,7 +123,7 @@ export function SessionsDrawer() {
             onClick={closeSessionsDrawer}
             aria-label="Close sessions drawer"
           >
-            ×
+            <X size={16} strokeWidth={2} />
           </button>
         </div>
 
@@ -150,7 +151,7 @@ export function SessionsDrawer() {
           {sessions.length === 0 ? (
             <div className={styles.emptyState}>
               <p>No saved sessions yet.</p>
-              <p style={{ marginTop: 4 }}>Give your palette a name above and save it.</p>
+              <p className={styles.emptyStateHint}>Give your palette a name above and save it.</p>
             </div>
           ) : (
             sessions.map((session) => (
@@ -173,7 +174,7 @@ export function SessionsDrawer() {
                     title="Delete this session"
                     aria-label={`Delete session ${session.name}`}
                   >
-                    ✕
+                    <X size={12} strokeWidth={2.5} />
                   </button>
                 </div>
               </div>

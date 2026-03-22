@@ -1,29 +1,29 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: var(--ui-space-4);
 }
 
 .card {
   background: var(--color-surface, #fff);
   border: 1px solid var(--color-border, #e8e4df);
-  border-radius: 6px;
-  padding: 12px;
+  border-radius: var(--ui-radius-3);
+  padding: var(--ui-space-6);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
 }
 
 .preview {
@@ -34,14 +34,53 @@
 }
 
 .label {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface, #333);
 }
 
-.value {
-  font-size: 13px;
-  font-family: monospace;
-  color: var(--color-on-surface-subtle, #aaa);
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
 }
+
+.valueInput {
+  width: 44px;
+  padding: var(--ui-space-1) var(--ui-space-2);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #111);
+  text-align: right;
+}
+
+.valueInput:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.valueInput.overridden {
+  border-color: var(--color-interactive, #e8543a);
+  background: var(--color-interactive-subtle, #fde8e3);
+}
+
+.pxLabel {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #bbb);
+  font-family: var(--ui-font-mono);
+}
+
+.resetBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #bbb);
+  padding: 0 var(--ui-space-1);
+}
+
+.resetBtn:hover { color: var(--color-interactive, #e8543a); }

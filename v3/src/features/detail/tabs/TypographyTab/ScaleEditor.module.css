@@ -1,47 +1,47 @@
 .section { margin-bottom: 24px; }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--color-on-surface-subtle);
-  margin-bottom: 14px;
+  margin-bottom: var(--ui-space-7);
   font-family: sans-serif;
 }
 
 .ratioRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  font-size: 13px;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-7);
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
   flex-wrap: wrap;
 }
 
 .hint {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   opacity: 0.5;
 }
 
 .presetGroup {
   display: flex;
-  gap: 4px;
+  gap: var(--ui-space-2);
   flex-wrap: wrap;
   align-items: center;
 }
 
 .presetBtn {
-  padding: 3px 8px;
+  padding: var(--ui-space-1) var(--ui-space-4);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-2);
   background: none;
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   cursor: pointer;
   color: var(--color-on-surface-subtle);
-  transition: all 0.15s;
+  transition: all var(--ui-duration-3);
 }
 
 .presetBtn:hover {
@@ -58,12 +58,12 @@
 
 .customRatioInput {
   width: 72px;
-  font-size: 13px;
-  font-family: monospace;
-  padding: 3px 6px;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  padding: var(--ui-space-1) var(--ui-space-3);
   background: var(--color-background);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-2);
   color: var(--color-on-surface-subtle);
 }
 
@@ -78,17 +78,18 @@
   outline-offset: 1px;
 }
 
-.scaleList { display: flex; flex-direction: column; gap: 4px; }
+.scaleList { display: flex; flex-direction: column; gap: var(--ui-space-2); }
 
 .scaleRow {
   display: flex;
   align-items: center;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: var(--ui-space-3) var(--ui-space-5);
+  border-radius: var(--ui-radius-3);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  gap: 10px;
+  gap: var(--ui-space-5);
   flex-wrap: wrap;
+  transition: all var(--ui-duration-3);
 }
 
 .overridden {
@@ -99,9 +100,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
-  padding: 0 2px;
+  padding: 0 var(--ui-space-1);
   line-height: 1;
   flex-shrink: 0;
 }
@@ -111,31 +112,31 @@
 .expandedControls {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--ui-space-5);
   width: 100%;
-  padding: 8px 0 4px;
+  padding: var(--ui-space-4) 0 var(--ui-space-2);
   border-top: 1px solid var(--color-border);
-  margin-top: 4px;
+  margin-top: var(--ui-space-2);
   align-items: center;
 }
 
 .overrideLabel {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  font-size: 13px;
+  gap: var(--ui-space-1);
+  font-size: var(--ui-text-sm);
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);
 }
 
 .overrideInput {
   width: 72px;
-  font-size: 13px;
-  font-family: monospace;
-  padding: 3px 6px;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  padding: var(--ui-space-1) var(--ui-space-3);
   background: var(--color-background);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-2);
   color: var(--color-on-surface);
 }
 
@@ -145,15 +146,15 @@
 }
 
 .resetStepBtn {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   background: none;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 3px 10px;
+  border-radius: var(--ui-radius-2);
+  padding: var(--ui-space-1) var(--ui-space-5);
   cursor: pointer;
   color: var(--color-on-surface-subtle);
   align-self: flex-end;
-  transition: all 0.15s;
+  transition: all var(--ui-duration-3);
 }
 
 .resetStepBtn:hover {
@@ -171,21 +172,21 @@
 
 .meta {
   display: flex;
-  gap: 8px;
+  gap: var(--ui-space-4);
   flex-shrink: 0;
   align-items: center;
 }
 
 .metaItem {
-  font-size: 13px;
-  font-family: monospace;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
   color: var(--color-on-surface-subtle);
   min-width: 40px;
   text-align: right;
 }
 
 .stepLabel {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   font-weight: 700;
   font-family: sans-serif;
   color: var(--color-on-surface-subtle);

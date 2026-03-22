@@ -1,15 +1,15 @@
 .footer {
-  padding: 12px 16px;
+  padding: var(--ui-space-6) var(--ui-space-8);
   border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ui-space-4);
   flex-wrap: wrap;
   background: var(--color-surface);
 }
 
 .hint {
-  font-size: 13px;
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
   font-family: sans-serif;
   flex: 1;
@@ -18,64 +18,75 @@
 
 .hint kbd {
   display: inline-block;
-  padding: 1px 5px;
+  padding: var(--ui-space-1) var(--ui-space-2);
   background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
-  border-radius: 3px;
-  font-family: monospace;
-  font-size: 13px;
+  border-radius: var(--ui-radius-2);
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-text-sm);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--ui-space-3);
   flex-wrap: wrap;
 }
 
 .vibeChip {
-  height: 28px;
-  padding: 0 10px;
+  height: var(--ui-size-btn-sm);
+  padding: 0 var(--ui-space-5);
   background: none;
   border: 1px dashed var(--color-border);
-  border-radius: 14px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-5);
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
   cursor: not-allowed;
   font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
 }
 
 .addBtn {
-  height: 28px;
-  padding: 0 10px;
+  height: var(--ui-size-btn-sm);
+  padding: 0 var(--ui-space-5);
   background: none;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   cursor: pointer;
   color: var(--color-on-surface);
   font-family: sans-serif;
-  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  transition: background var(--ui-duration-2), border-color var(--ui-duration-2);
 }
 
-.addBtn:hover { background: var(--color-interactive-subtle); }
+.addBtn:hover { background: var(--color-interactive-subtle); border-color: var(--color-interactive); }
+.addBtn:active { transform: scale(0.96); }
 .addBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .detailBtn {
-  height: 28px;
-  padding: 0 12px;
+  height: var(--ui-size-btn-sm);
+  padding: 0 var(--ui-space-6);
   background: var(--color-interactive);
   color: var(--color-on-interactive);
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
   font-family: sans-serif;
-  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  transition: opacity var(--ui-duration-2);
 }
 
 .detailBtn:hover { opacity: 0.85; }
+.detailBtn:active { transform: scale(0.97); }
 
 .generateMobile {
   display: none;
@@ -85,7 +96,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) { /* --ui-bp-mobile */
   .hint { display: none; }
   .footer {
     position: sticky;
@@ -93,29 +104,37 @@
     border-top: 1px solid var(--color-border);
   }
   .generateMobile {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-3);
     flex: 1;
-    height: 40px;
+    height: var(--ui-size-btn-xl);
     background: var(--color-on-surface);
     color: var(--color-background);
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: var(--ui-radius-4);
+    font-size: var(--ui-text-md);
     font-weight: 600;
     cursor: pointer;
   }
+  .generateMobile:active { transform: scale(0.98); }
   .previewBtn {
-    display: block;
-    height: 40px;
-    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-2);
+    height: var(--ui-size-btn-xl);
+    padding: 0 var(--ui-space-8);
     background: var(--color-surface, #fff);
     color: var(--color-on-surface, #111);
     border: 1px solid var(--color-border, #e8e4df);
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: var(--ui-radius-4);
+    font-size: var(--ui-text-md);
     cursor: pointer;
-    margin-right: 8px;
+    margin-right: var(--ui-space-4);
     font-family: sans-serif;
     white-space: nowrap;
   }
+  .previewBtn:active { transform: scale(0.97); }
 }
