@@ -26,7 +26,7 @@
 }
 
 .roleLabel {
-  font-size: var(--ui-text-sm);
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
