@@ -1,10 +1,8 @@
-import { useColor, useColorActions, useUIActions, useTypographyActions } from '@/store'
-import { ArrowRight, Sparkles, Plus } from 'lucide-react'
+import { useColorActions, useUIActions, useTypographyActions } from '@/store'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import styles from './GeneratorFooter.module.css'
 
 export function GeneratorFooter() {
-  const { slots } = useColor()
-  const { addSlot } = useColorActions()
   const { setMode, showMobilePreview } = useUIActions()
   const colorActions = useColorActions()
   const typographyActions = useTypographyActions()
@@ -16,28 +14,7 @@ export function GeneratorFooter() {
 
   return (
     <div className={styles.footer}>
-      <span className={styles.hint}>
-        Press <kbd>SPACE</kbd> to generate
-      </span>
       <div className={styles.actions}>
-        <button
-          className={styles.vibeChip}
-          disabled
-          title="Coming soon — vibe-based generation (Phase 4)"
-          aria-disabled="true"
-        >
-          <Sparkles size={12} strokeWidth={1.75} />
-          vibe
-        </button>
-        <button
-          className={styles.addBtn}
-          onClick={addSlot}
-          disabled={slots.length >= 8}
-          aria-label="Add color slot"
-        >
-          <Plus size={13} strokeWidth={2} />
-          Add color
-        </button>
         <button
           className={styles.detailBtn}
           onClick={() => setMode('detail')}
