@@ -25,7 +25,7 @@ import { ICON_LIBRARIES } from '@/core/components/icons'
 import type { ComponentName, ComponentVariantKey } from '@/core/components/types'
 import styles from './ComponentsSummaryCard.module.css'
 
-type IconComp = React.ComponentType<{ size?: number; width?: number; height?: number; strokeWidth?: number }>
+type IconComp = React.ComponentType<{ size?: number | string; width?: number | string; height?: number | string; strokeWidth?: number | string }>
 
 const PREVIEW_ICONS: Record<string, IconComp[]> = {
   lucide:    [Home, Search, Settings, User, Heart, Star],

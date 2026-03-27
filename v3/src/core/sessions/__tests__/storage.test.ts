@@ -18,7 +18,7 @@ const mockSnapshot: ShareSnapshot = {
   v: 3,
   colors: [{ id: 'brand', hex: '#5B6CF7', locked: false, role: 'brand' }],
   harmonyModel: 'analogous',
-  pairing: { heading: 'Inter', body: 'Merriweather' },
+  pairing: { heading: 'Inter', body: 'Merriweather', source: 'google', character: 'humanist', harmonyAffinity: ['analogous'] },
   typographyLocks: { heading: false, body: false, scale: false },
   scaleRatio: 1.333,
   mode: 'generator',

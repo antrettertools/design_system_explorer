@@ -44,7 +44,7 @@ export function DetailMode() {
       default:
         return (
           <div className={styles.comingSoon}>
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} tab — coming in Phase 3
+            {(activeTab as string).charAt(0).toUpperCase() + (activeTab as string).slice(1)} tab — coming in Phase 3
           </div>
         )
     }

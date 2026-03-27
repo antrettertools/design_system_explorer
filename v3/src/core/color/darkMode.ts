@@ -1,7 +1,8 @@
 import type { ShadeScale } from './types'
 import { getContrastColor } from './scales'
+import type { SemanticRoles } from './semantic'
 
-export type SemanticRoles = Record<string, string>
+export type { SemanticRoles }
 
 /**
  * Dark mode derivation — maps light semantic roles to their dark equivalents

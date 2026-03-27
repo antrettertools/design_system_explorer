@@ -51,8 +51,8 @@ export function makeShadeScale(hex: string): ShadeScale {
   // Dark end: interpolate toward L=0.13, C≈0.02 (near-black with hint of hue)
   const darkTarget = { mode: 'oklch' as const, l: 0.13, c: 0.02, h }
 
-  const lightInterp = interpolate([lightTarget, { mode: 'oklch' as const, ...base }], 'oklch')
-  const darkInterp = interpolate([{ mode: 'oklch' as const, ...base }, darkTarget], 'oklch')
+  const lightInterp = interpolate([lightTarget, base], 'oklch')
+  const darkInterp = interpolate([base, darkTarget], 'oklch')
 
   // t values for light steps 50→400 (t=0 is lightTarget, t=1 is base)
   const lightT: Record<number, number> = { 50: 0.08, 100: 0.15, 200: 0.30, 300: 0.50, 400: 0.72 }

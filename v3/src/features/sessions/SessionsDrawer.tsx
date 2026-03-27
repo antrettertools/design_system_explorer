@@ -48,7 +48,7 @@ export function SessionsDrawer() {
       v: 3,
       colors: state.color.slots,
       harmonyModel: state.color.activeRecipe?.id ?? null,
-      pairing: state.typography.pairing ?? { heading: 'Inter', body: 'Inter', source: 'google' },
+      pairing: state.typography.pairing ?? { heading: 'Inter', body: 'Inter', source: 'google', character: 'humanist', harmonyAffinity: [] },
       typographyLocks: state.typography.locks,
       scaleRatio: 1.333,
       mode: state.ui.mode,

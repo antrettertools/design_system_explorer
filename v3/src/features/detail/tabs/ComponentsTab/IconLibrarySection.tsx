@@ -77,7 +77,8 @@ const SIZE_OPTIONS = [
 ]
 
 type LucideIconComponent = React.ComponentType<LucideProps>
-type GenericIconComponent = React.ComponentType<{ size?: number; width?: number; height?: number; strokeWidth?: number; weight?: string }>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GenericIconComponent = React.ComponentType<any>
 
 const LUCIDE_ICON_MAP: Record<string, LucideIconComponent> = {
   home: Home, search: Search, settings: Settings, user: User,
@@ -137,9 +138,6 @@ const LIBRARY_MAPS: Record<string, Record<string, GenericIconComponent | LucideI
   radix: RADIX_MAP,
 }
 
-function getLucideIcon(slug: string): LucideIconComponent | null {
-  return LUCIDE_ICON_MAP[slug] ?? null
-}
 
 export function IconLibrarySection() {
   const { iconLibrary } = useComponents()
