@@ -1,0 +1,17 @@
+.panel {
+  padding: 0;
+}
+
+.section {
+  padding: 0 24px 32px;
+}
+
+.sectionHeading {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--chrome-text);
+  font-family: var(--chrome-font-ui);
+  margin-bottom: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--chrome-border);
+}

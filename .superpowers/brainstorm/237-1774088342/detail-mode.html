@@ -1,0 +1,268 @@
+<h2>Detail Mode — Tab Structure</h2>
+<p class="subtitle">Same 50/50 split. Left panel becomes a tabbed editor. Right panel gets template switcher. Continuous flow — no state lost from generator.</p>
+
+<div class="section">
+  <h3>Tab overview — what lives where</h3>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#e8543a;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Colors</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 1</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● Shade scale per color (9 steps)</li>
+          <li>● Semantic role assignments</li>
+          <li>● Contrast grid (WCAG AA/AAA)</li>
+          <li>● Dark mode derived palette</li>
+          <li>● Manual hex/OKLCH override</li>
+          <li>● Add / remove / reorder colors</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#3a7be8;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Typography</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 1</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● Full font browser (GF + Fontshare)</li>
+          <li>● Scale ratio picker (1.25–1.5)</li>
+          <li>● Per-step size / weight / lh override</li>
+          <li>● Live type specimen</li>
+          <li>● Readability score (APCA)</li>
+          <li>● Lock heading / body independently</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#54c47a;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Spacing</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 2</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● Base unit + scale (4pt / 8pt grid)</li>
+          <li>● Named steps (xs → 3xl)</li>
+          <li>● Border radius scale</li>
+          <li>● Breakpoints</li>
+          <li>● Z-index layers</li>
+          <li>● Visual spacing ruler preview</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#c49a54;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Shadows</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 2</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● Elevation presets (sm/md/lg/xl)</li>
+          <li>● Color-tinted shadows from brand</li>
+          <li>● Custom shadow builder</li>
+          <li>● Inner shadow support</li>
+          <li>● Preview on card component</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#8a6be8;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Showcase</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 1</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● Switchable templates (Landing / Dashboard / Blog)</li>
+          <li>● System view (swatches + type specimen)</li>
+          <li>● Light / dark mode toggle</li>
+          <li>● Full-screen expand</li>
+          <li>● Share URL</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e8e4df;border-radius:8px;overflow:hidden;">
+      <div style="background:#111;padding:8px 12px;">
+        <span style="font-size:10px;font-weight:700;color:#fff;">Export</span>
+        <span style="font-size:8px;color:rgba(255,255,255,0.6);margin-left:6px;">Phase 1</span>
+      </div>
+      <div style="padding:10px 12px;">
+        <ul style="font-size:8px;color:#666;line-height:2;list-style:none;padding:0;margin:0;">
+          <li>● CSS custom properties</li>
+          <li>● Tailwind config (v3 + v4)</li>
+          <li>● W3C design token JSON</li>
+          <li>● SCSS variables</li>
+          <li>● Copy to clipboard / download</li>
+          <li>● Naming convention picker</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Detail mode — left panel UX pattern</h3>
+  <div class="mockup">
+    <div class="mockup-header">Colors tab — how a tab is structured inside the left panel</div>
+    <div class="mockup-body" style="display:flex;height:320px;background:#fafaf8;overflow:hidden;font-family:sans-serif;">
+
+      <!-- Left panel -->
+      <div style="width:50%;border-right:1px solid #ece9e4;display:flex;flex-direction:column;background:#fafaf8;">
+
+        <!-- Tab bar -->
+        <div style="display:flex;background:#fff;border-bottom:1px solid #ece9e4;overflow-x:auto;flex-shrink:0;">
+          <div style="padding:9px 14px;font-size:9px;font-weight:700;color:#e8543a;border-bottom:2px solid #e8543a;white-space:nowrap;cursor:pointer;">Colors</div>
+          <div style="padding:9px 14px;font-size:9px;color:#aaa;white-space:nowrap;cursor:pointer;">Typography</div>
+          <div style="padding:9px 14px;font-size:9px;color:#aaa;white-space:nowrap;cursor:pointer;">Spacing</div>
+          <div style="padding:9px 14px;font-size:9px;color:#aaa;white-space:nowrap;cursor:pointer;">Shadows</div>
+          <div style="padding:9px 14px;font-size:9px;color:#aaa;white-space:nowrap;cursor:pointer;">Export</div>
+        </div>
+
+        <!-- Back to generator link -->
+        <div style="padding:8px 16px;background:#fdf8f0;border-bottom:1px solid #f0ebe0;display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <span style="font-size:9px;color:#c49a54;cursor:pointer;">← Back to generator</span>
+          <span style="font-size:8px;color:#ddd;">·</span>
+          <span style="font-size:8px;color:#ccc;">Brand #E8543A · Secondary #3A7BE8 · +2</span>
+        </div>
+
+        <!-- Scrollable content -->
+        <div style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px;">
+
+          <!-- Brand color section -->
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.5px;">Brand</span>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <span style="font-size:8px;color:#bbb;">auto</span>
+                <span style="font-size:8px;color:#e8543a;cursor:pointer;">edit</span>
+              </div>
+            </div>
+            <!-- Shade scale -->
+            <div style="display:flex;gap:2px;border-radius:4px;overflow:hidden;height:28px;margin-bottom:6px;">
+              <div style="flex:1;background:#fde8e3;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;"><span style="font-size:6px;color:rgba(0,0,0,0.3);">50</span></div>
+              <div style="flex:1;background:#f9c4b5;"></div>
+              <div style="flex:1;background:#f39f87;"></div>
+              <div style="flex:1;background:#ee7a5e;"></div>
+              <div style="flex:1;background:#e8543a;outline:2px solid rgba(255,255,255,0.8);outline-offset:-2px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;"><span style="font-size:6px;color:rgba(255,255,255,0.8);">500</span></div>
+              <div style="flex:1;background:#c03a22;"></div>
+              <div style="flex:1;background:#962a15;"></div>
+              <div style="flex:1;background:#6e1a0b;"></div>
+              <div style="flex:1;background:#451007;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;"><span style="font-size:6px;color:rgba(255,255,255,0.3);">950</span></div>
+            </div>
+            <!-- Semantic roles -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:12px;height:12px;background:#e8543a;border-radius:2px;flex-shrink:0;"></div>
+                <span style="font-size:8px;color:#666;flex:1;">interactive</span>
+                <span style="font-size:7px;color:#bbb;font-family:monospace;">#E8543A</span>
+                <span style="font-size:7px;color:#ccc;">auto</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:12px;height:12px;background:#fde8e3;border-radius:2px;flex-shrink:0;border:1px solid #f0d0c8;"></div>
+                <span style="font-size:8px;color:#666;flex:1;">interactive-subtle</span>
+                <span style="font-size:7px;color:#bbb;font-family:monospace;">#FDE8E3</span>
+                <span style="font-size:7px;color:#ccc;">auto</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:12px;height:12px;background:#962a15;border-radius:2px;flex-shrink:0;"></div>
+                <span style="font-size:8px;color:#666;flex:1;">interactive-hover</span>
+                <span style="font-size:7px;color:#bbb;font-family:monospace;">#962A15</span>
+                <span style="font-size:7px;color:#ccc;">auto</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div style="height:1px;background:#ece9e4;"></div>
+
+          <!-- Secondary color -->
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.5px;">Secondary</span>
+              <div style="display:flex;gap:6px;">
+                <span style="font-size:8px;color:#3a7be8;cursor:pointer;">overridden</span>
+                <span style="font-size:8px;color:#bbb;cursor:pointer;">reset</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:2px;border-radius:4px;overflow:hidden;height:28px;margin-bottom:6px;">
+              <div style="flex:1;background:#e3ecfd;"></div>
+              <div style="flex:1;background:#b5cef9;"></div>
+              <div style="flex:1;background:#87aef3;"></div>
+              <div style="flex:1;background:#5e8eee;"></div>
+              <div style="flex:1;background:#3a7be8;outline:2px solid rgba(255,255,255,0.8);outline-offset:-2px;"></div>
+              <div style="flex:1;background:#2255c0;"></div>
+              <div style="flex:1;background:#153896;"></div>
+              <div style="flex:1;background:#0b246e;"></div>
+              <div style="flex:1;background:#071045;"></div>
+            </div>
+          </div>
+
+          <!-- Contrast grid hint -->
+          <div style="background:#f0faf4;border-radius:6px;padding:8px 10px;border:1px solid #d4eed9;">
+            <div style="font-size:8px;color:#3a8a54;font-weight:600;margin-bottom:3px;">✓ All semantic roles pass WCAG AA</div>
+            <div style="font-size:7px;color:#6aaa84;">2 roles pass AAA · View contrast grid →</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: preview with template switcher -->
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff;">
+        <div style="display:flex;gap:0;border-bottom:1px solid #ece9e4;background:#fafaf8;flex-shrink:0;">
+          <div style="padding:8px 12px;font-size:8px;font-weight:700;color:#e8543a;border-bottom:2px solid #e8543a;cursor:pointer;">Landing</div>
+          <div style="padding:8px 12px;font-size:8px;color:#bbb;cursor:pointer;">Dashboard</div>
+          <div style="padding:8px 12px;font-size:8px;color:#bbb;cursor:pointer;">Blog</div>
+          <div style="padding:8px 12px;font-size:8px;color:#bbb;cursor:pointer;">System ↗</div>
+          <div style="margin-left:auto;padding:8px 12px;font-size:8px;color:#bbb;cursor:pointer;">⛶ Expand</div>
+        </div>
+        <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:inline-block;background:rgba(232,84,58,0.06);border:1px solid rgba(232,84,58,0.15);border-radius:20px;padding:3px 10px;width:fit-content;">
+            <span style="font-size:8px;color:#e8543a;font-weight:600;">New · v3 shipped</span>
+          </div>
+          <div style="font-size:20px;color:#111;font-weight:800;line-height:1.15;font-family:'Georgia',serif;">Design systems<br/><span style="color:#e8543a;">at vibe speed.</span></div>
+          <div style="font-size:9px;color:#999;line-height:1.5;">Hit space. Lock what you love.</div>
+          <div style="display:flex;gap:6px;">
+            <div style="background:#e8543a;border-radius:4px;padding:6px 12px;"><span style="font-size:8px;color:#fff;font-weight:700;">Get started</span></div>
+            <div style="border:1px solid #e0e0e0;border-radius:4px;padding:6px 12px;"><span style="font-size:8px;color:#555;">See docs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Transition from generator → detail mode</h3>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div style="background:#fafaf8;border:1px solid #ece9e4;border-radius:6px;padding:10px 14px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:#333;">Generator</div>
+      <div style="font-size:8px;color:#aaa;margin-top:2px;">Colors + fonts locked</div>
+    </div>
+    <div style="color:#bbb;font-size:14px;">→</div>
+    <div style="background:#fdf8f0;border:1px solid #e8d9b4;border-radius:6px;padding:10px 14px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:#c49a54;">"Detail Mode →" click</div>
+      <div style="font-size:8px;color:#aaa;margin-top:2px;">Smooth panel transition</div>
+    </div>
+    <div style="color:#bbb;font-size:14px;">→</div>
+    <div style="background:#fafaf8;border:1px solid #ece9e4;border-radius:6px;padding:10px 14px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:#333;">Detail — Colors tab</div>
+      <div style="font-size:8px;color:#aaa;margin-top:2px;">Opens on colors by default</div>
+    </div>
+    <div style="color:#bbb;font-size:14px;">↔</div>
+    <div style="background:#fdf5f3;border:1px solid #f0d0c8;border-radius:6px;padding:10px 14px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:#e8543a;">"← Back" always visible</div>
+      <div style="font-size:8px;color:#aaa;margin-top:2px;">Returns to generator, state preserved</div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Does this detail mode structure feel right? Anything missing or to reorder?</p>

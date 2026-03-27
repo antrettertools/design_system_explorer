@@ -1,0 +1,110 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.baseUnitRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-8);
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+}
+
+.baseUnitHint {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #aaa);
+  opacity: 0.7;
+}
+
+.baseUnitToggle {
+  display: flex;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.unitBtn {
+  padding: var(--ui-space-2) var(--ui-space-6);
+  border: none;
+  background: none;
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle, #888);
+  transition: all var(--ui-duration-3);
+}
+
+.unitBtn.active {
+  background: var(--color-interactive-subtle, #fde8e3);
+  color: var(--color-interactive, #e8543a);
+  font-weight: 700;
+}
+
+.ruler { display: flex; flex-direction: column; gap: var(--ui-space-3); }
+
+.rulerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+}
+
+.stepLabel {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle, #888);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.bar {
+  height: 20px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: var(--ui-radius-2);
+  opacity: 0.7;
+  transition: width var(--ui-duration-5) ease;
+  flex-shrink: 0;
+}
+
+.valueInput {
+  width: 52px;
+  padding: var(--ui-space-1) var(--ui-space-3);
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #111);
+  text-align: right;
+}
+
+.valueInput.overridden {
+  border-color: var(--color-interactive, #e8543a);
+  background: var(--color-interactive-subtle, #fde8e3);
+}
+
+.resetBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #bbb);
+  padding: 0 var(--ui-space-2);
+}
+
+.resetBtn:hover { color: var(--color-interactive, #e8543a); }
+
+.pxLabel {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #bbb);
+  font-family: var(--ui-font-mono);
+}

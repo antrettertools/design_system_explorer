@@ -1,0 +1,118 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.subsection { margin-bottom: var(--ui-space-8); }
+
+.subsectionLabel {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: var(--ui-space-4);
+  font-family: sans-serif;
+}
+
+.tokenRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-4);
+  padding: var(--ui-space-2) 0;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface, #333);
+}
+
+.tokenName {
+  flex: 1;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.tokenValue {
+  font-weight: 700;
+}
+
+/* Border width bar */
+.borderWidthBar {
+  width: 60px;
+  background: var(--color-on-surface, #333);
+  /* height is set inline per token value */
+}
+
+/* Icon size previews */
+.iconSizeRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ui-space-5);
+}
+
+.iconSizeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+/* Opacity scale item */
+.opacityScaleItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.iconBox {
+  background: var(--color-interactive-subtle, #fde8e3);
+  border: 1px solid var(--color-interactive, #e8543a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-space-1);
+}
+
+.iconLabel {
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle, #aaa);
+}
+
+/* Opacity scale */
+.opacityRow {
+  display: flex;
+  gap: var(--ui-space-3);
+  align-items: flex-end;
+}
+
+.opacitySwatch {
+  width: 32px;
+  height: 32px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: var(--ui-radius-2);
+  flex-shrink: 0;
+}
+
+/* Breakpoints table */
+.bpTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+}
+
+.bpTable td {
+  padding: var(--ui-space-2) 0;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+  color: var(--color-on-surface, #333);
+}
+
+.bpTable td:first-child {
+  color: var(--color-on-surface-subtle, #888);
+  width: 40px;
+}

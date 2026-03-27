@@ -1,0 +1,8 @@
+.tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-10);
+  padding: var(--ui-space-8);
+  max-width: 800px;
+  margin: 0 auto;
+}

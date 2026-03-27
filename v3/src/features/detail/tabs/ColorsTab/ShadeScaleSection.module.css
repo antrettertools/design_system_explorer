@@ -1,0 +1,119 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.colorRow {
+  margin-bottom: var(--ui-space-8);
+}
+
+.colorHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-4);
+}
+
+.colorSwatch {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ui-radius-3);
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter var(--ui-duration-3);
+}
+
+.colorSwatch:hover { filter: brightness(0.88); }
+
+.swatchEditIcon {
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  opacity: 0;
+  transition: opacity var(--ui-duration-3);
+  pointer-events: none;
+  display: flex;
+}
+
+.colorSwatch:hover .swatchEditIcon { opacity: 1; }
+
+.colorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+}
+
+.roleName {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-family: sans-serif;
+}
+
+.colorMeta {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+}
+
+.scaleRow {
+  display: flex;
+  gap: var(--ui-space-1);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  height: 40px;
+}
+
+.scaleCell {
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+  transition: flex var(--ui-duration-3);
+}
+
+.scaleCell:hover { flex: 1.6; }
+
+.scaleCellLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: var(--ui-space-2);
+  opacity: 0;
+  transition: opacity var(--ui-duration-3);
+}
+
+.scaleCell:hover .scaleCellLabel { opacity: 1; }
+.scaleCell:first-child .scaleCellLabel,
+.scaleCell:last-child .scaleCellLabel { opacity: 0.5; }
+
+.scaleCellStep {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px var(--ui-space-1);
+  border-radius: var(--ui-radius-1);
+}
+
+.scaleCellHex {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: var(--ui-space-1);
+}
+
+/* For light cells */
+.scaleCellLight .scaleCellStep { color: rgba(0,0,0,0.5); background: rgba(0,0,0,0.08); }
+.scaleCellLight .scaleCellHex { color: rgba(0,0,0,0.4); }

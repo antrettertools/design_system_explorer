@@ -1,0 +1,22 @@
+@import './ui-tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+body { font-family: sans-serif; background: var(--color-background, #f8f7f4); color: var(--color-on-surface, #111); }
+
+:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--focus-ring-color, var(--color-interactive, #e8543a));
+  outline-offset: var(--focus-ring-offset, 2px);
+  border-radius: var(--ui-radius-2);
+}
+
+button:focus:not(:focus-visible) { outline: none; }
+
+/* Smooth dark mode transitions */
+*, *::before, *::after {
+  transition: background-color var(--ui-duration-4) ease, border-color var(--ui-duration-4) ease, color var(--ui-duration-3) ease;
+}
+
+/* Disable transitions during initial load to avoid flash */
+.no-transitions * { transition: none !important; }

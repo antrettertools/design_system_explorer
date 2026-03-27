@@ -1,0 +1,75 @@
+.section {
+  margin-bottom: var(--ui-space-2);
+}
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: var(--ui-space-5);
+  font-family: sans-serif;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  padding: var(--ui-space-5) var(--ui-space-6);
+  border-radius: var(--ui-radius-3);
+  border: 1px solid var(--color-border, #e0dbd5);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.tokenLabel {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: var(--ui-space-1);
+}
+
+.specimen {
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  font-weight: 600;
+  padding: var(--ui-space-1) var(--ui-space-3);
+  border-radius: var(--ui-radius-2);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.badgePass {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badgeFail {
+  background: #fee2e2;
+  color: #b91c1c;
+}

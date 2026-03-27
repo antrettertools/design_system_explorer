@@ -1,0 +1,25 @@
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: var(--chrome-surface-raised);
+  border: 1px solid var(--chrome-accent);
+  color: var(--chrome-accent);
+  padding: 10px 20px;
+  border-radius: var(--chrome-radius);
+  font-size: 12px;
+  font-family: var(--chrome-font-mono);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}

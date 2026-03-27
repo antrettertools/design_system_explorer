@@ -1,0 +1,195 @@
+.section { margin-bottom: 24px; }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.ratioRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-7);
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+  flex-wrap: wrap;
+}
+
+.hint {
+  font-size: var(--ui-text-sm);
+  opacity: 0.5;
+}
+
+.presetGroup {
+  display: flex;
+  gap: var(--ui-space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.presetBtn {
+  padding: var(--ui-space-1) var(--ui-space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  background: none;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  transition: all var(--ui-duration-3);
+}
+
+.presetBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.presetActive {
+  background: var(--color-interactive-subtle, #fde8e3);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+  font-weight: 700;
+}
+
+.customRatioInput {
+  width: 72px;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  padding: var(--ui-space-1) var(--ui-space-3);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  color: var(--color-on-surface-subtle);
+}
+
+.customRatioActive {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+  font-weight: 700;
+}
+
+.customRatioInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+}
+
+.scaleList { display: flex; flex-direction: column; gap: var(--ui-space-2); }
+
+.scaleRow {
+  display: flex;
+  align-items: center;
+  padding: var(--ui-space-3) var(--ui-space-5);
+  border-radius: var(--ui-radius-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  gap: var(--ui-space-5);
+  flex-wrap: wrap;
+  transition: all var(--ui-duration-3);
+}
+
+.overridden {
+  border-left: 3px solid var(--color-interactive);
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  padding: 0 var(--ui-space-1);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.expandBtn:hover { color: var(--color-on-surface); }
+
+.expandedControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-5);
+  width: 100%;
+  padding: var(--ui-space-4) 0 var(--ui-space-2);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--ui-space-2);
+  align-items: center;
+}
+
+.overrideLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.overrideInput {
+  width: 72px;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  padding: var(--ui-space-1) var(--ui-space-3);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  color: var(--color-on-surface);
+}
+
+.overrideInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+}
+
+.resetStepBtn {
+  font-size: var(--ui-text-sm);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  padding: var(--ui-space-1) var(--ui-space-5);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  align-self: flex-end;
+  transition: all var(--ui-duration-3);
+}
+
+.resetStepBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.specimen {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-on-surface);
+}
+
+.meta {
+  display: flex;
+  gap: var(--ui-space-4);
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.metaItem {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
+  min-width: 40px;
+  text-align: right;
+}
+
+.stepLabel {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+  width: 48px;
+  flex-shrink: 0;
+}

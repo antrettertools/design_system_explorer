@@ -1,0 +1,188 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-6);
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  color: var(--color-on-surface-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: var(--ui-space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.libraryGrid {
+  display: flex;
+  gap: var(--ui-space-2);
+  flex-wrap: wrap;
+}
+
+.libraryBtn {
+  padding: var(--ui-space-2) var(--ui-space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  background: var(--color-surface);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  transition: all var(--ui-duration-3);
+}
+
+.libraryBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.libraryBtnSelected {
+  border-color: var(--color-interactive);
+  background: var(--color-brand-100);
+  color: var(--color-interactive);
+  font-weight: 600;
+}
+
+.previewArea {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-6);
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--ui-space-4);
+  gap: var(--ui-space-4);
+  flex-wrap: wrap;
+}
+
+.previewLabel {
+  font-size: var(--font-size-label);
+  color: var(--color-on-surface-subtle);
+  margin: 0;
+}
+
+.sizeSelector {
+  display: flex;
+  gap: var(--ui-space-1);
+}
+
+.sizeBtn {
+  padding: var(--ui-space-1) var(--ui-space-4);
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body);
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+  transition: all var(--ui-duration-2);
+}
+
+.sizeBtn:first-child {
+  border-radius: var(--ui-radius-2) 0 0 var(--ui-radius-2);
+}
+
+.sizeBtn:last-child {
+  border-radius: 0 var(--ui-radius-2) var(--ui-radius-2) 0;
+}
+
+.sizeBtnActive {
+  background: var(--color-interactive);
+  border-color: var(--color-interactive);
+  color: var(--color-on-interactive, #fff);
+  font-weight: 600;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--ui-space-4);
+}
+
+.iconCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ui-radius-3);
+  color: var(--color-on-surface-subtle);
+  transition: background var(--ui-duration-2);
+}
+
+.iconCell:hover {
+  background: var(--color-surface-raised);
+}
+
+.iconMissing {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+}
+
+.libraryPlaceholder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  padding: var(--ui-space-6);
+  text-align: center;
+}
+
+.libraryPlaceholderTitle {
+  font-size: var(--font-size-body);
+  color: var(--color-on-surface);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.libraryPlaceholderHint {
+  font-size: var(--font-size-label);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body);
+}
+
+.sizeMappingTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sizeMappingTable th,
+.sizeMappingTable td {
+  padding: var(--ui-space-2) var(--ui-space-4);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-size-label);
+  text-align: left;
+}
+
+.sizeMappingTable th {
+  background: var(--color-surface);
+  color: var(--color-on-surface-subtle);
+  font-weight: 600;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sizeMappingTable td {
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-mono, monospace);
+}
+
+.sizePreview {
+  display: inline-block;
+  background: var(--color-interactive);
+  border-radius: var(--ui-radius-1);
+  vertical-align: middle;
+  margin-right: var(--ui-space-2);
+}
+
+.description {
+  font-size: var(--font-size-label);
+  color: var(--color-on-surface-subtle);
+  margin: 0 0 var(--ui-space-4);
+}

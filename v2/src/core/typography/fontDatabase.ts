@@ -1,0 +1,582 @@
+import type { FontDefinition } from '@/core/tokens/types'
+
+/**
+ * Static font registry.
+ * Each entry carries enough metadata to:
+ * - Render the correct <link> tag (source + axes)
+ * - Build the font-variation-settings CSS property
+ * - Suggest pairing partners
+ * - Categorize in the UI
+ */
+export const FONTS: FontDefinition[] = [
+  // ── Sans-serif — Google ────────────────────────────────────────
+  {
+    name: 'Inter',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 100, max: 900, default: 400 },
+      wdth: { min: 75, max: 125, default: 100 },
+    },
+    pairsWith: ['Lora', 'Playfair Display', 'EB Garamond', 'Merriweather'],
+  },
+  {
+    name: 'Roboto',
+    category: 'sans',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Merriweather', 'Lora', 'Roboto Mono'],
+  },
+  {
+    name: 'Open Sans',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 300, max: 800, default: 400 },
+      wdth: { min: 75, max: 100, default: 100 },
+    },
+    pairsWith: ['Lora', 'Merriweather', 'Playfair Display'],
+  },
+  {
+    name: 'Lato',
+    category: 'sans',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Merriweather', 'EB Garamond'],
+  },
+  {
+    name: 'Poppins',
+    category: 'sans',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Lora', 'Merriweather'],
+  },
+  {
+    name: 'Nunito',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 1000, default: 400 } },
+    pairsWith: ['Source Serif 4', 'Lora'],
+  },
+  {
+    name: 'DM Sans',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 100, max: 900, default: 400 },
+      opsz: { min: 9, max: 40, default: 14 },
+    },
+    pairsWith: ['Lora', 'Fraunces', 'DM Serif Display'],
+  },
+  {
+    name: 'Outfit',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'EB Garamond'],
+  },
+  {
+    name: 'Manrope',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 800, default: 400 } },
+    pairsWith: ['JetBrains Mono', 'Source Serif 4'],
+  },
+  {
+    name: 'Figtree',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Bitter'],
+  },
+  {
+    name: 'Plus Jakarta Sans',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 800, default: 400 } },
+    pairsWith: ['Lora', 'Source Serif 4'],
+  },
+  {
+    name: 'Urbanist',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Fraunces'],
+  },
+  {
+    name: 'Raleway',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Merriweather'],
+  },
+  {
+    name: 'Jost',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Spectral'],
+  },
+  {
+    name: 'Lexend',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 300 } },
+    pairsWith: ['Source Serif 4', 'Bitter'],
+  },
+  {
+    name: 'Sora',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 800, default: 400 } },
+    pairsWith: ['Syne', 'Fraunces'],
+  },
+  {
+    name: 'Exo 2',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Source Serif 4'],
+  },
+  {
+    name: 'Barlow',
+    category: 'sans',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Source Serif 4', 'Lora'],
+  },
+  {
+    name: 'Mulish',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 1000, default: 400 } },
+    pairsWith: ['Lora', 'Merriweather'],
+  },
+  {
+    name: 'Quicksand',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 700, default: 400 } },
+    pairsWith: ['Lora', 'Vollkorn'],
+  },
+  {
+    name: 'Josefin Sans',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 700, default: 400 } },
+    pairsWith: ['Lora', 'Playfair Display'],
+  },
+  {
+    name: 'Montserrat',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Merriweather', 'EB Garamond', 'Cormorant'],
+  },
+  {
+    name: 'Work Sans',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Source Serif 4', 'Lora'],
+  },
+  {
+    name: 'Karla',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 200, max: 800, default: 400 },
+      wdth: { min: 75, max: 125, default: 100 },
+    },
+    pairsWith: ['Lora', 'Merriweather'],
+  },
+  {
+    name: 'Rubik',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Lora', 'Frank Ruhl Libre'],
+  },
+  {
+    name: 'Cabin',
+    category: 'sans',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 400, max: 700, default: 400 },
+      wdth: { min: 75, max: 100, default: 100 },
+    },
+    pairsWith: ['Lora', 'Source Serif 4'],
+  },
+  {
+    name: 'Ubuntu',
+    category: 'sans',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Lora', 'Ubuntu Mono'],
+  },
+  // ── Serif — Google ─────────────────────────────────────────────
+  {
+    name: 'Merriweather',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'DM Sans', 'Open Sans'],
+  },
+  {
+    name: 'Lora',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 400, max: 700, default: 400 } },
+    pairsWith: ['Inter', 'DM Sans', 'Montserrat', 'Work Sans'],
+  },
+  {
+    name: 'Playfair Display',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 400, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Lato', 'Josefin Sans'],
+  },
+  {
+    name: 'EB Garamond',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 400, max: 800, default: 400 } },
+    pairsWith: ['Inter', 'Lato', 'Raleway'],
+  },
+  {
+    name: 'Cormorant',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 300, max: 700, default: 400 },
+      wdth: { min: 75, max: 125, default: 100 },
+    },
+    pairsWith: ['Montserrat', 'Inter'],
+  },
+  {
+    name: 'Crimson Pro',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Work Sans'],
+  },
+  {
+    name: 'Source Serif 4',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 200, max: 900, default: 400 },
+      opsz: { min: 8, max: 60, default: 14 },
+    },
+    pairsWith: ['Barlow', 'Work Sans', 'Manrope'],
+  },
+  {
+    name: 'Bitter',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Figtree', 'Lexend'],
+  },
+  {
+    name: 'PT Serif',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'Open Sans'],
+  },
+  {
+    name: 'Libre Baskerville',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'Montserrat'],
+  },
+  {
+    name: 'Spectral',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'Jost'],
+  },
+  {
+    name: 'Vollkorn',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 400, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Quicksand'],
+  },
+  {
+    name: 'Newsreader',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 200, max: 800, default: 400 },
+      opsz: { min: 6, max: 72, default: 14 },
+    },
+    pairsWith: ['Inter', 'DM Sans'],
+  },
+  {
+    name: 'Frank Ruhl Libre',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Rubik', 'Inter'],
+  },
+  {
+    name: 'DM Serif Display',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['DM Sans', 'DM Mono'],
+  },
+  {
+    name: 'Fraunces',
+    category: 'serif',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 100, max: 900, default: 400 },
+      opsz: { min: 9, max: 144, default: 14 },
+    },
+    pairsWith: ['Satoshi', 'DM Sans', 'Urbanist'],
+  },
+  {
+    name: 'Zilla Slab',
+    category: 'serif',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'Montserrat'],
+  },
+  // ── Monospace — Google ─────────────────────────────────────────
+  {
+    name: 'JetBrains Mono',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 800, default: 400 } },
+    pairsWith: ['Inter', 'Manrope', 'DM Sans'],
+  },
+  {
+    name: 'Fira Code',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 700, default: 400 } },
+    pairsWith: ['Inter', 'Lato'],
+  },
+  {
+    name: 'Source Code Pro',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 200, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Source Serif 4'],
+  },
+  {
+    name: 'Inconsolata',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: {
+      wght: { min: 200, max: 900, default: 400 },
+      wdth: { min: 50, max: 200, default: 100 },
+    },
+    pairsWith: ['Lato', 'Open Sans'],
+  },
+  {
+    name: 'Roboto Mono',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 700, default: 400 } },
+    pairsWith: ['Roboto', 'Open Sans'],
+  },
+  {
+    name: 'IBM Plex Mono',
+    category: 'mono',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Work Sans', 'IBM Plex Serif'],
+  },
+  {
+    name: 'Space Mono',
+    category: 'mono',
+    source: 'google',
+    variable: false,
+    pairsWith: ['Inter', 'Poppins'],
+  },
+  {
+    name: 'DM Mono',
+    category: 'mono',
+    source: 'google',
+    variable: false,
+    pairsWith: ['DM Sans', 'DM Serif Display'],
+  },
+  {
+    name: 'Azeret Mono',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Inter', 'Outfit'],
+  },
+  {
+    name: 'Overpass Mono',
+    category: 'mono',
+    source: 'google',
+    variable: true,
+    axes: { wght: { min: 300, max: 700, default: 400 } },
+    pairsWith: ['Inter', 'Urbanist'],
+  },
+  // ── Sans — Fontshare ───────────────────────────────────────────
+  {
+    name: 'Satoshi',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Fraunces', 'Boska', 'Lora'],
+  },
+  {
+    name: 'Cabinet Grotesk',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Boska', 'Zodiak'],
+  },
+  {
+    name: 'Clash Grotesk',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 200, max: 700, default: 400 } },
+    pairsWith: ['Boska', 'Fraunces'],
+  },
+  {
+    name: 'Switzer',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 100, max: 900, default: 400 } },
+    pairsWith: ['Boska', 'Zodiak'],
+  },
+  {
+    name: 'General Sans',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 200, max: 700, default: 400 } },
+    pairsWith: ['Boska', 'Fraunces'],
+  },
+  {
+    name: 'Chillax',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 200, max: 700, default: 400 } },
+    pairsWith: ['Boska', 'Zodiak'],
+  },
+  {
+    name: 'Nippo',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Boska', 'Zodiak'],
+  },
+  {
+    name: 'Author',
+    category: 'sans',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 200, max: 900, default: 400 } },
+    pairsWith: ['Boska', 'Zodiak'],
+  },
+  // ── Serif — Fontshare ──────────────────────────────────────────
+  {
+    name: 'Boska',
+    category: 'serif',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 300, max: 900, default: 400 } },
+    pairsWith: ['Satoshi', 'Cabinet Grotesk', 'General Sans'],
+  },
+  {
+    name: 'Zodiak',
+    category: 'serif',
+    source: 'fontshare',
+    variable: true,
+    axes: { wght: { min: 200, max: 800, default: 400 } },
+    pairsWith: ['Satoshi', 'Switzer', 'Chillax'],
+  },
+  // ── System ─────────────────────────────────────────────────────
+  {
+    name: 'Georgia',
+    category: 'serif',
+    source: 'system',
+    variable: false,
+    pairsWith: ['Inter', 'Arial'],
+  },
+  {
+    name: 'system-ui',
+    category: 'sans',
+    source: 'system',
+    variable: false,
+    pairsWith: ['Georgia', 'ui-monospace'],
+  },
+]
+
+/** Lookup a font definition by name */
+export function getFontByName(name: string): FontDefinition | undefined {
+  return FONTS.find((f) => f.name === name)
+}
+
+/** Filter fonts by category */
+export function getFontsByCategory(
+  category: 'all' | 'sans' | 'serif' | 'mono',
+): FontDefinition[] {
+  if (category === 'all') return FONTS
+  return FONTS.filter((f) => f.category === category)
+}
+
+/** Get pairing suggestions for a given font */
+export function getPairingCandidates(fontName: string): FontDefinition[] {
+  const font = getFontByName(fontName)
+  if (!font?.pairsWith) return []
+  return font.pairsWith
+    .map((name) => getFontByName(name))
+    .filter((f): f is FontDefinition => f !== undefined)
+}

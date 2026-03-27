@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.left {
+  flex-shrink: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.divider {
+  width: var(--ui-size-divider);
+  flex-shrink: 0;
+  background: var(--color-border);
+  cursor: col-resize;
+  transition: background var(--ui-duration-2);
+  position: relative;
+  z-index: 10;
+}
+
+/* Transparent hit area — 12px wide, centered on the 4px visual bar */
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  right: -4px;
+  cursor: col-resize;
+}
+
+/* Grip dots indicator on hover */
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 24px;
+  background: var(--color-interactive);
+  border-radius: var(--ui-radius-full);
+  opacity: 0;
+  transition: opacity var(--ui-duration-2);
+}
+
+.divider:hover,
+.divider.dragging {
+  background: var(--color-interactive);
+}
+
+.divider:hover::after,
+.divider.dragging::after {
+  opacity: 0.5;
+}
+
+.right {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) { /* --ui-bp-mobile */
+  .container {
+    position: relative;
+    overflow: hidden;
+  }
+  .left {
+    width: 100% !important;
+    flex: none;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: translateX(0);
+    transition: transform var(--ui-duration-5) ease;
+    z-index: 1;
+  }
+  .left.slideOut {
+    transform: translateX(-100%);
+  }
+  .right {
+    width: 100% !important;
+    flex: none;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: translateX(100%);
+    transition: transform var(--ui-duration-5) ease;
+  }
+  .right.slideIn {
+    transform: translateX(0);
+  }
+  .divider { display: none; }
+}

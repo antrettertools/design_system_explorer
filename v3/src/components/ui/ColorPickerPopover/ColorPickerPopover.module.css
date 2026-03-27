@@ -1,0 +1,39 @@
+.popover {
+  position: fixed;
+  z-index: 1000;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  padding: var(--ui-space-6);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-4);
+  min-width: 180px;
+}
+
+.colorInput {
+  width: 100%;
+  height: var(--ui-size-btn-lg);
+  border: none;
+  border-radius: var(--ui-radius-2);
+  cursor: pointer;
+  padding: 0;
+}
+
+.hexInput {
+  width: 100%;
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-text-sm);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  color: var(--color-on-surface);
+  box-sizing: border-box;
+}
+
+.hexInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+}

@@ -1,0 +1,196 @@
+<h2>3 approaches for the core generator UX</h2>
+<p class="subtitle">How the left panel works — this is the heart of v3. Pick the one that feels right.</p>
+
+<div class="cards">
+
+  <!-- APPROACH A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:14px;border-radius:6px;">
+      <!-- Left panel mockup: coolors-style horizontal strips -->
+      <div style="display:flex;flex-direction:column;gap:4px;height:150px;">
+        <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Generator panel</div>
+        <!-- Color strips stacked -->
+        <div style="display:flex;align-items:center;gap:6px;background:#1a1a1a;border-radius:4px;padding:5px 8px;flex:1;">
+          <div style="width:32px;height:32px;background:#e8543a;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:9px;color:#888;margin-bottom:2px;">Brand</div>
+            <div style="display:flex;gap:2px;">
+              <div style="flex:1;height:6px;background:#e8543a;border-radius:1px;opacity:0.2;"></div>
+              <div style="flex:1;height:6px;background:#e8543a;border-radius:1px;opacity:0.4;"></div>
+              <div style="flex:1;height:6px;background:#e8543a;border-radius:1px;opacity:0.6;"></div>
+              <div style="flex:1;height:6px;background:#e8543a;border-radius:1px;opacity:0.8;"></div>
+              <div style="flex:1;height:6px;background:#e8543a;border-radius:1px;"></div>
+              <div style="flex:1;height:6px;background:#b83020;border-radius:1px;"></div>
+            </div>
+          </div>
+          <div style="font-size:8px;color:#555;">🔒</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:#1a1a1a;border-radius:4px;padding:5px 8px;flex:1;">
+          <div style="width:32px;height:32px;background:#3a7be8;border-radius:50%;border:2px dashed rgba(255,255,255,0.1);flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:9px;color:#888;margin-bottom:2px;">Secondary</div>
+            <div style="display:flex;gap:2px;">
+              <div style="flex:1;height:6px;background:#3a7be8;border-radius:1px;opacity:0.2;"></div>
+              <div style="flex:1;height:6px;background:#3a7be8;border-radius:1px;opacity:0.4;"></div>
+              <div style="flex:1;height:6px;background:#3a7be8;border-radius:1px;opacity:0.6;"></div>
+              <div style="flex:1;height:6px;background:#3a7be8;border-radius:1px;opacity:0.8;"></div>
+              <div style="flex:1;height:6px;background:#3a7be8;border-radius:1px;"></div>
+              <div style="flex:1;height:6px;background:#1a4fa0;border-radius:1px;"></div>
+            </div>
+          </div>
+          <div style="font-size:8px;color:#444;">○</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;background:#1a1a1a;border-radius:4px;padding:5px 8px;flex:1;">
+          <div style="width:32px;height:32px;background:#54c47a;border-radius:50%;border:2px dashed rgba(255,255,255,0.1);flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:9px;color:#888;margin-bottom:2px;">Accent A</div>
+            <div style="display:flex;gap:2px;">
+              <div style="flex:1;height:6px;background:#54c47a;border-radius:1px;opacity:0.3;"></div>
+              <div style="flex:1;height:6px;background:#54c47a;border-radius:1px;opacity:0.5;"></div>
+              <div style="flex:1;height:6px;background:#54c47a;border-radius:1px;opacity:0.7;"></div>
+              <div style="flex:1;height:6px;background:#54c47a;border-radius:1px;"></div>
+              <div style="flex:1;height:6px;background:#2d9a54;border-radius:1px;"></div>
+              <div style="flex:1;height:6px;background:#1a6035;border-radius:1px;"></div>
+            </div>
+          </div>
+          <div style="font-size:8px;color:#444;">○</div>
+        </div>
+        <!-- Typography row -->
+        <div style="display:flex;align-items:center;gap:8px;background:#1a1a1a;border-radius:4px;padding:5px 8px;">
+          <div style="font-size:11px;color:#ccc;font-style:italic;flex-shrink:0;">Aa</div>
+          <div style="flex:1;">
+            <div style="font-size:8px;color:#888;">Inter / Playfair Display · 16/48px</div>
+          </div>
+          <div style="font-size:8px;color:#444;">○</div>
+        </div>
+        <!-- Space hint -->
+        <div style="text-align:center;font-size:8px;color:#333;margin-top:2px;">SPACE to cycle unlocked · click to lock</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Structured Role Rows</h3>
+      <p>Each slot (Brand, Secondary, Accent A, Accent B, Typography) is a labeled row with its shade scale visible. Lock per slot. Very clear, role-aware from the start. Vibe coders immediately understand "brand color" vs guessing.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Role labels from day 1</li><li>Shade scale always visible</li><li>Easy to scan what's locked</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Slightly denser UI</li><li>Less "magical" feel</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:14px;border-radius:6px;">
+      <div style="display:flex;flex-direction:column;height:150px;gap:6px;">
+        <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Generator panel</div>
+        <!-- Big color swatches like coolors horizontal -->
+        <div style="display:flex;gap:4px;flex:1;border-radius:6px;overflow:hidden;">
+          <div style="flex:1;background:#e8543a;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:4px;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.9);font-weight:bold;">#E8543A</div>
+            <div style="position:absolute;top:4px;right:4px;font-size:10px;">🔒</div>
+          </div>
+          <div style="flex:1;background:#3a7be8;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:4px;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.9);font-weight:bold;">#3A7BE8</div>
+            <div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);"></div>
+          </div>
+          <div style="flex:1;background:#54c47a;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:4px;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.9);font-weight:bold;">#54C47A</div>
+            <div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);"></div>
+          </div>
+          <div style="flex:1;background:#c49a54;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:4px;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.9);font-weight:bold;">#C49A54</div>
+            <div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);"></div>
+          </div>
+        </div>
+        <!-- Typography below as separate row -->
+        <div style="background:#1a1a1a;border-radius:4px;padding:5px 8px;display:flex;gap:8px;align-items:center;">
+          <span style="font-size:13px;color:#ddd;font-style:italic;">Aa</span>
+          <span style="font-size:8px;color:#666;">Syne Bold / DM Sans · Scale: 12–72px</span>
+          <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        </div>
+        <!-- Role reveal below -->
+        <div style="background:#161616;border-radius:4px;padding:4px 8px;">
+          <div style="font-size:8px;color:#333;">→ Lock a color to see its semantic role derivation</div>
+        </div>
+        <div style="text-align:center;font-size:8px;color:#333;">SPACE · click to lock · + to add color</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Coolors-Style Big Swatches</h3>
+      <p>Large immersive color columns, hex visible. Click to lock, space to cycle unlocked. Typography as a compact row below. Role labels only appear after locking. Maximally playful and familiar — closest to coolors.co.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Most playful / fun</li><li>Proven UX pattern</li><li>Low cognitive load</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Roles hidden until locked</li><li>Less color science visible</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROACH C: RECOMMENDED -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:14px;border-radius:6px;position:relative;">
+      <div style="position:absolute;top:6px;right:8px;font-size:8px;background:#e8543a;color:#fff;padding:2px 6px;border-radius:10px;font-weight:bold;">★ Recommended</div>
+      <div style="display:flex;flex-direction:column;height:150px;gap:5px;">
+        <div style="font-size:9px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Generator panel</div>
+        <!-- Big swatches top (coolors feel) -->
+        <div style="display:flex;gap:3px;height:52px;border-radius:5px;overflow:hidden;">
+          <div style="flex:1;background:#e8543a;display:flex;flex-direction:column;justify-content:flex-end;padding:3px 4px;">
+            <div style="font-size:7px;color:rgba(255,255,255,0.9);">#E8543A</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.5);">Brand</div>
+            <div style="position:absolute;font-size:10px;margin-top:-28px;margin-left:22px;">🔒</div>
+          </div>
+          <div style="flex:1;background:#3a7be8;display:flex;flex-direction:column;justify-content:flex-end;padding:3px 4px;">
+            <div style="font-size:7px;color:rgba(255,255,255,0.9);">#3A7BE8</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);">Secondary</div>
+          </div>
+          <div style="flex:1;background:#54c47a;display:flex;flex-direction:column;justify-content:flex-end;padding:3px 4px;">
+            <div style="font-size:7px;color:rgba(255,255,255,0.9);">#54C47A</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);">Accent A</div>
+          </div>
+          <div style="flex:1;background:#c49a54;display:flex;flex-direction:column;justify-content:flex-end;padding:3px 4px;">
+            <div style="font-size:7px;color:rgba(255,255,255,0.9);">#C49A54</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);">Accent B</div>
+          </div>
+        </div>
+        <!-- Shade strip for locked color -->
+        <div style="display:flex;gap:1px;border-radius:2px;overflow:hidden;height:8px;opacity:0.8;">
+          <div style="flex:1;background:#fde8e3;"></div>
+          <div style="flex:1;background:#f9c4b5;"></div>
+          <div style="flex:1;background:#f39f87;"></div>
+          <div style="flex:1;background:#ee7a5e;"></div>
+          <div style="flex:1;background:#e8543a;"></div>
+          <div style="flex:1;background:#c03a22;"></div>
+          <div style="flex:1;background:#962a15;"></div>
+        </div>
+        <!-- Typography compact -->
+        <div style="background:#1a1a1a;border-radius:4px;padding:4px 8px;display:flex;gap:6px;align-items:center;">
+          <span style="font-size:12px;color:#e0d5c0;font-style:italic;font-weight:bold;">Aa</span>
+          <div style="flex:1;">
+            <div style="font-size:7px;color:#666;margin-bottom:1px;">Heading · Body</div>
+            <div style="font-size:8px;color:#999;">Fraunces / Inter</div>
+          </div>
+          <div style="display:flex;gap:2px;">
+            <div style="font-size:7px;color:#555;">H1 48</div>
+            <div style="font-size:7px;color:#444;">·</div>
+            <div style="font-size:7px;color:#555;">H2 32</div>
+            <div style="font-size:7px;color:#444;">·</div>
+            <div style="font-size:7px;color:#555;">B 16</div>
+          </div>
+          <div style="width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        </div>
+        <!-- Quick actions -->
+        <div style="display:flex;gap:4px;align-items:center;">
+          <div style="flex:1;background:#1a1a1a;border-radius:4px;padding:4px 6px;font-size:8px;color:#444;text-align:center;">SPACE — generate</div>
+          <div style="background:#1a1a1a;border-radius:4px;padding:4px 8px;font-size:8px;color:#e8543a;">Export CSS →</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Hybrid: Swatches + Instant Scale ★</h3>
+      <p>Big playful color swatches (coolors feel) with role labels baked in from the start. When a color is locked, its shade strip appears below it. Typography is a compact row with scale preview inline. The vibe coder sees both the fun AND the derived system without switching views.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Playful AND informative</li><li>Shade scale appears as you lock</li><li>Role labels guide vibe coders</li><li>Export visible from minute 1</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Most complex to build of the three</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>

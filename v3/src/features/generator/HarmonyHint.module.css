@@ -1,0 +1,18 @@
+.hint {
+  margin: var(--ui-space-4) var(--ui-space-8) 0;
+  padding: var(--ui-space-3) var(--ui-space-5);
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
+  color: #166534;
+  font-family: sans-serif;
+  letter-spacing: 0.01em;
+  transition: opacity var(--ui-duration-4);
+}
+
+[data-theme='dark'] .hint {
+  background: #052e16;
+  border-color: #166534;
+  color: #86efac;
+}

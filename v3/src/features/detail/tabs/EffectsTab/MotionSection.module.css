@@ -1,0 +1,129 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.subsectionLabel {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  color: var(--color-on-surface-subtle, #888);
+  margin-bottom: var(--ui-space-4);
+  font-family: sans-serif;
+}
+
+.tokenRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-4);
+  padding: var(--ui-space-2) 0;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface, #333);
+}
+
+.tokenName {
+  width: 160px;
+  flex-shrink: 0;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.tokenValue {
+  flex: 1;
+  font-size: var(--ui-text-sm);
+}
+
+/* Easing rows with animation demo */
+.easingList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  margin-bottom: var(--ui-space-8);
+}
+
+.easingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-6);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border-radius: var(--ui-radius-3);
+  border: 1px solid var(--color-border, #e8e4df);
+  background: var(--color-surface, #fff);
+  cursor: default;
+  transition: border-color var(--ui-duration-3);
+}
+
+.easingRow:hover { border-color: var(--color-interactive, #e8543a); }
+
+.easingName {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  font-family: sans-serif;
+  color: var(--color-on-surface, #333);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.easingDemo {
+  width: 16px;
+  height: 16px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: var(--ui-radius-2);
+  flex-shrink: 0;
+}
+
+.easingDemoActive {
+  transform: translateX(40px);
+}
+
+.easingValue {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle, #aaa);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subsectionLabelSpaced {
+  margin-top: var(--ui-space-6);
+}
+
+/* Duration row */
+.durationField {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-4);
+  flex: 1;
+}
+
+.durationBar {
+  height: 6px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: var(--ui-radius-2);
+  transition: width var(--ui-duration-3);
+}
+
+.durationInput {
+  width: 64px;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  padding: var(--ui-space-1) var(--ui-space-3);
+  background: var(--color-background, #f7f4f0);
+  border: 1px solid var(--color-border, #e0dbd5);
+  border-radius: var(--ui-radius-2);
+  color: var(--color-on-surface, #333);
+  text-align: right;
+}
+
+.durationInput:focus {
+  outline: 2px solid var(--color-interactive, #e8543a);
+  outline-offset: 1px;
+}

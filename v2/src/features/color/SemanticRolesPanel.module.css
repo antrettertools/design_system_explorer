@@ -1,0 +1,122 @@
+.panel {
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--chrome-text);
+  margin-bottom: 6px;
+  font-family: var(--chrome-font-ui);
+}
+
+.subheading {
+  font-size: 12px;
+  color: var(--chrome-text-subtle);
+  line-height: 1.5;
+}
+
+.group {
+  margin-bottom: 28px;
+}
+
+.groupLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chrome-accent);
+  font-family: var(--chrome-font-ui);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--chrome-border);
+}
+
+.roleList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: var(--chrome-radius);
+  transition: background 0.12s;
+}
+
+.roleRow:hover {
+  background: var(--chrome-surface);
+}
+
+.swatches {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.roleName {
+  font-size: 11px;
+  font-family: var(--chrome-font-mono);
+  color: var(--chrome-text);
+  flex: 1;
+  min-width: 0;
+}
+
+.roleMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.autoBadge {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.06);
+  color: var(--chrome-text-subtle);
+  font-family: var(--chrome-font-mono);
+  letter-spacing: 0.04em;
+}
+
+.overrideBadge {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(232,168,48,0.15);
+  color: var(--chrome-accent);
+  font-family: var(--chrome-font-mono);
+  letter-spacing: 0.04em;
+}
+
+.resetBtn {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: none;
+  border: 1px solid var(--chrome-border);
+  color: var(--chrome-text-subtle);
+  font-family: var(--chrome-font-mono);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.resetBtn:hover {
+  border-color: var(--chrome-accent);
+  color: var(--chrome-accent);
+}

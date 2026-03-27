@@ -1,0 +1,161 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.subsectionTitle {
+  font-size: var(--ui-text-sm);
+  font-weight: 700;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-4);
+  font-family: sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Brand-derived roles grid */
+.rolesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ui-space-3);
+  margin-bottom: var(--ui-space-9);
+}
+
+.roleCard {
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.roleColorBar {
+  height: 32px;
+}
+
+.roleMeta {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  background: var(--color-surface);
+}
+
+.roleName {
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+  color: var(--color-on-surface);
+  font-family: sans-serif;
+}
+
+.roleHex {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+}
+
+/* Light/dark paired display */
+.pairedRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  margin-bottom: var(--ui-space-3);
+}
+
+.pairedSwatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-radius-2);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.pairedLabel {
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface);
+}
+
+.pairedHex {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
+  margin-left: var(--ui-space-2);
+}
+
+/* Dark mode column */
+.darkColumn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+}
+
+.themeBadge {
+  font-size: var(--ui-text-sm);
+  padding: 1px var(--ui-space-2);
+  border-radius: var(--ui-radius-2);
+  background: var(--color-border);
+  color: var(--color-on-surface-subtle);
+  font-family: sans-serif;
+}
+
+/* State/mood groups */
+.stateGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ui-space-4);
+  margin-bottom: var(--ui-space-9);
+}
+
+.stateCard {
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.statePair {
+  display: flex;
+  gap: var(--ui-space-1);
+  padding: var(--ui-space-4) var(--ui-space-4) 0;
+}
+
+.stateSwatch {
+  height: 20px;
+  flex: 1;
+  border-radius: var(--ui-radius-2);
+}
+
+.stateCardOverridden {
+  border-color: var(--color-interactive, #e8543a);
+}
+
+.stateFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-space-2) var(--ui-space-4) var(--ui-space-4);
+}
+
+.stateLabel {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: sans-serif;
+  text-transform: capitalize;
+}
+
+.stateResetBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  padding: 0;
+  line-height: 1;
+}
+
+.stateResetBtn:hover { color: var(--color-interactive); }
+
+.subsectionTitleSpaced {
+  margin-top: var(--ui-space-8);
+}

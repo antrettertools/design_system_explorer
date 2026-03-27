@@ -1,0 +1,202 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 200;
+  animation: fadeIn var(--ui-duration-3) ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--ui-size-drawer);
+  max-width: 90vw;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -4px 0 32px rgba(0, 0, 0, 0.12);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn var(--ui-duration-4) ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%) }
+  to   { transform: translateX(0) }
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-space-6) var(--ui-space-8);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.drawerTitle {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body);
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  padding: var(--ui-space-2);
+  border-radius: var(--ui-radius-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
+}
+
+.closeBtn:hover {
+  color: var(--color-on-surface);
+  background: var(--color-surface-raised);
+}
+
+.closeBtn:active { transform: scale(0.9); }
+
+.saveForm {
+  padding: var(--ui-space-6) var(--ui-space-8);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--ui-space-2);
+}
+
+.saveInput {
+  flex: 1;
+  padding: var(--ui-space-2) var(--ui-space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+}
+
+.saveInput:focus {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.saveBtn {
+  padding: var(--ui-space-2) var(--ui-space-6);
+  border: none;
+  border-radius: var(--ui-radius-4);
+  background: var(--color-interactive);
+  color: var(--color-on-interactive);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.saveBtn:hover {
+  opacity: 0.9;
+}
+
+.saveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sessionList {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-space-4) 0;
+}
+
+.emptyState {
+  padding: var(--ui-space-10) var(--ui-space-8);
+  text-align: center;
+  color: var(--color-on-surface-subtle);
+  font-size: var(--font-size-body);
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  padding: var(--ui-space-4) var(--ui-space-8);
+  gap: var(--ui-space-4);
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--ui-duration-1);
+}
+
+.sessionItem:hover {
+  background: var(--color-surface-raised);
+}
+
+.sessionInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.sessionName {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sessionMeta {
+  font-size: var(--font-size-label);
+  color: var(--color-on-surface-subtle);
+  margin-top: var(--ui-space-1);
+}
+
+.sessionActions {
+  display: flex;
+  gap: var(--ui-space-2);
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  font-size: var(--font-size-label);
+  padding: var(--ui-space-1) var(--ui-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--ui-duration-2), color var(--ui-duration-2), background var(--ui-duration-2);
+}
+
+.actionBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.deleteBtn:hover {
+  border-color: var(--color-error, #e53e3e);
+  color: var(--color-error, #e53e3e);
+}
+
+.limitNote {
+  padding: var(--ui-space-4) var(--ui-space-8);
+  font-size: var(--font-size-label);
+  color: var(--color-on-surface-subtle);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.emptyStateHint {
+  margin-top: var(--ui-space-2);
+}

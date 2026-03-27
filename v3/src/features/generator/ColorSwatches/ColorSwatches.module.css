@@ -1,0 +1,10 @@
+.grid {
+  display: flex;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-8) var(--ui-space-8) 0;
+}
+
+.grid > * {
+  flex: 1;
+  min-width: 0;
+}

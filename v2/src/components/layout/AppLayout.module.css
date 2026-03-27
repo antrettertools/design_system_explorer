@@ -1,0 +1,83 @@
+.quickLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.quickContent {
+  flex: 1;
+  overflow: hidden;
+}
+
+.exploreLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tabBar {
+  display: flex;
+  gap: 0;
+  background: var(--chrome-surface);
+  border-bottom: 1px solid var(--chrome-border);
+  padding: 0 0.5rem;
+  flex-shrink: 0;
+}
+
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--chrome-text-subtle);
+  cursor: pointer;
+  font-family: var(--chrome-font-ui);
+  font-size: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--chrome-text);
+}
+
+.tabActive {
+  color: var(--chrome-text);
+  border-bottom-color: var(--chrome-accent);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  background: var(--chrome-surface);
+  border-right: 1px solid var(--chrome-border);
+  overflow-y: auto;
+}
+
+.resizeHandle {
+  width: 4px;
+  cursor: col-resize;
+  background: var(--chrome-border);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.resizeHandle:hover {
+  background: var(--chrome-accent);
+}
+
+.preview {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--chrome-bg);
+}
+
+.placeholder {
+  padding: 2rem;
+  color: var(--chrome-text-subtle);
+  font-size: 0.875rem;
+}

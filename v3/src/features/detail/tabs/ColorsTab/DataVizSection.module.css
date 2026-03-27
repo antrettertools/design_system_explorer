@@ -1,0 +1,72 @@
+.section { margin-bottom: 28px; }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: sans-serif;
+}
+
+.nControl {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  margin-bottom: var(--ui-space-6);
+  font-size: var(--ui-text-sm);
+  font-family: sans-serif;
+  color: var(--color-on-surface-subtle);
+}
+
+.nControl select {
+  padding: var(--ui-space-1) var(--ui-space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.paramHint {
+  font-size: var(--ui-text-sm);
+  opacity: 0.6;
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+}
+
+.palette {
+  display: flex;
+  gap: var(--ui-space-2);
+  margin-bottom: var(--ui-space-5);
+  height: 44px;
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.paletteCell {
+  flex: 1;
+  border-radius: 0;
+  cursor: pointer;
+  transition: flex var(--ui-duration-3);
+}
+
+.paletteCell:hover { flex: 1.5; }
+
+/* Mini bar chart */
+.chart {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-3);
+  padding: var(--ui-space-5) var(--ui-space-6);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ui-space-2);
+  height: 64px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: var(--ui-radius-1) var(--ui-radius-1) 0 0;
+  transition: height var(--ui-duration-5) ease;
+}

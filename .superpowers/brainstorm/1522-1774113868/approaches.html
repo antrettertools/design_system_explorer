@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>palette. v4 — Implementation Approach Options</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f13;
+    color: #e8e4df;
+    padding: 40px;
+    line-height: 1.5;
+  }
+  .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: #fff; margin-bottom: 4px; }
+  .page-subtitle { font-size: 13px; color: #666; margin-bottom: 36px; text-transform: uppercase; letter-spacing: 0.02em; }
+
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+
+  .option {
+    background: #191921;
+    border: 1px solid #2a2a38;
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .option:hover { border-color: #444; }
+  .option.selected { border-color: #4a9eff; box-shadow: 0 0 0 1px #4a9eff22; }
+  .option.selected::after {
+    content: '✓ Selected';
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4a9eff;
+    background: rgba(74,158,255,0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .option.recommended { border-color: #9e6eff44; }
+  .option.recommended::before {
+    content: '★ Recommended';
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #9e6eff;
+    background: rgba(158,110,255,0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .option.selected.recommended::before { display: none; }
+
+  .option-letter {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 14px;
+    background: #222230;
+    color: #888;
+  }
+  .option.selected .option-letter { background: rgba(74,158,255,0.15); color: #4a9eff; }
+
+  .option-title { font-size: 16px; font-weight: 700; color: #f0ece8; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .option-desc { font-size: 13px; color: #777; line-height: 1.6; margin-bottom: 16px; }
+
+  .phases { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+  .phase {
+    display: flex; align-items: center; gap: 10px;
+    background: #111118;
+    border: 1px solid #1e1e2a;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .phase-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+    background: #222230;
+    color: #666;
+  }
+  .phase-name { color: #aaa; flex: 1; }
+  .phase-items { font-size: 10px; color: #555; }
+
+  .phase.critical .phase-num { background: rgba(232,82,82,0.2); color: #e85252; }
+  .phase.color .phase-num    { background: rgba(232,156,42,0.2); color: #e89c2a; }
+  .phase.comp .phase-num     { background: rgba(74,158,255,0.2); color: #4a9eff; }
+  .phase.ux .phase-num       { background: rgba(78,204,143,0.2); color: #4ecc8f; }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .pros, .cons {
+    background: #111118;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .pros { border: 1px solid rgba(78,204,143,0.2); }
+  .cons { border: 1px solid rgba(232,82,82,0.2); }
+  .pros h4 { font-size: 10px; font-weight: 700; color: #4ecc8f; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .cons h4 { font-size: 10px; font-weight: 700; color: #e85252; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .pros li, .cons li {
+    font-size: 12px; color: #777; line-height: 1.5;
+    margin-left: 12px;
+    list-style: disc;
+  }
+
+  /* Work breakdown */
+  .breakdown {
+    background: #191921;
+    border: 1px solid #2a2a38;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 8px;
+  }
+  .breakdown-title { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 20px; }
+  .work-items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .work-group { }
+  .work-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid #222;
+  }
+  .work-group.edit .work-group-title { color: #e85252; }
+  .work-group.color .work-group-title { color: #e89c2a; }
+  .work-group.comp .work-group-title  { color: #4a9eff; }
+  .work-group.ux .work-group-title    { color: #4ecc8f; }
+
+  .work-item {
+    font-size: 12px; color: #666; line-height: 1.4;
+    padding: 5px 0;
+    border-bottom: 1px solid #1a1a24;
+    display: flex; gap: 6px; align-items: flex-start;
+  }
+  .work-item::before { content: '·'; flex-shrink: 0; color: #333; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Phase 4 — How do we tackle this?</div>
+<div class="page-subtitle">Three approaches to implementing all review findings</div>
+
+<!-- All the work that needs doing -->
+<div class="breakdown">
+  <div class="breakdown-title">Full scope of work</div>
+  <div class="work-items">
+    <div class="work-group edit">
+      <div class="work-group-title">Editability</div>
+      <div class="work-item">Color picker popover on swatches</div>
+      <div class="work-item">Effects: rich shadow builder</div>
+      <div class="work-item">Effects: easing curve previewer</div>
+      <div class="work-item">Effects: motion live demo</div>
+      <div class="work-item">Type scale ratio slider</div>
+      <div class="work-item">Per-step size/weight/lh overrides</div>
+      <div class="work-item">Focus ring color + width editor</div>
+    </div>
+    <div class="work-group color">
+      <div class="work-group-title">Color System</div>
+      <div class="work-item">Three-way bg mode (white/light/dark)</div>
+      <div class="work-item">Greyscale section in Colors tab</div>
+      <div class="work-item">Font colors section in Colors tab</div>
+      <div class="work-item">Secondary/accent in all templates</div>
+      <div class="work-item">State colors in templates (badges, alerts)</div>
+      <div class="work-item">Dark token coverage for state/mood</div>
+      <div class="work-item">Dark token coverage for data viz</div>
+    </div>
+    <div class="work-group comp">
+      <div class="work-group-title">Components</div>
+      <div class="work-item">Component previews (input, card, badge, tag, tooltip, alert)</div>
+      <div class="work-item">Color picker on token bg/text/border fields</div>
+      <div class="work-item">Real icon packages (lucide-react)</div>
+      <div class="work-item">Icon library switching live</div>
+    </div>
+    <div class="work-group ux">
+      <div class="work-group-title">UX Polish</div>
+      <div class="work-item">Fix all 10px/11px text sizes</div>
+      <div class="work-item">Edit affordance on swatches (hover icon)</div>
+      <div class="work-item">Undo/redo buttons in header</div>
+      <div class="work-item">Theme toggle redesign (3-way)</div>
+      <div class="work-item">Header: mode indicator + shortcuts hint</div>
+      <div class="work-item">Tab overflow handling in detail mode</div>
+      <div class="work-item">Fix arch violations (inline styles, core/ imports)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Approaches -->
+<div style="margin-top: 32px; font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px;">Choose your implementation approach</div>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="option-letter">A</div>
+    <div class="option-title">One Big Phase 4</div>
+    <div class="option-desc">Single comprehensive spec covering all 4 work groups. One plan, one branch, all delivered together.</div>
+
+    <div class="phases">
+      <div class="phase critical">
+        <div class="phase-num">1</div>
+        <div class="phase-name">Everything</div>
+        <div class="phase-items">~25 tasks</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros"><h4>Pros</h4><ul><li>One spec to write</li><li>No coordination overhead</li></ul></div>
+      <div class="cons"><h4>Cons</h4><ul><li>Very long branch</li><li>Hard to review</li><li>High WIP risk</li></ul></div>
+    </div>
+  </div>
+
+  <div class="option recommended" data-choice="b" onclick="toggleSelect(this)">
+    <div class="option-letter">B</div>
+    <div class="option-title">Domain-Split (4 sub-phases)</div>
+    <div class="option-desc">Each domain gets its own spec + plan + branch, executed sequentially. Cleanest incremental delivery.</div>
+
+    <div class="phases">
+      <div class="phase critical">
+        <div class="phase-num">4A</div>
+        <div class="phase-name">Editability</div>
+        <div class="phase-items">color picker, effects builder, type scale</div>
+      </div>
+      <div class="phase color">
+        <div class="phase-num">4B</div>
+        <div class="phase-name">Color System</div>
+        <div class="phase-items">3-way bg, greyscale, showcase colors</div>
+      </div>
+      <div class="phase comp">
+        <div class="phase-num">4C</div>
+        <div class="phase-name">Components</div>
+        <div class="phase-items">previews, real icons, token inputs</div>
+      </div>
+      <div class="phase ux">
+        <div class="phase-num">4D</div>
+        <div class="phase-name">UX Polish</div>
+        <div class="phase-items">sizes, affordances, undo/redo, header</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros"><h4>Pros</h4><ul><li>Each phase reviewable</li><li>Ship value incrementally</li><li>Clear boundaries</li></ul></div>
+      <div class="cons"><h4>Cons</h4><ul><li>4 specs to write</li><li>Sequential dependency</li></ul></div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="option-letter">C</div>
+    <div class="option-title">Impact-First (2 phases)</div>
+    <div class="option-desc">Phase 4A tackles the two highest-impact gaps (editability + color system) together. Phase 4B handles polish + components.</div>
+
+    <div class="phases">
+      <div class="phase critical">
+        <div class="phase-num">4A</div>
+        <div class="phase-name">Core Completeness</div>
+        <div class="phase-items">color picker + effects builder + 3-way bg + showcase colors + greyscale/font colors</div>
+      </div>
+      <div class="phase ux">
+        <div class="phase-num">4B</div>
+        <div class="phase-name">Polish + Components</div>
+        <div class="phase-items">component previews, icons, UX polish, arch fixes, type scale</div>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros"><h4>Pros</h4><ul><li>Fast to visible impact</li><li>Only 2 specs</li><li>Natural split</li></ul></div>
+      <div class="cons"><h4>Cons</h4><ul><li>4A is still large</li><li>Less granular review</li></ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#191921;border:1px solid #2a2a38;border-radius:10px;padding:18px 22px;font-size:13px;color:#666;line-height:1.6;">
+  <strong style="color:#9e6eff">My recommendation: B (Domain-Split).</strong> The editability work (color pickers, effects builders) is technically meaty and benefits from focused review. The color system work (showcase templates, dark mode coverage) is a different skill set — mostly CSS and token design. Keeping them separate makes each session cleaner and lets you validate one domain before the next starts. 4D (UX Polish) can even run as a quick cleanup session at the end.
+</div>
+
+</body>
+</html>

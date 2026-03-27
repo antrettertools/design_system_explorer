@@ -1,0 +1,118 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-background);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-6);
+  padding: 0 var(--ui-space-8);
+  height: var(--ui-size-header);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  flex-shrink: 0;
+}
+
+.backLink {
+  background: none;
+  border: none;
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  cursor: pointer;
+  padding: var(--ui-space-1) var(--ui-space-2);
+  margin-left: calc(-1 * var(--ui-space-2));
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  white-space: nowrap;
+  border-radius: var(--ui-radius-2);
+  transition: color var(--ui-duration-2), background var(--ui-duration-2);
+  flex-shrink: 0;
+}
+
+.backLink:hover { color: var(--color-on-surface); background: var(--color-surface-raised, var(--color-border)); }
+.backLink:active { transform: scale(0.97); }
+
+.divider {
+  width: 1px;
+  height: 16px;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0 var(--ui-space-7);
+  height: 46px; /* intentionally 2px less than --ui-size-header for the active underline effect */
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
+  color: var(--color-on-surface-subtle);
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  transition: color var(--ui-duration-3), border-color var(--ui-duration-3);
+  font-family: sans-serif;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.tab:hover { color: var(--color-on-surface); }
+
+.tab.active {
+  color: var(--color-interactive);
+  border-bottom-color: var(--color-interactive);
+}
+
+/* Responsive label switching */
+.tabFullLabel { display: inline; }
+.tabShortLabel { display: none; }
+
+@media (max-width: 900px) { /* --ui-bp-tablet */
+  .tabFullLabel { display: none; }
+  .tabShortLabel { display: inline; }
+}
+
+.tabBadge {
+  font-size: var(--ui-text-sm);
+  opacity: 0.4;
+  margin-left: var(--ui-space-1);
+  line-height: 1;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ui-space-9) var(--ui-space-8);
+}
+
+/* Phase 2+ tab placeholders */
+.comingSoon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--color-on-surface-subtle);
+  font-size: var(--ui-text-md);
+  font-family: sans-serif;
+}
