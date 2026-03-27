@@ -1,22 +1,6 @@
 import { useColor } from '@/store'
+import { getWcagContrastRatio } from '@/core/color/scales'
 import styles from './FontColorsSection.module.css'
-
-function getLuminance(hex: string): number {
-  const clean = hex.replace('#', '').padEnd(6, '0')
-  const r = parseInt(clean.slice(0, 2), 16) / 255
-  const g = parseInt(clean.slice(2, 4), 16) / 255
-  const b = parseInt(clean.slice(4, 6), 16) / 255
-  const srgb = [r, g, b].map(c => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))
-  return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2]
-}
-
-function contrastRatio(hex1: string, hex2: string): number {
-  const l1 = getLuminance(hex1)
-  const l2 = getLuminance(hex2)
-  const lighter = Math.max(l1, l2)
-  const darker = Math.min(l1, l2)
-  return (lighter + 0.05) / (darker + 0.05)
-}
 
 const FONT_ROLES = [
   {
@@ -50,13 +34,12 @@ function resolveToken(token: string): string {
 }
 
 export function FontColorsSection() {
-  // Re-render on color changes
   useColor()
 
   const rows = FONT_ROLES.map(role => {
     const fgHex = resolveToken(role.token)
     const bgHex = resolveToken(role.bgToken)
-    const ratio = contrastRatio(fgHex, bgHex)
+    const ratio = getWcagContrastRatio(fgHex, bgHex)
     const passAA = ratio >= 4.5
     return { ...role, fgHex, bgHex, ratio, passAA }
   })

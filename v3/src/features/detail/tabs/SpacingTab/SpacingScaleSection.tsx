@@ -7,34 +7,13 @@ const MAX_BAR_PX = 96  // max rendered bar width in px (for 3xl, caps visual)
 
 export function SpacingScaleSection() {
   const { baseUnit, config, overrides } = useSpacing()
-  const { setBaseUnit, overrideStep, resetStep } = useSpacingActions()
+  const { overrideStep, resetStep } = useSpacingActions()
 
   const effectiveScale = { ...config.scale, ...overrides }
 
   return (
     <div className={styles.section}>
       <div className={styles.sectionTitle}>Spacing Scale</div>
-
-      <div className={styles.baseUnitRow}>
-        <span>Base unit:</span>
-        <div className={styles.baseUnitToggle}>
-          <button
-            className={`${styles.unitBtn} ${baseUnit === 4 ? styles.active : ''}`}
-            onClick={() => setBaseUnit(4)}
-            aria-pressed={baseUnit === 4}
-          >
-            4pt
-          </button>
-          <button
-            className={`${styles.unitBtn} ${baseUnit === 8 ? styles.active : ''}`}
-            onClick={() => setBaseUnit(8)}
-            aria-pressed={baseUnit === 8}
-          >
-            8pt
-          </button>
-        </div>
-        <span className={styles.baseUnitHint}>base unit = {baseUnit}px</span>
-      </div>
 
       <div className={styles.ruler} role="list">
         {STEP_ORDER.map(step => {
@@ -46,6 +25,7 @@ export function SpacingScaleSection() {
           return (
             <div key={step} className={styles.rulerRow} role="listitem">
               <span className={styles.stepLabel}>{step}</span>
+              <span className={styles.tokenName}>--spacing-{step}</span>
               <div
                 className={styles.bar}
                 style={{ width: `${barWidth}px` }}

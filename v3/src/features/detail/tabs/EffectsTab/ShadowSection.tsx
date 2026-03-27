@@ -7,7 +7,7 @@ const SHADOW_STEPS: (keyof ShadowPresets)[] = ['sm', 'md', 'lg', 'xl']
 
 export function ShadowSection() {
   const { config, shadowMode, shadowOverrides } = useEffects()
-  const { setShadowMode, overrideShadow, resetShadow } = useEffectsActions()
+  const { overrideShadow, resetShadow } = useEffectsActions()
 
   const baseShadows = shadowMode === 'colored' ? config.shadows : config.shadowsNeutral
   const activeShadows = { ...baseShadows, ...shadowOverrides }
@@ -15,24 +15,6 @@ export function ShadowSection() {
   return (
     <div className={styles.section}>
       <div className={styles.sectionTitle}>Elevation Shadows</div>
-
-      <div className={styles.modeRow}>
-        <span>Mode:</span>
-        <button
-          className={`${styles.modeBtn} ${shadowMode === 'colored' ? styles.active : ''}`}
-          onClick={() => setShadowMode('colored')}
-          aria-pressed={shadowMode === 'colored'}
-        >
-          Brand-tinted
-        </button>
-        <button
-          className={`${styles.modeBtn} ${shadowMode === 'neutral' ? styles.active : ''}`}
-          onClick={() => setShadowMode('neutral')}
-          aria-pressed={shadowMode === 'neutral'}
-        >
-          Neutral
-        </button>
-      </div>
 
       <div className={styles.builderList} role="list">
         {SHADOW_STEPS.map(step => (

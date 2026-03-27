@@ -1,0 +1,160 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: var(--font-body, sans-serif);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  overflow: hidden;
+}
+
+/* ── Shared row layout ───────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  padding: var(--ui-space-5) var(--ui-space-6);
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.rowMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.rowRole {
+  font-size: 10px;
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface-subtle);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.rowName {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface);
+  font-weight: 600;
+}
+
+/* ── Lock button (shared pattern) ────────────── */
+.lockBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-radius-2);
+  border: 1px solid var(--color-border);
+  background: none;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  flex-shrink: 0;
+  transition: all var(--ui-duration-3);
+}
+
+.lockBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.lockBtnActive {
+  background: var(--color-interactive-subtle);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+/* ── Shadow mode row ─────────────────────────── */
+.previewsRow {
+  display: flex;
+  gap: var(--ui-space-5);
+  align-items: flex-end;
+}
+
+.shadowPreviewItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+.shadowBox {
+  width: 36px;
+  height: 36px;
+  background: var(--color-surface);
+  border-radius: var(--ui-radius-3);
+  border: 1px solid transparent;
+}
+
+.previewLabel {
+  font-size: 10px;
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
+}
+
+.toggleGroup {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  margin-left: auto;
+}
+
+.modeBtn {
+  padding: var(--ui-space-2) var(--ui-space-4);
+  border: none;
+  background: none;
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  transition: all var(--ui-duration-3);
+}
+
+.modeBtnActive {
+  background: var(--color-interactive-subtle);
+  color: var(--color-interactive);
+  font-weight: 600;
+}
+
+/* ── Focus ring row ──────────────────────────── */
+.focusPreview {
+  display: flex;
+  align-items: center;
+}
+
+.focusedBtn {
+  padding: var(--ui-space-2) var(--ui-space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-2);
+  background: var(--color-surface);
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface);
+  cursor: default;
+}
+
+.focusMeta {
+  flex: 1;
+}
+
+.focusDetail {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
+}

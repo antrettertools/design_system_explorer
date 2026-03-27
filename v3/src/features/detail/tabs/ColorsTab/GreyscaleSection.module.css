@@ -1,79 +1,96 @@
 .section {
-  margin-bottom: var(--ui-space-2);
+  margin-bottom: var(--ui-space-10);
 }
 
 .sectionTitle {
   font-size: var(--ui-text-sm);
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--color-on-surface-subtle, #aaa);
-  margin-bottom: var(--ui-space-5);
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-3);
   font-family: var(--font-body, sans-serif);
 }
 
-.strip {
+.note {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+  margin-bottom: var(--ui-space-7);
+  opacity: 0.7;
+}
+
+.scaleRow {
   display: flex;
-  flex-direction: row;
-  gap: 0;
+  gap: var(--ui-space-1);
   border-radius: var(--ui-radius-3);
   overflow: hidden;
-  border: 1px solid var(--color-border, #e0dbd5);
+  height: 40px;
 }
 
-.swatch {
+.scaleCell {
   flex: 1;
-  height: 48px;
-  border: none;
-  cursor: pointer;
   position: relative;
-  transition: opacity var(--ui-duration-2);
-  min-width: 0;
+  cursor: pointer;
+  transition: flex var(--ui-duration-3);
 }
 
-.swatch:hover {
-  opacity: 0.85;
-  z-index: 1;
-}
+.scaleCell:hover { flex: 1.6; }
 
-.copied {
+.scaleCellLabel {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: var(--ui-text-lg, 15px);
-  color: inherit;
-  background: rgba(0,0,0,0.15);
-  border-radius: 0;
+  justify-content: flex-end;
+  padding-bottom: var(--ui-space-2);
+  opacity: 0;
+  transition: opacity var(--ui-duration-3);
 }
 
-.labels {
+.scaleCell:hover .scaleCellLabel { opacity: 1; }
+.scaleCell:first-child .scaleCellLabel,
+.scaleCell:last-child .scaleCellLabel { opacity: 0.5; }
+
+.scaleCellStep {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px var(--ui-space-1);
+  border-radius: var(--ui-radius-1);
+}
+
+.scaleCellCopied {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px var(--ui-space-1);
+  border-radius: var(--ui-radius-1);
+}
+
+/* For light cells */
+.scaleCellLight .scaleCellStep   { color: rgba(0,0,0,0.5); background: rgba(0,0,0,0.08); }
+.scaleCellLight .scaleCellCopied { color: rgba(0,0,0,0.7); background: rgba(0,0,0,0.12); }
+
+.stepLabels {
   display: flex;
-  flex-direction: row;
-  gap: 0;
+  gap: var(--ui-space-1);
   margin-top: var(--ui-space-3);
 }
 
-.labelCell {
+.stepLabel {
   flex: 1;
   min-width: 0;
-  padding: 0 var(--ui-space-1);
   overflow: hidden;
 }
 
-.tokenName {
+.stepHex {
+  display: block;
   font-size: var(--ui-text-sm);
-  color: var(--color-on-surface-subtle, #888);
   font-family: var(--ui-font-mono);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.hex {
-  font-size: var(--ui-text-sm);
-  color: var(--color-on-surface-subtle, #aaa);
-  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

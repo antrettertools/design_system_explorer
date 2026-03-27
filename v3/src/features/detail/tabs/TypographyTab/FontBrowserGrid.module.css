@@ -1,6 +1,6 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--ui-space-4);
   padding: var(--ui-space-4) 0;
 }
@@ -26,7 +26,7 @@
 }
 
 .cellPreview {
-  font-size: var(--font-size-h2, 22px); /* reflects user's heading type scale */
+  font-size: var(--font-size-h3); /* reflects user's heading type scale */
   line-height: 1.2;
   margin-bottom: var(--ui-space-3);
   color: var(--color-on-surface);

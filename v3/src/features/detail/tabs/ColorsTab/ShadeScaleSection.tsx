@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { converter } from 'culori'
-import { Pencil } from 'lucide-react'
+import { Lock, LockOpen, Pencil } from 'lucide-react'
 import { useColor, useColorActions } from '@/store'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
 import { POSITION_LABELS } from '@/core/color/types'
@@ -36,7 +36,15 @@ export function ShadeScaleSection() {
   const { slots } = useColor()
   const colorActions = useColorActions()
   const [openSlotId, setOpenSlotId] = useState<string | null>(null)
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  function handleCopyStep(slotId: string, step: number, hex: string) {
+    navigator.clipboard?.writeText(hex)
+    const key = `${slotId}-${step}`
+    setCopiedKey(key)
+    setTimeout(() => setCopiedKey(null), 1500)
+  }
 
   return (
     <div className={styles.section}>
@@ -47,7 +55,7 @@ export function ShadeScaleSection() {
         const anchorRef = { current: swatchRefs.current[slot.id] } as React.RefObject<HTMLElement>
         const displayName = slot.name ?? POSITION_LABELS[slot.role]
         return (
-          <div key={slot.id} className={styles.colorRow}>
+          <div key={slot.id} className={`${styles.colorRow} ${slot.locked ? styles.locked : ''}`}>
             <div className={styles.colorHeader}>
               <div
                 ref={el => { swatchRefs.current[slot.id] = el }}
@@ -62,11 +70,24 @@ export function ShadeScaleSection() {
                 <span className={styles.roleName}>{displayName}</span>
                 <span className={styles.colorMeta}>{slot.hex.toUpperCase()} · {oklchLabel}</span>
               </div>
+              <button
+                className={`${styles.lockBtn} ${slot.locked ? styles.lockBtnActive : ''}`}
+                onClick={() => colorActions.toggleLock(slot.id)}
+                aria-label={slot.locked ? `Unlock ${displayName}` : `Lock ${displayName}`}
+                title={slot.locked ? 'Locked — click to unlock and allow SPACE to regenerate' : 'Unlocked — click to lock'}
+              >
+                {slot.locked
+                  ? <Lock size={12} strokeWidth={2} />
+                  : <LockOpen size={12} strokeWidth={2} />
+                }
+              </button>
             </div>
             <div className={styles.scaleRow} role="list" aria-label={`${displayName} shade scale`}>
               {SHADE_STEPS.map(step => {
                 const stepHex = scale[step]
                 const isLight = isLightStep(stepHex)
+                const key = `${slot.id}-${step}`
+                const copied = copiedKey === key
                 return (
                   <div
                     key={step}
@@ -74,13 +95,16 @@ export function ShadeScaleSection() {
                     style={{ background: stepHex }}
                     role="listitem"
                     title={`${slot.role}-${step}: ${stepHex}`}
-                    onClick={() => { navigator.clipboard?.writeText(stepHex) }}
+                    onClick={() => handleCopyStep(slot.id, step, stepHex)}
                     tabIndex={0}
-                    onKeyDown={e => { if (e.key === 'Enter') navigator.clipboard?.writeText(stepHex) }}
+                    onKeyDown={e => { if (e.key === 'Enter') handleCopyStep(slot.id, step, stepHex) }}
                     aria-label={`Step ${step}: ${stepHex}`}
                   >
                     <div className={styles.scaleCellLabel}>
-                      <span className={styles.scaleCellStep}>{step}</span>
+                      {copied
+                        ? <span className={styles.scaleCellCopied}>✓</span>
+                        : <span className={styles.scaleCellStep}>{step}</span>
+                      }
                     </div>
                   </div>
                 )

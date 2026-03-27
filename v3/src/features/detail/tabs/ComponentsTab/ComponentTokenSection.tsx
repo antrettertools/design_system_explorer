@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import { useComponents, useComponentsActions, useStore } from '@/store'
 import { deriveComponentTokens } from '@/core/components/tokens'
 import type { ComponentName, ComponentVariantKey } from '@/core/components/types'
@@ -14,7 +15,6 @@ function isColorKey(key: string): boolean {
 
 const COMPONENT_ORDER: ComponentName[] = ['button', 'input', 'card', 'badge', 'tag', 'tooltip', 'alert']
 
-// Maps each component family to its variant keys (required order)
 const BASE_VARIANTS: Record<ComponentName, ComponentVariantKey[]> = {
   button:  ['button', 'button-secondary', 'button-ghost', 'button-destructive'],
   input:   ['input'],
@@ -25,7 +25,6 @@ const BASE_VARIANTS: Record<ComponentName, ComponentVariantKey[]> = {
   alert:   ['alert'],
 }
 
-// Slot-dependent variants added per family when the slot exists
 const SLOT_VARIANTS: Record<ComponentName, { role: string; key: ComponentVariantKey }[]> = {
   button:  [],
   input:   [],
@@ -44,7 +43,6 @@ const SLOT_VARIANTS: Record<ComponentName, { role: string; key: ComponentVariant
   alert:   [],
 }
 
-// Human-readable labels for each variant key
 const VARIANT_LABELS: Record<ComponentVariantKey, string> = {
   'button':             'Primary',
   'button-secondary':   'Secondary',
@@ -73,12 +71,12 @@ const VARIANT_LABELS: Record<ComponentVariantKey, string> = {
 
 const TOKEN_LABELS: Record<string, string> = {
   bg:          'Background',
-  bgHover:     'Background hover',
-  text:        'Text color',
-  border:      'Border color',
+  bgHover:     'Bg hover',
+  text:        'Text',
+  border:      'Border',
   focusBorder: 'Focus border',
   placeholder: 'Placeholder',
-  radius:      'Border radius',
+  radius:      'Radius',
   shadow:      'Shadow',
   padding:     'Padding',
   iconColor:   'Icon color',
@@ -86,10 +84,10 @@ const TOKEN_LABELS: Record<string, string> = {
 
 export function ComponentTokenSection() {
   const { overrides } = useComponents()
-  const { overrideComponentToken, resetComponentToken } = useComponentsActions()
+  const { overrideComponentToken, resetComponentToken, resetComponentVariants } = useComponentsActions()
   const slots = useStore((s) => s.color.slots)
   const spacing = useStore((s) => s.spacing)
-  const [expanded, setExpanded] = useState<ComponentName | null>('button')
+  const [expanded, setExpanded] = useState<ComponentName | null>(null)
   const [openPicker, setOpenPicker] = useState<string | null>(null)
   const swatchRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
@@ -98,22 +96,16 @@ export function ComponentTokenSection() {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Component Tokens</h2>
-      <p className={styles.description}>
-        Token values are CSS variable references that automatically reflect your current palette.
-        Override any token to set a fixed value.
-      </p>
       <div className={styles.accordionList}>
         {COMPONENT_ORDER.map((comp) => {
           const isOpen = expanded === comp
 
-          // Compute the full list of variant keys for this component
           const slotRoles = new Set(slots.map(s => s.role))
           const slotVariants = SLOT_VARIANTS[comp]
             .filter(sv => slotRoles.has(sv.role as never))
             .map(sv => sv.key)
           const variantKeys: ComponentVariantKey[] = [...BASE_VARIANTS[comp], ...slotVariants]
 
-          // Total override count across all variants
           const overrideCount = variantKeys.reduce((sum, vk) => {
             return sum + Object.keys(overrides[vk] ?? {}).length
           }, 0)
@@ -121,7 +113,7 @@ export function ComponentTokenSection() {
           return (
             <div key={comp} className={styles.accordion}>
               <div
-                className={styles.accordionHeader}
+                className={`${styles.accordionHeader} ${isOpen ? styles.accordionHeaderOpen : ''}`}
                 role="button"
                 tabIndex={0}
                 aria-expanded={isOpen}
@@ -131,14 +123,37 @@ export function ComponentTokenSection() {
                 <span className={styles.accordionLabel}>{comp}</span>
                 <div className={styles.accordionMeta}>
                   {overrideCount > 0 && (
-                    <span className={styles.overrideCount}>{overrideCount} overridden</span>
+                    <>
+                      <span className={styles.overrideCount}>{overrideCount}</span>
+                      <button
+                        className={styles.resetCompBtn}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          resetComponentVariants(variantKeys)
+                        }}
+                        title={`Reset all ${comp} overrides`}
+                        aria-label={`Reset all ${comp} overrides`}
+                      >
+                        <RotateCcw size={11} />
+                      </button>
+                    </>
                   )}
-                  <span className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}>▾</span>
+                  <span className={styles.chevron}>
+                    {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </span>
                 </div>
               </div>
 
               {isOpen && (
                 <div className={styles.accordionBody}>
+                  {/* Component preview — always at top */}
+                  <div className={styles.previewWrapper}>
+                    <ComponentPreview componentName={comp} />
+                  </div>
+
+                  <div className={styles.tokensDivider} />
+
+                  {/* Token tables per variant */}
                   {variantKeys.map((variantKey) => {
                     const tokenSet = derived[variantKey]
                     if (!tokenSet) return null
@@ -161,12 +176,12 @@ export function ComponentTokenSection() {
                             const pickerId = `${variantKey}-${key}`
                             return (
                               <div key={key} className={styles.tokenRow}>
-                                <div className={styles.tokenKey}>
+                                <span className={styles.tokenKey}>
                                   {TOKEN_LABELS[key] ?? key}
-                                </div>
+                                </span>
                                 <div className={styles.tokenValue}>
                                   {isOverridden ? (
-                                    <span className={styles.overriddenPill}>overridden</span>
+                                    <span className={styles.overriddenPill}>custom</span>
                                   ) : (
                                     <span className={styles.autoPill}>auto</span>
                                   )}
@@ -197,7 +212,7 @@ export function ComponentTokenSection() {
                                       title="Reset to auto"
                                       aria-label={`Reset ${variantKey} ${key}`}
                                     >
-                                      ↺
+                                      <RotateCcw size={11} />
                                     </button>
                                   )}
                                   {openPicker === pickerId && (
@@ -216,11 +231,6 @@ export function ComponentTokenSection() {
                       </div>
                     )
                   })}
-
-                  <div className={styles.previewWrapper}>
-                    <span className={styles.previewLabel}>Preview</span>
-                    <ComponentPreview componentName={comp} />
-                  </div>
                 </div>
               )}
             </div>

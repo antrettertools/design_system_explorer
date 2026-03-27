@@ -1,0 +1,78 @@
+.section {
+  margin-bottom: var(--ui-space-10);
+}
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: var(--font-body, sans-serif);
+}
+
+.strip {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.swatch {
+  flex: 1;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: opacity var(--ui-duration-2);
+  min-width: 0;
+}
+
+.swatch:hover {
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.copied {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ui-text-lg);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.labels {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  margin-top: var(--ui-space-3);
+}
+
+.labelCell {
+  flex: 1;
+  min-width: 0;
+  padding: 0 var(--ui-space-1);
+  overflow: hidden;
+}
+
+.tokenName {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hex {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--ui-font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

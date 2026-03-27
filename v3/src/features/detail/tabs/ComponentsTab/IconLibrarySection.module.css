@@ -2,19 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: var(--ui-space-6);
+  margin-bottom: var(--ui-space-10);
 }
 
 .sectionTitle {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-label);
-  font-weight: 600;
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--ui-text-sm);
+  font-weight: 400;
   color: var(--color-on-surface-subtle);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 2px;
   padding-bottom: var(--ui-space-2);
   border-bottom: 1px solid var(--color-border);
 }
 
+/* ── Library picker ──────────────────────────── */
 .libraryGrid {
   display: flex;
   gap: var(--ui-space-2);
@@ -22,13 +24,13 @@
 }
 
 .libraryBtn {
-  padding: var(--ui-space-2) var(--ui-space-6);
+  padding: var(--ui-space-2) var(--ui-space-5);
   border: 1px solid var(--color-border);
-  border-radius: var(--ui-radius-4);
+  border-radius: var(--ui-radius-3);
   background: var(--color-surface);
   color: var(--color-on-surface-subtle);
-  font-family: var(--font-body);
-  font-size: var(--font-size-body);
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--ui-text-sm);
   cursor: pointer;
   transition: all var(--ui-duration-3);
 }
@@ -40,11 +42,12 @@
 
 .libraryBtnSelected {
   border-color: var(--color-interactive);
-  background: var(--color-brand-100);
+  background: var(--color-interactive-subtle);
   color: var(--color-interactive);
   font-weight: 600;
 }
 
+/* ── Icon preview area ───────────────────────── */
 .previewArea {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -56,17 +59,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--ui-space-4);
+  margin-bottom: var(--ui-space-5);
   gap: var(--ui-space-4);
   flex-wrap: wrap;
 }
 
 .previewLabel {
-  font-size: var(--font-size-label);
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
   color: var(--color-on-surface-subtle);
   margin: 0;
 }
 
+/* ── Size selector ───────────────────────────── */
 .sizeSelector {
   display: flex;
   gap: var(--ui-space-1);
@@ -77,7 +82,7 @@
   border: 1px solid var(--color-border);
   background: var(--color-background);
   color: var(--color-on-surface-subtle);
-  font-family: var(--font-body);
+  font-family: var(--font-body, sans-serif);
   font-size: var(--ui-text-sm);
   cursor: pointer;
   transition: all var(--ui-duration-2);
@@ -94,29 +99,32 @@
 .sizeBtnActive {
   background: var(--color-interactive);
   border-color: var(--color-interactive);
-  color: var(--color-on-interactive, #fff);
+  color: #fff;
   font-weight: 600;
 }
 
+/* ── Icon grid — responsive auto-fill ────────── */
 .iconGrid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: var(--ui-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: var(--ui-space-3);
 }
 
 .iconCell {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--ui-radius-3);
   color: var(--color-on-surface-subtle);
-  transition: background var(--ui-duration-2);
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
+  cursor: default;
 }
 
 .iconCell:hover {
   background: var(--color-surface-raised);
+  color: var(--color-on-surface);
 }
 
 .iconMissing {
@@ -124,6 +132,58 @@
   color: var(--color-on-surface-subtle);
 }
 
+/* ── Size mapping table ──────────────────────── */
+.description {
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface-subtle);
+  margin: 0 0 var(--ui-space-4);
+}
+
+.sizeMappingTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-3);
+  overflow: hidden;
+}
+
+.sizeMappingTable th,
+.sizeMappingTable td {
+  padding: var(--ui-space-2) var(--ui-space-5);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--ui-text-sm);
+  text-align: left;
+}
+
+.sizeMappingTable tr:last-child th,
+.sizeMappingTable tr:last-child td {
+  border-bottom: none;
+}
+
+.sizeMappingTable th {
+  background: var(--color-surface);
+  color: var(--color-on-surface-subtle);
+  font-weight: 600;
+  font-family: var(--font-body, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sizeMappingTable td {
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--ui-font-mono);
+}
+
+.sizePreview {
+  display: inline-block;
+  background: var(--color-interactive);
+  border-radius: var(--ui-radius-1);
+  vertical-align: middle;
+}
+
+/* Unused placeholder styles kept for potential future use */
 .libraryPlaceholder {
   display: flex;
   flex-direction: column;
@@ -133,56 +193,14 @@
 }
 
 .libraryPlaceholderTitle {
-  font-size: var(--font-size-body);
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface);
   font-weight: 600;
-  font-family: var(--font-body);
+  font-family: var(--font-body, sans-serif);
 }
 
 .libraryPlaceholderHint {
-  font-size: var(--font-size-label);
+  font-size: var(--ui-text-sm);
   color: var(--color-on-surface-subtle);
-  font-family: var(--font-body);
-}
-
-.sizeMappingTable {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.sizeMappingTable th,
-.sizeMappingTable td {
-  padding: var(--ui-space-2) var(--ui-space-4);
-  border: 1px solid var(--color-border);
-  font-size: var(--font-size-label);
-  text-align: left;
-}
-
-.sizeMappingTable th {
-  background: var(--color-surface);
-  color: var(--color-on-surface-subtle);
-  font-weight: 600;
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.sizeMappingTable td {
-  background: var(--color-background);
-  color: var(--color-on-surface);
-  font-family: var(--font-mono, monospace);
-}
-
-.sizePreview {
-  display: inline-block;
-  background: var(--color-interactive);
-  border-radius: var(--ui-radius-1);
-  vertical-align: middle;
-  margin-right: var(--ui-space-2);
-}
-
-.description {
-  font-size: var(--font-size-label);
-  color: var(--color-on-surface-subtle);
-  margin: 0 0 var(--ui-space-4);
+  font-family: var(--font-body, sans-serif);
 }

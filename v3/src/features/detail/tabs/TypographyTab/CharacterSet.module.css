@@ -28,7 +28,7 @@
 }
 
 .charset {
-  font-size: var(--font-size-body, 16px); /* reflects user's body type scale */
+  font-size: var(--font-size-body); /* reflects user's body type scale */
   line-height: 1.8;
   letter-spacing: 0.03em;
   color: var(--color-on-surface);
@@ -45,6 +45,6 @@
 }
 
 .weightSample {
-  font-size: var(--font-size-small, 14px); /* reflects user's small type scale */
+  font-size: var(--font-size-small); /* reflects user's small type scale */
   color: var(--color-on-surface);
 }

@@ -62,11 +62,9 @@ export function ReadabilityScore() {
             <div className={styles.scoreLabel}>APCA Lc · body text on background</div>
             <span className={`${styles.grade} ${grade.className}`}>{grade.label}</span>
           </div>
-          <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+          <div className={styles.wcagBlock}>
             <div className={styles.scoreLabel}>WCAG</div>
-            <div style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--color-on-surface)' }}>
-              {ratio.toFixed(1)}:1
-            </div>
+            <div className={styles.wcagValue}>{ratio.toFixed(1)}:1</div>
           </div>
         </div>
         <div

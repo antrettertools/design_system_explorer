@@ -22,6 +22,8 @@ export interface ColorState {
 export interface ColorActions {
   generate: () => void
   toggleLock: (id: string) => void
+  lockAllSlots: () => void
+  unlockAllSlots: () => void
   addSlot: () => void
   removeSlot: (id: string) => void
   reorderSlots: (fromIndex: number, toIndex: number) => void
@@ -66,6 +68,18 @@ export function createColorActions(set: any, get: any): ColorActions {
       const slots = state.color.slots.map(s =>
         s.id === id ? { ...s, locked: !s.locked } : s,
       )
+      set({ color: { ...state.color, slots } })
+    },
+
+    lockAllSlots() {
+      const state = get() as { color: ColorState }
+      const slots = state.color.slots.map(s => ({ ...s, locked: true }))
+      set({ color: { ...state.color, slots } })
+    },
+
+    unlockAllSlots() {
+      const state = get() as { color: ColorState }
+      const slots = state.color.slots.map(s => ({ ...s, locked: false }))
       set({ color: { ...state.color, slots } })
     },
 

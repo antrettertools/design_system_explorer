@@ -20,13 +20,17 @@ export function RadiusSection() {
           const isOverridden = radiusOverrides[step] !== undefined
           const borderRadius = step === 'full' ? '9999px' : `${effective}px`
 
+          // Scale preview box: min 24px (none) → max 52px (full), proportional to radius value
+          const previewSize = step === 'full' ? 52 : Math.max(24, Math.min(52, 24 + effective))
+
           return (
             <div key={step} className={styles.card} role="listitem">
               <div
                 className={styles.preview}
-                style={{ borderRadius }}
+                style={{ borderRadius, width: previewSize, height: previewSize }}
                 title={`--radius-${step}: ${borderRadius}`}
               />
+              <span className={styles.tokenName}>--radius-{step}</span>
               <span className={styles.label}>{step}</span>
               <div className={styles.inputRow}>
                 <input

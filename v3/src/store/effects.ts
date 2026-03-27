@@ -1,11 +1,13 @@
 import { deriveShadowPresets, deriveNeutralShadows, deriveFocusRing } from '@/core/effects/shadows'
-import { deriveMotionTokens } from '@/core/effects/motion'
-import type { EffectsConfig, ShadowPresets } from '@/core/effects/types'
+import { deriveMotionTokens, DURATION_SCALE, EASING_PRESETS } from '@/core/effects/motion'
+import type { EffectsConfig, ShadowPresets, DurationStep } from '@/core/effects/types'
 
 export interface EffectsState {
   config: EffectsConfig
-  shadowMode: 'colored' | 'neutral'      // colored = brand-tinted, neutral = plain grey
+  shadowMode: 'colored' | 'neutral'
   shadowOverrides: Partial<ShadowPresets>
+  shadowLocked: boolean       // when true, rebuildFromBrand leaves shadows untouched
+  focusRingLocked: boolean    // when true, rebuildFromBrand leaves focus ring untouched
 }
 
 export interface EffectsActions {
@@ -15,6 +17,9 @@ export interface EffectsActions {
   rebuildFromBrand: (brandHex: string) => void
   setFocusRing: (partial: Partial<{ color: string; width: string; offset: string }>) => void
   setDuration: (step: string, ms: number) => void
+  resetDuration: (step: DurationStep) => void
+  toggleShadowLock: () => void
+  toggleFocusRingLock: () => void
 }
 
 function buildConfig(brandHex: string): EffectsConfig {
@@ -26,10 +31,21 @@ function buildConfig(brandHex: string): EffectsConfig {
   }
 }
 
+/** Recompute the three transition presets from the current durations + easings. */
+function recomputeTransitions(durations: EffectsConfig['motion']['durations']): EffectsConfig['motion']['transitions'] {
+  return {
+    fast:   `all ${durations.fast}ms ${EASING_PRESETS.easeOut}`,
+    normal: `all ${durations.normal}ms ${EASING_PRESETS.easeOut}`,
+    slow:   `all ${durations.slow}ms ${EASING_PRESETS.easeInOut}`,
+  }
+}
+
 export const defaultEffectsState: EffectsState = {
-  config: buildConfig('#888888'),   // placeholder — rebuilt in store subscription
+  config: buildConfig('#888888'),
   shadowMode: 'colored',
   shadowOverrides: {},
+  shadowLocked: false,
+  focusRingLocked: false,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,11 +69,18 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
 
     rebuildFromBrand(brandHex) {
       const state = get() as { effects: EffectsState }
+      const newConfig = buildConfig(brandHex)
       set({
         effects: {
           ...state.effects,
-          config: buildConfig(brandHex),
-          shadowOverrides: {},  // reset overrides when brand changes
+          config: {
+            ...newConfig,
+            // Respect locks — preserve what the user has locked
+            shadows:        state.effects.shadowLocked ? state.effects.config.shadows        : newConfig.shadows,
+            shadowsNeutral: state.effects.shadowLocked ? state.effects.config.shadowsNeutral : newConfig.shadowsNeutral,
+            focusRing:      state.effects.focusRingLocked ? state.effects.config.focusRing   : newConfig.focusRing,
+          },
+          shadowOverrides: state.effects.shadowLocked ? state.effects.shadowOverrides : {},
         },
       })
     },
@@ -78,6 +101,8 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
     setDuration(step, ms) {
       const state = get() as { effects: EffectsState }
       const clamped = Math.max(0, Math.min(2000, ms))
+      const updatedDurations = { ...state.effects.config.motion.durations, [step]: clamped }
+      const updatedTransitions = recomputeTransitions(updatedDurations)
       set({
         effects: {
           ...state.effects,
@@ -85,11 +110,42 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
             ...state.effects.config,
             motion: {
               ...state.effects.config.motion,
-              durations: { ...state.effects.config.motion.durations, [step]: clamped },
+              durations: updatedDurations,
+              transitions: updatedTransitions,
             },
           },
         },
       })
+    },
+
+    resetDuration(step) {
+      const state = get() as { effects: EffectsState }
+      const defaultMs = DURATION_SCALE[step]
+      const updatedDurations = { ...state.effects.config.motion.durations, [step]: defaultMs }
+      const updatedTransitions = recomputeTransitions(updatedDurations)
+      set({
+        effects: {
+          ...state.effects,
+          config: {
+            ...state.effects.config,
+            motion: {
+              ...state.effects.config.motion,
+              durations: updatedDurations,
+              transitions: updatedTransitions,
+            },
+          },
+        },
+      })
+    },
+
+    toggleShadowLock() {
+      const state = get() as { effects: EffectsState }
+      set({ effects: { ...state.effects, shadowLocked: !state.effects.shadowLocked } })
+    },
+
+    toggleFocusRingLock() {
+      const state = get() as { effects: EffectsState }
+      set({ effects: { ...state.effects, focusRingLocked: !state.effects.focusRingLocked } })
     },
   }
 }

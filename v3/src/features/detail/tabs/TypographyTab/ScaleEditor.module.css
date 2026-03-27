@@ -1,4 +1,4 @@
-.section { margin-bottom: 24px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
   font-size: var(--ui-text-sm);
@@ -192,4 +192,30 @@
   color: var(--color-on-surface-subtle);
   width: 48px;
   flex-shrink: 0;
+}
+
+.lockBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--ui-radius-2);
+  border: 1px solid var(--color-border);
+  background: none;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  flex-shrink: 0;
+  transition: all var(--ui-duration-3);
+}
+
+.lockBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.lockBtnActive {
+  background: var(--color-interactive-subtle, #fde8e3);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
 }

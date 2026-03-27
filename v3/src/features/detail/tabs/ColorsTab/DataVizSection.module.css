@@ -1,4 +1,4 @@
-.section { margin-bottom: 28px; }
+.section { margin-bottom: var(--ui-space-10); }
 
 .sectionTitle {
   font-size: var(--ui-text-sm);

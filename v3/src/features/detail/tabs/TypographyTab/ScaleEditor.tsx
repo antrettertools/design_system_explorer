@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChevronDown, ChevronUp, Lock, LockOpen } from 'lucide-react'
 import { useTypography, useTypographyActions } from '@/store'
 import styles from './ScaleEditor.module.css'
 import type { TypeScale, TypeScaleStep } from '@/core/typography/types'
@@ -19,10 +20,10 @@ const SPECIMEN_STRINGS: Partial<Record<keyof TypeScale, string>> = {
 
 const RATIO_PRESETS = [
   { label: '1.125', value: 1.125, name: 'Minor 2nd' },
-  { label: '1.250', value: 1.25, name: 'Major 2nd' },
+  { label: '1.250', value: 1.25,  name: 'Major 2nd' },
   { label: '1.333', value: 1.333, name: 'Perfect 4th' },
   { label: '1.414', value: 1.414, name: 'Aug 4th' },
-  { label: '1.500', value: 1.5, name: 'Perfect 5th' },
+  { label: '1.500', value: 1.5,   name: 'Perfect 5th' },
 ]
 
 function isPreset(ratio: number): boolean {
@@ -30,7 +31,7 @@ function isPreset(ratio: number): boolean {
 }
 
 export function ScaleEditor() {
-  const { scale, pairing } = useTypography()
+  const { scale, pairing, stepOverrides, stepLocks } = useTypography()
   const typographyActions = useTypographyActions()
   const [expandedRows, setExpandedRows] = useState<Set<keyof TypeScale>>(new Set())
   const [customRatio, setCustomRatio] = useState('')
@@ -92,7 +93,8 @@ export function ScaleEditor() {
             ? `"${pairing.body}", sans-serif`
             : `"${pairing.heading}", serif`
           const isExpanded = expandedRows.has(key)
-          const isOverridden = false // tracked via store.stepOverrides, but steps are already merged into scale
+          const isOverridden = !!stepOverrides?.[key]
+          const isLocked = !!stepLocks?.[key]
           return (
             <div key={key} className={`${styles.scaleRow} ${isOverridden ? styles.overridden : ''}`} role="listitem">
               <button
@@ -101,7 +103,7 @@ export function ScaleEditor() {
                 aria-expanded={isExpanded}
                 aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${step.label} row`}
               >
-                {isExpanded ? '▴' : '▾'}
+                {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
               </button>
               <span className={styles.stepLabel}>{step.label}</span>
               <div
@@ -121,6 +123,14 @@ export function ScaleEditor() {
                 <span className={styles.metaItem}>{step.weight}</span>
                 <span className={styles.metaItem}>lh {step.lineHeight}</span>
               </div>
+              <button
+                className={`${styles.lockBtn} ${isLocked ? styles.lockBtnActive : ''}`}
+                onClick={() => typographyActions.toggleStepLock(key)}
+                title={isLocked ? `Unlock ${step.label}` : `Lock ${step.label}`}
+                aria-label={isLocked ? `Unlock ${step.label}` : `Lock ${step.label}`}
+              >
+                {isLocked ? <Lock size={12} /> : <LockOpen size={12} />}
+              </button>
               {isExpanded && (
                 <div className={styles.expandedControls} onClick={e => e.stopPropagation()}>
                   <label className={styles.overrideLabel}>

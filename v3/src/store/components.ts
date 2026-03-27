@@ -9,6 +9,7 @@ export interface ComponentsActions {
   setIconLibrary: (library: IconLibraryName) => void
   overrideComponentToken: (component: ComponentVariantKey, key: string, value: string) => void
   resetComponentToken: (component: ComponentVariantKey, key: string) => void
+  resetComponentVariants: (variantKeys: ComponentVariantKey[]) => void
   resetAllComponentOverrides: () => void
 }
 
@@ -56,6 +57,15 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
           },
         },
       })
+    },
+
+    resetComponentVariants(variantKeys: ComponentVariantKey[]) {
+      const state = get() as { components: ComponentsState }
+      const next = { ...state.components.overrides }
+      for (const vk of variantKeys) {
+        delete next[vk]
+      }
+      set({ components: { ...state.components, overrides: next } })
     },
 
     resetAllComponentOverrides() {

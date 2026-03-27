@@ -27,10 +27,18 @@
 }
 
 .preview {
-  width: 40px;
-  height: 40px;
   background: var(--color-interactive-subtle, #fde8e3);
   border: 2px solid var(--color-interactive, #e8543a);
+  flex-shrink: 0;
+  transition: width var(--ui-duration-3), height var(--ui-duration-3);
+}
+
+.tokenName {
+  font-size: 10px;
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle, #aaa);
+  text-align: center;
+  word-break: break-all;
 }
 
 .label {

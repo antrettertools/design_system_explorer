@@ -2,6 +2,34 @@ import { formatHex, clampChroma, converter, interpolate } from 'culori'
 import type { ShadeScale, ShadeStep } from './types'
 import { SHADE_STEPS } from './types'
 
+/**
+ * Generate an 11-step pure greyscale.
+ * Uses OKLCH with C=0 throughout — fully achromatic, no brand hue influence.
+ * L values follow the same distribution as makeShadeScale for visual consistency.
+ */
+export function makeGreyscale(): ShadeScale {
+  const lightL = 0.975
+  const midL   = 0.560
+  const darkL  = 0.100
+
+  const lightT: Record<number, number> = { 50: 0.08, 100: 0.15, 200: 0.30, 300: 0.50, 400: 0.72 }
+  const darkT:  Record<number, number> = { 600: 0.18, 700: 0.35, 800: 0.55, 900: 0.72, 950: 0.87 }
+
+  const scale: Partial<ShadeScale> = {}
+  for (const step of SHADE_STEPS) {
+    let l: number
+    if (step === 500) {
+      l = midL
+    } else if (step < 500) {
+      l = lightL + lightT[step] * (midL - lightL)
+    } else {
+      l = midL + darkT[step] * (darkL - midL)
+    }
+    scale[step as ShadeStep] = formatHex({ mode: 'oklch', l, c: 0, h: 0 }) ?? '#808080'
+  }
+  return scale as ShadeScale
+}
+
 const toOklch = converter('oklch')
 
 /**

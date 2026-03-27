@@ -48,8 +48,20 @@
 .gradeMedium { background: var(--color-warning-container, #fef3c7); color: var(--color-warning, #d97706); }
 .gradePoor   { background: var(--color-error-container, #fee2e2);   color: var(--color-error, #dc2626); }
 
+.wcagBlock {
+  margin-left: auto;
+  text-align: right;
+}
+
+.wcagValue {
+  font-family: var(--ui-font-mono);
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-size: var(--ui-text-sm);
+}
+
 .sampleText {
-  font-size: var(--font-size-body, 16px);
+  font-size: var(--font-size-body);
   line-height: 1.6;
   padding: var(--ui-space-5) var(--ui-space-6);
   border-radius: var(--ui-radius-3);

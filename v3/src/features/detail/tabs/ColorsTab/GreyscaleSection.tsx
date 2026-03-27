@@ -1,60 +1,69 @@
 import { useState } from 'react'
-import { useColor } from '@/store'
+import { makeGreyscale } from '@/core/color/scales'
 import styles from './GreyscaleSection.module.css'
 
-const NEUTRAL_STEPS = [
-  { label: 'background',       token: '--color-background' },
-  { label: 'surface',          token: '--color-surface' },
-  { label: 'surface-raised',   token: '--color-surface-raised' },
-  { label: 'border',           token: '--color-border' },
-  { label: 'border-strong',    token: '--color-border-strong' },
-  { label: 'on-surface-subtle', token: '--color-on-surface-subtle' },
-  { label: 'on-surface',       token: '--color-on-surface' },
-]
+const SHADE_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+
+function isLightStep(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return (r * 299 + g * 587 + b * 114) / 1000 > 150
+}
+
+const GREY_SCALE = makeGreyscale()
 
 export function GreyscaleSection() {
-  // Re-render when color slots change so resolved values stay fresh
-  useColor()
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
 
-  const [copiedToken, setCopiedToken] = useState<string | null>(null)
-
-  const resolvedColors = NEUTRAL_STEPS.map(s => ({
-    ...s,
-    hex: getComputedStyle(document.documentElement).getPropertyValue(s.token).trim() || '#888888',
-  }))
-
-  const handleCopy = (hex: string, token: string) => {
-    navigator.clipboard.writeText(hex).catch(() => {})
-    setCopiedToken(token)
-    setTimeout(() => setCopiedToken(null), 1500)
+  function handleCopy(step: number, hex: string) {
+    navigator.clipboard?.writeText(hex)
+    setCopiedKey(String(step))
+    setTimeout(() => setCopiedKey(null), 1500)
   }
 
   return (
     <section className={styles.section}>
-      <div className={styles.sectionTitle}>Greyscale / Neutrals</div>
-      <div className={styles.strip}>
-        {resolvedColors.map(({ token, hex }) => (
-          <button
-            key={token}
-            className={styles.swatch}
-            style={{ background: hex }}
-            onClick={() => handleCopy(hex, token)}
-            title={`${token}\n${hex}\nClick to copy`}
-            aria-label={`Copy ${hex}`}
-          >
-            {copiedToken === token && (
-              <span className={styles.copied}>✓</span>
-            )}
-          </button>
-        ))}
+      <div className={styles.sectionTitle}>Greyscale</div>
+      <div className={styles.note}>
+        Pure achromatic scale · OKLCH C=0 · independent of brand color
       </div>
-      <div className={styles.labels}>
-        {resolvedColors.map(({ label, token, hex }) => (
-          <div key={token} className={styles.labelCell}>
-            <div className={styles.tokenName}>{label}</div>
-            <div className={styles.hex}>{hex}</div>
-          </div>
-        ))}
+      <div className={styles.scaleRow} role="list" aria-label="Pure greyscale">
+        {SHADE_STEPS.map(step => {
+          const hex = GREY_SCALE[step as keyof typeof GREY_SCALE] ?? '#888'
+          const isLight = isLightStep(hex)
+          const copied = copiedKey === String(step)
+          return (
+            <div
+              key={step}
+              className={`${styles.scaleCell} ${isLight ? styles.scaleCellLight : ''}`}
+              style={{ background: hex }}
+              role="listitem"
+              title={`grey-${step}: ${hex}`}
+              onClick={() => handleCopy(step, hex)}
+              tabIndex={0}
+              onKeyDown={e => { if (e.key === 'Enter') handleCopy(step, hex) }}
+              aria-label={`Step ${step}: ${hex}`}
+            >
+              <div className={styles.scaleCellLabel}>
+                {copied
+                  ? <span className={styles.scaleCellCopied}>✓</span>
+                  : <span className={styles.scaleCellStep}>{step}</span>
+                }
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <div className={styles.stepLabels}>
+        {SHADE_STEPS.map(step => {
+          const hex = GREY_SCALE[step as keyof typeof GREY_SCALE] ?? '#888'
+          return (
+            <div key={step} className={styles.stepLabel}>
+              <span className={styles.stepHex}>{hex.toUpperCase()}</span>
+            </div>
+          )
+        })}
       </div>
     </section>
   )

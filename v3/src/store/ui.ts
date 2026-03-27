@@ -44,7 +44,28 @@ export const defaultUIState: UIState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createUIActions(set: any, get: any): UIActions {
   return {
-    setMode: (mode) => set({ ui: { ...(get() as { ui: UIState }).ui, mode } }),
+    setMode: (mode) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const state = get() as {
+        ui: UIState
+        color: { slots: any[] }
+        typography: { locks: { heading: boolean; body: boolean; scale: boolean }; [key: string]: unknown }
+        effects: { shadowLocked: boolean; focusRingLocked: boolean; [key: string]: unknown }
+      }
+      if (mode === 'detail') {
+        // Auto-lock colors, typography and effects when entering detail mode so spacebar
+        // doesn't regenerate everything. Users unlock individually per section.
+        const lockedSlots = state.color.slots.map((s: { locked: boolean }) => ({ ...s, locked: true }))
+        set({
+          ui: { ...state.ui, mode },
+          color: { ...state.color, slots: lockedSlots },
+          typography: { ...state.typography, locks: { heading: true, body: true, scale: true } },
+          effects: { ...state.effects, shadowLocked: true, focusRingLocked: true },
+        })
+      } else {
+        set({ ui: { ...state.ui, mode } })
+      }
+    },
     setTheme: (theme) => {
       document.documentElement.setAttribute('data-theme', theme)
       set({ ui: { ...(get() as { ui: UIState }).ui, theme } })

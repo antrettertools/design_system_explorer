@@ -9,25 +9,43 @@ type ParsedShadow = {
   blur: number
   spread: number
   color: string
-} | null
+  /** remaining comma-separated layers after the first, if any */
+  rest: string
+}
 
-function parseShadow(css: string): ParsedShadow {
+/**
+ * Parse the FIRST layer of a box-shadow value.
+ * Handles both "0" and "0px" for zero values, and multi-layer shadows (comma-separated).
+ * Returns null only when the value contains a CSS variable (unparseable).
+ */
+function parseShadow(css: string): ParsedShadow | null {
   if (css.includes('var(')) return null
-  const match = css.match(
-    /(-?\d+(?:\.\d+)?)px\s+(-?\d+(?:\.\d+)?)px\s+(-?\d+(?:\.\d+)?)px(?:\s+(-?\d+(?:\.\d+)?)px)?\s+(.+)/,
+
+  const commaIdx = css.indexOf(',')
+  const firstLayer = commaIdx === -1 ? css.trim() : css.slice(0, commaIdx).trim()
+  const rest = commaIdx === -1 ? '' : css.slice(commaIdx + 1).trim()
+
+  // Match: optional sign, digits, optional decimal, optional "px" — for each of X Y blur spread
+  const VALUE = '(-?\\d+(?:\\.\\d+)?(?:px)?)'
+  const re = new RegExp(
+    `^${VALUE}\\s+${VALUE}\\s+${VALUE}(?:\\s+${VALUE})?\\s+(.+)$`,
   )
+  const match = firstLayer.match(re)
   if (!match) return null
+
   return {
-    x: parseFloat(match[1]),
-    y: parseFloat(match[2]),
-    blur: parseFloat(match[3]),
+    x:      parseFloat(match[1]),
+    y:      parseFloat(match[2]),
+    blur:   parseFloat(match[3]),
     spread: parseFloat(match[4] ?? '0'),
-    color: match[5].trim(),
+    color:  match[5].trim(),
+    rest,
   }
 }
 
-function composeShadow(p: NonNullable<ParsedShadow>): string {
-  return `${p.x}px ${p.y}px ${p.blur}px ${p.spread}px ${p.color}`
+function composeShadow(p: ParsedShadow): string {
+  const first = `${p.x}px ${p.y}px ${p.blur}px ${p.spread}px ${p.color}`
+  return p.rest ? `${first}, ${p.rest}` : first
 }
 
 interface ShadowBuilderProps {
@@ -51,7 +69,7 @@ export function ShadowBuilder({ step, value, onOverride, onReset, isOverridden }
     setTextValue(value)
   }
 
-  function updateField(field: keyof NonNullable<ParsedShadow>, newVal: number | string) {
+  function updateField(field: keyof Omit<ParsedShadow, 'rest'>, newVal: number | string) {
     if (!parsed) return
     const updated = { ...parsed, [field]: newVal }
     onOverride(composeShadow(updated))
@@ -61,11 +79,16 @@ export function ShadowBuilder({ step, value, onOverride, onReset, isOverridden }
     <div className={styles.builder}>
       <div className={styles.header}>
         <span className={styles.stepLabel}>shadow-{step}</span>
-        {isOverridden && (
-          <button className={styles.resetBtn} onClick={onReset} title="Reset to derived value">
-            ↺ reset
-          </button>
-        )}
+        <div className={styles.headerRight}>
+          {parsed?.rest && (
+            <span className={styles.layerNote}>editing first layer</span>
+          )}
+          {isOverridden && (
+            <button className={styles.resetBtn} onClick={onReset} title="Reset to derived value">
+              ↺ reset
+            </button>
+          )}
+        </div>
       </div>
 
       {parsed ? (
@@ -122,7 +145,7 @@ export function ShadowBuilder({ step, value, onOverride, onReset, isOverridden }
         </div>
       ) : (
         <div className={styles.textFallback}>
-          <span className={styles.infoNote}>Contains CSS variable — edit as text</span>
+          <span className={styles.infoNote}>Edit as CSS text</span>
           <input
             type="text"
             className={styles.textInput}

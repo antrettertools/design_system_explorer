@@ -1,0 +1,100 @@
+.section { margin-bottom: var(--ui-space-10); }
+
+.sectionTitle {
+  font-size: var(--ui-text-sm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle);
+  margin-bottom: var(--ui-space-7);
+  font-family: var(--font-body, sans-serif);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-4);
+  overflow: hidden;
+}
+
+.fontRow,
+.ratioRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-5);
+  padding: var(--ui-space-5) var(--ui-space-6);
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.fontMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-1);
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.fontRole {
+  font-size: var(--ui-text-sm);
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface-subtle);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 10px;
+}
+
+.fontName {
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.specimen {
+  flex: 1;
+  font-size: var(--font-size-body);
+  color: var(--color-on-surface);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.ratioValue {
+  flex: 1;
+  font-size: var(--ui-text-sm);
+  font-family: var(--ui-font-mono);
+  color: var(--color-on-surface-subtle);
+}
+
+.lockBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-radius-2);
+  border: 1px solid var(--color-border);
+  background: none;
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  flex-shrink: 0;
+  transition: all var(--ui-duration-3);
+}
+
+.lockBtn:hover {
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
+.lockBtnActive {
+  background: var(--color-interactive-subtle, #fde8e3);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}

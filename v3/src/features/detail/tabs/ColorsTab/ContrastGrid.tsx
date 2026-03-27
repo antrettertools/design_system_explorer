@@ -1,4 +1,5 @@
 import { useColor } from '@/store'
+import { getWcagContrastRatio, getWcagLevels } from '@/core/color/scales'
 import { POSITION_LABELS } from '@/core/color/types'
 import styles from './ContrastGrid.module.css'
 
@@ -9,26 +10,6 @@ interface ContrastPair {
   bgHex: string
 }
 
-function getLuminance(hex: string): number {
-  const r = parseInt(hex.slice(1, 3), 16) / 255
-  const g = parseInt(hex.slice(3, 5), 16) / 255
-  const b = parseInt(hex.slice(5, 7), 16) / 255
-  const toLinear = (c: number) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b)
-}
-
-function contrastRatio(hex1: string, hex2: string): number {
-  const l1 = getLuminance(hex1)
-  const l2 = getLuminance(hex2)
-  const bright = Math.max(l1, l2)
-  const dark = Math.min(l1, l2)
-  return (bright + 0.05) / (dark + 0.05)
-}
-
-function getWcagLevels(ratio: number): { aaBodyText: boolean; aaaBodyText: boolean } {
-  return { aaBodyText: ratio >= 4.5, aaaBodyText: ratio >= 7 }
-}
-
 function getCssVar(name: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888'
 }
@@ -36,56 +17,41 @@ function getCssVar(name: string): string {
 export function ContrastGrid() {
   const { slots } = useColor()
 
-  const onSurface = getCssVar('--color-on-surface')
-  const background = getCssVar('--color-background')
-  const onInteractive = getCssVar('--color-on-interactive')
-  const interactive = getCssVar('--color-interactive')
-  const onSurfaceSubtle = getCssVar('--color-on-surface-subtle')
-  const surface = getCssVar('--color-surface')
+  // All unique ordered slot pairs, sorted by contrast ratio descending — shows the
+  // most interesting brand-to-brand contrasts. Capped at 8 to keep the grid scannable.
+  const allPairs: ContrastPair[] = slots.flatMap(slot =>
+    slots
+      .filter(s => s.id !== slot.id)
+      .map(bg => ({
+        fgLabel: slot.name ?? POSITION_LABELS[slot.role],
+        bgLabel: bg.name ?? POSITION_LABELS[bg.role],
+        fgHex: slot.hex,
+        bgHex: bg.hex,
+      })),
+  )
 
-  const pairs: ContrastPair[] = [
-    {
-      fgLabel: 'on-surface / background',
-      bgLabel: 'background',
-      fgHex: onSurface,
-      bgHex: background,
-    },
-    {
-      fgLabel: 'on-interactive / interactive',
-      bgLabel: 'interactive',
-      fgHex: onInteractive,
-      bgHex: interactive,
-    },
-    {
-      fgLabel: 'interactive / background',
-      bgLabel: 'background',
-      fgHex: interactive,
-      bgHex: background,
-    },
-    {
-      fgLabel: 'on-surface-subtle / surface',
-      bgLabel: 'surface',
-      fgHex: onSurfaceSubtle,
-      bgHex: surface,
-    },
-    ...slots.flatMap(slot =>
-      slots
-        .filter(s => s.id !== slot.id)
-        .map(bg => ({
-          fgLabel: `${slot.name ?? POSITION_LABELS[slot.role]} / ${bg.name ?? ROLE_LABELS[bg.role] ?? bg.role}`,
-          bgLabel: bg.name ?? ROLE_LABELS[bg.role] ?? bg.role,
-          fgHex: slot.hex,
-          bgHex: bg.hex,
-        })),
-    ).slice(0, 4),
-  ]
+  const pairs = allPairs
+    .sort((a, b) => getWcagContrastRatio(b.fgHex, b.bgHex) - getWcagContrastRatio(a.fgHex, a.bgHex))
+    .slice(0, 8)
+
+  // Pad with the two most critical semantic pairs if we have fewer than 4 brand pairs
+  if (pairs.length < 4) {
+    const onSurface     = getCssVar('--color-on-surface')
+    const background    = getCssVar('--color-background')
+    const onInteractive = getCssVar('--color-on-interactive')
+    const interactive   = getCssVar('--color-interactive')
+    pairs.push(
+      { fgLabel: 'on-surface', bgLabel: 'background', fgHex: onSurface, bgHex: background },
+      { fgLabel: 'on-interactive', bgLabel: 'interactive', fgHex: onInteractive, bgHex: interactive },
+    )
+  }
 
   return (
     <div className={styles.section}>
-      <div className={styles.sectionTitle}>Contrast — WCAG AA/AAA</div>
+      <div className={styles.sectionTitle}>Contrast — WCAG AA / AAA</div>
       <div className={styles.grid} role="list">
         {pairs.map((pair, i) => {
-          const ratio = contrastRatio(pair.fgHex, pair.bgHex)
+          const ratio = getWcagContrastRatio(pair.fgHex, pair.bgHex)
           const levels = getWcagLevels(ratio)
           return (
             <div
@@ -96,7 +62,7 @@ export function ContrastGrid() {
             >
               <div className={styles.cellColors}>
                 <div className={styles.swatch} style={{ background: pair.fgHex }} />
-                <span className={styles.cellLabel}>{pair.fgLabel}</span>
+                <span className={styles.cellLabel}>{pair.fgLabel} / {pair.bgLabel}</span>
               </div>
               <div className={styles.cellRight}>
                 <div className={styles.badges}>
