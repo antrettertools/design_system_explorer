@@ -205,28 +205,29 @@ export function buildTokenMap(
 }
 
 /**
- * Inject CSS custom properties into :root and [data-theme="dark"].
+ * Inject CSS custom properties into :root inline styles.
  * Call this after every state change.
+ *
+ * Why inline styles for both light and dark (not a [data-theme="dark"] CSS rule):
+ * Inline styles (set via style.setProperty) always have higher specificity than any
+ * CSS selector, including [data-theme="dark"]. If light tokens are inline and dark
+ * tokens are in a CSS rule, the inline light values always win — dark mode never shows.
+ *
+ * Solution: always inject light tokens first, then overlay dark overrides on top
+ * as inline styles too. The dark keys overlap with light keys so the last write wins.
+ * Switching back to light mode re-runs this with only light tokens, resetting correctly.
  */
 export function injectTokensToDOM(tokens: TokenMap, theme: AppTheme = 'light'): void {
   const root = document.documentElement
+  // Base: inject all light tokens
   for (const [key, value] of Object.entries(tokens.light)) {
     root.style.setProperty(key, value)
   }
-  // For dark tokens, we inject them into a <style> tag that targets [data-theme="dark"]
-  // so they apply when the theme is toggled without needing JS per-property
-  let styleEl = document.getElementById('palette-dark-tokens') as HTMLStyleElement | null
-  if (!styleEl) {
-    styleEl = document.createElement('style')
-    styleEl.id = 'palette-dark-tokens'
-    document.head.appendChild(styleEl)
-  }
+  // Dark mode: overlay dark overrides inline — these overwrite the light values
+  // for the keys they share (background, surface, on-surface, border, interactive, etc.)
   if (theme === 'dark') {
-    const darkRules = Object.entries(tokens.dark)
-      .map(([k, v]) => `  ${k}: ${v};`)
-      .join('\n')
-    styleEl.textContent = `[data-theme="dark"] {\n${darkRules}\n}`
-  } else {
-    styleEl.textContent = ''  // Clear dark overrides when not in dark mode
+    for (const [key, value] of Object.entries(tokens.dark)) {
+      root.style.setProperty(key, value)
+    }
   }
 }
