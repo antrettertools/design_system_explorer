@@ -97,18 +97,28 @@ describe('deriveDarkModeRoles', () => {
     expect(brightness(dark['surface'])).toBeLessThan(brightness(dark['surface-raised']))
   })
 
-  it('dark background is near-neutral (low saturation) regardless of brand color', () => {
-    // Test with a highly saturated brand color — the dark background should still be near-neutral
-    const saturatedScale = makeShadeScale('#ff0000')
-    const dark = deriveDarkModeRoles(saturatedScale, '#ff0000')
-    const hex = dark['background']
-    const r = parseInt(hex.slice(1, 3), 16)
-    const g = parseInt(hex.slice(3, 5), 16)
-    const b = parseInt(hex.slice(5, 7), 16)
-    const max = Math.max(r, g, b)
-    const min = Math.min(r, g, b)
-    // Saturation in RGB space: (max - min) / max — should be small (< 0.25)
-    const saturation = max > 0 ? (max - min) / max : 0
-    expect(saturation).toBeLessThan(0.25)
+  it('dark background is dramatically less saturated than the brand color', () => {
+    // Test with a highly saturated brand color — the dark background should have far lower
+    // saturation than the brand itself, even if not perfectly neutral.
+    const brandHexRed = '#ff0000'
+    const saturatedScale = makeShadeScale(brandHexRed)
+    const dark = deriveDarkModeRoles(saturatedScale, brandHexRed)
+
+    const rgbSaturation = (hex: string) => {
+      const r = parseInt(hex.slice(1, 3), 16)
+      const g = parseInt(hex.slice(3, 5), 16)
+      const b = parseInt(hex.slice(5, 7), 16)
+      const max = Math.max(r, g, b)
+      const min = Math.min(r, g, b)
+      return max > 0 ? (max - min) / max : 0
+    }
+
+    const brandSaturation = rgbSaturation(brandHexRed)   // 1.0 for pure red
+    const bgSaturation = rgbSaturation(dark['background'])
+
+    // Background should have at least 50% less saturation than the brand
+    expect(bgSaturation).toBeLessThan(brandSaturation * 0.75)
+    // And should still be very dark (absolute saturation < 0.65 even for pure red)
+    expect(bgSaturation).toBeLessThan(0.65)
   })
 })

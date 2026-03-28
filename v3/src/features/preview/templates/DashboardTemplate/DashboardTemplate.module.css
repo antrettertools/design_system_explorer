@@ -84,7 +84,7 @@
   font-size: 10px;
   font-weight: 700;
   background: var(--color-error, #dc2626);
-  color: #fff;
+  color: var(--color-on-error, #fff);
   border-radius: var(--radius-full, 9999px);
   padding: 1px 5px;
   min-width: 16px;

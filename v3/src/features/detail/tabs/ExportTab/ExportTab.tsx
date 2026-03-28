@@ -21,6 +21,7 @@ const FILE_EXT: Record<ExportFormat, string> = {
   'w3c': 'tokens.json',
   'scss': 'tokens.scss',
   'figma': 'figma-variables.json',
+  'style-dictionary': 'tokens.sd.json',
 }
 
 export function ExportTab() {

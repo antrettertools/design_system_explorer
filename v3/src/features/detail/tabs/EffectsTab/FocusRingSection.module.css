@@ -85,7 +85,7 @@
 .colorValue {
   font-size: var(--ui-text-sm);
   font-family: var(--ui-font-mono);
-  color: var(--color-on-surface, #333);
+  color: var(--color-on-surface);
 }
 
 .sliderField {
@@ -103,7 +103,7 @@
 .sliderValue {
   font-size: var(--ui-text-sm);
   font-family: var(--ui-font-mono);
-  color: var(--color-on-surface, #333);
+  color: var(--color-on-surface);
   min-width: 36px;
   text-align: right;
 }
