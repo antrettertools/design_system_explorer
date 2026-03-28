@@ -29,6 +29,47 @@
   margin-bottom: 5px;
 }
 
+/* Section header row — title + lock-all icon */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.sectionHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.sectionLockBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--ui-radius-2);
+  cursor: pointer;
+  color: var(--color-on-surface-subtle);
+  opacity: 0.5;
+  transition: opacity var(--ui-duration-2), color var(--ui-duration-2), background var(--ui-duration-2);
+  flex-shrink: 0;
+}
+
+.sectionLockBtn:hover {
+  opacity: 1;
+  background: var(--color-interactive-subtle);
+  color: var(--color-interactive);
+}
+
+.sectionLockBtn[aria-pressed="true"] {
+  opacity: 1;
+  color: var(--color-interactive);
+}
+
+.sectionLockBtn:active { transform: scale(0.9); }
+
 .sectionResult {
   display: block;
   font-size: 22px;
