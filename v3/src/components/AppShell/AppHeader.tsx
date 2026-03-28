@@ -1,8 +1,8 @@
 import type { JSX } from 'react'
 import styles from './AppHeader.module.css'
-import { useUI, useUIActions, useStore, temporalUndo, temporalRedo } from '@/store'
+import { useUI, useUIActions, useStore, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
 import type { AppTheme } from '@/store/ui'
-import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download } from 'lucide-react'
+import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen } from 'lucide-react'
 
 interface AppHeaderProps {
   onExportClick: () => void
@@ -29,6 +29,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
   const futureLen = useStore(() => temporal?.getState().futureStates?.length ?? 0)
   const canUndo = pastLen > 0
   const canRedo = futureLen > 0
+  const isEverythingLocked = useIsEverythingLocked()
 
   const contextLabel = mode === 'detail'
     ? activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
@@ -71,6 +72,17 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             <Redo2 size={14} strokeWidth={1.75} />
           </button>
         </div>
+        <button
+          className={styles.lockAllBtn}
+          onClick={isEverythingLocked ? unlockEverything : lockEverything}
+          title={isEverythingLocked ? 'Unlock all settings' : 'Lock all settings'}
+          aria-label={isEverythingLocked ? 'Unlock all settings' : 'Lock all settings'}
+          aria-pressed={isEverythingLocked}
+        >
+          {isEverythingLocked
+            ? <Lock size={14} strokeWidth={2} />
+            : <LockOpen size={14} strokeWidth={2} />}
+        </button>
         <button
           className={styles.themeToggle}
           onClick={toggleSessionsDrawer}

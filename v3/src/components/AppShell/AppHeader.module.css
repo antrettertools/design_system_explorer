@@ -97,6 +97,34 @@
 
 .historyBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+/* Global lock / unlock all button */
+.lockAllBtn {
+  width: var(--ui-size-btn-md);
+  height: var(--ui-size-btn-md);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--ui-radius-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface-subtle);
+  transition: background var(--ui-duration-2), color var(--ui-duration-2), border-color var(--ui-duration-2);
+}
+
+.lockAllBtn:hover {
+  background: var(--color-interactive-subtle);
+  color: var(--color-interactive);
+}
+
+.lockAllBtn:active { transform: scale(0.94); }
+
+.lockAllBtn[aria-pressed="true"] {
+  background: var(--color-interactive-subtle);
+  border-color: var(--color-interactive);
+  color: var(--color-interactive);
+}
+
 /* Sessions button */
 .themeToggle {
   width: var(--ui-size-btn-md);
@@ -194,6 +222,7 @@
   /* Larger touch targets for small icon buttons */
   .historyBtn { width: 40px; height: 40px; }
   .themeToggle { width: 40px; height: 40px; }
+  .lockAllBtn { width: 40px; height: 40px; }
 
   /* Swap: hide 3-way segment, show cycling button */
   .themeSegment { display: none; }
