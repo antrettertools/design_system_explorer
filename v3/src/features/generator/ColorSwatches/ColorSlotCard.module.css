@@ -151,6 +151,30 @@
 .removeBtn:hover { background: rgba(0, 0, 0, 0.55); }
 .removeBtn:active { transform: scale(0.9); }
 
+/* ── Touch drag states ───────────────────────────────────────────────────── */
+
+/* Card being dragged: lifts up */
+.touchDragging {
+  transform: scale(1.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  z-index: 20;
+  position: relative;
+  transition: transform var(--ui-duration-3), box-shadow var(--ui-duration-3);
+}
+
+/* Valid drop target: ring highlight */
+.touchOver {
+  outline: 2px solid var(--color-interactive);
+  outline-offset: 2px;
+  border-radius: var(--ui-radius-4);
+}
+
+/* Other cards during drag: step back */
+.touchDimmed {
+  opacity: 0.45;
+  transition: opacity var(--ui-duration-3);
+}
+
 @media (max-width: 768px) {
   /* No grab cursor on touch */
   .card { cursor: default; }

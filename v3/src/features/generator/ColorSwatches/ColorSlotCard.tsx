@@ -21,6 +21,11 @@ interface ColorSlotCardProps {
   onDragStart?: (id: string) => void
   onDragOver?: (id: string) => void
   onDrop?: () => void
+  isTouchDragging?: boolean
+  isTouchOver?: boolean
+  isTouchDimmed?: boolean
+  onTouchStartCard?: (e: React.TouchEvent, id: string) => void
+  onTouchEndCard?: () => void
 }
 
 export function ColorSlotCard({
@@ -29,6 +34,11 @@ export function ColorSlotCard({
   onDragStart,
   onDragOver,
   onDrop,
+  isTouchDragging,
+  isTouchOver,
+  isTouchDimmed,
+  onTouchStartCard,
+  onTouchEndCard,
 }: ColorSlotCardProps) {
   const { toggleLock, removeSlot, overrideHex, renameSlot } = useColorActions()
   const isLight = isLightColor(slot.hex)
@@ -58,14 +68,25 @@ export function ColorSlotCard({
     setEditingName(false)
   }
 
+  const cardClass = [
+    styles.card,
+    slot.locked       ? styles.locked        : '',
+    isTouchDragging   ? styles.touchDragging  : '',
+    isTouchOver       ? styles.touchOver      : '',
+    isTouchDimmed     ? styles.touchDimmed    : '',
+  ].filter(Boolean).join(' ')
+
   return (
     <div
-      className={`${styles.card} ${slot.locked ? styles.locked : ''}`}
+      className={cardClass}
       data-light={isLight}
       draggable
       onDragStart={() => onDragStart?.(slot.id)}
       onDragOver={(e) => { e.preventDefault(); onDragOver?.(slot.id) }}
       onDrop={onDrop}
+      onTouchStart={e => onTouchStartCard?.(e, slot.id)}
+      onTouchEnd={onTouchEndCard}
+      onTouchCancel={onTouchEndCard}
     >
       <div
         ref={swatchRef}
