@@ -151,6 +151,21 @@
 .removeBtn:hover { background: rgba(0, 0, 0, 0.55); }
 .removeBtn:active { transform: scale(0.9); }
 
+@media (max-width: 768px) {
+  /* No grab cursor on touch */
+  .card { cursor: default; }
+  .card:active { cursor: default; }
+
+  /* Remove button always visible */
+  .card .removeBtn {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Bigger lock button touch target */
+  .lockBtn { width: 32px; height: 32px; }
+}
+
 .swatch { cursor: pointer; position: relative; }
 .swatch::after {
   content: '';

@@ -56,3 +56,7 @@
   color: var(--color-on-surface);
   border-color: var(--color-border-strong);
 }
+
+@media (max-width: 768px) {
+  .kbd { display: none; }
+}

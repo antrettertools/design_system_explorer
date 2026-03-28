@@ -9,6 +9,15 @@
 }
 .row::-webkit-scrollbar { display: none; }
 
+@media (max-width: 768px) {
+  /* Fade right edge to signal there are more pills to scroll to */
+  .row {
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    padding-right: var(--ui-space-8);
+  }
+}
+
 /* ── Unified pill grammar ───────────────────────────────────────────────
    Identical visual language to TypographySpecimen.module.css .pill/.pillActive.
    Any change here must be mirrored there.

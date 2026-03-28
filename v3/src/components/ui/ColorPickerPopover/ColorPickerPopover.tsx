@@ -24,28 +24,35 @@ export function ColorPickerPopover({ hex, onChange, onClose, anchorRef }: ColorP
     setTextValue(sanitizeHex(hex))
   }, [hex])
 
-  // Compute position relative to anchor
+  // Compute position relative to anchor, clamped to viewport
   const style: React.CSSProperties = {}
   if (anchorRef.current) {
     const rect = anchorRef.current.getBoundingClientRect()
-    style.top = rect.bottom + 6
-    style.left = Math.max(8, rect.right - 180)
+    const POPOVER_W = 180
+    const POPOVER_H = 110 // approx: color input + hex input + padding
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    style.top = Math.min(rect.bottom + 6, vh - POPOVER_H - 8)
+    style.left = Math.max(8, Math.min(rect.right - POPOVER_W, vw - POPOVER_W - 8))
   }
 
-  // Outside click and Escape close
+  // Outside click/tap and Escape close
   useEffect(() => {
-    function handleMouseDown(e: MouseEvent) {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+    function handlePointerDown(e: MouseEvent | TouchEvent) {
+      const target = 'touches' in e ? e.touches[0]?.target : (e as MouseEvent).target
+      if (popoverRef.current && !popoverRef.current.contains(target as Node)) {
         onClose()
       }
     }
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
     }
-    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mousedown', handlePointerDown as EventListener)
+    document.addEventListener('touchstart', handlePointerDown as EventListener)
     document.addEventListener('keydown', handleKeyDown)
     return () => {
-      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mousedown', handlePointerDown as EventListener)
+      document.removeEventListener('touchstart', handlePointerDown as EventListener)
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [onClose])
