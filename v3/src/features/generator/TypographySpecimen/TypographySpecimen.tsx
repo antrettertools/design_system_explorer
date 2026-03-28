@@ -23,7 +23,8 @@ const LOCK_PILLS: { key: 'heading' | 'body' | 'scale'; label: string }[] = [
 
 export function TypographySpecimen() {
   const { pairing, scale, locks } = useTypography()
-  const { toggleLock } = useTypographyActions()
+  const { toggleLock, lockAllTypography, unlockAllTypography } = useTypographyActions()
+  const allTypographyLocked = locks.heading && locks.body && locks.scale
   const [headingText, setHeadingText] = useState('The quick brown fox jumps over')
   const [bodyText, setBodyText] = useState('How vexingly quick daft zebras jump!')
 
@@ -32,7 +33,20 @@ export function TypographySpecimen() {
   return (
     <div className={styles.section}>
       {/* Section identity — mirrors GeneratorPanel sectionTitle/sectionResult */}
-      <span className={styles.sectionTitle}>Typography</span>
+      <div className={styles.sectionHeader}>
+        <span className={styles.sectionTitle}>Typography</span>
+        <button
+          className={styles.sectionLockBtn}
+          onClick={allTypographyLocked ? unlockAllTypography : lockAllTypography}
+          title={allTypographyLocked ? 'Unlock all typography' : 'Lock all typography'}
+          aria-label={allTypographyLocked ? 'Unlock all typography' : 'Lock all typography'}
+          aria-pressed={allTypographyLocked}
+        >
+          {allTypographyLocked
+            ? <Lock size={12} strokeWidth={2.5} />
+            : <LockOpen size={12} strokeWidth={2.5} />}
+        </button>
+      </div>
       <span className={styles.sectionResult}>{pairing.heading} + {pairing.body}</span>
 
       {/* Lock pills — same grammar as RecipePillRow */}
