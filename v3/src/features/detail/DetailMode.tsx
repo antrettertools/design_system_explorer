@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import styles from './DetailMode.module.css'
 import { useUI, useUIActions } from '@/store'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
@@ -25,7 +25,7 @@ const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effec
 
 export function DetailMode() {
   const { activeTab } = useUI()
-  const { setMode, setActiveTab } = useUIActions()
+  const { setMode, setActiveTab, showMobilePreview } = useUIActions()
   const activeTabRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -84,6 +84,14 @@ export function DetailMode() {
             </button>
           ))}
         </nav>
+        <button
+          className={styles.mobilePreviewBtn}
+          onClick={showMobilePreview}
+          aria-label="Show live preview"
+        >
+          Preview
+          <ArrowRight size={12} strokeWidth={2} />
+        </button>
       </div>
       <div className={styles.content}>
         {renderTab()}

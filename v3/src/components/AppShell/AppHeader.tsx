@@ -16,6 +16,7 @@ const THEME_OPTIONS: ThemeOption[] = [
   { value: 'light', icon: <SunDim size={ICON_SIZE} />, title: 'Light background' },
   { value: 'dark',  icon: <Moon size={ICON_SIZE} />,   title: 'Dark background' },
 ]
+const THEME_ORDER: AppTheme[] = ['white', 'light', 'dark']
 
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
@@ -32,6 +33,9 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
   const contextLabel = mode === 'detail'
     ? activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
     : null
+
+  const nextTheme = THEME_ORDER[(THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length]
+  const currentThemeOption = THEME_OPTIONS.find(o => o.value === theme)!
 
   return (
     <header className={styles.header}>
@@ -88,9 +92,17 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             </button>
           ))}
         </div>
+        <button
+          className={styles.themeCycleBtn}
+          onClick={() => setTheme(nextTheme)}
+          title={currentThemeOption.title}
+          aria-label={`Theme: ${currentThemeOption.title}. Tap to cycle.`}
+        >
+          {currentThemeOption.icon}
+        </button>
         <button className={styles.exportBtn} onClick={onExportClick}>
           <Download size={13} strokeWidth={2} />
-          Export
+          <span className={styles.exportBtnLabel}>Export</span>
         </button>
       </div>
     </header>

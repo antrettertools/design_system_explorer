@@ -163,3 +163,43 @@
 
 .exportBtn:hover { opacity: 0.8; }
 .exportBtn:active { transform: scale(0.97); }
+
+/* Mobile-only cycling theme button (replaces the 3-way segment) */
+.themeCycleBtn {
+  display: none;
+  width: var(--ui-size-btn-md);
+  height: var(--ui-size-btn-md);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--ui-radius-3);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface-subtle);
+  transition: background var(--ui-duration-2), color var(--ui-duration-2);
+}
+
+.themeCycleBtn:hover {
+  background: var(--color-interactive-subtle);
+  color: var(--color-interactive);
+}
+
+.themeCycleBtn:active { transform: scale(0.94); }
+
+@media (max-width: 768px) {
+  .header { padding: 0 var(--ui-space-6); }
+
+  .actions { gap: var(--ui-space-3); }
+
+  /* Larger touch targets for small icon buttons */
+  .historyBtn { width: 40px; height: 40px; }
+  .themeToggle { width: 40px; height: 40px; }
+
+  /* Swap: hide 3-way segment, show cycling button */
+  .themeSegment { display: none; }
+  .themeCycleBtn { display: flex; width: 40px; height: 40px; }
+
+  /* Icon-only export button */
+  .exportBtnLabel { display: none; }
+  .exportBtn { padding: 0 var(--ui-space-5); }
+}

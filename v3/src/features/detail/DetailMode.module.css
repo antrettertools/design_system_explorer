@@ -88,9 +88,40 @@
 .tabFullLabel { display: inline; }
 .tabShortLabel { display: none; }
 
+/* Mobile preview button — hidden on desktop, visible on mobile */
+.mobilePreviewBtn {
+  display: none;
+}
+
 @media (max-width: 900px) { /* --ui-bp-tablet */
   .tabFullLabel { display: none; }
   .tabShortLabel { display: inline; }
+}
+
+@media (max-width: 768px) { /* --ui-bp-mobile */
+  .mobilePreviewBtn {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    flex-shrink: 0;
+    height: var(--ui-size-btn-sm);
+    padding: 0 var(--ui-space-5);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--ui-radius-3);
+    font-size: var(--ui-text-sm);
+    font-weight: 600;
+    color: var(--color-on-surface-subtle);
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: var(--font-body, sans-serif);
+    transition: color var(--ui-duration-2), background var(--ui-duration-2);
+  }
+  .mobilePreviewBtn:hover {
+    color: var(--color-on-surface);
+    background: var(--color-surface-raised, var(--color-border));
+  }
+  .mobilePreviewBtn:active { transform: scale(0.97); }
 }
 
 .tabBadge {

@@ -160,4 +160,22 @@
 
 @media (max-width: 768px) { /* --ui-bp-mobile */
   .panel { border-radius: var(--ui-radius-6) var(--ui-radius-6) 0 0; max-height: 85vh; }
+
+  /* Scrollable format tabs — consistent with DetailMode tab pattern */
+  .formatTabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding-right: var(--ui-space-9); /* breathing room at end */
+  }
+  .formatTabs::-webkit-scrollbar { display: none; }
+
+  /* Hide stats line, let footer space go to action buttons */
+  .meta { display: none; }
+  .footer { justify-content: flex-end; }
+
+  /* Full-width Copy button */
+  .footerActions { flex: 1; }
+  .copyBtn { flex: 1; }
 }
