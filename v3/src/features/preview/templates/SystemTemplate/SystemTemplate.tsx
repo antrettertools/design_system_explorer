@@ -59,7 +59,7 @@ export function SystemTemplate() {
       {/* HEADER */}
       <div className={styles.header}>
         <div className={styles.systemLabel}>Design System</div>
-        <div className={styles.wordmark}>palette.</div>
+        <div className={styles.wordmark}>dsygn.cloud</div>
         <div className={styles.systemMeta}>
           Generated {TODAY}
           {activeRecipe ? ` · ${activeRecipe.label}` : ''}

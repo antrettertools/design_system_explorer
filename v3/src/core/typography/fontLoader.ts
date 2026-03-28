@@ -24,7 +24,7 @@ function injectFontLink(fontName: string, source: FontSource): void {
   link.rel = 'stylesheet'
   link.href = getFontUrl(fontName, source)
   link.onerror = () => {
-    console.warn(`[palette] Failed to load font: ${fontName} from ${source}`)
+    console.warn(`[dsygn.cloud] Failed to load font: ${fontName} from ${source}`)
   }
   document.head.appendChild(link)
   loadedFonts.add(fontName)

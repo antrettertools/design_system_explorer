@@ -76,7 +76,7 @@ export function buildTokenMap(
   }
 
   // Dark mode equivalents
-  const darkBrandRoles = deriveDarkModeRoles(brandScale)
+  const darkBrandRoles = deriveDarkModeRoles(brandScale, brandHex)
   for (const [k, v] of Object.entries(darkBrandRoles)) {
     dark[`--color-${k}`] = v
   }

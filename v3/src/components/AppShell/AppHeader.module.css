@@ -12,7 +12,7 @@
 .wordmark {
   font-size: var(--ui-text-xl);
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.75px;
   color: var(--color-on-surface);
   font-family: var(--font-heading, Georgia, serif);
   user-select: none;

@@ -99,7 +99,7 @@
 .sizeBtnActive {
   background: var(--color-interactive);
   border-color: var(--color-interactive);
-  color: #fff;
+  color: var(--color-on-interactive);
   font-weight: 600;
 }
 

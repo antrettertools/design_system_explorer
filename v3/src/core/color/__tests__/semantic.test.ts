@@ -55,21 +55,60 @@ describe('deriveNeutralRoles', () => {
 })
 
 describe('deriveDarkModeRoles', () => {
+  const brandHex = '#e8543a'
+  const scale = makeShadeScale(brandHex)
+
   it('returns dark equivalents of all roles', () => {
-    const scale = makeShadeScale('#e8543a')
-    const dark = deriveDarkModeRoles(scale)
+    const dark = deriveDarkModeRoles(scale, brandHex)
     expect(dark).toHaveProperty('background')
     expect(dark).toHaveProperty('surface')
+    expect(dark).toHaveProperty('surface-raised')
     expect(dark).toHaveProperty('on-surface')
+    expect(dark).toHaveProperty('on-surface-subtle')
+    expect(dark).toHaveProperty('border')
+    expect(dark).toHaveProperty('border-strong')
     expect(dark).toHaveProperty('interactive')
     expect(dark).toHaveProperty('interactive-subtle')
+    expect(dark).toHaveProperty('interactive-container')
+    expect(dark).toHaveProperty('on-interactive-container')
+    expect(dark).toHaveProperty('interactive-hover')
   })
 
-  it('dark background is darker than light background', () => {
-    const scale = makeShadeScale('#e8543a')
-    const dark = deriveDarkModeRoles(scale)
-    // dark background is step 950 — should be very dark
+  it('dark background is much darker than light background (near-black)', () => {
+    const dark = deriveDarkModeRoles(scale, brandHex)
     const brightness = (h: string) => parseInt(h.slice(1, 3), 16) + parseInt(h.slice(3, 5), 16) + parseInt(h.slice(5, 7), 16)
+    // Dark background should be near-black (brightness < 60 across R+G+B combined)
+    expect(brightness(dark['background'])).toBeLessThan(60)
+    // And much darker than light background
     expect(brightness(dark['background'])).toBeLessThan(brightness(scale[50]))
+  })
+
+  it('dark on-surface is near-white (high brightness)', () => {
+    const dark = deriveDarkModeRoles(scale, brandHex)
+    const brightness = (h: string) => parseInt(h.slice(1, 3), 16) + parseInt(h.slice(3, 5), 16) + parseInt(h.slice(5, 7), 16)
+    // on-surface should be near-white — combined channel sum > 600
+    expect(brightness(dark['on-surface'])).toBeGreaterThan(600)
+  })
+
+  it('dark surfaces have proper lightness progression (bg < surface < surface-raised)', () => {
+    const dark = deriveDarkModeRoles(scale, brandHex)
+    const brightness = (h: string) => parseInt(h.slice(1, 3), 16) + parseInt(h.slice(3, 5), 16) + parseInt(h.slice(5, 7), 16)
+    expect(brightness(dark['background'])).toBeLessThan(brightness(dark['surface']))
+    expect(brightness(dark['surface'])).toBeLessThan(brightness(dark['surface-raised']))
+  })
+
+  it('dark background is near-neutral (low saturation) regardless of brand color', () => {
+    // Test with a highly saturated brand color — the dark background should still be near-neutral
+    const saturatedScale = makeShadeScale('#ff0000')
+    const dark = deriveDarkModeRoles(saturatedScale, '#ff0000')
+    const hex = dark['background']
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    // Saturation in RGB space: (max - min) / max — should be small (< 0.25)
+    const saturation = max > 0 ? (max - min) / max : 0
+    expect(saturation).toBeLessThan(0.25)
   })
 })

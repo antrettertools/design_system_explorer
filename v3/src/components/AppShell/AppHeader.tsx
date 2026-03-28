@@ -39,7 +39,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
 
   return (
     <header className={styles.header}>
-      <div className={styles.wordmark}>palette.</div>
+      <div className={styles.wordmark}>dsygn.cloud</div>
 
       <div className={styles.contextArea}>
         {contextLabel && (
