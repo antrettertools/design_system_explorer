@@ -65,25 +65,29 @@ function lightenForDark(hex: string): string {
 function darkenForDark(hex: string): string {
   const c = toOklch(hex)
   if (!c) return hex
-  return formatHex({ ...c, l: Math.max(0.1, (c.l ?? 0) - 0.3), c: (c.c ?? 0) * 0.6 }) ?? hex
+  // Target a dark tinted surface well above neutral dark surfaces (surface-raised L=0.155).
+  // Keep enough chroma so each state hue is clearly distinguishable from the others.
+  const targetL = 0.190
+  const targetC = Math.max((c.c ?? 0) * 0.50, 0.045)
+  return formatHex(clampChroma({ mode: 'oklch', l: targetL, c: targetC, h: c.h ?? 0 }, 'oklch')) ?? hex
 }
 
 /**
  * Dark mode state/mood roles — lighten base colors and darken containers
- * so they remain visible on dark backgrounds.
+ * so they remain visible and clearly chromatic on dark backgrounds.
  */
 export function deriveDarkStateMoodRoles(brandHex: string): SemanticRoles {
   const light = deriveStateMoodRoles(brandHex)
-  return {
-    'error':             lightenForDark(light['error']),
-    'error-container':   darkenForDark(light['error-container']),
-    'warning':           lightenForDark(light['warning']),
-    'warning-container': darkenForDark(light['warning-container']),
-    'success':           lightenForDark(light['success']),
-    'success-container': darkenForDark(light['success-container']),
-    'info':              lightenForDark(light['info']),
-    'info-container':    darkenForDark(light['info-container']),
+  const result: SemanticRoles = {}
+  for (const prefix of ['error', 'warning', 'success', 'info'] as const) {
+    const darkBase      = lightenForDark(light[prefix])
+    const darkContainer = darkenForDark(light[`${prefix}-container`])
+    result[prefix]                   = darkBase
+    result[`on-${prefix}`]           = getContrastColor(darkBase)
+    result[`${prefix}-container`]    = darkContainer
+    result[`on-${prefix}-container`] = lightenForDark(light[`on-${prefix}-container`])
   }
+  return result
 }
 
 /**

@@ -6,10 +6,12 @@ describe('deriveDarkStateMoodRoles', () => {
   const light = deriveStateMoodRoles(brandHex)
   const dark = deriveDarkStateMoodRoles(brandHex)
 
-  it('returns 8 keys matching light state keys', () => {
-    expect(Object.keys(dark)).toHaveLength(8)
+  it('returns 16 keys (base + on- + container + on-container for each state)', () => {
+    expect(Object.keys(dark)).toHaveLength(16)
     expect(dark['error']).toBeDefined()
+    expect(dark['on-error']).toBeDefined()
     expect(dark['success-container']).toBeDefined()
+    expect(dark['on-success-container']).toBeDefined()
   })
 
   it('error color is lighter in dark mode than light mode', () => {
