@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useColor, useColorActions } from '@/store'
 import { POSITION_LABELS } from '@/core/color/types'
 import { ColorSlotCard } from './ColorSlotCard'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import styles from './ColorSwatches.module.css'
 
 export function ColorSwatches() {
@@ -40,6 +41,24 @@ export function ColorSwatches() {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           />
+          <div className={styles.reorderRow}>
+            <button
+              className={styles.reorderBtn}
+              onClick={() => reorderSlots(index, index - 1)}
+              disabled={index === 0}
+              aria-label="Move color left"
+            >
+              <ChevronLeft size={12} strokeWidth={2.5} />
+            </button>
+            <button
+              className={styles.reorderBtn}
+              onClick={() => reorderSlots(index, index + 1)}
+              disabled={index === slots.length - 1}
+              aria-label="Move color right"
+            >
+              <ChevronRight size={12} strokeWidth={2.5} />
+            </button>
+          </div>
         </div>
       ))}
       <div className={styles.slotWrapper}>
