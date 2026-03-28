@@ -22,6 +22,8 @@ export interface TypographyActions {
   setBodyFont: (fontName: string, source: FontPairing['source']) => void
   toggleLock: (key: 'heading' | 'body' | 'scale') => void
   toggleStepLock: (step: keyof TypeScale) => void
+  lockAllTypography: () => void
+  unlockAllTypography: () => void
   setScaleRatio: (ratio: number) => void
   overrideStep: (step: keyof TypeScale, partial: Partial<TypeScaleStep>) => void
   resetStep: (step: keyof TypeScale) => void
@@ -119,6 +121,16 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
       const state = get() as { typography: TypographyState }
       const locks = { ...state.typography.locks, [key]: !state.typography.locks[key] }
       set({ typography: { ...state.typography, locks } })
+    },
+
+    lockAllTypography() {
+      const state = get() as { typography: TypographyState }
+      set({ typography: { ...state.typography, locks: { heading: true, body: true, scale: true } } })
+    },
+
+    unlockAllTypography() {
+      const state = get() as { typography: TypographyState }
+      set({ typography: { ...state.typography, locks: { heading: false, body: false, scale: false } } })
     },
 
     toggleStepLock(step: keyof TypeScale) {

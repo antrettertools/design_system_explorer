@@ -25,6 +25,26 @@ describe('setScaleRatio', () => {
   })
 })
 
+describe('lockAllTypography / unlockAllTypography', () => {
+  it('lockAllTypography sets all three locks to true', () => {
+    useStore.getState().typographyActions.lockAllTypography()
+    const { locks } = useStore.getState().typography
+    expect(locks.heading).toBe(true)
+    expect(locks.body).toBe(true)
+    expect(locks.scale).toBe(true)
+  })
+
+  it('unlockAllTypography sets all three locks to false', () => {
+    useStore.getState().typographyActions.toggleLock('heading')
+    useStore.getState().typographyActions.toggleLock('body')
+    useStore.getState().typographyActions.unlockAllTypography()
+    const { locks } = useStore.getState().typography
+    expect(locks.heading).toBe(false)
+    expect(locks.body).toBe(false)
+    expect(locks.scale).toBe(false)
+  })
+})
+
 describe('overrideStep / resetStep', () => {
   it('overrides a step size', () => {
     useStore.getState().typographyActions.overrideStep('body', { size: 18 })
