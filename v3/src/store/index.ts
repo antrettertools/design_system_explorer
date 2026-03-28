@@ -135,3 +135,25 @@ const _temporal = (useStore as any).temporal as {
 
 export const temporalUndo = () => _temporal?.getState().undo()
 export const temporalRedo = () => _temporal?.getState().redo()
+
+// Global lock / unlock all (colors + typography)
+export const lockEverything = () => {
+  const { colorActions, typographyActions } = useStore.getState()
+  colorActions.lockAllSlots()
+  typographyActions.lockAllTypography()
+}
+
+export const unlockEverything = () => {
+  const { colorActions, typographyActions } = useStore.getState()
+  colorActions.unlockAllSlots()
+  typographyActions.unlockAllTypography()
+}
+
+export const useIsEverythingLocked = () =>
+  useStore(s =>
+    s.color.slots.length > 0 &&
+    s.color.slots.every(sl => sl.locked) &&
+    s.typography.locks.heading &&
+    s.typography.locks.body &&
+    s.typography.locks.scale,
+  )
