@@ -2,7 +2,7 @@ export type AppMode = 'generator' | 'detail'
 export type DetailTab = 'colors' | 'typography' | 'spacing' | 'effects' | 'components' | 'showcase' | 'export'
 export type AppTheme = 'white' | 'light' | 'dark'
 export type ShowcaseTemplate = 'landing' | 'dashboard' | 'blog' | 'system'
-export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss' | 'figma'
+export type ExportFormat = 'css' | 'tailwind-v3' | 'tailwind-v4' | 'w3c' | 'scss' | 'figma' | 'style-dictionary'
 
 export interface UIState {
   mode: AppMode
@@ -32,7 +32,7 @@ export interface UIActions {
 
 export const defaultUIState: UIState = {
   mode: 'generator',
-  theme: 'light',
+  theme: 'white',
   activeTab: 'colors',
   showcaseTemplate: 'landing',
   exportPanelOpen: false,

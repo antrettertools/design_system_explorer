@@ -4,6 +4,7 @@ export { formatTailwindV4 } from './tailwindV4'
 export { formatW3C } from './w3c'
 export { formatSCSS } from './scss'
 export { formatFigmaVariables } from './figma'
+export { formatStyleDictionary } from './styleDictionary'
 export type { ExportFormat, ExportOptions, TokenMap, TokenCasing } from './types'
 
 import { formatCSS } from './css'
@@ -12,6 +13,7 @@ import { formatTailwindV4 } from './tailwindV4'
 import { formatW3C } from './w3c'
 import { formatSCSS } from './scss'
 import { formatFigmaVariables } from './figma'
+import { formatStyleDictionary } from './styleDictionary'
 import type { ExportFormat, ExportOptions, TokenMap } from './types'
 
 export function formatTokens(format: ExportFormat, tokens: TokenMap, opts?: ExportOptions): string {
@@ -22,5 +24,6 @@ export function formatTokens(format: ExportFormat, tokens: TokenMap, opts?: Expo
     case 'w3c': return formatW3C(tokens, opts)
     case 'scss': return formatSCSS(tokens, opts)
     case 'figma': return formatFigmaVariables(tokens, opts ?? {})
+    case 'style-dictionary': return formatStyleDictionary(tokens, opts)
   }
 }

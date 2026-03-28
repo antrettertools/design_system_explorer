@@ -10,61 +10,46 @@ function hexToFigmaColor(hex: string): { r: number; g: number; b: number; a: num
   return { r, g, b, a: 1 }
 }
 
-// Convert "16px" → 16, "8px" → 8; returns null for non-px values
+// Convert "16px" → 16; returns null for non-px values
 function parsePxValue(value: string): number | null {
   const match = value.match(/^(\d+(?:\.\d+)?)px$/)
   return match ? parseFloat(match[1]) : null
 }
 
+// Convert "400" or "700" (font-weight string) → number
+function parseNumber(value: string): number | null {
+  const n = parseFloat(value)
+  return isNaN(n) ? null : n
+}
+
 // Convert CSS var name → Figma variable path
 // "--color-brand-500" → "color/brand/500"
-// "--spacing-md" → "spacing/md"
 function varToPath(varName: string): string {
   const stripped = varName.replace(/^--/, '')
-  // Preserve numeric suffixes by splitting carefully
   return stripped.replace(/-(\d)/g, '/$1').replace(/-/g, '/')
 }
 
 type FigmaColor = { r: number; g: number; b: number; a: number }
+type FigmaValue = FigmaColor | number | string
 type FigmaVariable = {
   name: string
   type: 'COLOR' | 'FLOAT' | 'STRING'
-  values: Record<string, FigmaColor | number | string>
+  values: Record<string, FigmaValue>
 }
 type FigmaCollection = { name: string; modes: string[]; variables: FigmaVariable[] }
 
-/**
- * Format token map as Figma Variables JSON.
- * Compatible with Tokens Studio and the native Figma Variables import format.
- *
- * Structure:
- * - Colors collection (Light + Dark modes) — hex values only; CSS var references skipped
- * - Spacing collection (single mode — dimension values in px)
- * - Border Radius collection (single mode — dimension values in px)
- */
 export function formatFigmaVariables(tokenMap: TokenMap, _opts: ExportOptions): string {
   const collections: FigmaCollection[] = []
 
-  // Partition tokens by prefix
-  const colorVars: string[] = []
-  const spacingVars: string[] = []
-  const radiusVars: string[] = []
-
-  for (const varName of Object.keys(tokenMap.light)) {
-    if (varName.startsWith('--color-')) colorVars.push(varName)
-    else if (varName.startsWith('--spacing-')) spacingVars.push(varName)
-    else if (varName.startsWith('--radius-')) radiusVars.push(varName)
-  }
-
-  // ── Colors collection — Light + Dark modes ─────────────────────────────
-  if (colorVars.length > 0) {
+  // ── Colors — Light + Dark modes ─────────────────────────────────────────
+  {
     const variables: FigmaVariable[] = []
-    for (const varName of colorVars) {
-      const lightVal = tokenMap.light[varName]
-      const darkVal = tokenMap.dark[varName]
+    for (const [varName, lightVal] of Object.entries(tokenMap.light)) {
+      if (!varName.startsWith('--color-')) continue
       const lightColor = hexToFigmaColor(lightVal)
-      if (!lightColor) continue  // skip CSS var references (not a raw hex)
-      const darkColor = hexToFigmaColor(darkVal) ?? lightColor
+      if (!lightColor) continue  // skip CSS var references
+      const darkVal = tokenMap.dark[varName]
+      const darkColor = (darkVal ? hexToFigmaColor(darkVal) : null) ?? lightColor
       variables.push({
         name: varToPath(varName),
         type: 'COLOR',
@@ -76,38 +61,123 @@ export function formatFigmaVariables(tokenMap: TokenMap, _opts: ExportOptions): 
     }
   }
 
-  // ── Spacing collection ──────────────────────────────────────────────────
-  if (spacingVars.length > 0) {
+  // ── Typography ───────────────────────────────────────────────────────────
+  {
     const variables: FigmaVariable[] = []
-    for (const varName of spacingVars) {
-      const px = parsePxValue(tokenMap.light[varName])
-      if (px === null) continue
-      variables.push({
-        name: varToPath(varName),
-        type: 'FLOAT',
-        values: { Light: px },
-      })
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (varName === '--font-heading' || varName === '--font-body') {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      } else if (varName.startsWith('--font-size-')) {
+        const px = parsePxValue(value)
+        if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+      } else if (varName.startsWith('--font-weight-')) {
+        const n = parseNumber(value)
+        if (n !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: n } })
+      } else if (varName.startsWith('--line-height-')) {
+        const n = parseNumber(value)
+        if (n !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: n } })
+      } else if (varName.startsWith('--letter-spacing-')) {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      }
     }
     if (variables.length > 0) {
-      collections.push({ name: 'Spacing', modes: ['Light'], variables })
+      collections.push({ name: 'Typography', modes: ['Value'], variables })
     }
   }
 
-  // ── Border Radius collection ────────────────────────────────────────────
-  if (radiusVars.length > 0) {
+  // ── Spacing ──────────────────────────────────────────────────────────────
+  {
     const variables: FigmaVariable[] = []
-    for (const varName of radiusVars) {
-      const val = tokenMap.light[varName]
-      const px = val === '9999px' ? 9999 : parsePxValue(val)
-      if (px === null) continue
-      variables.push({
-        name: varToPath(varName),
-        type: 'FLOAT',
-        values: { Light: px },
-      })
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (!varName.startsWith('--spacing-')) continue
+      const px = parsePxValue(value)
+      if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
     }
     if (variables.length > 0) {
-      collections.push({ name: 'Border Radius', modes: ['Light'], variables })
+      collections.push({ name: 'Spacing', modes: ['Value'], variables })
+    }
+  }
+
+  // ── Border Radius ────────────────────────────────────────────────────────
+  {
+    const variables: FigmaVariable[] = []
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (!varName.startsWith('--radius-')) continue
+      const px = value === '9999px' ? 9999 : parsePxValue(value)
+      if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+    }
+    if (variables.length > 0) {
+      collections.push({ name: 'Border Radius', modes: ['Value'], variables })
+    }
+  }
+
+  // ── Sizing (icon sizes, border widths, breakpoints, z-index) ─────────────
+  {
+    const variables: FigmaVariable[] = []
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (varName.startsWith('--icon-size-')) {
+        const px = parsePxValue(value)
+        if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+      } else if (varName.startsWith('--border-width-')) {
+        const px = parsePxValue(value)
+        if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+      } else if (varName.startsWith('--breakpoint-')) {
+        const px = parsePxValue(value)
+        if (px !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+      } else if (varName.startsWith('--z-')) {
+        const n = parseNumber(value)
+        if (n !== null) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: n } })
+      }
+    }
+    if (variables.length > 0) {
+      collections.push({ name: 'Sizing', modes: ['Value'], variables })
+    }
+  }
+
+  // ── Effects (shadows, focus ring, motion) ───────────────────────────────
+  {
+    const variables: FigmaVariable[] = []
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (varName.startsWith('--shadow-')) {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      } else if (varName.startsWith('--focus-ring-')) {
+        // width/offset as FLOAT px, color as STRING
+        const px = parsePxValue(value)
+        if (px !== null) {
+          variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: px } })
+        } else {
+          variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+        }
+      } else if (varName.startsWith('--ease-')) {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      } else if (varName.startsWith('--duration-')) {
+        // Strip "ms" suffix for FLOAT
+        const n = parseFloat(value)
+        if (!isNaN(n)) variables.push({ name: varToPath(varName), type: 'FLOAT', values: { Value: n } })
+      } else if (varName.startsWith('--transition-')) {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      }
+    }
+    if (variables.length > 0) {
+      collections.push({ name: 'Effects', modes: ['Value'], variables })
+    }
+  }
+
+  // ── Components ───────────────────────────────────────────────────────────
+  {
+    const variables: FigmaVariable[] = []
+    for (const [varName, value] of Object.entries(tokenMap.light)) {
+      if (!varName.startsWith('--component-')) continue
+      // Try to resolve hex colors for Figma COLOR type; fall back to STRING
+      const asColor = hexToFigmaColor(value)
+      if (asColor) {
+        variables.push({ name: varToPath(varName), type: 'COLOR', values: { Value: asColor } })
+      } else {
+        variables.push({ name: varToPath(varName), type: 'STRING', values: { Value: value } })
+      }
+    }
+    if (variables.length > 0) {
+      collections.push({ name: 'Components', modes: ['Value'], variables })
     }
   }
 

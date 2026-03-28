@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useUI, useUIActions, useColor, useTypography } from '@/store'
+import { useUI, useUIActions, useColor, useTypography, useSpacing, useEffects, useComponents } from '@/store'
 import { buildTokenMap } from '@/store/derived'
 import { formatTokens } from '@/core/export'
 import type { ExportFormat } from '@/core/export/types'
@@ -12,6 +12,7 @@ const FORMATS: { id: ExportFormat; label: string }[] = [
   { id: 'w3c', label: 'W3C JSON' },
   { id: 'scss', label: 'SCSS' },
   { id: 'figma', label: 'Figma' },
+  { id: 'style-dictionary', label: 'Style Dict' },
 ]
 
 const FILE_EXT: Record<ExportFormat, string> = {
@@ -21,17 +22,21 @@ const FILE_EXT: Record<ExportFormat, string> = {
   'w3c': 'tokens.json',
   'scss': 'tokens.scss',
   'figma': 'figma-variables.json',
+  'style-dictionary': 'tokens.sd.json',
 }
 
 export function ExportPanel() {
-  const { exportPanelOpen, activeExportFormat } = useUI()
+  const { exportPanelOpen, activeExportFormat, theme } = useUI()
   const { closeExportPanel, setExportFormat } = useUIActions()
-  const { slots, dataVizN } = useColor()
+  const { slots, dataVizN, stateOverrides } = useColor()
   const { pairing, scale } = useTypography()
+  const spacing = useSpacing()
+  const effects = useEffects()
+  const { overrides: componentOverrides } = useComponents()
   const [copied, setCopied] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  const tokens = buildTokenMap(slots, scale, pairing, dataVizN)
+  const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides, stateOverrides }, theme)
   const code = formatTokens(activeExportFormat, tokens)
 
   useEffect(() => {
