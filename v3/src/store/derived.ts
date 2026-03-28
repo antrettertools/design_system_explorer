@@ -219,10 +219,22 @@ export function buildTokenMap(
  */
 export function injectTokensToDOM(tokens: TokenMap, theme: AppTheme = 'light'): void {
   const root = document.documentElement
+
+  // Remove any dark-only keys that have no light equivalent, so they don't
+  // persist on :root as stale inline styles after switching away from dark mode.
+  // Currently all dark keys are a subset of light keys, but this makes the
+  // function correct regardless of how TokenMap.dark evolves.
+  for (const key of Object.keys(tokens.dark)) {
+    if (!(key in tokens.light)) {
+      root.style.removeProperty(key)
+    }
+  }
+
   // Base: inject all light tokens
   for (const [key, value] of Object.entries(tokens.light)) {
     root.style.setProperty(key, value)
   }
+
   // Dark mode: overlay dark overrides inline — these overwrite the light values
   // for the keys they share (background, surface, on-surface, border, interactive, etc.)
   if (theme === 'dark') {

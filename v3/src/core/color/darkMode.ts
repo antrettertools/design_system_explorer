@@ -39,10 +39,14 @@ const toOklch = converter('oklch')
 export function deriveDarkModeRoles(scale: ShadeScale, brandHex: string): SemanticRoles {
   const brand = toOklch(brandHex)
   const h = brand?.h ?? 0
+  // Achromatic colors (grey, white, black) have undefined hue in OKLCH.
+  // Falling back to h=0 would give a faint red temperature — instead use C=0
+  // for truly neutral dark surfaces when the brand has no meaningful hue.
+  const isAchromatic = (brand?.c ?? 0) < 0.001
 
   // Compute a brand-tempered neutral dark color at given lightness + micro-chroma
   const dark = (l: number, c: number): string =>
-    formatHex(clampChroma({ mode: 'oklch', l, c, h }, 'oklch')) ?? '#111111'
+    formatHex(clampChroma({ mode: 'oklch', l, c: isAchromatic ? 0 : c, h }, 'oklch')) ?? '#111111'
 
   return {
     // Surfaces — near-black, barely tinted by brand temperature

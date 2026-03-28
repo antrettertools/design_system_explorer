@@ -67,8 +67,12 @@ export function createUIActions(set: any, get: any): UIActions {
       }
     },
     setTheme: (theme) => {
-      document.documentElement.setAttribute('data-theme', theme)
+      // Update state first — the subscription calls injectTokensToDOM which sets
+      // the correct inline styles before the attribute flip is visible to the browser.
+      // The attribute is only needed so exported [data-theme="dark"] CSS works in
+      // consumer projects; it plays no role in the app's own rendering.
       set({ ui: { ...(get() as { ui: UIState }).ui, theme } })
+      document.documentElement.setAttribute('data-theme', theme)
     },
     setActiveTab: (activeTab) => set({ ui: { ...(get() as { ui: UIState }).ui, activeTab } }),
     setShowcaseTemplate: (showcaseTemplate) => set({ ui: { ...(get() as { ui: UIState }).ui, showcaseTemplate } }),
