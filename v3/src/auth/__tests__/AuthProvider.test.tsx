@@ -142,9 +142,10 @@ describe('AuthProvider', () => {
     } as never)
 
     // Capture the onAuthStateChange callback so we can fire it later
-    let authChangeCallback: ((event: string, session: null) => void) | null = null
+    // Using an object ref to prevent TypeScript from narrowing the closure variable to never
+    const captured: { cb: ((event: string, session: null) => void) | null } = { cb: null }
     vi.mocked(supabase.auth.onAuthStateChange).mockImplementation((cb) => {
-      authChangeCallback = cb as typeof authChangeCallback
+      captured.cb = cb as (event: string, session: null) => void
       return { data: { subscription: { unsubscribe: vi.fn() } } } as never
     })
 
@@ -152,7 +153,7 @@ describe('AuthProvider', () => {
     await waitFor(() => expect(screen.getByTestId('state').textContent).toBe('signed-out'))
 
     // Fire SIGNED_OUT event
-    if (authChangeCallback) authChangeCallback('SIGNED_OUT', null)
+    captured.cb?.('SIGNED_OUT', null)
     await waitFor(() => expect(screen.getByTestId('state').textContent).toBe('signed-out'))
   })
 })
