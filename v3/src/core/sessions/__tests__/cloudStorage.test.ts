@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import {
   listCloudSessions,
-  countCloudSessions,
   saveCloudSession,
   deleteCloudSession,
   SaveLimitError,

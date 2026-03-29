@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
-import React from 'react'
 
 // Mock the supabase module before importing anything that uses it
 vi.mock('@/lib/supabase', () => {
@@ -153,7 +152,7 @@ describe('AuthProvider', () => {
     await waitFor(() => expect(screen.getByTestId('state').textContent).toBe('signed-out'))
 
     // Fire SIGNED_OUT event
-    authChangeCallback?.('SIGNED_OUT', null)
+    if (authChangeCallback) authChangeCallback('SIGNED_OUT', null)
     await waitFor(() => expect(screen.getByTestId('state').textContent).toBe('signed-out'))
   })
 })
