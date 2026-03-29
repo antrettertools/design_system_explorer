@@ -158,6 +158,91 @@
 .downloadBtn:hover { background: var(--color-surface-raised, var(--color-border)); }
 .downloadBtn:active { transform: scale(0.97); }
 
+/* Lock gate — gated format tabs */
+.lockedTab {
+  opacity: 0.55;
+  cursor: pointer; /* still clickable — shows the gate */
+  position: relative;
+}
+
+.lockedTab:hover {
+  opacity: 0.75;
+}
+
+.lockIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.7;
+  vertical-align: middle;
+}
+
+.prefixRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-4);
+  padding: var(--ui-space-4) var(--ui-space-9);
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+  flex-shrink: 0;
+}
+
+.prefixLabel {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle, #888);
+  font-family: var(--font-body, sans-serif);
+  white-space: nowrap;
+}
+
+.prefixInput {
+  width: 120px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--ui-radius-2);
+  font-size: var(--ui-text-sm);
+  background: var(--color-background, #f8f7f4);
+  color: var(--color-on-surface, #111);
+  font-family: var(--ui-font-mono);
+  outline: none;
+}
+
+.prefixInput:focus {
+  border-color: var(--color-interactive, #e8543a);
+}
+
+.zipBtn {
+  height: var(--ui-size-btn-lg);
+  padding: 0 var(--ui-space-7);
+  background: none;
+  border: 1px solid var(--color-interactive, #6366f1);
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+  color: var(--color-interactive, #6366f1);
+  font-family: var(--font-body, sans-serif);
+  font-weight: 600;
+  transition: background var(--ui-duration-2);
+}
+
+.zipBtn:hover { background: rgba(99,102,241,0.07); }
+.zipBtn:active { transform: scale(0.97); }
+
+.pdfBtn {
+  height: var(--ui-size-btn-lg);
+  padding: 0 var(--ui-space-7);
+  background: none;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--ui-radius-3);
+  font-size: var(--ui-text-sm);
+  cursor: pointer;
+  color: var(--color-on-surface, #333);
+  font-family: var(--font-body, sans-serif);
+  transition: background var(--ui-duration-2);
+}
+
+.pdfBtn:hover { background: var(--color-surface-raised, var(--color-border)); }
+.pdfBtn:active { transform: scale(0.97); }
+
 @media (max-width: 768px) { /* --ui-bp-mobile */
   .panel { border-radius: var(--ui-radius-6) var(--ui-radius-6) 0 0; max-height: 85vh; }
 

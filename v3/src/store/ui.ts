@@ -13,6 +13,9 @@ export interface UIState {
   activeExportFormat: ExportFormat
   mobileShowPreview: boolean
   sessionsDrawerOpen: boolean
+  signInPromptOpen: boolean
+  signInPromptReason: 'save' | 'export' | 'manual' | null
+  upgradeModalOpen: boolean
 }
 
 export interface UIActions {
@@ -28,6 +31,10 @@ export interface UIActions {
   openSessionsDrawer: () => void
   closeSessionsDrawer: () => void
   toggleSessionsDrawer: () => void
+  openSignInPrompt: (reason: 'save' | 'export' | 'manual') => void
+  closeSignInPrompt: () => void
+  openUpgradeModal: () => void
+  closeUpgradeModal: () => void
 }
 
 export const defaultUIState: UIState = {
@@ -39,6 +46,9 @@ export const defaultUIState: UIState = {
   activeExportFormat: 'css',
   mobileShowPreview: false,
   sessionsDrawerOpen: false,
+  signInPromptOpen: false,
+  signInPromptReason: null,
+  upgradeModalOpen: false,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,5 +97,17 @@ export function createUIActions(set: any, get: any): UIActions {
       const state = get() as { ui: UIState }
       set({ ui: { ...state.ui, sessionsDrawerOpen: !state.ui.sessionsDrawerOpen } })
     },
+    openSignInPrompt: (reason) => set({
+      ui: { ...(get() as { ui: UIState }).ui, signInPromptOpen: true, signInPromptReason: reason },
+    }),
+    closeSignInPrompt: () => set({
+      ui: { ...(get() as { ui: UIState }).ui, signInPromptOpen: false, signInPromptReason: null },
+    }),
+    openUpgradeModal: () => set({
+      ui: { ...(get() as { ui: UIState }).ui, upgradeModalOpen: true },
+    }),
+    closeUpgradeModal: () => set({
+      ui: { ...(get() as { ui: UIState }).ui, upgradeModalOpen: false },
+    }),
   }
 }

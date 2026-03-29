@@ -12,3 +12,26 @@
   flex: 1;
   min-height: 0;
 }
+
+.upgradeToast {
+  position: fixed;
+  bottom: var(--ui-space-8, 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-success, #15803d);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body, sans-serif);
+  z-index: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  animation: toastIn 0.2s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

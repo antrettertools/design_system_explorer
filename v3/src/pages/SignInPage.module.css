@@ -1,0 +1,101 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background, #f8f7f4);
+  padding: 24px;
+}
+
+.card {
+  background: var(--ui-surface-1, #ffffff);
+  border: 1px solid var(--ui-border, #e5e5e5);
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.wordmark {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-on-surface, #111);
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-on-surface, #111);
+  margin-bottom: 8px;
+}
+
+.subtext {
+  font-size: 14px;
+  color: var(--ui-text-2, #666);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.oauthBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--ui-border, #e5e5e5);
+  background: var(--ui-surface-1, #ffffff);
+  color: var(--color-on-surface, #111);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.oauthBtn:hover {
+  background: var(--ui-surface-2, #f5f5f5);
+  border-color: var(--ui-border-strong, #ccc);
+}
+
+.googleBtn {
+  /* Google button gets same styling — icon carries the brand */
+}
+
+.legal {
+  font-size: 12px;
+  color: var(--ui-text-3, #999);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.legalLink {
+  color: var(--color-interactive, inherit);
+  text-decoration: underline;
+}
+
+.backBtn {
+  font-size: 13px;
+  color: var(--ui-text-2, #666);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.backBtn:hover {
+  color: var(--color-on-surface, #111);
+}

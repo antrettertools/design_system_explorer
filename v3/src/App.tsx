@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { trackEvent } from './analytics'
 import { useColorActions, useTypographyActions, useUI, useUIActions, temporalUndo, temporalRedo, useStore } from './store'
 import { RECIPES } from '@/core/color/recipes'
 import type { DetailTab } from './store/ui'
@@ -10,6 +11,9 @@ import { DetailMode } from './features/detail/DetailMode'
 import { LivePreview } from './features/preview/LivePreview'
 import { ExportPanel } from './features/export/ExportPanel'
 import { SessionsDrawer } from './features/sessions/SessionsDrawer'
+import { SignInPrompt } from './components/auth/SignInPrompt'
+import { UpgradeModal } from './components/auth/UpgradeModal'
+import { OnboardingOverlay } from './components/OnboardingOverlay'
 import { loadFromHash } from './core/share/loadFromHash'
 import appStyles from './App.module.css'
 
@@ -18,6 +22,17 @@ export default function App() {
   const typographyActions = useTypographyActions()
   const { mode } = useUI()
   const { openExportPanel } = useUIActions()
+  const [showUpgradeToast, setShowUpgradeToast] = useState(false)
+
+  useEffect(() => {
+    if (window.location.search.includes('upgraded=1')) {
+      setShowUpgradeToast(true)
+      trackEvent('Purchase Complete')
+      window.history.replaceState(null, '', window.location.pathname)
+      const timer = setTimeout(() => setShowUpgradeToast(false), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [])
 
   useEffect(() => {
     document.documentElement.classList.add('no-transitions')
@@ -80,6 +95,7 @@ export default function App() {
         e.preventDefault()
         colorActions.generate()
         typographyActions.generate(undefined)
+        trackEvent('Generate')
         return
       }
 
@@ -115,6 +131,14 @@ export default function App() {
       </div>
       <ExportPanel />
       <SessionsDrawer />
+      <SignInPrompt />
+      <UpgradeModal />
+      {showUpgradeToast && (
+        <div className={appStyles.upgradeToast} role="status" aria-live="polite">
+          You're all set! All paid features are now unlocked.
+        </div>
+      )}
+      <OnboardingOverlay />
     </div>
   )
 }

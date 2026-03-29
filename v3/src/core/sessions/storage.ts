@@ -24,6 +24,7 @@ export function saveSession(name: string, snapshot: ShareSnapshot): Session {
     name: name.slice(0, 40),
     createdAt: Date.now(),
     snapshot,
+    source: 'local',
   }
 
   let sessions = listSessions()

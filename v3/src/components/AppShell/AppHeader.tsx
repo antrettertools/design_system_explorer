@@ -1,6 +1,8 @@
-import type { JSX } from 'react'
+import { type JSX, useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './AppHeader.module.css'
 import { useUI, useUIActions, useStore, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
+import { useAuth } from '@/auth/useAuth'
 import type { AppTheme } from '@/store/ui'
 import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen } from 'lucide-react'
 
@@ -20,9 +22,31 @@ const THEME_ORDER: AppTheme[] = ['white', 'light', 'dark']
 
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
-  const { setTheme, toggleSessionsDrawer } = useUIActions()
+  const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal } = useUIActions()
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Access temporal store for undo/redo enabled state
+  // Close dropdown on outside click or Escape
+  useEffect(() => {
+    if (!dropdownOpen) return
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDropdownOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [dropdownOpen])
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const temporal = (useStore as any).temporal as { getState: () => { pastStates?: unknown[]; futureStates?: unknown[] } } | undefined
   const pastLen = useStore(() => temporal?.getState().pastStates?.length ?? 0)
@@ -72,6 +96,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             <Redo2 size={14} strokeWidth={1.75} />
           </button>
         </div>
+
         <button
           className={styles.lockAllBtn}
           onClick={isEverythingLocked ? unlockEverything : lockEverything}
@@ -83,6 +108,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             ? <Lock size={14} strokeWidth={2} />
             : <LockOpen size={14} strokeWidth={2} />}
         </button>
+
         <button
           className={styles.themeToggle}
           onClick={toggleSessionsDrawer}
@@ -91,6 +117,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
         >
           <Bookmark size={15} strokeWidth={1.75} />
         </button>
+
         <div className={styles.themeSegment} role="group" aria-label="Background mode">
           {THEME_OPTIONS.map(opt => (
             <button
@@ -104,6 +131,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
             </button>
           ))}
         </div>
+
         <button
           className={styles.themeCycleBtn}
           onClick={() => setTheme(nextTheme)}
@@ -112,10 +140,66 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
         >
           {currentThemeOption.icon}
         </button>
+
         <button className={styles.exportBtn} onClick={onExportClick}>
           <Download size={13} strokeWidth={2} />
           <span className={styles.exportBtnLabel}>Export</span>
         </button>
+
+        {/* Auth UI */}
+        {user ? (
+          <div className={styles.userMenu} ref={dropdownRef}>
+            <button
+              className={styles.avatarBtn}
+              onClick={() => setDropdownOpen(v => !v)}
+              aria-label={`Account menu for ${user.username}`}
+              aria-expanded={dropdownOpen}
+              aria-haspopup="menu"
+              title={user.username}
+            >
+              {user.username[0].toUpperCase()}
+            </button>
+            {dropdownOpen && (
+              <div className={styles.dropdown} role="menu">
+                <div className={styles.dropdownUser}>{user.username}</div>
+                <div className={styles.dropdownPlan}>
+                  {user.plan === 'paid' ? 'Lifetime' : 'Free'}
+                </div>
+                <hr className={styles.dropdownDivider} />
+                <button
+                  className={styles.dropdownItem}
+                  role="menuitem"
+                  onClick={() => { setDropdownOpen(false); navigate('/account') }}
+                >
+                  My designs
+                </button>
+                {user.plan === 'free' && (
+                  <button
+                    className={`${styles.dropdownItem} ${styles.dropdownUpgrade}`}
+                    role="menuitem"
+                    onClick={() => { setDropdownOpen(false); openUpgradeModal() }}
+                  >
+                    Upgrade to Lifetime
+                  </button>
+                )}
+                <button
+                  className={styles.dropdownItem}
+                  role="menuitem"
+                  onClick={() => { setDropdownOpen(false); signOut() }}
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            className={styles.signInBtn}
+            onClick={() => openSignInPrompt('manual')}
+          >
+            Sign in
+          </button>
+        )}
       </div>
     </header>
   )
