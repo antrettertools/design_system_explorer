@@ -49,8 +49,8 @@ export const shareSnapshotSchema = z.object({
   spacingBaseUnit: z.union([z.literal(4), z.literal(8)]).optional(),
   shadowMode: z.enum(['colored', 'neutral']).optional(),
   // Optional Phase 3 fields
-  stepOverrides: z.record(typeScaleStepPartialSchema).optional(),
-  stepLocks: z.record(z.boolean()).optional(),
+  stepOverrides: z.record(z.string(), typeScaleStepPartialSchema).optional(),
+  stepLocks: z.record(z.string(), z.boolean()).optional(),
 })
 
 // ─── TypeScript type ─────────────────────────────────────────────────────────

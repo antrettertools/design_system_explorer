@@ -34,7 +34,6 @@ export type AppStore = {
  */
 export type StoreSet = (
   partial: Partial<AppStore> | ((state: AppStore) => Partial<AppStore>),
-  replace?: boolean,
 ) => void
 
 /** Typed getter for Zustand actions. Replaces `get: any` in all slice factories. */
