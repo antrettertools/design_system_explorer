@@ -1,9 +1,11 @@
 import { type JSX, useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { TemporalState } from 'zundo'
 import styles from './AppHeader.module.css'
 import { useUI, useUIActions, useStore, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
 import { useAuth } from '@/auth/useAuth'
 import type { AppTheme } from '@/store/ui'
+import type { AppStore } from '@/store/types'
 import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen, Heart } from 'lucide-react'
 
 interface AppHeaderProps {
@@ -47,8 +49,7 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
     }
   }, [dropdownOpen])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const temporal = (useStore as any).temporal as { getState: () => { pastStates?: unknown[]; futureStates?: unknown[] } } | undefined
+  const temporal = (useStore as unknown as { temporal?: { getState: () => TemporalState<AppStore> } }).temporal
   const pastLen = useStore(() => temporal?.getState().pastStates?.length ?? 0)
   const futureLen = useStore(() => temporal?.getState().futureStates?.length ?? 0)
   const canUndo = pastLen > 0
