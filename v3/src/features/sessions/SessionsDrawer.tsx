@@ -44,7 +44,9 @@ function buildSnapshot(): ShareSnapshot {
       heading: 'Inter', body: 'Inter', source: 'google', character: 'humanist', harmonyAffinity: [],
     },
     typographyLocks: state.typography.locks,
-    scaleRatio: 1.333,
+    scaleRatio: state.typography.scale?._ratio ?? 1.333,
+    stepOverrides: state.typography.stepOverrides,
+    stepLocks: state.typography.stepLocks,
     mode: state.ui.mode,
     activeTab: state.ui.activeTab,
     theme: state.ui.theme,
@@ -159,11 +161,6 @@ export function SessionsDrawer() {
         slots: snapshot.colors,
         activeRecipe: RECIPES.find(r => r.id === snapshot.harmonyModel) ?? null,
       },
-      typography: {
-        ...prev.typography,
-        pairing: snapshot.pairing,
-        locks: snapshot.typographyLocks,
-      },
       ui: {
         ...prev.ui,
         theme: snapshot.theme,
@@ -172,7 +169,14 @@ export function SessionsDrawer() {
       },
     }))
     document.documentElement.setAttribute('data-theme', snapshot.theme)
-    useStore.getState().typographyActions.generate()
+    // restoreFromSnapshot handles scaleRatio, stepOverrides, stepLocks, and font loading
+    useStore.getState().typographyActions.restoreFromSnapshot({
+      pairing: snapshot.pairing,
+      locks: snapshot.typographyLocks,
+      scaleRatio: snapshot.scaleRatio,
+      stepOverrides: snapshot.stepOverrides,
+      stepLocks: snapshot.stepLocks,
+    })
     if (snapshot.spacingBaseUnit) {
       useStore.getState().spacingActions.setBaseUnit(snapshot.spacingBaseUnit as SpacingState['baseUnit'])
     }

@@ -1,0 +1,22 @@
+-- =============================================================
+-- dsygn.cloud — Migration 004: Restrict public email reads
+-- Run in Supabase SQL Editor after 001/002/003.
+-- =============================================================
+--
+-- Problem: the "users_select_username_public" policy (added in 001) uses
+-- `for select using (true)` with no column restriction, meaning any
+-- anonymous request can read the `email` column for any user row.
+-- The `email` column has no legitimate public use case — the hosted
+-- viewer only needs `id` and `username`, which remain public.
+--
+-- Fix: revoke the SELECT privilege on `email` from the `anon` role at the
+-- column level.  Postgres column-level privileges apply on top of RLS, so:
+--   - Anonymous reads:      can still see id, username, plan, paid_at,
+--                           created_at — but NOT email.
+--   - Authenticated reads:  `authenticated` role retains full column access,
+--                           so AuthProvider.tsx (.select('id, email, username, plan'))
+--                           continues to work for signed-in users.
+--   - Service role (webhook): bypasses RLS entirely, unaffected.
+-- =============================================================
+
+revoke select (email) on public.users from anon;

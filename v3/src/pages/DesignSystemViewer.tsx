@@ -7,6 +7,7 @@ import { deriveTypeScale } from '@/core/typography/scale'
 import { loadActivePairing } from '@/core/typography/fontLoader'
 import { defaultSpacingState } from '@/store/spacing'
 import { defaultEffectsState } from '@/store/effects'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import type { ShareSnapshot } from '@/core/share/types'
 import type { ColorSlot } from '@/core/color/types'
 import styles from './DesignSystemViewer.module.css'
@@ -43,7 +44,16 @@ function contrastBadge(ratio: number): string {
   return 'Fail'
 }
 
-export function DesignSystemViewer() {
+function ViewerErrorFallback() {
+  return (
+    <div className={styles.state}>
+      <p className={styles.notFoundText}>Something went wrong rendering this design system.</p>
+      <a href="/" className={styles.ctaLink}>Go to dsygn.cloud →</a>
+    </div>
+  )
+}
+
+function DesignSystemViewerContent() {
   const { username, slug } = useParams<{ username: string; slug: string }>()
   const [design, setDesign] = useState<PublicDesign | null>(null)
   const [notFound, setNotFound] = useState(false)
@@ -250,5 +260,13 @@ export function DesignSystemViewer() {
         </section>
       </main>
     </div>
+  )
+}
+
+export function DesignSystemViewer() {
+  return (
+    <ErrorBoundary fallback={<ViewerErrorFallback />}>
+      <DesignSystemViewerContent />
+    </ErrorBoundary>
   )
 }

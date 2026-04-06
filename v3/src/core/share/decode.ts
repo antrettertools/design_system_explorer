@@ -1,4 +1,5 @@
 import { inflateSync, strFromU8 } from 'fflate'
+import { shareSnapshotSchema } from './types'
 import type { ShareSnapshot } from './types'
 
 function fromBase64Url(str: string): Uint8Array {
@@ -16,9 +17,9 @@ export async function decodeShare(hash: string): Promise<ShareSnapshot | null> {
     const compressed = fromBase64Url(encoded)
     const decompressed = inflateSync(compressed)
     const json = strFromU8(decompressed)
-    const parsed = JSON.parse(json) as ShareSnapshot
-    if (parsed.v !== 3) return null
-    return parsed
+    const result = shareSnapshotSchema.safeParse(JSON.parse(json))
+    if (!result.success) return null
+    return result.data as ShareSnapshot
   } catch {
     return null
   }

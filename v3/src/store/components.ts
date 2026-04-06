@@ -1,4 +1,5 @@
 import type { IconLibraryName, ComponentVariantKey, ComponentTokenMap } from '@/core/components/types'
+import type { StoreSet, StoreGet } from './types'
 
 export interface ComponentsState {
   iconLibrary: IconLibraryName
@@ -18,16 +19,15 @@ export const defaultComponentsState: ComponentsState = {
   overrides: {},
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createComponentsActions(set: any, get: any): ComponentsActions {
+export function createComponentsActions(set: StoreSet, get: StoreGet): ComponentsActions {
   return {
     setIconLibrary(library: IconLibraryName) {
-      const state = get() as { components: ComponentsState }
+      const state = get()
       set({ components: { ...state.components, iconLibrary: library } })
     },
 
     overrideComponentToken(component: ComponentVariantKey, key: string, value: string) {
-      const state = get() as { components: ComponentsState }
+      const state = get()
       set({
         components: {
           ...state.components,
@@ -43,7 +43,7 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
     },
 
     resetComponentToken(component: ComponentVariantKey, key: string) {
-      const state = get() as { components: ComponentsState }
+      const state = get()
       const existing = state.components.overrides[component]
       if (!existing) return
       const next = { ...existing }
@@ -60,7 +60,7 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
     },
 
     resetComponentVariants(variantKeys: ComponentVariantKey[]) {
-      const state = get() as { components: ComponentsState }
+      const state = get()
       const next = { ...state.components.overrides }
       for (const vk of variantKeys) {
         delete next[vk]
@@ -69,7 +69,7 @@ export function createComponentsActions(set: any, get: any): ComponentsActions {
     },
 
     resetAllComponentOverrides() {
-      const state = get() as { components: ComponentsState }
+      const state = get()
       set({ components: { ...state.components, overrides: {} } })
     },
   }
