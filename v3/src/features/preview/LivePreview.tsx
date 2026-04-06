@@ -1,10 +1,15 @@
-import { useUI, useUIActions } from '@/store'
+import { useRef, useState, useEffect } from 'react'
+import { useUI, useUIActions, useColor } from '@/store'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import styles from './LivePreview.module.css'
 import { LandingTemplate } from './templates/LandingTemplate/LandingTemplate'
 import { SystemTemplate } from './templates/SystemTemplate/SystemTemplate'
 import { DashboardTemplate } from './templates/DashboardTemplate/DashboardTemplate'
 import { BlogTemplate } from './templates/BlogTemplate/BlogTemplate'
+import { PricingView } from './views/PricingView'
+import { LegalView } from './views/LegalView'
+
+type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
 
 function LivePreviewErrorFallback() {
   return (
@@ -20,11 +25,41 @@ function LivePreviewErrorFallback() {
 function LivePreviewContent() {
   const { showcaseTemplate, mode } = useUI()
   const { hideMobilePreview } = useUIActions()
+  const { lastBaseHue } = useColor()
+
+  const [panelRoute, setPanelRoute] = useState<PanelRoute>('home')
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // Reset to home when a new palette is generated
+  useEffect(() => {
+    setPanelRoute('home')
+  }, [lastBaseHue])
+
+  // Scroll to top on route change
+  useEffect(() => {
+    if (panelRef.current) {
+      panelRef.current.scrollTop = 0
+    }
+  }, [panelRoute])
 
   // In generator mode, always show landing (single fixed template per spec)
   const template = mode === 'detail' ? showcaseTemplate : 'landing'
 
   const renderTemplate = () => {
+    if (mode !== 'detail') {
+      // Generator mode — support sub-routes
+      switch (panelRoute) {
+        case 'pricing':
+          return <PricingView onBack={() => setPanelRoute('home')} />
+        case 'privacy':
+        case 'terms':
+        case 'impressum':
+          return <LegalView page={panelRoute} onBack={() => setPanelRoute('home')} />
+        default:
+          return <LandingTemplate />
+      }
+    }
+
     switch (template) {
       case 'system': return <SystemTemplate />
       case 'dashboard': return <DashboardTemplate />
@@ -34,7 +69,7 @@ function LivePreviewContent() {
   }
 
   return (
-    <div className={styles.panel}>
+    <div className={styles.panel} ref={panelRef}>
       <button className={styles.backBtn} onClick={hideMobilePreview} aria-label="Back to generator">
         &larr; Back to generator
       </button>
