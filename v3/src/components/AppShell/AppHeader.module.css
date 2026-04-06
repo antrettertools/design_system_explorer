@@ -172,6 +172,32 @@
 .themeBtn:hover { background: var(--color-surface); color: var(--color-on-surface); }
 .themeBtnActive { background: var(--color-interactive-subtle); color: var(--color-interactive); font-weight: 600; }
 
+.supportBtn {
+  width: var(--ui-size-btn-md);
+  height: var(--ui-size-btn-md);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--ui-radius-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface-subtle);
+  transition: background var(--ui-duration-2), color var(--ui-duration-2), border-color var(--ui-duration-2);
+}
+
+.supportBtn:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #f59e0b;
+  color: #b45309;
+}
+
+.supportBtn:active { transform: scale(0.94); }
+
+@media (max-width: 768px) {
+  .supportBtn { width: 40px; height: 40px; }
+}
+
 .exportBtn {
   height: var(--ui-size-btn-md);
   padding: 0 var(--ui-space-6);

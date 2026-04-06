@@ -141,6 +141,15 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
           {currentThemeOption.icon}
         </button>
 
+        <button
+          className={styles.supportBtn}
+          onClick={() => openDonateModal('footer')}
+          title="Support this project"
+          aria-label="Support this project"
+        >
+          <Heart size={13} strokeWidth={1.75} />
+        </button>
+
         <button className={styles.exportBtn} onClick={onExportClick}>
           <Download size={13} strokeWidth={2} />
           <span className={styles.exportBtnLabel}>Export</span>
