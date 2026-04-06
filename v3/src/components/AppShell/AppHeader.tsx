@@ -4,7 +4,7 @@ import styles from './AppHeader.module.css'
 import { useUI, useUIActions, useStore, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
 import { useAuth } from '@/auth/useAuth'
 import type { AppTheme } from '@/store/ui'
-import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen } from 'lucide-react'
+import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen, Heart } from 'lucide-react'
 
 interface AppHeaderProps {
   onExportClick: () => void
@@ -22,7 +22,7 @@ const THEME_ORDER: AppTheme[] = ['white', 'light', 'dark']
 
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
-  const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal } = useUIActions()
+  const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -172,6 +172,14 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
                   onClick={() => { setDropdownOpen(false); navigate('/account') }}
                 >
                   My designs
+                </button>
+                <button
+                  className={`${styles.dropdownItem} ${styles.dropdownDonate}`}
+                  role="menuitem"
+                  onClick={() => { setDropdownOpen(false); openDonateModal('dropdown') }}
+                >
+                  <Heart size={13} strokeWidth={1.75} />
+                  Support the maker
                 </button>
                 {user.plan === 'free' && (
                   <button

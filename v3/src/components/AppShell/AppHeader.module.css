@@ -336,6 +336,19 @@
   font-weight: 600;
 }
 
+/* Support item in dropdown — subtle amber tint, with icon */
+.dropdownDonate {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-on-surface-subtle, #888);
+}
+
+.dropdownDonate:hover {
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.06);
+}
+
 @keyframes dropdownIn {
   from { opacity: 0; transform: translateY(-4px) }
   to   { opacity: 1; transform: translateY(0) }
