@@ -60,11 +60,6 @@ export default function App() {
             slots: snapshot.colors,
             activeRecipe: RECIPES.find(r => r.id === snapshot.harmonyModel) ?? null,
           },
-          typography: {
-            ...prev.typography,
-            pairing: snapshot.pairing,
-            locks: snapshot.typographyLocks,
-          },
           ui: {
             ...prev.ui,
             theme: snapshot.theme,
@@ -74,8 +69,14 @@ export default function App() {
         }))
         // Apply theme immediately
         document.documentElement.setAttribute('data-theme', snapshot.theme)
-        // Generate typography scale for the restored pairing
-        useStore.getState().typographyActions.generate()
+        // Restore typography — handles scaleRatio, stepOverrides, stepLocks, and font loading
+        useStore.getState().typographyActions.restoreFromSnapshot({
+          pairing: snapshot.pairing,
+          locks: snapshot.typographyLocks,
+          scaleRatio: snapshot.scaleRatio,
+          stepOverrides: snapshot.stepOverrides,
+          stepLocks: snapshot.stepLocks,
+        })
         // Restore Phase 2 spacing + effects state
         if (snapshot.spacingBaseUnit) {
           useStore.getState().spacingActions.setBaseUnit(snapshot.spacingBaseUnit as SpacingState['baseUnit'])

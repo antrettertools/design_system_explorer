@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { trackEvent } from '@/analytics'
-import { useStore, useUI, useUIActions, useColor, useTypography, useSpacing, useEffects, useComponents } from '@/store'
-import { buildTokenMap } from '@/store/derived'
+import { useStore, useUI, useUIActions, useColorTokens } from '@/store'
 import { formatTokens } from '@/core/export'
 import type { ExportFormat } from '@/core/export/types'
 import { downloadAllFormats } from '@/core/export/zip'
@@ -56,13 +55,9 @@ function ExportPanelErrorFallback() {
 }
 
 function ExportPanelContent() {
-  const { exportPanelOpen, activeExportFormat, theme } = useUI()
+  const { exportPanelOpen, activeExportFormat } = useUI()
   const { closeExportPanel, setExportFormat, openSignInPrompt, openUpgradeModal } = useUIActions()
-  const { slots, dataVizN, stateOverrides } = useColor()
-  const { pairing, scale } = useTypography()
-  const spacing = useSpacing()
-  const effects = useEffects()
-  const { overrides: componentOverrides } = useComponents()
+  const tokens = useColorTokens()
   const { user } = useAuth()
   const [copied, setCopied] = useState(false)
   const [cssPrefix, setCssPrefix] = useState('')
@@ -75,7 +70,6 @@ function ExportPanelContent() {
     }
   }, [exportPanelOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides, stateOverrides }, theme)
   const opts = cssPrefix ? { prefix: cssPrefix } : undefined
   const code = formatTokens(activeExportFormat, tokens, opts)
 
@@ -124,12 +118,12 @@ function ExportPanelContent() {
   }
 
   const handleBrandingPdf = () => {
-    const scaleRatio = scale?._ratio ?? 1.333
+    const state = useStore.getState()
     openBrandingPdf({
       tokens,
-      colors: slots,
-      pairing: pairing!,
-      scaleRatio,
+      colors: state.color.slots,
+      pairing: state.typography.pairing!,
+      scaleRatio: state.typography.scale?._ratio ?? 1.333,
     })
   }
 

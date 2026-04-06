@@ -1,6 +1,7 @@
 import { deriveShadowPresets, deriveNeutralShadows, deriveFocusRing } from '@/core/effects/shadows'
 import { deriveMotionTokens, DURATION_SCALE, EASING_PRESETS } from '@/core/effects/motion'
 import type { EffectsConfig, ShadowPresets, DurationStep } from '@/core/effects/types'
+import type { StoreSet, StoreGet } from './types'
 
 export interface EffectsState {
   config: EffectsConfig
@@ -48,27 +49,26 @@ export const defaultEffectsState: EffectsState = {
   focusRingLocked: false,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createEffectsActions(set: any, get: any): EffectsActions {
+export function createEffectsActions(set: StoreSet, get: StoreGet): EffectsActions {
   return {
     setShadowMode(mode) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       set({ effects: { ...state.effects, shadowMode: mode } })
     },
 
     overrideShadow(key, value) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       set({ effects: { ...state.effects, shadowOverrides: { ...state.effects.shadowOverrides, [key]: value } } })
     },
 
     resetShadow(key) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       const { [key]: _removed, ...rest } = state.effects.shadowOverrides
       set({ effects: { ...state.effects, shadowOverrides: rest } })
     },
 
     rebuildFromBrand(brandHex) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       const newConfig = buildConfig(brandHex)
       set({
         effects: {
@@ -86,7 +86,7 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
     },
 
     setFocusRing(partial) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       set({
         effects: {
           ...state.effects,
@@ -99,7 +99,7 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
     },
 
     setDuration(step, ms) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       const clamped = Math.max(0, Math.min(2000, ms))
       const updatedDurations = { ...state.effects.config.motion.durations, [step]: clamped }
       const updatedTransitions = recomputeTransitions(updatedDurations)
@@ -119,7 +119,7 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
     },
 
     resetDuration(step) {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       const defaultMs = DURATION_SCALE[step]
       const updatedDurations = { ...state.effects.config.motion.durations, [step]: defaultMs }
       const updatedTransitions = recomputeTransitions(updatedDurations)
@@ -139,12 +139,12 @@ export function createEffectsActions(set: any, get: any): EffectsActions {
     },
 
     toggleShadowLock() {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       set({ effects: { ...state.effects, shadowLocked: !state.effects.shadowLocked } })
     },
 
     toggleFocusRingLock() {
-      const state = get() as { effects: EffectsState }
+      const state = get()
       set({ effects: { ...state.effects, focusRingLocked: !state.effects.focusRingLocked } })
     },
   }
