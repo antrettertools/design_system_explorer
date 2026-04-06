@@ -16,6 +16,8 @@ export interface UIState {
   signInPromptOpen: boolean
   signInPromptReason: 'save' | 'export' | 'manual' | null
   upgradeModalOpen: boolean
+  donateModalOpen: boolean
+  donateModalSource: 'footer' | 'dropdown' | null
 }
 
 export interface UIActions {
@@ -35,6 +37,8 @@ export interface UIActions {
   closeSignInPrompt: () => void
   openUpgradeModal: () => void
   closeUpgradeModal: () => void
+  openDonateModal: (source: 'footer' | 'dropdown') => void
+  closeDonateModal: () => void
 }
 
 export const defaultUIState: UIState = {
@@ -49,6 +53,8 @@ export const defaultUIState: UIState = {
   signInPromptOpen: false,
   signInPromptReason: null,
   upgradeModalOpen: false,
+  donateModalOpen: false,
+  donateModalSource: null,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,6 +114,12 @@ export function createUIActions(set: any, get: any): UIActions {
     }),
     closeUpgradeModal: () => set({
       ui: { ...(get() as { ui: UIState }).ui, upgradeModalOpen: false },
+    }),
+    openDonateModal: (source) => set({
+      ui: { ...(get() as { ui: UIState }).ui, donateModalOpen: true, donateModalSource: source },
+    }),
+    closeDonateModal: () => set({
+      ui: { ...(get() as { ui: UIState }).ui, donateModalOpen: false, donateModalSource: null },
     }),
   }
 }
