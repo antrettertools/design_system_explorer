@@ -879,3 +879,223 @@
   white-space: nowrap;
   font-family: monospace;
 }
+
+/* ── COMPONENTS SECTION (05) ────────────────────────────── */
+
+.componentGroup {
+  margin-bottom: 40px;
+}
+
+.componentGroupLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: var(--font-body, sans-serif);
+  margin-bottom: 14px;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.demoBtn {
+  padding: 10px 20px;
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+.demoBtn:hover { opacity: 0.85; }
+
+.demoBtnPrimary {
+  background: var(--color-interactive, #e8543a);
+  color: var(--color-on-interactive, #fff);
+  border: none;
+}
+
+.demoBtnSecondary {
+  background: var(--color-surface-raised, #f4f4f4);
+  color: var(--color-on-surface, #111);
+  border: 1px solid var(--color-border, #e5e5e5);
+}
+
+.demoBtnGhost {
+  background: transparent;
+  color: var(--color-on-surface, #111);
+  border: 1px solid var(--color-border, #e5e5e5);
+}
+
+.demoBtnDestructive {
+  background: var(--color-error, #dc2626);
+  color: #fff;
+  border: none;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demoBadge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  font-family: var(--font-body, sans-serif);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 320px;
+}
+
+.demoLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-on-surface, #111);
+  font-family: var(--font-body, sans-serif);
+}
+
+.demoInput {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-md, 8px);
+  padding: 10px 14px;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  color: var(--color-on-surface, #111);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.demoInput:focus {
+  border-color: var(--color-interactive, #e8543a);
+  outline: none;
+}
+
+.alertGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.alertCard {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-sm, 0 1px 4px rgba(0,0,0,0.06));
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+
+.alertIcon {
+  flex-shrink: 0;
+  font-size: 15px;
+  margin-top: 1px;
+}
+
+.alertTitle {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--color-on-surface, #111);
+  font-family: var(--font-body, sans-serif);
+}
+
+.alertBody {
+  font-size: 12px;
+  color: var(--color-on-surface-subtle, #666);
+  line-height: 1.5;
+  font-family: var(--font-body, sans-serif);
+}
+
+/* ── SPACING SECTION (06) ───────────────────────────────── */
+
+.spacingScale {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.spacingRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.spacingLabel {
+  width: 36px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: monospace;
+  color: var(--color-on-surface-subtle, #888);
+  text-align: right;
+}
+
+.spacingBar {
+  height: 20px;
+  background: var(--color-interactive, #e8543a);
+  border-radius: var(--radius-sm, 4px);
+  min-width: 4px;
+}
+
+.radiusRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.radiusChip {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-border, #e5e5e5);
+  background: var(--color-surface-raised, #f4f4f4);
+  flex-shrink: 0;
+}
+
+.radiusChipLabel {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: monospace;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.shadowRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.shadowBox {
+  width: 80px;
+  height: 80px;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-md, 8px);
+  flex-shrink: 0;
+}
+
+.shadowBoxLabel {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: monospace;
+  margin-top: 8px;
+  text-align: center;
+}

@@ -173,6 +173,225 @@ function TypographySection() {
   )
 }
 
+// ── Section 05: Components in Action ─────────────────────────────────────────
+
+function ComponentsSection() {
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionLabel}>Your components</div>
+
+      {/* Buttons */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Buttons</div>
+        <div className={styles.buttonRow}>
+          <button className={`${styles.demoBtn} ${styles.demoBtnPrimary}`}>Save design</button>
+          <button className={`${styles.demoBtn} ${styles.demoBtnSecondary}`}>Preview</button>
+          <button className={`${styles.demoBtn} ${styles.demoBtnGhost}`}>Cancel</button>
+          <button className={`${styles.demoBtn} ${styles.demoBtnDestructive}`}>Delete</button>
+        </div>
+      </div>
+
+      {/* Badges */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Badges</div>
+        <div className={styles.badgeRow}>
+          <span
+            className={styles.demoBadge}
+            style={{ background: 'var(--color-surface-raised)', color: 'var(--color-on-surface-subtle)' }}
+          >
+            Default
+          </span>
+          <span
+            className={styles.demoBadge}
+            style={{ background: 'var(--color-success-container)', color: 'var(--color-success)' }}
+          >
+            Success
+          </span>
+          <span
+            className={styles.demoBadge}
+            style={{ background: 'var(--color-warning-container)', color: 'var(--color-warning)' }}
+          >
+            Warning
+          </span>
+          <span
+            className={styles.demoBadge}
+            style={{ background: 'var(--color-error-container)', color: 'var(--color-error)' }}
+          >
+            Error
+          </span>
+          <span
+            className={styles.demoBadge}
+            style={{ background: 'var(--color-info-container)', color: 'var(--color-info)' }}
+          >
+            Info
+          </span>
+        </div>
+      </div>
+
+      {/* Input */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Input</div>
+        <div className={styles.inputGroup}>
+          <label className={styles.demoLabel} htmlFor="demo-email">Email</label>
+          <input
+            id="demo-email"
+            className={styles.demoInput}
+            type="email"
+            placeholder="you@example.com"
+          />
+        </div>
+      </div>
+
+      {/* Alert cards */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Alerts</div>
+        <div className={styles.alertGrid}>
+          <div
+            className={styles.alertCard}
+            style={{
+              background: 'var(--color-success-container)',
+              borderLeftColor: 'var(--color-success)',
+            }}
+          >
+            <span className={styles.alertIcon}>✓</span>
+            <div>
+              <div className={styles.alertTitle}>Tokens compiled</div>
+              <div className={styles.alertBody}>47 tokens · no contrast errors</div>
+            </div>
+          </div>
+          <div
+            className={styles.alertCard}
+            style={{
+              background: 'var(--color-info-container)',
+              borderLeftColor: 'var(--color-info)',
+            }}
+          >
+            <span className={styles.alertIcon}>ℹ</span>
+            <div>
+              <div className={styles.alertTitle}>New harmony model</div>
+              <div className={styles.alertBody}>Triadic — 4 accents generated</div>
+            </div>
+          </div>
+          <div
+            className={styles.alertCard}
+            style={{
+              background: 'var(--color-warning-container)',
+              borderLeftColor: 'var(--color-warning)',
+            }}
+          >
+            <span className={styles.alertIcon}>⚠</span>
+            <div>
+              <div className={styles.alertTitle}>Breaking change</div>
+              <div className={styles.alertBody}>Token names changed in v2</div>
+            </div>
+          </div>
+          <div
+            className={styles.alertCard}
+            style={{
+              background: 'var(--color-error-container)',
+              borderLeftColor: 'var(--color-error)',
+            }}
+          >
+            <span className={styles.alertIcon}>✕</span>
+            <div>
+              <div className={styles.alertTitle}>Contrast failed</div>
+              <div className={styles.alertBody}>Body text below 4.5:1 on surface-raised</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── Section 06: Spacing + Effects ────────────────────────────────────────────
+
+type SpacingStep = { key: string; varName: string }
+type RadiusStep = { key: string; varName: string }
+type ShadowStep = { key: string; varName: string }
+
+const SPACING_STEPS: SpacingStep[] = [
+  { key: 'xs',  varName: 'var(--ui-space-xs)' },
+  { key: 'sm',  varName: 'var(--ui-space-sm)' },
+  { key: 'md',  varName: 'var(--ui-space-md)' },
+  { key: 'lg',  varName: 'var(--ui-space-lg)' },
+  { key: 'xl',  varName: 'var(--ui-space-xl)' },
+  { key: '2xl', varName: 'var(--ui-space-2xl)' },
+  { key: '3xl', varName: 'var(--ui-space-3xl)' },
+]
+
+const RADIUS_STEPS: RadiusStep[] = [
+  { key: 'none', varName: 'var(--radius-none)' },
+  { key: 'sm',   varName: 'var(--radius-sm)' },
+  { key: 'md',   varName: 'var(--radius-md)' },
+  { key: 'lg',   varName: 'var(--radius-lg)' },
+  { key: 'xl',   varName: 'var(--radius-xl)' },
+  { key: 'full', varName: 'var(--radius-full)' },
+]
+
+const SHADOW_STEPS: ShadowStep[] = [
+  { key: 'sm', varName: 'var(--shadow-sm)' },
+  { key: 'md', varName: 'var(--shadow-md)' },
+  { key: 'lg', varName: 'var(--shadow-lg)' },
+  { key: 'xl', varName: 'var(--shadow-xl)' },
+]
+
+function SpacingSection() {
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionLabel}>Your spacing + effects</div>
+
+      {/* Spacing scale */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Spacing scale</div>
+        <div className={styles.spacingScale}>
+          {SPACING_STEPS.map((step) => (
+            <div key={step.key} className={styles.spacingRow}>
+              <span className={styles.spacingLabel}>{step.key}</span>
+              <div
+                className={styles.spacingBar}
+                style={{ width: step.varName }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Border radius chips */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Border radius</div>
+        <div className={styles.radiusRow}>
+          {RADIUS_STEPS.map((step) => (
+            <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div
+                className={styles.radiusChip}
+                style={{ borderRadius: step.varName }}
+              />
+              <div className={styles.radiusChipLabel}>{step.key}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Shadow boxes */}
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Shadows</div>
+        <div className={styles.shadowRow}>
+          {SHADOW_STEPS.map((step) => (
+            <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div
+                className={styles.shadowBox}
+                style={{ boxShadow: step.varName }}
+              />
+              <div className={styles.shadowBoxLabel}>shadow-{step.key}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
   const { user } = useAuth()
   const { openSignInPrompt, openUpgradeModal } = useUIActions()
@@ -260,6 +479,12 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
 
       {/* ── SECTION 04: TYPOGRAPHY SCALE ────────────────────── */}
       <TypographySection />
+
+      {/* ── SECTION 05: COMPONENTS IN ACTION ────────────────── */}
+      <ComponentsSection />
+
+      {/* ── SECTION 06: SPACING + EFFECTS ───────────────────── */}
+      <SpacingSection />
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer className={styles.footer}>
