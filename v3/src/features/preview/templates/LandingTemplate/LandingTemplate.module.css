@@ -762,3 +762,120 @@
   transition: color 0.12s;
 }
 .footerLegalLink:hover { color: var(--color-on-surface, #111); }
+
+/* ── SECTION WRAPPER (03, 04, …) ────────────────────────── */
+
+.section {
+  padding: 80px 40px;
+  border-top: 1px solid var(--color-border, #e5e5e5);
+}
+
+.sectionLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: var(--font-body, sans-serif);
+  margin-bottom: 32px;
+}
+
+/* ── PALETTE SECTION (03) ───────────────────────────────── */
+
+.paletteRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.swatchCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md, 8px);
+  flex-shrink: 0;
+}
+
+.swatchLabel {
+  font-size: 11px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: var(--font-body, sans-serif);
+  text-align: center;
+}
+
+.swatchHex {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: monospace;
+  opacity: 0.7;
+}
+
+.datavizStrip {
+  display: flex;
+  height: 32px;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+}
+
+.datavizSegment {
+  flex-grow: 1;
+}
+
+/* ── TYPOGRAPHY SECTION (04) ────────────────────────────── */
+
+.fontPairingBadge {
+  display: inline-block;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-full, 9999px);
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--color-on-surface-subtle, #888);
+  font-family: var(--font-body, sans-serif);
+  margin-bottom: 40px;
+}
+
+.typeScale {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.typeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+}
+
+.typeLabel {
+  width: 72px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-on-surface-subtle, #888);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-body, sans-serif);
+}
+
+.typeSpecimen {
+  flex-grow: 1;
+  color: var(--color-on-surface, #111);
+  line-height: 1.2;
+}
+
+.typeMeta {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #888);
+  opacity: 0.6;
+  white-space: nowrap;
+  font-family: monospace;
+}
