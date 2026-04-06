@@ -13,6 +13,7 @@ import { ExportPanel } from './features/export/ExportPanel'
 import { SessionsDrawer } from './features/sessions/SessionsDrawer'
 import { SignInPrompt } from './components/auth/SignInPrompt'
 import { UpgradeModal } from './components/auth/UpgradeModal'
+import { DonateModal } from './components/DonateModal/DonateModal'
 import { OnboardingOverlay } from './components/OnboardingOverlay'
 import { loadFromHash } from './core/share/loadFromHash'
 import appStyles from './App.module.css'
@@ -20,9 +21,10 @@ import appStyles from './App.module.css'
 export default function App() {
   const colorActions = useColorActions()
   const typographyActions = useTypographyActions()
-  const { mode } = useUI()
-  const { openExportPanel } = useUIActions()
+  const { mode, donateModalOpen, donateModalSource } = useUI()
+  const { openExportPanel, closeDonateModal } = useUIActions()
   const [showUpgradeToast, setShowUpgradeToast] = useState(false)
+  const [showDonateToast, setShowDonateToast] = useState(false)
 
   useEffect(() => {
     if (window.location.search.includes('upgraded=1')) {
@@ -30,6 +32,16 @@ export default function App() {
       trackEvent('Purchase Complete')
       window.history.replaceState(null, '', window.location.pathname)
       const timer = setTimeout(() => setShowUpgradeToast(false), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (window.location.search.includes('donated=1')) {
+      setShowDonateToast(true)
+      trackEvent('Donate Complete')
+      window.history.replaceState(null, '', window.location.pathname)
+      const timer = setTimeout(() => setShowDonateToast(false), 5000)
       return () => clearTimeout(timer)
     }
   }, [])
@@ -133,9 +145,19 @@ export default function App() {
       <SessionsDrawer />
       <SignInPrompt />
       <UpgradeModal />
+      <DonateModal
+        open={donateModalOpen}
+        onClose={closeDonateModal}
+        source={donateModalSource ?? 'dropdown'}
+      />
       {showUpgradeToast && (
         <div className={appStyles.upgradeToast} role="status" aria-live="polite">
           You're all set! All paid features are now unlocked.
+        </div>
+      )}
+      {showDonateToast && (
+        <div className={appStyles.donateToast} role="status" aria-live="polite">
+          Thank you so much! Your support genuinely means a lot. ☕
         </div>
       )}
       <OnboardingOverlay />
