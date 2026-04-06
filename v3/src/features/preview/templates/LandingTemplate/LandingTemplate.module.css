@@ -230,6 +230,13 @@
 }
 .heroGhost:hover { background: var(--color-surface, #f9f9f9); }
 
+.spaceHint {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--color-on-surface-subtle, #aaa);
+  margin-top: 12px;
+}
+
 .trustBar {
   display: flex;
   flex-direction: column;

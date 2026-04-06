@@ -3,6 +3,7 @@ import { useUI, useUIActions, useColor } from '@/store'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import styles from './LivePreview.module.css'
 import { LandingTemplate } from './templates/LandingTemplate/LandingTemplate'
+import { DsygnLanding } from './templates/LandingTemplate/DsygnLanding'
 import { SystemTemplate } from './templates/SystemTemplate/SystemTemplate'
 import { DashboardTemplate } from './templates/DashboardTemplate/DashboardTemplate'
 import { BlogTemplate } from './templates/BlogTemplate/BlogTemplate'
@@ -56,7 +57,7 @@ function LivePreviewContent() {
         case 'impressum':
           return <LegalView page={panelRoute} onBack={() => setPanelRoute('home')} />
         default:
-          return <LandingTemplate />
+          return <DsygnLanding onNavigate={setPanelRoute} />
       }
     }
 
