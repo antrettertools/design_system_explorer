@@ -2,6 +2,7 @@ import { useAuth } from '@/auth/useAuth'
 import { useColor, useTypography, useUIActions } from '@/store'
 import type { ColorSlot } from '@/core/color/types'
 import { POSITION_LABELS } from '@/core/color/types'
+import { TemplateIcon } from '../shared/TemplateIcon'
 import styles from './LandingTemplate.module.css'
 
 type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
@@ -392,6 +393,148 @@ function SpacingSection() {
   )
 }
 
+// ── Section 07: Features — 3 Cards ───────────────────────────────────────────
+
+function FeaturesSection() {
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionLabel}>How it works</div>
+      <div className={styles.featuresGrid}>
+
+        {/* Card 1 — OKLCH Color Science */}
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-a-500, var(--color-accent-a, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="star" size={28} />
+          </div>
+          <div className={styles.featTitle}>OKLCH Color Science</div>
+          <div className={styles.featBody}>
+            Perceptually uniform colors. Every shade looks intentional — no muddy mid-tones,
+            no blown-out lights. Semantic state colors generated automatically.
+          </div>
+        </div>
+
+        {/* Card 2 — Token Export */}
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-b-500, var(--color-accent-b, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="file" size={28} />
+          </div>
+          <div className={styles.featTitle}>Token Export</div>
+          <div className={styles.featBody}>
+            CSS variables, Tailwind v3/v4, SCSS, W3C Design Tokens, Figma JSON. One click. Always in sync.
+          </div>
+        </div>
+
+        {/* Card 3 — Ship in Seconds */}
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-brand-500, var(--color-interactive, #e8543a))' }}>
+            <TemplateIcon slug="arrow-right" size={28} />
+          </div>
+          <div className={styles.featTitle}>Ship in Seconds</div>
+          <div className={styles.featBody}>
+            Hit ␣ space to regenerate. Lock what you love. Export and paste. No config files, no rituals.
+          </div>
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+// ── Section 08: Pricing ───────────────────────────────────────────────────────
+
+const EARLY_BIRD_ACTIVE = import.meta.env.VITE_EARLY_BIRD_ACTIVE === 'true'
+
+function PricingSection() {
+  const { user } = useAuth()
+  const { openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
+
+  const isSignedIn = user !== null
+  const isPaid = user?.plan === 'paid'
+
+  return (
+    <section className={styles.section}>
+      <div className={styles.sectionLabel}>Simple pricing</div>
+
+      <div className={styles.pricingGrid}>
+
+        {/* Free card */}
+        <div className={styles.pricingCard}>
+          <div className={styles.pricingLabel}>Free</div>
+          <div className={styles.pricingPrice}>€0</div>
+          <div className={styles.pricingSubtext}>forever</div>
+          <ul className={styles.pricingList}>
+            <li className={styles.pricingListItem}>Generator (all features)</li>
+            <li className={styles.pricingListItem}>CSS export</li>
+            <li className={styles.pricingListItem}>3 saved designs</li>
+            <li className={styles.pricingListItem}>No account required to start</li>
+          </ul>
+          <button
+            className={styles.pricingCta}
+            onClick={() => openSignInPrompt('manual')}
+          >
+            Start free
+          </button>
+        </div>
+
+        {/* Lifetime card */}
+        <div className={`${styles.pricingCard} ${styles.pricingCardHighlight}`}>
+          <div className={styles.pricingLabelRow}>
+            <span className={styles.pricingLabel}>Lifetime</span>
+            {EARLY_BIRD_ACTIVE && (
+              <span className={styles.earlyBirdBadge}>Early Bird</span>
+            )}
+          </div>
+          <div className={styles.pricingPrice}>€29</div>
+          <div className={styles.pricingSubtext}>one-time · no subscription</div>
+          <ul className={styles.pricingList}>
+            <li className={styles.pricingListItem}>Everything in Free</li>
+            <li className={styles.pricingListItem}>Unlimited cloud saves</li>
+            <li className={styles.pricingListItem}>All export formats (ZIP, Figma, W3C, SCSS, Tailwind)</li>
+            <li className={styles.pricingListItem}>Branding PDF</li>
+            <li className={styles.pricingListItem}>Hosted public design system page</li>
+            <li className={styles.pricingListItem}>Version history</li>
+          </ul>
+          {!isSignedIn && (
+            <button
+              className={styles.pricingCta}
+              onClick={() => openSignInPrompt('manual')}
+            >
+              Get lifetime access
+            </button>
+          )}
+          {isSignedIn && !isPaid && (
+            <button
+              className={styles.pricingCta}
+              onClick={openUpgradeModal}
+            >
+              Upgrade — €29
+            </button>
+          )}
+          {isSignedIn && isPaid && (
+            <button
+              className={`${styles.pricingCta} ${styles.pricingCtaDisabled}`}
+              disabled
+            >
+              You&apos;re all set ✓
+            </button>
+          )}
+        </div>
+
+      </div>
+
+      <div className={styles.coffeeRow}>
+        Enjoying dsygn.cloud? ☕{' '}
+        <button
+          className={styles.coffeeBtn}
+          onClick={() => openDonateModal('footer')}
+        >
+          Buy me a coffee
+        </button>
+      </div>
+    </section>
+  )
+}
+
 export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
   const { user } = useAuth()
   const { openSignInPrompt, openUpgradeModal } = useUIActions()
@@ -485,6 +628,12 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
 
       {/* ── SECTION 06: SPACING + EFFECTS ───────────────────── */}
       <SpacingSection />
+
+      {/* ── SECTION 07: FEATURES — 3 CARDS ─────────────────── */}
+      <FeaturesSection />
+
+      {/* ── SECTION 08: PRICING ─────────────────────────────── */}
+      <PricingSection />
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer className={styles.footer}>
