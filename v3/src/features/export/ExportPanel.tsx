@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { trackEvent } from '@/analytics'
-import { useUI, useUIActions, useColor, useTypography, useSpacing, useEffects, useComponents } from '@/store'
+import { useStore, useUI, useUIActions, useColor, useTypography, useSpacing, useEffects, useComponents } from '@/store'
 import { buildTokenMap } from '@/store/derived'
 import { formatTokens } from '@/core/export'
 import type { ExportFormat } from '@/core/export/types'
 import { downloadAllFormats } from '@/core/export/zip'
 import { openBrandingPdf } from '@/core/export/brandingPdf'
 import { useAuth } from '@/auth/useAuth'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import styles from './ExportPanel.module.css'
 
 const FORMATS: { id: ExportFormat; label: string }[] = [
@@ -36,7 +37,25 @@ function isFormatLocked(format: ExportFormat, plan: string | undefined): boolean
   return !FREE_FORMATS.has(format) && plan !== 'paid'
 }
 
-export function ExportPanel() {
+// Shown when ExportPanel itself crashes. Replicates the overlay so the user
+// is not left with a frozen dark backdrop and no escape route.
+function ExportPanelErrorFallback() {
+  return (
+    <div className={styles.overlay} role="alertdialog" aria-label="Export panel error">
+      <div className={styles.errorContent}>
+        <p className={styles.errorMessage}>Export panel failed to load.</p>
+        <button
+          className={styles.errorDismiss}
+          onClick={() => useStore.getState().uiActions.closeExportPanel()}
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function ExportPanelContent() {
   const { exportPanelOpen, activeExportFormat, theme } = useUI()
   const { closeExportPanel, setExportFormat, openSignInPrompt, openUpgradeModal } = useUIActions()
   const { slots, dataVizN, stateOverrides } = useColor()
@@ -208,5 +227,13 @@ export function ExportPanel() {
         </div>
       </div>
     </div>
+  )
+}
+
+export function ExportPanel() {
+  return (
+    <ErrorBoundary fallback={<ExportPanelErrorFallback />}>
+      <ExportPanelContent />
+    </ErrorBoundary>
   )
 }

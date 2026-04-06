@@ -6,3 +6,11 @@
   max-width: 800px;
   margin: 0 auto;
 }
+
+.iconLoading {
+  padding: var(--ui-space-10) var(--ui-space-8);
+  color: var(--color-on-surface-muted, #999);
+  font-size: var(--ui-text-sm, 13px);
+  font-family: var(--font-body, sans-serif);
+  text-align: center;
+}
