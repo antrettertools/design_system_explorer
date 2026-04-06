@@ -1,6 +1,7 @@
 import { generatePalette } from '@/core/color/harmony'
 import type { ColorSlot, RecipeDef, PrimaryType } from '@/core/color/types'
 import { COLOR_ROLES } from '@/core/color/types'
+import type { StoreSet, StoreGet } from './types'
 
 /** After any reorder/remove, make slot.role strictly match array position */
 function reassignRolesByPosition(slots: ColorSlot[]): ColorSlot[] {
@@ -46,11 +47,10 @@ export const defaultColorState: ColorState = {
   stateOverrides: {},
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createColorActions(set: any, get: any): ColorActions {
+export function createColorActions(set: StoreSet, get: StoreGet): ColorActions {
   return {
     generate() {
-      const state = get() as { color: ColorState }
+      const state = get()
       const existing = state.color.slots
       // Only pass existing slots when some are locked — avoids passing stale hex values to unlocked slots
       const hasLocked = existing.some(s => s.locked)
@@ -64,7 +64,7 @@ export function createColorActions(set: any, get: any): ColorActions {
     },
 
     toggleLock(id: string) {
-      const state = get() as { color: ColorState }
+      const state = get()
       const slots = state.color.slots.map(s =>
         s.id === id ? { ...s, locked: !s.locked } : s,
       )
@@ -72,19 +72,19 @@ export function createColorActions(set: any, get: any): ColorActions {
     },
 
     lockAllSlots() {
-      const state = get() as { color: ColorState }
+      const state = get()
       const slots = state.color.slots.map(s => ({ ...s, locked: true }))
       set({ color: { ...state.color, slots } })
     },
 
     unlockAllSlots() {
-      const state = get() as { color: ColorState }
+      const state = get()
       const slots = state.color.slots.map(s => ({ ...s, locked: false }))
       set({ color: { ...state.color, slots } })
     },
 
     addSlot() {
-      const state = get() as { color: ColorState }
+      const state = get()
       if (state.color.slots.length >= 8) return
       // Fall back to RECIPES[0] when activeRecipe is null (pre-generate edge case) to ensure a specific recipe is used, preserving visual coherence
       const { slots: newSlots, recipe } = generatePalette({
@@ -97,14 +97,14 @@ export function createColorActions(set: any, get: any): ColorActions {
     },
 
     removeSlot(id: string) {
-      const state = get() as { color: ColorState }
+      const state = get()
       const filtered = state.color.slots.filter(s => s.id !== id)
       if (filtered.length === 0) return  // keep at least 1
       set({ color: { ...state.color, slots: reassignRolesByPosition(filtered) } })
     },
 
     reorderSlots(fromIndex: number, toIndex: number) {
-      const state = get() as { color: ColorState }
+      const state = get()
       const slots = [...state.color.slots]
       const [moved] = slots.splice(fromIndex, 1)
       slots.splice(toIndex, 0, moved)
@@ -112,18 +112,18 @@ export function createColorActions(set: any, get: any): ColorActions {
     },
 
     setDataVizN(n: number) {
-      const state = get() as { color: ColorState }
+      const state = get()
       set({ color: { ...state.color, dataVizN: Math.min(Math.max(n, 2), 20) } })
     },
 
     overrideHex(id: string, hex: string) {
-      const state = get() as { color: ColorState }
+      const state = get()
       const slots = state.color.slots.map(s => s.id === id ? { ...s, hex } : s)
       set({ color: { ...state.color, slots } })
     },
 
     renameSlot(id: string, name: string) {
-      const state = get() as { color: ColorState }
+      const state = get()
       const trimmed = name.trim()
       const slots = state.color.slots.map(s =>
         s.id === id ? { ...s, name: trimmed || undefined } : s,
@@ -132,24 +132,24 @@ export function createColorActions(set: any, get: any): ColorActions {
     },
 
     setStateColor(prefix, hex) {
-      const state = get() as { color: ColorState }
+      const state = get()
       set({ color: { ...state.color, stateOverrides: { ...state.color.stateOverrides, [prefix]: hex } } })
     },
 
     resetStateColor(prefix) {
-      const state = get() as { color: ColorState }
+      const state = get()
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [prefix]: _removed, ...rest } = state.color.stateOverrides
       set({ color: { ...state.color, stateOverrides: rest as Partial<Record<StateColorPrefix, string>> } })
     },
 
     pinRecipe(id: string | null) {
-      const state = get() as { color: ColorState }
+      const state = get()
       set({ color: { ...state.color, pinnedRecipeId: id, pinnedPrimaryType: null } })
     },
 
     pinPrimaryType(type: PrimaryType | null) {
-      const state = get() as { color: ColorState }
+      const state = get()
       set({ color: { ...state.color, pinnedPrimaryType: type, pinnedRecipeId: null } })
     },
   }

@@ -51,7 +51,7 @@ describe('formatFigmaVariables', () => {
     expect(spacingCollection).toBeDefined()
     const mdVar = spacingCollection.variables.find((v: { name: string }) => v.name === 'spacing/md')
     expect(mdVar?.type).toBe('FLOAT')
-    expect(mdVar?.values?.Light).toBe(16)
+    expect(mdVar?.values?.Value).toBe(16)
   })
 
   it('color variables have both Light and Dark mode values', () => {
@@ -67,7 +67,7 @@ describe('formatFigmaVariables', () => {
     const radiusCollection = parsed.collections.find((c: { name: string }) => c.name === 'Border Radius')
     expect(radiusCollection).toBeDefined()
     const full = radiusCollection.variables.find((v: { name: string }) => v.name === 'radius/full')
-    expect(full?.values?.Light).toBe(9999)
+    expect(full?.values?.Value).toBe(9999)
   })
 
   it('CSS var references and non-hex values are skipped in color collection', () => {

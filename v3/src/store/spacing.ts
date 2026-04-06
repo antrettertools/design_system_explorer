@@ -1,5 +1,6 @@
 import { deriveSpacingScale, deriveRadiusScale, deriveIconSizes, BORDER_WIDTHS, OPACITY_SCALE, Z_INDEX_LAYERS, BREAKPOINTS } from '@/core/spacing/scale'
 import type { SpacingConfig, SpacingScale, RadiusScale } from '@/core/spacing/types'
+import type { StoreSet, StoreGet } from './types'
 
 export interface SpacingState {
   baseUnit: 4 | 8           // 4pt grid or 8pt grid
@@ -37,11 +38,10 @@ export const defaultSpacingState: SpacingState = {
   radiusOverrides: {},
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createSpacingActions(set: any, get: any): SpacingActions {
+export function createSpacingActions(set: StoreSet, get: StoreGet): SpacingActions {
   return {
     setBaseUnit(unit: 4 | 8) {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       set({
         spacing: {
           ...state.spacing,
@@ -53,7 +53,7 @@ export function createSpacingActions(set: any, get: any): SpacingActions {
     },
 
     overrideStep(step, value) {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       set({
         spacing: {
           ...state.spacing,
@@ -63,18 +63,18 @@ export function createSpacingActions(set: any, get: any): SpacingActions {
     },
 
     resetStep(step) {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       const { [step]: _removed, ...rest } = state.spacing.overrides
       set({ spacing: { ...state.spacing, overrides: rest } })
     },
 
     resetAll() {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       set({ spacing: { ...state.spacing, overrides: {} } })
     },
 
     overrideRadius(step, value) {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       set({
         spacing: {
           ...state.spacing,
@@ -84,7 +84,7 @@ export function createSpacingActions(set: any, get: any): SpacingActions {
     },
 
     resetRadius(step) {
-      const state = get() as { spacing: SpacingState }
+      const state = get()
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [step]: _removed, ...rest } = state.spacing.radiusOverrides
       set({ spacing: { ...state.spacing, radiusOverrides: rest as Partial<RadiusScale> } })

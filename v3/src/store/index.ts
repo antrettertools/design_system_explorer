@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { temporal } from 'zundo'
+import { shallow } from 'zustand/shallow'
 
 import { defaultColorState, createColorActions } from './color'
 import { defaultTypographyState, createTypographyActions } from './typography'
@@ -10,27 +11,8 @@ import { defaultEffectsState, createEffectsActions } from './effects'
 import { defaultComponentsState, createComponentsActions } from './components'
 import { buildTokenMap, injectTokensToDOM } from './derived'
 
-import type { ColorState, ColorActions } from './color'
-import type { TypographyState, TypographyActions } from './typography'
-import type { UIState, UIActions } from './ui'
-import type { SpacingState, SpacingActions } from './spacing'
-import type { EffectsState, EffectsActions } from './effects'
-import type { ComponentsState, ComponentsActions } from './components'
-
-export interface AppStore {
-  color: ColorState
-  typography: TypographyState
-  ui: UIState
-  spacing: SpacingState
-  effects: EffectsState
-  components: ComponentsState
-  colorActions: ColorActions
-  typographyActions: TypographyActions
-  uiActions: UIActions
-  spacingActions: SpacingActions
-  effectsActions: EffectsActions
-  componentsActions: ComponentsActions
-}
+import type { AppStore } from './types'
+export type { AppStore } from './types'
 
 // Module-level cache — updated by the subscription, never triggers re-renders directly
 let _cachedTokenMap: { light: Record<string, string>; dark: Record<string, string> } = {
@@ -44,8 +26,7 @@ export { _cachedTokenMap }
 export const useStore = create<AppStore>()(
   subscribeWithSelector(
     temporal(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (set: any, get: any) => ({
+      (set, get) => ({
         color: defaultColorState,
         typography: defaultTypographyState,
         ui: defaultUIState,
@@ -106,7 +87,7 @@ useStore.subscribe(
     _cachedTokenMap = tokens
     injectTokensToDOM(tokens, theme)
   },
-  { equalityFn: (a, b) => JSON.stringify(a) === JSON.stringify(b) },
+  { equalityFn: shallow },
 )
 
 // When brand color changes, rebuild effects (focus ring + colored shadows)
@@ -117,21 +98,21 @@ useStore.subscribe(
   },
 )
 
-// Selector that returns the cached token map, re-renders when palette/pairing changes
+// Selector that returns the cached token map, re-renders when palette/pairing/theme changes
 export function useColorTokens(): { light: Record<string, string>; dark: Record<string, string> } {
   return useStore(state => {
-    // Read state.color.slots and state.typography.pairing to establish subscription
+    // Access these fields to subscribe to their changes
     void state.color.slots
     void state.typography.pairing
+    void state.ui.theme  // theme affects token computation — ensure re-render on theme change
     return _cachedTokenMap
   })
 }
 
-// Undo/redo helpers
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const _temporal = (useStore as any).temporal as {
-  getState: () => { undo: () => void; redo: () => void }
-} | undefined
+// Undo/redo helpers — zundo attaches `.temporal` to the store at runtime
+const _temporal = (useStore as unknown as {
+  temporal?: { getState: () => { undo: () => void; redo: () => void } }
+}).temporal
 
 export const temporalUndo = () => _temporal?.getState().undo()
 export const temporalRedo = () => _temporal?.getState().redo()

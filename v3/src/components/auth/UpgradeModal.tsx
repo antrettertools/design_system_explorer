@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { trackEvent } from '@/analytics'
 import { useUI, useUIActions } from '@/store'
 import { useAuth } from '@/auth/useAuth'
+import { supabase } from '@/lib/supabase'
 import styles from './UpgradeModal.module.css'
 
 const PAID_FEATURES = [
@@ -43,9 +44,15 @@ export function UpgradeModal() {
     setLoading(true)
     setCheckoutError(null)
     try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No active session. Please sign in again.')
+
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({ userId: user.id }),
       })
 

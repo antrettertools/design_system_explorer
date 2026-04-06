@@ -2,6 +2,7 @@ import { pickRandomPairing, deriveTypeScale } from '@/core/typography/scale'
 import { loadActivePairing } from '@/core/typography/fontLoader'
 import type { FontPairing, TypeScale, TypeScaleStep } from '@/core/typography/types'
 import type { HarmonyModelName } from '@/core/color/types'
+import type { StoreSet, StoreGet } from './types'
 
 export interface TypographyState {
   pairing: FontPairing | null
@@ -27,6 +28,14 @@ export interface TypographyActions {
   setScaleRatio: (ratio: number) => void
   overrideStep: (step: keyof TypeScale, partial: Partial<TypeScaleStep>) => void
   resetStep: (step: keyof TypeScale) => void
+  /** Restore typography from a saved snapshot — handles scale derivation, stepOverrides, and font loading. */
+  restoreFromSnapshot: (params: {
+    pairing: FontPairing
+    locks: TypographyState['locks']
+    scaleRatio: number
+    stepOverrides?: TypographyState['stepOverrides']
+    stepLocks?: TypographyState['stepLocks']
+  }) => void
 }
 
 export const defaultTypographyState: TypographyState = {
@@ -41,22 +50,22 @@ function applyStepOverrides(
   scale: TypeScale,
   overrides: Partial<Record<keyof TypeScale, Partial<TypeScaleStep>>>,
 ): TypeScale {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result: any = { ...scale }
+  const result: TypeScale = { ...scale }
   for (const [step, partial] of Object.entries(overrides)) {
     const key = step as keyof TypeScale
-    if (result[key] && typeof result[key] === 'object') {
-      result[key] = { ...(result[key] as TypeScaleStep), ...partial }
+    const existing = result[key]
+    if (existing && typeof existing === 'object') {
+      // Narrow cast only at the write point — avoids `any` while keeping mutability
+      ;(result as Record<keyof TypeScale, unknown>)[key] = { ...(existing as TypeScaleStep), ...partial }
     }
   }
-  return result as TypeScale
+  return result
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createTypographyActions(set: any, get: any): TypographyActions {
+export function createTypographyActions(set: StoreSet, get: StoreGet): TypographyActions {
   return {
     generate(harmonyModel?: HarmonyModelName) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const locks = state.typography.locks
       const existing = state.typography.pairing
 
@@ -97,44 +106,44 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
     },
 
     regenerateFonts() {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const pairing = pickRandomPairing()
       if (pairing) loadActivePairing(pairing)
       set({ typography: { ...state.typography, pairing } })
     },
 
     setHeadingFont(fontName: string, source: FontPairing['source']) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const pairing = { ...(state.typography.pairing ?? { heading: '', body: '', character: 'humanist' as const, harmonyAffinity: [] as FontPairing['harmonyAffinity'] }), heading: fontName, source }
       loadActivePairing(pairing as FontPairing)
       set({ typography: { ...state.typography, pairing } })
     },
 
     setBodyFont(fontName: string, source: FontPairing['source']) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const pairing = { ...(state.typography.pairing ?? { heading: '', body: '', character: 'humanist' as const, harmonyAffinity: [] as FontPairing['harmonyAffinity'] }), body: fontName, source }
       loadActivePairing(pairing as FontPairing)
       set({ typography: { ...state.typography, pairing } })
     },
 
     toggleLock(key: 'heading' | 'body' | 'scale') {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const locks = { ...state.typography.locks, [key]: !state.typography.locks[key] }
       set({ typography: { ...state.typography, locks } })
     },
 
     lockAllTypography() {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       set({ typography: { ...state.typography, locks: { heading: true, body: true, scale: true } } })
     },
 
     unlockAllTypography() {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       set({ typography: { ...state.typography, locks: { heading: false, body: false, scale: false } } })
     },
 
     toggleStepLock(step: keyof TypeScale) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const isLocked = !!state.typography.stepLocks[step]
 
       if (isLocked) {
@@ -165,14 +174,14 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
 
     setScaleRatio(ratio) {
       const clamped = Math.max(1.0, Math.min(2.0, ratio))
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const baseScale = deriveTypeScale({ ratio: clamped })
       const scale = applyStepOverrides(baseScale, state.typography.stepOverrides)
       set({ typography: { ...state.typography, scale } })
     },
 
     overrideStep(step, partial) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       const newOverrides = {
         ...state.typography.stepOverrides,
         [step]: { ...(state.typography.stepOverrides[step] ?? {}), ...partial },
@@ -185,7 +194,7 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
     },
 
     resetStep(step) {
-      const state = get() as { typography: TypographyState }
+      const state = get()
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [step]: _removedOverride, ...restOverrides } = state.typography.stepOverrides
       // Also remove the step lock so the step freely regenerates again
@@ -195,6 +204,14 @@ export function createTypographyActions(set: any, get: any): TypographyActions {
       const baseScale = deriveTypeScale({ ratio: baseRatio })
       const merged = applyStepOverrides(baseScale, restOverrides)
       set({ typography: { ...state.typography, stepOverrides: restOverrides, stepLocks: restLocks, scale: merged } })
+    },
+
+    restoreFromSnapshot({ pairing, locks, scaleRatio, stepOverrides = {}, stepLocks = {} }) {
+      const state = get()
+      const baseScale = deriveTypeScale({ ratio: scaleRatio })
+      const scale = applyStepOverrides(baseScale, stepOverrides)
+      loadActivePairing(pairing)
+      set({ typography: { ...state.typography, pairing, locks, scale, stepOverrides, stepLocks } })
     },
   }
 }

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { trackEvent } from '@/analytics'
-import { useUI, useUIActions, useColor, useTypography, useSpacing, useEffects, useComponents } from '@/store'
-import { buildTokenMap } from '@/store/derived'
+import { useStore, useUI, useUIActions, useColorTokens } from '@/store'
 import { formatTokens } from '@/core/export'
 import type { ExportFormat } from '@/core/export/types'
 import { downloadAllFormats } from '@/core/export/zip'
 import { openBrandingPdf } from '@/core/export/brandingPdf'
 import { useAuth } from '@/auth/useAuth'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import styles from './ExportPanel.module.css'
 
 const FORMATS: { id: ExportFormat; label: string }[] = [
@@ -36,14 +36,28 @@ function isFormatLocked(format: ExportFormat, plan: string | undefined): boolean
   return !FREE_FORMATS.has(format) && plan !== 'paid'
 }
 
-export function ExportPanel() {
-  const { exportPanelOpen, activeExportFormat, theme } = useUI()
+// Shown when ExportPanel itself crashes. Replicates the overlay so the user
+// is not left with a frozen dark backdrop and no escape route.
+function ExportPanelErrorFallback() {
+  return (
+    <div className={styles.overlay} role="alertdialog" aria-label="Export panel error">
+      <div className={styles.errorContent}>
+        <p className={styles.errorMessage}>Export panel failed to load.</p>
+        <button
+          className={styles.errorDismiss}
+          onClick={() => useStore.getState().uiActions.closeExportPanel()}
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function ExportPanelContent() {
+  const { exportPanelOpen, activeExportFormat } = useUI()
   const { closeExportPanel, setExportFormat, openSignInPrompt, openUpgradeModal } = useUIActions()
-  const { slots, dataVizN, stateOverrides } = useColor()
-  const { pairing, scale } = useTypography()
-  const spacing = useSpacing()
-  const effects = useEffects()
-  const { overrides: componentOverrides } = useComponents()
+  const tokens = useColorTokens()
   const { user } = useAuth()
   const [copied, setCopied] = useState(false)
   const [cssPrefix, setCssPrefix] = useState('')
@@ -56,7 +70,6 @@ export function ExportPanel() {
     }
   }, [exportPanelOpen]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const tokens = buildTokenMap(slots, scale, pairing, dataVizN, spacing, effects, { componentOverrides, stateOverrides }, theme)
   const opts = cssPrefix ? { prefix: cssPrefix } : undefined
   const code = formatTokens(activeExportFormat, tokens, opts)
 
@@ -105,12 +118,12 @@ export function ExportPanel() {
   }
 
   const handleBrandingPdf = () => {
-    const scaleRatio = scale?._ratio ?? 1.333
+    const state = useStore.getState()
     openBrandingPdf({
       tokens,
-      colors: slots,
-      pairing: pairing!,
-      scaleRatio,
+      colors: state.color.slots,
+      pairing: state.typography.pairing!,
+      scaleRatio: state.typography.scale?._ratio ?? 1.333,
     })
   }
 
@@ -208,5 +221,13 @@ export function ExportPanel() {
         </div>
       </div>
     </div>
+  )
+}
+
+export function ExportPanel() {
+  return (
+    <ErrorBoundary fallback={<ExportPanelErrorFallback />}>
+      <ExportPanelContent />
+    </ErrorBoundary>
   )
 }

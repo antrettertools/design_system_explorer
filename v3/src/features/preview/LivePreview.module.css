@@ -6,6 +6,32 @@
   box-shadow: inset 2px 0 8px rgba(0, 0, 0, 0.04);
 }
 
+.errorFallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-space-5, 12px);
+}
+
+.errorMessage {
+  font-size: var(--ui-text-sm, 13px);
+  color: var(--color-on-surface-muted, #999);
+  font-family: var(--font-body, sans-serif);
+  margin: 0;
+}
+
+.errorReload {
+  font-size: var(--ui-text-sm, 13px);
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-brand-500, #6366f1);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
 .backBtn {
   display: none;
 }

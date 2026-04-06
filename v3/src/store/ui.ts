@@ -1,3 +1,5 @@
+import type { StoreSet, StoreGet } from './types'
+
 export type AppMode = 'generator' | 'detail'
 export type DetailTab = 'colors' | 'typography' | 'spacing' | 'effects' | 'components' | 'showcase' | 'export'
 export type AppTheme = 'white' | 'light' | 'dark'
@@ -57,21 +59,14 @@ export const defaultUIState: UIState = {
   donateModalSource: null,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createUIActions(set: any, get: any): UIActions {
+export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
   return {
     setMode: (mode) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const state = get() as {
-        ui: UIState
-        color: { slots: any[] }
-        typography: { locks: { heading: boolean; body: boolean; scale: boolean }; [key: string]: unknown }
-        effects: { shadowLocked: boolean; focusRingLocked: boolean; [key: string]: unknown }
-      }
+      const state = get()
       if (mode === 'detail') {
         // Auto-lock colors, typography and effects when entering detail mode so spacebar
         // doesn't regenerate everything. Users unlock individually per section.
-        const lockedSlots = state.color.slots.map((s: { locked: boolean }) => ({ ...s, locked: true }))
+        const lockedSlots = state.color.slots.map(s => ({ ...s, locked: true }))
         set({
           ui: { ...state.ui, mode },
           color: { ...state.color, slots: lockedSlots },
@@ -87,39 +82,39 @@ export function createUIActions(set: any, get: any): UIActions {
       // the correct inline styles before the attribute flip is visible to the browser.
       // The attribute is only needed so exported [data-theme="dark"] CSS works in
       // consumer projects; it plays no role in the app's own rendering.
-      set({ ui: { ...(get() as { ui: UIState }).ui, theme } })
+      set({ ui: { ...get().ui, theme } })
       document.documentElement.setAttribute('data-theme', theme)
     },
-    setActiveTab: (activeTab) => set({ ui: { ...(get() as { ui: UIState }).ui, activeTab } }),
-    setShowcaseTemplate: (showcaseTemplate) => set({ ui: { ...(get() as { ui: UIState }).ui, showcaseTemplate } }),
-    openExportPanel: () => set({ ui: { ...(get() as { ui: UIState }).ui, exportPanelOpen: true } }),
-    closeExportPanel: () => set({ ui: { ...(get() as { ui: UIState }).ui, exportPanelOpen: false } }),
-    setExportFormat: (activeExportFormat) => set({ ui: { ...(get() as { ui: UIState }).ui, activeExportFormat } }),
-    showMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: true } }),
-    hideMobilePreview: () => set({ ui: { ...(get() as { ui: UIState }).ui, mobileShowPreview: false } }),
-    openSessionsDrawer: () => set({ ui: { ...(get() as { ui: UIState }).ui, sessionsDrawerOpen: true } }),
-    closeSessionsDrawer: () => set({ ui: { ...(get() as { ui: UIState }).ui, sessionsDrawerOpen: false } }),
+    setActiveTab: (activeTab) => set({ ui: { ...get().ui, activeTab } }),
+    setShowcaseTemplate: (showcaseTemplate) => set({ ui: { ...get().ui, showcaseTemplate } }),
+    openExportPanel: () => set({ ui: { ...get().ui, exportPanelOpen: true } }),
+    closeExportPanel: () => set({ ui: { ...get().ui, exportPanelOpen: false } }),
+    setExportFormat: (activeExportFormat) => set({ ui: { ...get().ui, activeExportFormat } }),
+    showMobilePreview: () => set({ ui: { ...get().ui, mobileShowPreview: true } }),
+    hideMobilePreview: () => set({ ui: { ...get().ui, mobileShowPreview: false } }),
+    openSessionsDrawer: () => set({ ui: { ...get().ui, sessionsDrawerOpen: true } }),
+    closeSessionsDrawer: () => set({ ui: { ...get().ui, sessionsDrawerOpen: false } }),
     toggleSessionsDrawer: () => {
-      const state = get() as { ui: UIState }
+      const state = get()
       set({ ui: { ...state.ui, sessionsDrawerOpen: !state.ui.sessionsDrawerOpen } })
     },
     openSignInPrompt: (reason) => set({
-      ui: { ...(get() as { ui: UIState }).ui, signInPromptOpen: true, signInPromptReason: reason },
+      ui: { ...get().ui, signInPromptOpen: true, signInPromptReason: reason },
     }),
     closeSignInPrompt: () => set({
-      ui: { ...(get() as { ui: UIState }).ui, signInPromptOpen: false, signInPromptReason: null },
+      ui: { ...get().ui, signInPromptOpen: false, signInPromptReason: null },
     }),
     openUpgradeModal: () => set({
-      ui: { ...(get() as { ui: UIState }).ui, upgradeModalOpen: true },
+      ui: { ...get().ui, upgradeModalOpen: true },
     }),
     closeUpgradeModal: () => set({
-      ui: { ...(get() as { ui: UIState }).ui, upgradeModalOpen: false },
+      ui: { ...get().ui, upgradeModalOpen: false },
     }),
     openDonateModal: (source) => set({
-      ui: { ...(get() as { ui: UIState }).ui, donateModalOpen: true, donateModalSource: source },
+      ui: { ...get().ui, donateModalOpen: true, donateModalSource: source },
     }),
     closeDonateModal: () => set({
-      ui: { ...(get() as { ui: UIState }).ui, donateModalOpen: false, donateModalSource: null },
+      ui: { ...get().ui, donateModalOpen: false, donateModalSource: null },
     }),
   }
 }

@@ -3,10 +3,6 @@ import { RECIPES } from './recipes'
 import { DEPTH_RANGES, COLOR_ROLES } from './types'
 import type { ColorSlot, RecipeDef, PrimaryType, SlotType } from './types'
 
-// Re-export deprecated helpers so old imports don't break at runtime
-export { pickHarmonyModel } from './harmonyLegacy'
-
-
 function randomInRange(min: number, max: number): number {
   return min + Math.random() * (max - min)
 }
