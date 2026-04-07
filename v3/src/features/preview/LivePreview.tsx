@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react'
 import { useUI, useUIActions, useColor } from '@/store'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import styles from './LivePreview.module.css'
-import { LandingTemplate } from './templates/LandingTemplate/LandingTemplate'
 import { DsygnLanding } from './templates/LandingTemplate/DsygnLanding'
 import { SystemTemplate } from './templates/SystemTemplate/SystemTemplate'
 import { DashboardTemplate } from './templates/DashboardTemplate/DashboardTemplate'
@@ -47,25 +46,25 @@ function LivePreviewContent() {
   const template = mode === 'detail' ? showcaseTemplate : 'landing'
 
   const renderTemplate = () => {
-    if (mode !== 'detail') {
-      // Generator mode — support sub-routes
-      switch (panelRoute) {
-        case 'pricing':
-          return <PricingView onBack={() => setPanelRoute('home')} />
-        case 'privacy':
-        case 'terms':
-        case 'impressum':
-          return <LegalView page={panelRoute} onBack={() => setPanelRoute('home')} />
-        default:
-          return <DsygnLanding onNavigate={setPanelRoute} />
+    // Detail mode non-landing templates bypass panelRoute
+    if (mode === 'detail' && template !== 'landing') {
+      switch (template) {
+        case 'system': return <SystemTemplate />
+        case 'dashboard': return <DashboardTemplate />
+        case 'blog': return <BlogTemplate />
       }
     }
 
-    switch (template) {
-      case 'system': return <SystemTemplate />
-      case 'dashboard': return <DashboardTemplate />
-      case 'blog': return <BlogTemplate />
-      default: return <LandingTemplate />
+    // Landing template (both modes) and generator mode: honor panelRoute
+    switch (panelRoute) {
+      case 'pricing':
+        return <PricingView onBack={() => setPanelRoute('home')} />
+      case 'privacy':
+      case 'terms':
+      case 'impressum':
+        return <LegalView page={panelRoute} onBack={() => setPanelRoute('home')} />
+      default:
+        return <DsygnLanding onNavigate={setPanelRoute} />
     }
   }
 

@@ -18,7 +18,17 @@ export function LegalView({ page, onBack }: LegalViewProps) {
     <div className={styles.view}>
       <button className={styles.backBtn} onClick={onBack}>← Back</button>
       <h2 className={styles.title}>{TITLES[page]}</h2>
-      <p>Content coming soon.</p>
+      <p style={{ color: 'var(--color-on-surface-subtle)', fontSize: '14px', lineHeight: 1.6 }}>
+        Full content available at{' '}
+        <a
+          href={`/${page}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'var(--color-interactive)', textDecoration: 'underline' }}
+        >
+          dsygn.cloud/{page}
+        </a>
+      </p>
     </div>
   )
 }
