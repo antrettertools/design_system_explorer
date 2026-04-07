@@ -1,5 +1,5 @@
 import { useAuth } from '@/auth/useAuth'
-import { useColor, useTypography, useUIActions } from '@/store'
+import { useColor, useTypography, useUIActions, useUI } from '@/store'
 import type { ColorSlot } from '@/core/color/types'
 import { POSITION_LABELS } from '@/core/color/types'
 import { TemplateIcon } from '../shared/TemplateIcon'
@@ -397,7 +397,7 @@ function SpacingSection() {
 
 function FeaturesSection() {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="features">
       <div className={styles.sectionLabel}>How it works</div>
       <div className={styles.featuresGrid}>
 
@@ -538,6 +538,7 @@ function PricingSection() {
 export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
   const { user } = useAuth()
   const { openSignInPrompt, openUpgradeModal } = useUIActions()
+  const { mode } = useUI()
 
   const isSignedIn = user !== null
   const isPaid = user?.plan === 'paid'
@@ -614,7 +615,9 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
             See pricing
           </button>
         </div>
-        <p className={styles.spaceHint}>Hit ␣ to regenerate this page</p>
+        {mode === 'generator' && (
+          <p className={styles.spaceHint}>Hit ␣ to regenerate this page</p>
+        )}
       </section>
 
       {/* ── SECTION 03: LIVE PALETTE ────────────────────────── */}
