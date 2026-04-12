@@ -1,4 +1,5 @@
 import { TemplateIcon } from '../shared/TemplateIcon'
+import { PreviewFooter } from '../shared/PreviewFooter'
 import styles from './BlogTemplate.module.css'
 
 const POSTS = [
@@ -134,6 +135,35 @@ export function BlogTemplate() {
           </div>
         </section>
 
+        {/* ── TOKEN SHOWCASE ───────────────────────────── */}
+        <section className={styles.tokenShowcase}>
+          <div className={styles.tokenShowcaseLabel}>This blog's design system</div>
+          <div className={styles.tokenShowcaseRow}>
+            {/* Color palette strip */}
+            <div className={styles.tokenPaletteStrip}>
+              {[1, 2, 3, 4, 5, 6].map(n => (
+                <div
+                  key={n}
+                  className={styles.tokenPaletteSegment}
+                  style={{ background: `var(--color-dataviz-${n}, var(--color-interactive))` }}
+                />
+              ))}
+            </div>
+            {/* State chips */}
+            <div className={styles.tokenStateChips}>
+              {(['success', 'warning', 'error', 'info'] as const).map(s => (
+                <span
+                  key={s}
+                  className={styles.tokenStateChip}
+                  style={{ background: `var(--color-${s}-container)`, color: `var(--color-${s})` }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── TOPICS ───────────────────────────────────── */}
         <section className={styles.topics}>
           <h3 className={styles.topicsTitle}>Explore topics</h3>
@@ -150,12 +180,15 @@ export function BlogTemplate() {
       <footer className={styles.footer}>
         <div className={styles.footerLogo}>The Journal</div>
         <div className={styles.footerLinks}>
-          {['About', 'Archive', 'RSS', 'Contact'].map(l => (
+          {['Design', 'Typography', 'Color', 'Archive'].map(l => (
             <a key={l} className={styles.footerLink}>{l}</a>
           ))}
         </div>
-        <span className={styles.footerCopy}>&copy; 2026</span>
+        <span className={styles.footerCopy}>
+          Built with <a href="https://dsygn.cloud" className={styles.footerBrand} target="_blank" rel="noopener noreferrer">dsygn.cloud</a> · &copy; 2026
+        </span>
       </footer>
+      <PreviewFooter />
 
     </div>
   )

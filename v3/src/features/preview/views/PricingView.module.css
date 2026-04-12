@@ -1,0 +1,25 @@
+.view {
+  padding: 24px;
+  font-family: var(--font-body, sans-serif);
+  background: var(--color-background, #fff);
+  min-height: 100%;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-on-surface-subtle, #666);
+  cursor: pointer;
+  padding: 16px 0 12px;
+  margin-bottom: 24px;
+  font-family: var(--font-body, sans-serif);
+  position: sticky;
+  top: 0;
+  background: var(--color-background, #fff);
+}
+.backBtn:hover { color: var(--color-on-surface, #111); }

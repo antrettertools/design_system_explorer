@@ -1,4 +1,11 @@
 /* System view — beautiful design system document */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--color-background, #f8f7f4);
+}
+
 .doc {
   font-family: var(--font-body, sans-serif);
   background: var(--color-background, #f8f7f4);
@@ -6,6 +13,7 @@
   padding: 32px 40px;
   max-width: 780px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* Header */
@@ -489,4 +497,97 @@
   border-radius: var(--radius-sm, 4px);
   border: 1px solid rgba(0,0,0,0.08);
   margin: 4px 8px;
+}
+
+/* CSS vars table category labels */
+.cssVarCategory {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-interactive, #e8543a);
+  font-family: var(--font-body, sans-serif);
+  padding: 10px 8px 4px;
+  background: var(--color-background, #f8f7f4);
+}
+
+/* Type specimen table */
+.typeSpecimenTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-border, #e8e4df);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.typeSpecimenRow {
+  display: grid;
+  grid-template-columns: 56px 1fr 140px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border, #e8e4df);
+}
+.typeSpecimenRow:last-child { border-bottom: none; }
+.typeSpecimenRow:nth-child(odd) { background: var(--color-surface, #fff); }
+.typeSpecimenRow:nth-child(even) { background: var(--color-background, #f8f7f4); }
+
+.typeRowLabel {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-on-surface-subtle, #aaa);
+  font-family: var(--font-body, sans-serif);
+}
+
+.typeRowSample {
+  color: var(--color-on-surface, #111);
+  line-height: 1.2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.typeRowMeta {
+  font-size: 9px;
+  font-family: var(--ui-font-mono, monospace);
+  color: var(--color-on-surface-subtle, #bbb);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Icon gallery */
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e8e4df);
+}
+
+.iconCellIcon {
+  color: var(--color-on-surface, #333);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconCellLabel {
+  font-size: 7px;
+  color: var(--color-on-surface-subtle, #bbb);
+  font-family: var(--ui-font-mono, monospace);
+  text-align: center;
+  line-height: 1.2;
 }

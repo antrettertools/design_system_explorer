@@ -3,9 +3,17 @@
    state badges, sidebar nav with icons, charts, and table.
    ═══════════════════════════════════════════════════════════ */
 
+/* Wrapper */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--color-background, #f8f7f4);
+}
+
 .page {
   display: flex;
-  height: 100%;
+  flex: 1;
   font-family: var(--font-body, sans-serif);
   background: var(--color-background, #f8f7f4);
   color: var(--color-on-surface, #111);
@@ -521,5 +529,154 @@
   padding: 2px 8px;
   border-radius: var(--radius-full, 9999px);
   text-transform: capitalize;
+  white-space: nowrap;
+}
+
+/* ── PALETTE STRIP ───────────────────────────────────────── */
+
+.paletteStrip {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-full, 9999px);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.paletteStripSegment {
+  flex: 1;
+}
+
+/* ── FORM + ACTIVITY ROW ─────────────────────────────────── */
+
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm, 8px);
+}
+
+/* Form card */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-on-surface, #333);
+}
+
+.formInput {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #111);
+  font-size: 12px;
+  font-family: var(--font-body, sans-serif);
+  outline: none;
+  box-sizing: border-box;
+}
+.formInput:focus {
+  border-color: var(--color-interactive, #e8543a);
+  box-shadow: 0 0 0 2px var(--color-interactive-container, rgba(232,84,58,0.15));
+}
+
+.formSelect {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #111);
+  font-size: 12px;
+  font-family: var(--font-body, sans-serif);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.checkboxRow {
+  display: flex;
+  gap: 16px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-on-surface, #333);
+  cursor: pointer;
+}
+
+.checkboxInput {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-sm, 3px);
+  border: 1.5px solid var(--color-border, #e5e5e5);
+  accent-color: var(--color-interactive, #e8543a);
+  cursor: pointer;
+}
+
+.formSubmitBtn {
+  align-self: flex-start;
+  padding: 7px 16px;
+  background: var(--color-interactive, #e8543a);
+  color: var(--color-on-interactive, #fff);
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body, sans-serif);
+}
+
+/* Activity feed */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 10px;
+}
+
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+}
+.activityItem:last-child { border-bottom: none; }
+
+.activityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.activityMsg {
+  flex: 1;
+  font-size: 12px;
+  color: var(--color-on-surface, #333);
+  line-height: 1.4;
+}
+
+.activityTime {
+  font-size: 10px;
+  color: var(--color-on-surface-subtle, #aaa);
+  flex-shrink: 0;
   white-space: nowrap;
 }
