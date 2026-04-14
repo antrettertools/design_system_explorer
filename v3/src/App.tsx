@@ -15,6 +15,7 @@ import { SignInPrompt } from './components/auth/SignInPrompt'
 import { UpgradeModal } from './components/auth/UpgradeModal'
 import { DonateModal } from './components/DonateModal/DonateModal'
 import { OnboardingOverlay } from './components/OnboardingOverlay'
+import { SharedDesignBanner } from './components/SharedDesignBanner/SharedDesignBanner'
 import { loadFromHash } from './core/share/loadFromHash'
 import appStyles from './App.module.css'
 
@@ -65,6 +66,7 @@ export default function App() {
             theme: snapshot.theme,
             mode: snapshot.mode,
             activeTab: (snapshot.activeTab as DetailTab | null) ?? 'colors',
+            loadedFromShare: true,
           },
         }))
         // Apply theme immediately
@@ -136,6 +138,7 @@ export default function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader onExportClick={openExportPanel} />
+      <SharedDesignBanner />
       <div className={appStyles.body}>
         <SplitPane
           left={leftPanel}
