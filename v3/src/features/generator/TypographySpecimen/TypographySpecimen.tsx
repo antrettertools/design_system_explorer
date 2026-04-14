@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTypography, useTypographyActions } from '@/store'
 import type { TypeScaleStep } from '@/core/typography/types'
-import { Lock, LockOpen } from 'lucide-react'
+import { Lock, LockOpen, Pencil } from 'lucide-react'
 import styles from './TypographySpecimen.module.css'
 
 const HEADING_KEYS = new Set(['h1', 'h2', 'h3'])
@@ -79,6 +79,7 @@ export function TypographySpecimen() {
             aria-label="Heading specimen text"
             style={{ fontFamily: `"${pairing.heading}", Georgia, serif` }}
           />
+          <Pencil className={styles.editIcon} size={11} strokeWidth={2} aria-hidden="true" />
         </div>
         <div className={styles.inputRow}>
           <span className={styles.inputTag}>Bd</span>
@@ -90,6 +91,7 @@ export function TypographySpecimen() {
             aria-label="Body specimen text"
             style={{ fontFamily: `"${pairing.body}", sans-serif` }}
           />
+          <Pencil className={styles.editIcon} size={11} strokeWidth={2} aria-hidden="true" />
         </div>
       </div>
 
