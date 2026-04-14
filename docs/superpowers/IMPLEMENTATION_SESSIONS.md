@@ -18,7 +18,7 @@ Do not read the full spec archive for context — this document is the distillat
 
 ## Current State (update after each phase)
 
-> Last updated: **2026-04-14** — Phase 1 complete.
+> Last updated: **2026-04-14** — Phase 2 complete.
 
 ### Right Panel / Live Preview
 - **Template lock removed** in `LivePreview.tsx`. `const template = showcaseTemplate` — respected in all modes. `mode` destructure also removed (was unused after lock removal).
@@ -29,8 +29,8 @@ Do not read the full spec archive for context — this document is the distillat
 - Center `contextArea` shows nothing in Generator Mode, tab breadcrumb in Detail Mode.
 - `.harmonyBadge` and `.pairingLabel` CSS classes exist in `AppHeader.module.css` but are not rendered.
 - No visual grouping between the 9 action elements in the right zone.
-- Export button radius uses `--ui-radius-3` (fixed 6px) — Phase 2 changes this to `--ui-radius-cta` alias.
-- Auth dropdown uses undefined legacy tokens (`--ui-surface-1`, `--ui-border`) — Phase 2 fixes.
+- Export button radius uses `--ui-radius-cta` alias → `--radius-sm` (tracks generated 4px default, responds to user's radius token). ✓ Phase 2 done.
+- Auth dropdown uses `--color-surface`, `--color-border`, `--color-on-surface-subtle`, `--color-surface-raised`. ✓ Phase 2 done.
 
 ### Generator Panel
 - `SpaceHintBar` is **lock-aware**: shows " — locked slots will hold" hint when some slots locked; shows muted "All slots locked — unlock to regenerate" (with 🔒, `opacity: 0.5`) when all slots locked; falls through to default "Hit SPACE to regenerate" when no locks or empty slots.
@@ -50,16 +50,16 @@ Do not read the full spec archive for context — this document is the distillat
 - Phase 3 is primarily: (1) wiring `harmonyBadge`/`pairingLabel` in JSX, (2) adding 3 `actionDivider` spans between the 9 right-zone elements, (3) replacing `detailBtn` with `detailStrip`, (4) changing `.backLink` to a bordered pill, (5) adding `--ui-radius-cta` alias and applying to export button.
 
 ### Modals / Overlays
-- `SignInPrompt`, `UpgradeModal`, `DonateModal`: use undefined legacy tokens (`--ui-surface-1`, `--ui-border`, `--ui-text-2/3`). They appear white even in dark mode. Phase 2 fixes.
-- Modal shadows: hardcoded `rgba()` values, not responsive to brand color. Phase 2 fixes.
-- Modal radii: hardcoded 12–14px, not responsive to user's radius tokens. Phase 2 fixes.
+- `SignInPrompt`, `UpgradeModal`, `DonateModal`: all now use `--color-surface`, `--color-border`, `--color-on-surface-subtle`, `--color-surface-raised`. Dark mode renders correctly. ✓ Phase 2 done.
+- Modal shadows: all use `var(--shadow-xl, ...)` — brand-tinted and animate on palette switch. ✓ Phase 2 done.
+- Modal radii: all use `var(--radius-lg, 12px)` — respond to user's radius token. ✓ Phase 2 done.
 
 ### Meta-Theming
 - **Colors:** Complete. All `--color-*` tokens injected to `:root` and consumed by app chrome.
 - **Typography:** Font tokens (`--font-heading`, `--font-body`) injected and consumed by wordmark and body. Complete.
-- **Radius:** Broken. Generated `--radius-*` tokens injected to `:root` but all chrome components use fixed `--ui-radius-*` tokens. Phase 2 fixes for cards, popovers, modals.
-- **Shadows:** Mostly broken. `ColorPickerPopover` already uses `var(--shadow-lg)`. Modals and drawer use hardcoded `rgba()`. Phase 2 fixes.
-- **Global transition:** `box-shadow` missing from the transition rule in `globals.css`. Phase 2 adds it.
+- **Radius:** Complete. `ColorSlotCard`, `ColorPickerPopover`, `SessionsDrawer` session cards, and all modals now use `--radius-md`/`--radius-lg`. Export button uses `--ui-radius-cta` alias → `--radius-sm`. Phase 2 done.
+- **Shadows:** Complete. Modals use `--shadow-xl`, dropdown uses `--shadow-md`, drawer uses brand-tinted directional shadow via `color-mix()`. `ColorPickerPopover` already used `--shadow-lg`. Phase 2 done.
+- **Global transition:** `box-shadow` added to transition rule in `globals.css`. Shadow changes now animate smoothly on palette switch.
 
 ### Share / Viewer
 - **`copyShareLink` in `ShowcaseTab.tsx` is local and incomplete:** missing `stepOverrides` and `stepLocks` from the snapshot, and no `trackEvent` call. Phase 6 moves this logic to `store/ui.ts` as a UIAction (`copyShareLink`) and fixes the snapshot completeness.
@@ -85,7 +85,7 @@ Do not read the full spec archive for context — this document is the distillat
 | Phase | Name | Spec | Status | Key files |
 |---|---|---|---|---|
 | 1 | Template Freedom | [spec](./specs/2026-04-13-phase-1-template-freedom.md) | ✅ Complete (2026-04-14) | `LivePreview.tsx`, new `ShowcaseStrip/`, `SpaceHintBar.tsx` |
-| 2 | Meta-Theming Completion | [spec](./specs/2026-04-13-phase-2-meta-theming-completion.md) | ⬜ Not started | `globals.css`, `ColorSlotCard.module.css`, `ColorPickerPopover.module.css`, modal CSS files, `AppHeader.module.css` auth section |
+| 2 | Meta-Theming Completion | [spec](./specs/2026-04-13-phase-2-meta-theming-completion.md) | ✅ Complete (2026-04-14) | `globals.css`, `ColorSlotCard.module.css`, `ColorPickerPopover.module.css`, modal CSS files, `AppHeader.module.css`, `ui-tokens.css` |
 | 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ⬜ Not started | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
 | 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ⬜ Not started | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx/css`, new `TokenHints/` |
 | 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ⬜ Not started | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
@@ -212,6 +212,39 @@ From `CLAUDE.md` — these are blocking launch but not UX phases:
 - Right Panel: template lock removed, ShowcaseStrip exists and is mounted
 - Generator Panel: SpaceHintBar is now lock-aware (three states)
 - Phase 6 coordination note still valid: ShowcaseStrip share button uses `location.href` stub; Phase 6 replaces with encoded share URL
+
+---
+
+## Phase 2 — Meta-Theming Completion — COMPLETE (2026-04-14)
+
+### What shipped
+- [x] `globals.css`: `box-shadow` added to the global transition rule — shadows now animate on palette switch
+- [x] `ColorSlotCard.module.css`: `.card`, `.locked .swatch`, `.touchOver` all use `--radius-md, 8px`
+- [x] `ColorPickerPopover.module.css`: `.popover` uses `--radius-md, 8px`
+- [x] `SignInPrompt.module.css`: `.modal` uses `--radius-lg, 12px` radius + `--shadow-xl` shadow
+- [x] `UpgradeModal.module.css`: `.modal` uses `--radius-lg, 12px` radius + `--shadow-xl` shadow
+- [x] `DonateModal.module.css`: `.modal` uses `--radius-lg, 12px` radius + `--shadow-xl` shadow
+- [x] `ui-tokens.css`: `--ui-radius-cta: var(--radius-sm, var(--ui-radius-3))` alias added
+- [x] `AppHeader.module.css`: `.exportBtn` uses `--ui-radius-cta`; `.dropdown` uses `--shadow-md`
+- [x] `SessionsDrawer.module.css`: `.drawer` shadow uses `color-mix(in oklch, var(--color-interactive) 12%, rgba(0,0,0,0.08))`
+- [x] Legacy token cleanup complete in `SignInPrompt`, `UpgradeModal`, `DonateModal`, `AppHeader` auth section — all `--ui-surface-1/2`, `--ui-border`, `--ui-border-strong`, `--ui-text-2/3` replaced with `--color-*` tokens
+- [x] `npx tsc --noEmit` passes (zero errors)
+- [x] `npm run build` succeeds
+- [x] 191/191 tests pass (30 test files, no regressions)
+
+### Deviations from spec
+- **Spec 2.2 `.sessionCard` skipped**: The spec referenced `.sessionCard { border-radius: var(--ui-radius-4) }` in `SessionsDrawer.module.css`, but this class does not exist in the actual codebase. The actual class is `.sessionItem`, which has no `border-radius` at all (it's a list row with padding, not a card shape). No action taken — this was a spec artifact.
+- **`SessionsDrawer` shadow**: Spec said "prefer `--shadow-lg` color but override direction". Instead, used `color-mix(in oklch, var(--color-interactive, #6366f1) 12%, rgba(0,0,0,0.08))` which directly extracts the brand hue rather than approximating from a symmetric token. This is cleaner and more precise.
+
+### New discoveries / things to carry forward
+- `--color-border-strong` **is** emitted by `deriveNeutralRoles` in `core/color/semantic.ts` as `scale[400]`. No fallback needed.
+- `--color-surface-raised` is emitted as `#ffffff` in light mode by `derived.ts`. In dark mode it needs to be checked — if it resolves to a dark value, modals will look correct. Verify when testing dark mode.
+- Phase 4 will also touch `ShadeStrip.module.css` `.strip { border-radius: 0 0 var(--ui-radius-3) var(--ui-radius-3) }` — this should be updated to `--radius-md` in Phase 4. Per the Phase 4 spec, `.locked .swatch` rule in ColorSlotCard (which we changed to `--radius-md`) may need coordination with the shade-open state toggle.
+
+### Updated Current State notes
+- Meta-Theming section updated: Radius, Shadows, and Global transition all complete.
+- App Header section updated: export button and auth dropdown now use correct tokens.
+- Modals section updated: all three modals now render correctly in dark mode.
 
 ---
 
