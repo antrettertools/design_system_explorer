@@ -1,0 +1,71 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ui-space-9);
+  height: 36px;
+  background: var(--color-interactive-subtle);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  gap: var(--ui-space-6);
+}
+
+.label {
+  font-size: var(--ui-text-sm);
+  color: var(--color-on-surface-subtle);
+  font-family: var(--font-body, sans-serif);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-4);
+  flex-shrink: 0;
+}
+
+.shareBtn {
+  height: 24px;
+  padding: 0 var(--ui-space-4);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--ui-radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface-subtle);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--ui-duration-2), border-color var(--ui-duration-2);
+}
+
+.shareBtn:hover {
+  color: var(--color-on-surface);
+  border-color: var(--color-on-surface-subtle);
+}
+
+.makeYoursBtn {
+  height: 24px;
+  padding: 0 var(--ui-space-5);
+  background: var(--color-interactive);
+  color: var(--color-on-interactive);
+  border: none;
+  border-radius: var(--ui-radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-body, sans-serif);
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  transition: opacity var(--ui-duration-2);
+}
+
+.makeYoursBtn:hover { opacity: 0.85; }
+.makeYoursBtn:active { transform: scale(0.96); }
+
+@media (max-width: 768px) {
+  .banner { padding: 0 var(--ui-space-6); height: 40px; }
+  .label { display: none; }
+}
