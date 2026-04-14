@@ -1,7 +1,7 @@
 .strip {
   display: flex;
   height: 24px;
-  border-radius: 0 0 var(--ui-radius-3) var(--ui-radius-3);
+  border-radius: 0 0 var(--radius-md, 8px) var(--radius-md, 8px);
   overflow: hidden;
   gap: 1px;
 }
