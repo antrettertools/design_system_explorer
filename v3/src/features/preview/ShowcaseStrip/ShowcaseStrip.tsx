@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useUI, useUIActions } from '@/store'
 import type { ShowcaseTemplate } from '@/store/ui'
 import styles from './ShowcaseStrip.module.css'
@@ -12,6 +13,7 @@ const TEMPLATES: { id: ShowcaseTemplate; label: string }[] = [
 export function ShowcaseStrip() {
   const { showcaseTemplate } = useUI()
   const { setShowcaseTemplate, copyShareLink } = useUIActions()
+  const [copied, setCopied] = useState(false)
 
   const handleFullscreen = () => {
     window.open(
@@ -21,8 +23,10 @@ export function ShowcaseStrip() {
     )
   }
 
-  const handleShare = () => {
-    void copyShareLink()
+  const handleShare = async () => {
+    await copyShareLink()
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -41,12 +45,12 @@ export function ShowcaseStrip() {
       </div>
       <div className={styles.actions}>
         <button
-          className={styles.iconBtn}
+          className={`${styles.iconBtn} ${copied ? styles.iconBtnCopied : ''}`}
           onClick={handleShare}
           aria-label="Copy share link"
-          title="Copy share link"
+          title={copied ? 'Link copied!' : 'Copy share link'}
         >
-          <ShareIcon />
+          {copied ? <CheckIcon /> : <ShareIcon />}
         </button>
         <button
           className={styles.iconBtn}
@@ -69,6 +73,20 @@ function ShareIcon() {
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M3 8l4 4 6-7"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

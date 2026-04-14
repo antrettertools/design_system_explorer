@@ -149,8 +149,9 @@ export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
         const url = `${window.location.origin}${window.location.pathname}${hash}`
         await navigator.clipboard.writeText(url)
         trackEvent('Share Link Copied')
-      } catch {
-        // clipboard permission denied or encode failure — silently no-op
+      } catch (err) {
+        // clipboard permission denied or encode failure
+        console.error('[dsygn] copyShareLink failed:', err)
       }
     },
     dismissShareBanner: () => set({ ui: { ...get().ui, loadedFromShare: false } }),

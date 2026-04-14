@@ -77,6 +77,11 @@
   background: var(--color-surface-raised, #f4f2ef);
 }
 
+.iconBtnCopied {
+  color: var(--color-interactive, #5a56e8);
+  background: var(--color-interactive-container, #e8e5ff);
+}
+
 /* On mobile, keep chips tappable but tighter */
 @media (max-width: 480px) {
   .chip {
