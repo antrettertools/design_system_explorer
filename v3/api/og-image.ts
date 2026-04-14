@@ -10,13 +10,13 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 export default function handler(req: VercelRequest, res: VercelResponse) {
   const rawColors = typeof req.query.colors === 'string' ? req.query.colors : ''
   const name = typeof req.query.name === 'string'
-    ? decodeURIComponent(req.query.name).slice(0, 60)
+    ? req.query.name.slice(0, 60)
     : 'Design System'
 
   // Parse and validate hex values
   const colors = rawColors
     .split(',')
-    .map(c => decodeURIComponent(c.trim()))
+    .map(c => c.trim())
     .filter(c => /^#[0-9a-fA-F]{6}$/.test(c))
     .slice(0, 8)
 
