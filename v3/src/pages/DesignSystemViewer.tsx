@@ -112,20 +112,79 @@ function DesignSystemViewerContent() {
     )
   }, [design])
 
+  const tokenSet = useMemo(() => {
+    if (!tokens || !design) return null
+    return design.data.theme === 'dark' ? tokens.dark : tokens.light
+  }, [tokens, design])
+
   // Load fonts + inject tokens as CSS custom properties on the viewer container
   useEffect(() => {
     if (!design || !tokens) return
-    loadActivePairing(design.data.pairing)
+    const snap = design.data
+    loadActivePairing(snap.pairing)
 
     const style = document.getElementById('viewer-tokens') as HTMLStyleElement | null
       ?? Object.assign(document.createElement('style'), { id: 'viewer-tokens' })
+    const tokenSet = snap.theme === 'dark' ? tokens.dark : tokens.light
     style.textContent = `.viewer-tokens {\n${
-      Object.entries(tokens.light).map(([k, v]) => `  ${k}: ${v};`).join('\n')
+      Object.entries(tokenSet).map(([k, v]) => `  ${k}: ${v};`).join('\n')
     }\n}`
     if (!style.parentNode) document.head.appendChild(style)
 
-    return () => { style.textContent = '' }
+    document.title = `${design.name} — dsygn.cloud`
+    return () => {
+      style.textContent = ''
+      document.title = 'dsygn.cloud'
+    }
   }, [design, tokens])
+
+  // Inject OG meta tags for social sharing
+  useEffect(() => {
+    if (!design) return
+
+    const brandColors = design.data.colors
+      .slice(0, 6)
+      .map(c => encodeURIComponent(c.hex))
+      .join(',')
+
+    const ogImageUrl =
+      `${window.location.origin}/api/og-image` +
+      `?colors=${brandColors}` +
+      `&name=${encodeURIComponent(design.name)}`
+
+    const metas: [string, string][] = [
+      ['og:title',       `${design.name} — dsygn.cloud`],
+      ['og:description', `A design system by ${design.username} · ${design.data.colors.length} colors · Built with dsygn.cloud`],
+      ['og:image',       ogImageUrl],
+      ['og:url',         window.location.href],
+      ['og:type',        'website'],
+      ['twitter:card',   'summary_large_image'],
+      ['twitter:title',  `${design.name} — dsygn.cloud`],
+      ['twitter:image',  ogImageUrl],
+    ]
+
+    const injected: HTMLMetaElement[] = []
+
+    for (const [property, content] of metas) {
+      const attr = property.startsWith('twitter:') ? 'name' : 'property'
+      const existing = document.querySelector(`meta[${attr}="${property}"]`)
+      if (existing) {
+        existing.setAttribute('content', content)
+      } else {
+        const meta = document.createElement('meta')
+        meta.setAttribute(attr, property)
+        meta.setAttribute('content', content)
+        document.head.appendChild(meta)
+        injected.push(meta)
+      }
+    }
+
+    return () => {
+      for (const meta of injected) {
+        meta.parentNode?.removeChild(meta)
+      }
+    }
+  }, [design])
 
   if (loading) return (
     <div className={styles.state}>Loading design system…</div>
@@ -144,7 +203,10 @@ function DesignSystemViewerContent() {
   const brandHex = snap.colors[0]?.hex ?? '#888'
 
   return (
-    <div className={`viewer-tokens ${styles.page}`}>
+    <div
+      className={`viewer-tokens ${styles.page}`}
+      data-theme={snap.theme}
+    >
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
@@ -219,7 +281,7 @@ function DesignSystemViewerContent() {
                     The quick brown fox
                   </span>
                   <span className={styles.typeMeta}>
-                    {tokens.light[varSize] ?? '—'} · {tokens.light[varWeight] ?? '—'}
+                    {tokenSet?.[varSize] ?? '—'} · {tokenSet?.[varWeight] ?? '—'}
                   </span>
                 </div>
               ))}
@@ -233,7 +295,7 @@ function DesignSystemViewerContent() {
           <div className={styles.spacingScale}>
             {[2, 4, 6, 8, 10, 12].map(step => {
               const varName = `--ui-space-${step}`
-              const value = tokens?.light[varName] ?? `${step * 4}px`
+              const value = tokenSet?.[varName] ?? `${step * 4}px`
               return (
                 <div key={step} className={styles.spacingRow}>
                   <div
