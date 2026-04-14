@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { useUI, useUIActions, useColor, useTypography, useSpacing, useEffects } from '@/store'
-import { encodeShare } from '@/core/share/encode'
-import type { ShareSnapshot } from '@/core/share/types'
 import type { ShowcaseTemplate } from '@/store/ui'
 import styles from './ShowcaseTab.module.css'
 
@@ -19,31 +17,15 @@ const SHADOW_STEPS = ['sm', 'md', 'lg', 'xl'] as const
 
 export function ShowcaseTab() {
   const { showcaseTemplate, theme, mode, activeTab } = useUI()
-  const { setShowcaseTemplate } = useUIActions()
+  const { setShowcaseTemplate, copyShareLink } = useUIActions()
   const { slots, activeRecipe, dataVizN } = useColor()
   const { pairing, scale, locks } = useTypography()
   const { baseUnit, config: spacingConfig, overrides: spacingOverrides, radiusOverrides } = useSpacing()
   const { config: effectsConfig, shadowMode, shadowOverrides } = useEffects()
   const [copied, setCopied] = useState(false)
 
-  const copyShareLink = async () => {
-    if (!pairing || !scale) return
-    const snapshot: ShareSnapshot = {
-      v: 3,
-      colors: slots,
-      harmonyModel: activeRecipe?.id ?? null,
-      pairing,
-      typographyLocks: locks,
-      scaleRatio: scale._ratio,
-      mode,
-      activeTab,
-      theme,
-      spacingBaseUnit: baseUnit,
-      shadowMode,
-    }
-    const hash = await encodeShare(snapshot)
-    const url = `${window.location.origin}${window.location.pathname}${hash}`
-    await navigator.clipboard.writeText(url)
+  const handleCopyLink = async () => {
+    await copyShareLink()
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -92,7 +74,7 @@ export function ShowcaseTab() {
           </button>
           <button
             className={`${styles.actionBtn} ${styles.actionBtnPrimary}`}
-            onClick={copyShareLink}
+            onClick={handleCopyLink}
             disabled={!pairing || !scale}
           >
             ↗ Copy share link
