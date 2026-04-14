@@ -44,7 +44,7 @@ export interface UIActions {
   closeUpgradeModal: () => void
   openDonateModal: (source: 'footer' | 'dropdown') => void
   closeDonateModal: () => void
-  copyShareLink: () => Promise<void>
+  copyShareLink: () => Promise<boolean>
   dismissShareBanner: () => void
 }
 
@@ -127,7 +127,7 @@ export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
         const state = get()
         const { color, typography, ui, spacing, effects } = state
         const { pairing, scale, locks, stepOverrides, stepLocks } = typography
-        if (!pairing || !scale) return
+        if (!pairing || !scale) return false
 
         const snapshot = {
           v: 3 as const,
@@ -149,9 +149,11 @@ export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
         const url = `${window.location.origin}${window.location.pathname}${hash}`
         await navigator.clipboard.writeText(url)
         trackEvent('Share Link Copied')
+        return true
       } catch (err) {
         // clipboard permission denied or encode failure
         console.error('[dsygn] copyShareLink failed:', err)
+        return false
       }
     },
     dismissShareBanner: () => set({ ui: { ...get().ui, loadedFromShare: false } }),

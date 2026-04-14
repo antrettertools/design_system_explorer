@@ -3,6 +3,19 @@ import type { IconSlug } from '../shared/TemplateIcon'
 import { PreviewFooter } from '../shared/PreviewFooter'
 import styles from './DashboardTemplate.module.css'
 
+// Brand color slots in fill order: brand → secondary → accentA → accentB
+// Each level falls back to the one before it, so designs with fewer colors still look great.
+const BRAND_ROLES = ['brand', 'secondary', 'accentA', 'accentB'] as const
+
+function brandVar(index: number): string {
+  const clamped = Math.max(0, Math.min(index, BRAND_ROLES.length - 1))
+  let css = `var(--color-${BRAND_ROLES[0]}-500)`
+  for (let i = 1; i <= clamped; i++) {
+    css = `var(--color-${BRAND_ROLES[i]}-500, ${css})`
+  }
+  return css
+}
+
 const NAV_ITEMS: { slug: IconSlug; label: string; active?: boolean; badge?: number }[] = [
   { slug: 'home',     label: 'Overview',  active: true },
   { slug: 'search',   label: 'Analytics' },
@@ -27,10 +40,10 @@ const BAR_DATA = [
 ]
 
 const CHANNELS = [
-  { name: 'Organic', pct: 48, dv: 1 },
-  { name: 'Paid',    pct: 27, dv: 2 },
-  { name: 'Direct',  pct: 15, dv: 3 },
-  { name: 'Referral',pct: 10, dv: 4 },
+  { name: 'Organic', pct: 48 },
+  { name: 'Paid',    pct: 27 },
+  { name: 'Direct',  pct: 15 },
+  { name: 'Referral',pct: 10 },
 ]
 
 const PROJECTS = [
@@ -164,13 +177,13 @@ export function DashboardTemplate() {
               <div className={styles.chartHeader}>
                 <div className={styles.chartTitle}>Monthly Revenue</div>
                 <div className={styles.chartLegend}>
-                  {[1, 2, 3, 4].map(n => (
-                    <div key={n} className={styles.legendItem}>
+                  {[0, 1, 2, 3].map(i => (
+                    <div key={i} className={styles.legendItem}>
                       <div
                         className={styles.legendDot}
-                        style={{ background: `var(--color-dataviz-${n}, var(--color-interactive))` }}
+                        style={{ background: brandVar(i) }}
                       />
-                      <span>Q{n}</span>
+                      <span>Q{i + 1}</span>
                     </div>
                   ))}
                 </div>
@@ -182,7 +195,7 @@ export function DashboardTemplate() {
                       className={styles.bar}
                       style={{
                         height: `${d.h}%`,
-                        background: `var(--color-dataviz-${(Math.floor(i / 3) % 4) + 1}, var(--color-interactive))`,
+                        background: brandVar(Math.floor(i / 3)),
                       }}
                     />
                     <div className={styles.barLabel}>{d.month.slice(0, 1)}</div>
@@ -195,7 +208,7 @@ export function DashboardTemplate() {
             <div className={styles.miniCard}>
               <div className={styles.chartTitle}>Channel Split</div>
               <div className={styles.channelList}>
-                {CHANNELS.map(c => (
+                {CHANNELS.map((c, i) => (
                   <div key={c.name} className={styles.channelRow}>
                     <div className={styles.channelName}>{c.name}</div>
                     <div className={styles.channelTrack}>
@@ -203,7 +216,7 @@ export function DashboardTemplate() {
                         className={styles.channelFill}
                         style={{
                           width: `${c.pct}%`,
-                          background: `var(--color-dataviz-${c.dv}, var(--color-interactive))`,
+                          background: brandVar(i),
                         }}
                       />
                     </div>

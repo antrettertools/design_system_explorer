@@ -19,6 +19,8 @@
   flex-shrink: 0;
 }
 
+.cloudWord { color: var(--color-interactive); }
+
 /* Context area — center, grows to fill available space */
 .contextArea {
   display: flex;
@@ -199,7 +201,7 @@
   padding: 0 var(--ui-space-6);
   background: var(--color-on-surface);
   color: var(--color-background);
-  border: none;
+  border: 1px solid var(--color-on-surface);
   border-radius: var(--ui-radius-cta);
   font-size: var(--ui-text-sm);
   font-weight: 600;
@@ -209,10 +211,35 @@
   align-items: center;
   gap: var(--ui-space-2);
   transition: opacity var(--ui-duration-2);
+  white-space: nowrap;
 }
 
 .exportBtn:hover { opacity: 0.8; }
 .exportBtn:active { transform: scale(0.97); }
+
+/* Share button — outlined, same height/font as Export */
+.shareBtn {
+  background: transparent;
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-border-strong, var(--color-border));
+}
+
+.shareBtn:hover {
+  opacity: 1;
+  background: var(--color-surface-raised, var(--color-border));
+  border-color: var(--color-on-surface-subtle);
+}
+
+.shareBtnCopied {
+  color: var(--color-interactive);
+  border-color: var(--color-interactive);
+  background: var(--color-interactive-subtle);
+}
+
+.shareBtnCopied:hover {
+  background: var(--color-interactive-subtle);
+  border-color: var(--color-interactive);
+}
 
 /* Mobile-only cycling theme button (replaces the 3-way segment) */
 .themeCycleBtn {
@@ -251,29 +278,34 @@
   .themeSegment { display: none; }
   .themeCycleBtn { display: flex; width: 44px; height: 44px; }
 
-  /* Icon-only export button — 44px height */
+  /* Icon-only export/share buttons — 44px height */
   .exportBtnLabel { display: none; }
   .exportBtn { padding: 0 var(--ui-space-5); height: 44px; }
+  .signInBtn { padding: 0 var(--ui-space-5); height: 44px; }
 }
 
 /* ── Auth UI ─────────────────────────────────────────────────────────── */
 
 .signInBtn {
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--color-border, #e5e5e5);
+  height: var(--ui-size-btn-md);
+  padding: 0 var(--ui-space-6);
+  border-radius: var(--ui-radius-cta);
+  border: 1px solid var(--color-border-strong, var(--color-border));
   background: transparent;
-  color: var(--color-on-surface, #111);
-  font-size: 12px;
-  font-weight: 500;
+  color: var(--color-on-surface);
+  font-size: var(--ui-text-sm);
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
+  transition: background var(--ui-duration-2), border-color var(--ui-duration-2);
 }
 
 .signInBtn:hover {
   background: var(--color-surface-raised, rgba(0,0,0,0.04));
-  border-color: var(--color-border-strong, #ccc);
+  border-color: var(--color-on-surface-subtle);
 }
 
 .userMenu {

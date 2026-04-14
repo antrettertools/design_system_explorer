@@ -24,9 +24,11 @@ export function ShowcaseStrip() {
   }
 
   const handleShare = async () => {
-    await copyShareLink()
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    const success = await copyShareLink()
+    if (success) {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (

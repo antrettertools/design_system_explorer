@@ -9,6 +9,8 @@
   gap: 12px;
 }
 
+.cloudWord { color: var(--color-interactive, #e8543a); }
+
 .notFoundText { font-size: 18px; color: #111; }
 .ctaLink { color: #6366f1; text-decoration: none; font-size: 14px; }
 

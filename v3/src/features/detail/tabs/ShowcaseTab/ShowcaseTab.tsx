@@ -25,9 +25,11 @@ export function ShowcaseTab() {
   const [copied, setCopied] = useState(false)
 
   const handleCopyLink = async () => {
-    await copyShareLink()
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    const success = await copyShareLink()
+    if (success) {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   const toggleFullscreen = () => {

@@ -1,14 +1,12 @@
 import { useRef, useEffect, type ComponentType } from 'react'
 import styles from './DetailMode.module.css'
 import { useUI, useUIActions } from '@/store'
-import { ArrowLeft, ArrowRight, Palette, Type, Ruler, Wand2, LayoutGrid, Monitor, Download } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Palette, Type, Ruler, Wand2, LayoutGrid } from 'lucide-react'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
 import { SpacingTab } from './tabs/SpacingTab/SpacingTab'
 import { EffectsTab } from './tabs/EffectsTab/EffectsTab'
-import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
-import { ExportTab } from './tabs/ExportTab/ExportTab'
 import { ComponentsTab } from './tabs/ComponentsTab/ComponentsTab'
 
 type TabDef = {
@@ -24,11 +22,9 @@ const ALL_TABS: TabDef[] = [
   { id: 'spacing',    label: 'Spacing',    short: 'Space',  Icon: Ruler      },
   { id: 'effects',    label: 'Effects',    short: 'FX',     Icon: Wand2      },
   { id: 'components', label: 'Components', short: 'Comps',  Icon: LayoutGrid },
-  { id: 'showcase',   label: 'Showcase',   short: 'Show',   Icon: Monitor    },
-  { id: 'export',     label: 'Export',     short: 'Export', Icon: Download   },
 ]
 
-const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'components', 'showcase', 'export']
+const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'components']
 
 export function DetailMode() {
   const { activeTab } = useUI()
@@ -46,8 +42,6 @@ export function DetailMode() {
       case 'spacing': return <SpacingTab />
       case 'effects': return <EffectsTab />
       case 'components': return <ComponentsTab />
-      case 'showcase': return <ShowcaseTab />
-      case 'export': return <ExportTab />
       default:
         return (
           <div className={styles.comingSoon}>

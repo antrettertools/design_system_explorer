@@ -6,7 +6,7 @@ import { useUI, useUIActions, useStore, useColor, useTypography, temporalUndo, t
 import { useAuth } from '@/auth/useAuth'
 import type { AppTheme } from '@/store/ui'
 import type { AppStore } from '@/store/types'
-import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Lock, LockOpen, Heart } from 'lucide-react'
+import { Undo2, Redo2, Bookmark, Sun, SunDim, Moon, Download, Link, Lock, LockOpen, Heart } from 'lucide-react'
 
 interface AppHeaderProps {
   onExportClick: () => void
@@ -26,10 +26,11 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
   const { activeRecipe } = useColor()
   const { pairing } = useTypography()
-  const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
+  const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal, openDonateModal, copyShareLink } = useUIActions()
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [shareCopied, setShareCopied] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Close dropdown on outside click or Escape
@@ -65,9 +66,17 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
   const nextTheme = THEME_ORDER[(THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length]
   const currentThemeOption = THEME_OPTIONS.find(o => o.value === theme)!
 
+  const handleShare = async () => {
+    const success = await copyShareLink()
+    if (success) {
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2000)
+    }
+  }
+
   return (
     <header className={styles.header}>
-      <div className={styles.wordmark}>dsygn.cloud</div>
+      <div className={styles.wordmark}>dsygn.<span className={styles.cloudWord}>cloud</span></div>
 
       <div className={styles.contextArea}>
         {mode === 'generator' ? (
@@ -173,6 +182,15 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
         </button>
 
         <span className={styles.actionDivider} aria-hidden="true" />
+
+        <button
+          className={`${styles.exportBtn} ${styles.shareBtn} ${shareCopied ? styles.shareBtnCopied : ''}`}
+          onClick={handleShare}
+          title={shareCopied ? 'Link copied!' : 'Copy share link'}
+        >
+          <Link size={13} strokeWidth={2} />
+          <span className={styles.exportBtnLabel}>{shareCopied ? 'Copied!' : 'Share'}</span>
+        </button>
 
         <button className={styles.exportBtn} onClick={onExportClick}>
           <Download size={13} strokeWidth={2} />

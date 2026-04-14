@@ -1,6 +1,5 @@
 import { useAuth } from '@/auth/useAuth'
 import { useColor, useTypography, useUIActions, useUI } from '@/store'
-import type { ColorSlot } from '@/core/color/types'
 import { POSITION_LABELS } from '@/core/color/types'
 import { TemplateIcon } from '../shared/TemplateIcon'
 import styles from './LandingTemplate.module.css'
@@ -9,13 +8,6 @@ type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
 
 type DsygnLandingProps = {
   onNavigate: (route: PanelRoute) => void
-}
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-function toCssRole(role: ColorSlot['role']): string {
-  // ColorRole values like 'accentA' → 'accent-a', 'brand' → 'brand'
-  return role.replace(/([A-Z])/g, (m) => `-${m.toLowerCase()}`)
 }
 
 // ── Section 03: Live Palette ──────────────────────────────────────────────────
@@ -38,12 +30,11 @@ function PaletteSection() {
       {/* Row 1 — Core palette */}
       <div className={styles.paletteRow}>
         {slots.map((slot) => {
-          const cssRole = toCssRole(slot.role)
           return (
             <div key={slot.id} className={styles.swatchCard}>
               <div
                 className={styles.swatch}
-                style={{ background: `var(--color-${cssRole}-500)` }}
+                style={{ background: `var(--color-${slot.role}-500)` }}
               />
               <span className={styles.swatchLabel}>
                 {slot.name ?? POSITION_LABELS[slot.role]}
@@ -523,7 +514,7 @@ function PricingSection() {
       </div>
 
       <div className={styles.coffeeRow}>
-        Enjoying dsygn.cloud? ☕{' '}
+        Enjoying dsygn.<span className={styles.cloudWord}>cloud</span>? ☕{' '}
         <button
           className={styles.coffeeBtn}
           onClick={() => openDonateModal('footer')}
@@ -548,7 +539,7 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
 
       {/* ── NAV ─────────────────────────────────────────────── */}
       <nav className={styles.nav}>
-        <div className={styles.navLogo}>dsygn.cloud</div>
+        <div className={styles.navLogo}>dsygn.<span className={styles.cloudWord}>cloud</span></div>
         <ul className={styles.navLinks}>
           <li>
             <button className={styles.navLink} onClick={() => onNavigate('pricing')}>
@@ -642,7 +633,7 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
           <div className={styles.footerBrand}>
-            <div className={styles.footerLogo}>dsygn.cloud</div>
+            <div className={styles.footerLogo}>dsygn.<span className={styles.cloudWord}>cloud</span></div>
           </div>
           <div className={styles.footerCols}>
             <div className={styles.footerCol}>
@@ -687,7 +678,7 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
           </div>
         </div>
         <div className={styles.footerBottom}>
-          <span className={styles.footerCopy}>&copy; 2026 dsygn.cloud</span>
+          <span className={styles.footerCopy}>&copy; 2026 dsygn.<span className={styles.cloudWord}>cloud</span></span>
         </div>
       </footer>
 

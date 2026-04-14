@@ -206,7 +206,7 @@ function DesignSystemViewerContent() {
   if (notFound) return (
     <div className={styles.state}>
       <p className={styles.notFoundText}>Design system not found.</p>
-      <Link to="/" className={styles.ctaLink}>Build yours free at dsygn.cloud →</Link>
+      <Link to="/" className={styles.ctaLink}>Build yours free at dsygn.<span className={styles.cloudWord}>cloud</span> →</Link>
     </div>
   )
 
@@ -233,7 +233,7 @@ function DesignSystemViewerContent() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Built with dsygn.cloud
+            Built with dsygn.<span className={styles.cloudWord}>cloud</span>
           </a>
         </div>
       </header>
@@ -327,7 +327,7 @@ function DesignSystemViewerContent() {
         <section className={`${styles.section} ${styles.ctaSection}`}>
           <h2 className={styles.ctaHeading}>Use this design system</h2>
           <p className={styles.ctaBody}>
-            Generate your own in seconds — free at dsygn.cloud
+            Generate your own in seconds — free at dsygn.<span className={styles.cloudWord}>cloud</span>
           </p>
           <a href="/" className={styles.ctaBtn} style={{ background: brandHex }}>
             Start building →

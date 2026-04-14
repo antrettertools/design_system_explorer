@@ -795,6 +795,8 @@ button.footerLink {
   margin-bottom: 32px;
 }
 
+.cloudWord { color: var(--color-interactive); }
+
 /* ── PALETTE SECTION (03) ───────────────────────────────── */
 
 .paletteRow {
