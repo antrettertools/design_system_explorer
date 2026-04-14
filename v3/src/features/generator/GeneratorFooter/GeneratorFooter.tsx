@@ -14,29 +14,22 @@ export function GeneratorFooter() {
 
   return (
     <div className={styles.footer}>
-      <div className={styles.actions}>
-        <button
-          className={styles.detailBtn}
-          onClick={() => setMode('detail')}
-          aria-label="Enter detail mode"
-        >
-          Detail Mode
-          <ArrowRight size={13} strokeWidth={2} />
-        </button>
-      </div>
+      {/* Desktop: full-width CTA strip */}
       <button
-        className={styles.previewBtn}
-        onClick={showMobilePreview}
-        aria-label="Show live preview"
+        className={styles.detailStrip}
+        onClick={() => setMode('detail')}
+        aria-label="Explore your design system in detail"
       >
+        <span className={styles.detailStripText}>Explore your design system</span>
+        <ArrowRight size={14} strokeWidth={2} className={styles.detailStripArrow} />
+      </button>
+
+      {/* Mobile only: unchanged */}
+      <button className={styles.previewBtn} onClick={showMobilePreview} aria-label="Show live preview">
         Preview
         <ArrowRight size={13} strokeWidth={2} />
       </button>
-      <button
-        className={styles.generateMobile}
-        onClick={handleGenerate}
-        aria-label="Generate new palette"
-      >
+      <button className={styles.generateMobile} onClick={handleGenerate} aria-label="Generate new palette">
         Generate
         <Sparkles size={14} strokeWidth={1.75} />
       </button>
