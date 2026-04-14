@@ -57,6 +57,8 @@
   --ui-radius-5:   12px;     /* panels, modals, bottom sheets (normalizes 12, 14px) */
   --ui-radius-6:   16px;     /* large bottom sheets, full-rounded areas (normalizes 16, 20px) */
   --ui-radius-full: 9999px;  /* pills and fully-rounded elements */
+  /* CTA button radius — tracks --radius-sm from generated tokens */
+  --ui-radius-cta:  var(--radius-sm, var(--ui-radius-3));
 
   /* ─── Fixed Sizes ───────────────────────────────────────────
    * Named dimensions for recurring structural elements.

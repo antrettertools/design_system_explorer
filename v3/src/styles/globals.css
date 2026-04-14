@@ -15,7 +15,10 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* Smooth dark mode transitions */
 *, *::before, *::after {
-  transition: background-color var(--ui-duration-4) ease, border-color var(--ui-duration-4) ease, color var(--ui-duration-3) ease;
+  transition: background-color var(--ui-duration-4) ease,
+              border-color var(--ui-duration-4) ease,
+              color var(--ui-duration-3) ease,
+              box-shadow var(--ui-duration-4) ease;
 }
 
 /* Disable transitions during initial load to avoid flash */

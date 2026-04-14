@@ -204,7 +204,7 @@
   background: var(--color-on-surface);
   color: var(--color-background);
   border: none;
-  border-radius: var(--ui-radius-3);
+  border-radius: var(--ui-radius-cta);
   font-size: var(--ui-text-sm);
   font-weight: 600;
   cursor: pointer;
@@ -264,8 +264,8 @@
 .signInBtn {
   padding: 5px 12px;
   border-radius: 6px;
-  border: 1px solid var(--ui-border, #e5e5e5);
-  background: var(--ui-surface-1, transparent);
+  border: 1px solid var(--color-border, #e5e5e5);
+  background: transparent;
   color: var(--color-on-surface, #111);
   font-size: 12px;
   font-weight: 500;
@@ -275,8 +275,8 @@
 }
 
 .signInBtn:hover {
-  background: var(--ui-surface-2, rgba(0,0,0,0.04));
-  border-color: var(--ui-border-strong, #ccc);
+  background: var(--color-surface-raised, rgba(0,0,0,0.04));
+  border-color: var(--color-border-strong, #ccc);
 }
 
 .userMenu {
@@ -307,11 +307,11 @@
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  background: var(--ui-surface-1, #ffffff);
-  border: 1px solid var(--ui-border, #e5e5e5);
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e5e5e5);
   border-radius: 8px;
   min-width: 160px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md, 0 4px 16px rgba(0, 0, 0, 0.1));
   z-index: 100;
   padding: 6px 0;
   animation: dropdownIn 0.12s ease;
@@ -330,12 +330,12 @@
 .dropdownPlan {
   padding: 0 14px 8px;
   font-size: 11px;
-  color: var(--ui-text-3, #999);
+  color: var(--color-on-surface-subtle, #999);
 }
 
 .dropdownDivider {
   border: none;
-  border-top: 1px solid var(--ui-border, #e5e5e5);
+  border-top: 1px solid var(--color-border, #e5e5e5);
   margin: 2px 0;
 }
 
@@ -353,7 +353,7 @@
 }
 
 .dropdownItem:hover {
-  background: var(--ui-surface-2, rgba(0,0,0,0.04));
+  background: var(--color-surface-raised, rgba(0,0,0,0.04));
 }
 
 /* Upgrade item in dropdown — accent color for visibility */

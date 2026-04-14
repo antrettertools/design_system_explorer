@@ -12,13 +12,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 201;
-  background: var(--ui-surface-1, #ffffff);
-  border: 1px solid var(--ui-border, #e5e5e5);
-  border-radius: 12px;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-lg, 12px);
   padding: 32px;
   width: min(420px, calc(100vw - 32px));
   text-align: center;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-xl, 0 8px 40px rgba(0, 0, 0, 0.15));
   animation: slideUp 0.18s ease;
 }
 
@@ -32,7 +32,7 @@
 
 .sub {
   font-size: 14px;
-  color: var(--ui-text-2, #666);
+  color: var(--color-on-surface-subtle, #666);
   line-height: 1.5;
   margin-bottom: 24px;
 }
@@ -47,8 +47,8 @@
 .oauthBtn {
   padding: 11px 20px;
   border-radius: 8px;
-  border: 1px solid var(--ui-border, #e5e5e5);
-  background: var(--ui-surface-1, #ffffff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  background: var(--color-surface, #ffffff);
   color: var(--color-on-surface, #111);
   font-size: 14px;
   font-weight: 500;
@@ -57,7 +57,7 @@
 }
 
 .oauthBtn:hover {
-  background: var(--ui-surface-2, #f5f5f5);
+  background: var(--color-surface-raised, #f5f5f5);
 }
 
 .googleBtn {
@@ -66,7 +66,7 @@
 
 .skipBtn {
   font-size: 13px;
-  color: var(--ui-text-3, #999);
+  color: var(--color-on-surface-subtle, #999);
   background: none;
   border: none;
   cursor: pointer;
@@ -75,7 +75,7 @@
 }
 
 .skipBtn:hover {
-  color: var(--ui-text-2, #666);
+  color: var(--color-on-surface-subtle, #666);
 }
 
 @keyframes fadeIn {
