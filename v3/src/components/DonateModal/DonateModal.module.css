@@ -17,7 +17,7 @@
   border-radius: var(--radius-lg, 12px);
   padding: 32px;
   width: min(420px, calc(100vw - 32px));
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-xl, 0 12px 48px rgba(0, 0, 0, 0.18));
   animation: slideUp 0.18s ease;
 }
 
