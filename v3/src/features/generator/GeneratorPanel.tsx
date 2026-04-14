@@ -4,6 +4,7 @@ import { SpaceHintBar } from './SpaceHintBar'
 import { ColorSwatches } from './ColorSwatches/ColorSwatches'
 import { RecipePillRow } from './RecipePillRow/RecipePillRow'
 import { TypographySpecimen } from './TypographySpecimen/TypographySpecimen'
+import { TokenHints } from './TokenHints/TokenHints'
 import { GeneratorFooter } from './GeneratorFooter/GeneratorFooter'
 import { Lock, LockOpen } from 'lucide-react'
 
@@ -38,6 +39,8 @@ export function GeneratorPanel() {
         <div className={styles.section}>
           <TypographySpecimen />
         </div>
+        {/* Zone C: Token Hints */}
+        <TokenHints />
       </div>
       <GeneratorFooter />
     </div>
