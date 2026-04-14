@@ -18,12 +18,21 @@ Do not read the full spec archive for context — this document is the distillat
 
 ## Current State (update after each phase)
 
-> Last updated: **2026-04-14** — Phase 5 complete.
+> Last updated: **2026-04-14** — Phase 6 complete.
 
 ### Right Panel / Live Preview
 - **Template lock removed** in `LivePreview.tsx`. `const template = showcaseTemplate` — respected in all modes. `mode` destructure also removed (was unused after lock removal).
-- `ShowcaseStrip` component **exists** at `v3/src/features/preview/ShowcaseStrip/`. Rendered as sticky strip (36px, `position: sticky; top: 0; z-index: 10`) inside `.panel`. Four chip buttons (Landing/Dashboard/Blog/System) switch template via `setShowcaseTemplate`. Share button copies `location.href` to clipboard (Phase 6 will replace with encoded share URL). Fullscreen button opens current URL in new tab.
+- `ShowcaseStrip` component **exists** at `v3/src/features/preview/ShowcaseStrip/`. Rendered as sticky strip (36px, `position: sticky; top: 0; z-index: 10`) inside `.panel`. Four chip buttons (Landing/Dashboard/Blog/System) switch template via `setShowcaseTemplate`. Share button now calls `copyShareLink` UIAction (Phase 6). Fullscreen button opens current URL in new tab.
 - All 4 templates now accessible in both Generator and Detail Mode via the strip.
+
+### Share / Virality (Phase 6 — COMPLETE)
+- **`copyShareLink`** is now a UIAction in `store/ui.ts` (was local function in `ShowcaseTab`). Called from `ShowcaseStrip` share button AND `ShowcaseTab` "Copy share link" button AND `SharedDesignBanner`. Builds complete snapshot including `stepOverrides`/`stepLocks`. Wrapped in try/catch (clipboard permission safety). Fires `trackEvent('Share Link Copied')`.
+- **`dismissShareBanner`** UIAction in `store/ui.ts` — sets `loadedFromShare: false`.
+- **`loadedFromShare: boolean`** added to UIState (default `false`). Set to `true` in `App.tsx` when a `#v3/` hash URL is successfully decoded.
+- **`SharedDesignBanner`** component at `v3/src/components/SharedDesignBanner/`. Renders a 36px strip below AppHeader when `loadedFromShare === true`. Shows "Viewing a shared design system" label + "↗ Copy link" (calls `copyShareLink`) + "Generate yours →" (generates fresh palette, clears hash, dismisses banner). Label hidden on mobile (≤768px).
+- **`ShowcaseTab.tsx`** — local `copyShareLink` removed; now uses store action via thin `handleCopyLink` wrapper. `encodeShare`/`ShareSnapshot` imports removed. Toast state preserved.
+- **`/api/og-image.ts`** — new Vercel serverless function. `GET /api/og-image?colors=hex1,hex2&name=...` returns 1200×630 SVG with palette swatches. Luminance-based bg (dark/light). `Cache-Control: public, max-age=86400`. XSS-safe via `escapeXml`. No external dependencies.
+- **`DesignSystemViewer.tsx`** — three bugs fixed: (1) now uses `tokens.dark` when `snap.theme === 'dark'` (was always `tokens.light`); (2) `document.title` updated to `${design.name} — dsygn.cloud`; (3) OG + Twitter meta tags injected on mount with correct cleanup (pre-existing tags restored on unmount). `data-theme={snap.theme}` added to viewer container. `tokenSet` memo drives both Typography and Spacing display sections.
 
 ### App Header
 - Center `contextArea` now shows harmony badge + font pairing in Generator Mode; tab breadcrumb in Detail Mode. ✓ Phase 3 done.
@@ -63,11 +72,7 @@ Do not read the full spec archive for context — this document is the distillat
 - **Global transition:** `box-shadow` added to transition rule in `globals.css`. Shadow changes now animate smoothly on palette switch.
 
 ### Share / Viewer
-- **`copyShareLink` in `ShowcaseTab.tsx` is local and incomplete:** missing `stepOverrides` and `stepLocks` from the snapshot, and no `trackEvent` call. Phase 6 moves this logic to `store/ui.ts` as a UIAction (`copyShareLink`) and fixes the snapshot completeness.
-- **`DesignSystemViewer.tsx` dark theme bug:** the viewer always injects `tokens.light` into `.viewer-tokens {}` regardless of `snap.theme`. Phase 6 fixes: use `tokens.dark` when `snap.theme === 'dark'`.
-- **`DesignSystemViewer.tsx` missing meta:** `document.title` is never updated from the default, and no OG meta tags are injected. Phase 6 adds both.
-- **No `loadedFromShare` context:** when the app loads from a `#v3/` hash URL, there is no visual signal that the user is viewing someone else's design rather than their own. Phase 6 adds `loadedFromShare: boolean` to UIState and a `SharedDesignBanner` component.
-- **No OG image endpoint:** share links have no preview image when posted to social media or messaging apps. Phase 6 adds `/api/og-image.ts` (1200×630 SVG palette). Note: SPA meta injection via `useEffect` does not work for static crawlers — a Vercel Edge Function or prerender service is needed post-launch for full coverage.
+- All Phase 6 items complete — see Phase 6 section below.
 
 ### Mobile
 - **AppHeader** touch targets bumped to 44px (all icon buttons). ✓ Phase 3 done.
@@ -92,7 +97,7 @@ Do not read the full spec archive for context — this document is the distillat
 | 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ✅ Complete (2026-04-14) | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
 | 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ✅ Complete (2026-04-14) | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx`, new `TokenHints/` |
 | 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ✅ Complete (2026-04-14) | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
-| 6 | Showcase Virality | [spec](./specs/2026-04-13-phase-6-showcase-virality.md) | ⬜ Not started | `store/ui.ts`, `ShowcaseTab.tsx/css`, new `SharedDesignBanner/`, `App.tsx`, `api/og-image.ts`, `DesignSystemViewer.tsx/css` |
+| 6 | Showcase Virality | [spec](./specs/2026-04-13-phase-6-showcase-virality.md) | ✅ Complete (2026-04-14) | `store/ui.ts`, `ShowcaseTab.tsx`, `ShowcaseStrip.tsx`, new `SharedDesignBanner/`, `App.tsx`, `api/og-image.ts`, `DesignSystemViewer.tsx` |
 
 **Dependencies:**
 - Phase 2 can run in parallel with Phase 3 — no file overlap.
@@ -345,6 +350,43 @@ From `CLAUDE.md` — these are blocking launch but not UX phases:
 ### Updated Current State notes
 - Mobile section: all 5 deliverables complete, ghost state fixed, bottom nav live, swipe gesture active
 - Phase 5 row in Phase Status table: marked ✅ Complete
+
+---
+
+## Phase 6 — Showcase Virality — COMPLETE (2026-04-14)
+
+### What shipped
+- [x] `store/ui.ts`: `loadedFromShare: boolean` added to `UIState` (default `false`)
+- [x] `store/ui.ts`: `copyShareLink: () => Promise<void>` UIAction — builds complete snapshot (incl. `stepOverrides`/`stepLocks`), encodes share URL, writes to clipboard, fires `trackEvent('Share Link Copied')`. Wrapped in try/catch (clipboard permission safety).
+- [x] `store/ui.ts`: `dismissShareBanner: () => void` UIAction — sets `loadedFromShare: false`
+- [x] `ShowcaseStrip.tsx`: share button wired to `copyShareLink` UIAction (replaced Phase 1 stub that copied raw `location.href`)
+- [x] `ShowcaseTab.tsx`: local `copyShareLink` function removed; `encodeShare`/`ShareSnapshot` imports removed; store action used via `handleCopyLink` wrapper; toast state preserved; unused destructured variables (`slots`, `activeRecipe`, `theme`, `mode`, `activeTab`, `locks`) cleaned up (were only used in removed snapshot code)
+- [x] `SharedDesignBanner/SharedDesignBanner.tsx` created — renders below AppHeader when `loadedFromShare === true`; hides when false (zero DOM nodes); "Generate yours →" generates fresh palette, clears URL hash, dismisses banner, fires analytics
+- [x] `SharedDesignBanner/SharedDesignBanner.module.css` created — 36px strip, mobile: label hidden, height 40px
+- [x] `App.tsx`: imports `SharedDesignBanner`, mounts between AppHeader and body, sets `loadedFromShare: true` in hash-load branch
+- [x] `api/og-image.ts` created — `GET /api/og-image?colors=...&name=...`, returns 1200×630 SVG, luminance-based bg, `Cache-Control: public max-age=86400`, XSS-safe via `escapeXml`, no external deps
+- [x] `DesignSystemViewer.tsx`: (1) dark theme fix — `tokenSet = snap.theme === 'dark' ? tokens.dark : tokens.light`; (2) `data-theme={snap.theme}` on viewer container; (3) `document.title` updated on mount, reset on unmount; (4) OG + Twitter meta tags injected with correct cleanup (pre-existing tags restored, newly created tags removed); (5) Typography + Spacing display sections use `tokenSet` memo
+- [x] `store/__tests__/ui.test.ts` created — 5 tests: default state, action existence, `dismissShareBanner` state diff, `copyShareLink` early-return on null pairing
+- [x] `npx tsc --noEmit` passes (zero errors)
+- [x] `npm run build` succeeds
+- [x] 196/196 tests pass (31 test files, +5 new tests, no regressions)
+
+### Deviations from spec
+- **`copyShareLink` wrapped in try/catch:** spec did not specify error handling, but reviewer flagged that `navigator.clipboard.writeText` throws `DOMException` on denied permission. Added try/catch for silent no-op — consistent with `trackEvent` defensive philosophy.
+- **OG meta cleanup symmetry fix:** spec showed a basic cleanup (remove injected tags only). Reviewer caught that pre-existing tags (from `index.html`) would not be restored on unmount. Fixed to also capture and restore previous content of pre-existing tags.
+- **`decodeURIComponent` removed from og-image handler:** spec included it but Vercel's Node runtime already decodes query params; double-decoding throws `URIError` on names with literal `%`. Removed safely.
+- **Unused `ShowcaseTab` destructures cleaned up:** after removing local `copyShareLink`, variables `slots`, `activeRecipe`, `theme`, `mode`, `activeTab`, `locks` became unused and caused `TS6133` strict-mode errors. Removed from destructures — this was necessary for the build to pass, not a spec deviation.
+
+### New discoveries / things to carry forward
+- **`navigator.clipboard.writeText` is permission-gated** — always wrap async clipboard actions in try/catch in Zustand actions (they're not in React error boundaries).
+- **`DesignSystemViewer` inline styles are an intentional exception** — the viewer renders arbitrary user-generated token data (hex colors, font families) that cannot be statically expressed in CSS Modules. CLAUDE.md's "no inline styles" rule applies to the app chrome layer, not the viewer's data-rendering layer.
+- **OG meta tag cleanup pattern** — when injecting dynamic meta tags client-side, always track both newly created tags (remove on unmount) AND pre-existing tags (restore previous content on unmount). The `restored: Array<{ el, prevContent }>` pattern is the correct implementation.
+- **Static crawler OG support is not yet handled** — `useEffect` meta injection works for JS-executing crawlers (X/Twitter card validator) but not WhatsApp, iMessage, Telegram, LinkedIn. Post-launch: add Vercel Edge Function at `/s/:username/:slug` or use a prerender service.
+
+### Updated Current State notes
+- Share/Viewer section: replaced all "Phase 6 will..." notes with "Phase 6 complete" summary
+- Phase 6 row in Phase Status table: marked ✅ Complete (2026-04-14)
+- `ShowcaseStrip` share button note updated (no longer a stub)
 
 ---
 
