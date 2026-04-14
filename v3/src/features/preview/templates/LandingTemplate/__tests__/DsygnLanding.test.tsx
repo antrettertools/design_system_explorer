@@ -10,8 +10,6 @@ vi.mock('@/auth/useAuth', () => ({
 
 vi.mock('@/analytics', () => ({ trackEvent: vi.fn() }))
 
-const onNavigate = vi.fn()
-
 function renderLanding(mode: 'generator' | 'detail' = 'generator') {
   useStore.setState(s => ({
     ...s,
@@ -25,7 +23,7 @@ function renderLanding(mode: 'generator' | 'detail' = 'generator') {
   }))
   return render(
     <MemoryRouter>
-      <DsygnLanding onNavigate={onNavigate} />
+      <DsygnLanding />
     </MemoryRouter>
   )
 }
