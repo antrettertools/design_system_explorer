@@ -2,7 +2,7 @@ import { type JSX, useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { TemporalState } from 'zundo'
 import styles from './AppHeader.module.css'
-import { useUI, useUIActions, useStore, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
+import { useUI, useUIActions, useStore, useColor, useTypography, temporalUndo, temporalRedo, lockEverything, unlockEverything, useIsEverythingLocked } from '@/store'
 import { useAuth } from '@/auth/useAuth'
 import type { AppTheme } from '@/store/ui'
 import type { AppStore } from '@/store/types'
@@ -24,6 +24,8 @@ const THEME_ORDER: AppTheme[] = ['white', 'light', 'dark']
 
 export function AppHeader({ onExportClick }: AppHeaderProps) {
   const { theme, mode, activeTab } = useUI()
+  const { activeRecipe } = useColor()
+  const { pairing } = useTypography()
   const { setTheme, toggleSessionsDrawer, openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
@@ -68,11 +70,26 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
       <div className={styles.wordmark}>dsygn.cloud</div>
 
       <div className={styles.contextArea}>
-        {contextLabel && (
-          <span className={styles.contextBreadcrumb}>
-            <span className={styles.breadcrumbSep}>/ </span>
-            {contextLabel}
-          </span>
+        {mode === 'generator' ? (
+          <>
+            {activeRecipe && (
+              <span className={styles.harmonyBadge}>
+                {activeRecipe.label}
+              </span>
+            )}
+            {pairing && (
+              <span className={styles.pairingLabel}>
+                {pairing.heading} + {pairing.body}
+              </span>
+            )}
+          </>
+        ) : (
+          contextLabel && (
+            <span className={styles.contextBreadcrumb}>
+              <span className={styles.breadcrumbSep}>/ </span>
+              {contextLabel}
+            </span>
+          )
         )}
       </div>
 
@@ -98,6 +115,8 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
           </button>
         </div>
 
+        <span className={styles.actionDivider} aria-hidden="true" />
+
         <button
           className={styles.lockAllBtn}
           onClick={isEverythingLocked ? unlockEverything : lockEverything}
@@ -118,6 +137,8 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
         >
           <Bookmark size={15} strokeWidth={1.75} />
         </button>
+
+        <span className={styles.actionDivider} aria-hidden="true" />
 
         <div className={styles.themeSegment} role="group" aria-label="Background mode">
           {THEME_OPTIONS.map(opt => (
@@ -150,6 +171,8 @@ export function AppHeader({ onExportClick }: AppHeaderProps) {
         >
           <Heart size={13} strokeWidth={1.75} />
         </button>
+
+        <span className={styles.actionDivider} aria-hidden="true" />
 
         <button className={styles.exportBtn} onClick={onExportClick}>
           <Download size={13} strokeWidth={2} />
