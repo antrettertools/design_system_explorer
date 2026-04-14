@@ -11,7 +11,7 @@ const TEMPLATES: { id: ShowcaseTemplate; label: string }[] = [
 
 export function ShowcaseStrip() {
   const { showcaseTemplate } = useUI()
-  const { setShowcaseTemplate } = useUIActions()
+  const { setShowcaseTemplate, copyShareLink } = useUIActions()
 
   const handleFullscreen = () => {
     window.open(
@@ -21,10 +21,8 @@ export function ShowcaseStrip() {
     )
   }
 
-  const handleShare = async () => {
-    await navigator.clipboard.writeText(window.location.href)
-    // No toast — browser clipboard feedback is sufficient for now.
-    // Phase 6 replaces this with the proper encoded share URL + toast.
+  const handleShare = () => {
+    void copyShareLink()
   }
 
   return (
