@@ -8,6 +8,7 @@ import { DashboardTemplate } from './templates/DashboardTemplate/DashboardTempla
 import { BlogTemplate } from './templates/BlogTemplate/BlogTemplate'
 import { PricingView } from './views/PricingView'
 import { LegalView } from './views/LegalView'
+import { ShowcaseStrip } from './ShowcaseStrip/ShowcaseStrip'
 
 type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
 
@@ -72,6 +73,7 @@ function LivePreviewContent() {
       <button className={styles.backBtn} onClick={hideMobilePreview} aria-label="Back to generator">
         &larr; Back to generator
       </button>
+      <ShowcaseStrip />
       {renderTemplate()}
     </div>
   )
