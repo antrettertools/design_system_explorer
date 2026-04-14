@@ -126,7 +126,7 @@ export function ColorSlotCard({
             aria-label={slot.locked ? 'Unlock color' : 'Lock color'}
             title={slot.locked ? 'Click to unlock' : 'Click to lock'}
           >
-            {slot.locked ? <Lock size={11} strokeWidth={2.5} /> : <LockOpen size={11} strokeWidth={2.5} />}
+            {slot.locked ? <Lock size={13} strokeWidth={2.5} /> : <LockOpen size={13} strokeWidth={2.5} />}
           </button>
         </div>
         <div className={styles.bottomRow}>
