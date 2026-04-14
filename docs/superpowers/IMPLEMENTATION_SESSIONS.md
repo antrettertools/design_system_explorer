@@ -18,7 +18,7 @@ Do not read the full spec archive for context — this document is the distillat
 
 ## Current State (update after each phase)
 
-> Last updated: **2026-04-14** — Phase 2 complete.
+> Last updated: **2026-04-14** — Phase 3 complete.
 
 ### Right Panel / Live Preview
 - **Template lock removed** in `LivePreview.tsx`. `const template = showcaseTemplate` — respected in all modes. `mode` destructure also removed (was unused after lock removal).
@@ -26,15 +26,16 @@ Do not read the full spec archive for context — this document is the distillat
 - All 4 templates now accessible in both Generator and Detail Mode via the strip.
 
 ### App Header
-- Center `contextArea` shows nothing in Generator Mode, tab breadcrumb in Detail Mode.
-- `.harmonyBadge` and `.pairingLabel` CSS classes exist in `AppHeader.module.css` but are not rendered.
-- No visual grouping between the 9 action elements in the right zone.
+- Center `contextArea` now shows harmony badge + font pairing in Generator Mode; tab breadcrumb in Detail Mode. ✓ Phase 3 done.
+- `.harmonyBadge` and `.pairingLabel` CSS classes (pre-existing) are now wired and rendered. ✓ Phase 3 done.
+- Three `actionDivider` spans separate the 9 action elements into 4 logical groups (hidden on mobile). ✓ Phase 3 done.
 - Export button radius uses `--ui-radius-cta` alias → `--radius-sm` (tracks generated 4px default, responds to user's radius token). ✓ Phase 2 done.
 - Auth dropdown uses `--color-surface`, `--color-border`, `--color-on-surface-subtle`, `--color-surface-raised`. ✓ Phase 2 done.
+- Mobile buttons bumped to 44px (WCAG 2.5.5): `historyBtn`, `themeToggle`, `lockAllBtn`, `themeCycleBtn`, `supportBtn`. ✓ Phase 3 done.
 
 ### Generator Panel
 - `SpaceHintBar` is **lock-aware**: shows " — locked slots will hold" hint when some slots locked; shows muted "All slots locked — unlock to regenerate" (with 🔒, `opacity: 0.5`) when all slots locked; falls through to default "Hit SPACE to regenerate" when no locks or empty slots.
-- `GeneratorFooter` has a small right-aligned "Detail Mode →" button (28px, **filled with `--color-interactive` background** — not a ghost button as master spec described). Phase 3 replaces with full-width strip.
+- `GeneratorFooter` has a full-width "Explore your design system →" CTA strip (40px, `--color-interactive-subtle` background, `color-mix()` border). On mobile the strip is hidden; mobile buttons (`generateMobile`, `previewBtn`) are 44px. ✓ Phase 3 done.
 - **Dual role-label opacity problem:** `ColorSwatches.module.css` `.roleTag { opacity: 0.55 }` is the column *header* above each card; `ColorSlotCard.module.css` `.card[data-light="true"] .roleLabel { color: rgba(0,0,0,0.55) }` is the label *inside* the swatch. Both need opacity increases. Phase 4 fixes both.
 - **Lock button hit area:** `.lockBtn { width: 24px; height: 24px }` on desktop (already 32px on mobile). Phase 4 corrects desktop to 32px.
 - **Shade strip decoupling:** `ShadeStrip` renders unconditionally based on `slot.locked`. Phase 4 decouples: adds `[shadeOpen, setShadeOpen]` state + chevron toggle + `data-shade-open` attribute. The Phase 2 `.locked .swatch` radius rule becomes a `[data-shade-open="false"] .swatch` rule in Phase 4 (they must coordinate — see Phase 4 spec).
@@ -42,12 +43,11 @@ Do not read the full spec archive for context — this document is the distillat
 - **`TypographySpecimen` already uses `<input>` elements** with a `border-bottom` underline for heading + body text — it is more sophisticated than the master spec described. `[headingText, setHeadingText]` state exists. Phase 4 improves the affordance (dashed underline on hover, focus distinction, pencil icon) — it does NOT rebuild from scratch.
 
 ### Detail Mode
-- "← Generator" back link styled identically to inactive tabs — easy to miss. Phase 3 makes it a bordered pill.
+- "← Generator" back link is now a **bordered pill** (`border: 1px solid var(--color-border)`, `border-radius: var(--ui-radius-full)`, `height: 28px`, `font-weight: 500`). Visually distinct from tabs. Negative margin removed. ✓ Phase 3 done.
 - All 7 tabs functional: Colors, Typography, Spacing, Effects, Components, Showcase, Export.
 
-### App Header (Phase 3 discoveries)
-- `.harmonyBadge` and `.pairingLabel` CSS classes **already exist** in `AppHeader.module.css` — Phase 3 is a JSX wiring task, not CSS creation. The styles are already there waiting.
-- Phase 3 is primarily: (1) wiring `harmonyBadge`/`pairingLabel` in JSX, (2) adding 3 `actionDivider` spans between the 9 right-zone elements, (3) replacing `detailBtn` with `detailStrip`, (4) changing `.backLink` to a bordered pill, (5) adding `--ui-radius-cta` alias and applying to export button.
+### App Header (Phase 3 — COMPLETE)
+- All Phase 3 items shipped. See Phase 3 section below for full log.
 
 ### Modals / Overlays
 - `SignInPrompt`, `UpgradeModal`, `DonateModal`: all now use `--color-surface`, `--color-border`, `--color-on-surface-subtle`, `--color-surface-raised`. Dark mode renders correctly. ✓ Phase 2 done.
@@ -69,7 +69,8 @@ Do not read the full spec archive for context — this document is the distillat
 - **No OG image endpoint:** share links have no preview image when posted to social media or messaging apps. Phase 6 adds `/api/og-image.ts` (1200×630 SVG palette). Note: SPA meta injection via `useEffect` does not work for static crawlers — a Vercel Edge Function or prerender service is needed post-launch for full coverage.
 
 ### Mobile
-- Touch targets: 40px on mobile (WCAG minimum is 44px). Phase 3 corrects.
+- **AppHeader** touch targets bumped to 44px (all icon buttons). ✓ Phase 3 done.
+- **GeneratorFooter** mobile buttons (`generateMobile`, `previewBtn`) bumped to 44px. ✓ Phase 3 done.
 - Detail Mode tab strip overflows on narrow viewports. Phase 5 replaces it with a bottom nav on mobile.
 - `mobileShowPreview` is not reset when mode changes — ghost state bug. Phase 5 fixes in `store/ui.ts`.
 - AppHeader buttons are 40px on mobile (WCAG minimum is 44px). Phase 5 corrects all to 44px.
@@ -86,7 +87,7 @@ Do not read the full spec archive for context — this document is the distillat
 |---|---|---|---|---|
 | 1 | Template Freedom | [spec](./specs/2026-04-13-phase-1-template-freedom.md) | ✅ Complete (2026-04-14) | `LivePreview.tsx`, new `ShowcaseStrip/`, `SpaceHintBar.tsx` |
 | 2 | Meta-Theming Completion | [spec](./specs/2026-04-13-phase-2-meta-theming-completion.md) | ✅ Complete (2026-04-14) | `globals.css`, `ColorSlotCard.module.css`, `ColorPickerPopover.module.css`, modal CSS files, `AppHeader.module.css`, `ui-tokens.css` |
-| 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ⬜ Not started | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
+| 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ✅ Complete (2026-04-14) | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
 | 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ⬜ Not started | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx/css`, new `TokenHints/` |
 | 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ⬜ Not started | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
 | 6 | Showcase Virality | [spec](./specs/2026-04-13-phase-6-showcase-virality.md) | ⬜ Not started | `store/ui.ts`, `ShowcaseTab.tsx/css`, new `SharedDesignBanner/`, `App.tsx`, `api/og-image.ts`, `DesignSystemViewer.tsx/css` |
@@ -245,6 +246,39 @@ From `CLAUDE.md` — these are blocking launch but not UX phases:
 - Meta-Theming section updated: Radius, Shadows, and Global transition all complete.
 - App Header section updated: export button and auth dropdown now use correct tokens.
 - Modals section updated: all three modals now render correctly in dark mode.
+
+---
+
+## Phase 3 — Header & Navigation Clarity — COMPLETE (2026-04-14)
+
+### What shipped
+- [x] 3.1 Header center zone: `useColor()` + `useTypography()` added to `AppHeader.tsx`; `contextArea` now renders `.harmonyBadge` + `.pairingLabel` in Generator Mode (both guarded against null — empty before first generation)
+- [x] 3.1 Detail Mode center continues to show tab breadcrumb (mode-branched in JSX)
+- [x] 3.2 Three `<span className={styles.actionDivider} aria-hidden="true" />` inserted between action groups: after `historyGroup`, after `themeToggle`(Sessions), after `supportBtn`
+- [x] 3.2 `.actionDivider` CSS added to `AppHeader.module.css` (1px × 16px vertical line, hidden on mobile)
+- [x] 3.3 `GeneratorFooter.tsx`: old `actions`+`detailBtn` structure replaced with full-width `.detailStrip` CTA ("Explore your design system →")
+- [x] 3.3 `GeneratorFooter.module.css` rewritten: `.detailStrip` with `color-mix()` hover effects; `.footer` padding tightened (`--ui-space-6` → `--ui-space-5`); strip hidden on mobile
+- [x] 3.4 `DetailMode.module.css` `.backLink` changed to bordered pill: `border: 1px solid var(--color-border)`, `border-radius: var(--ui-radius-full)`, `height: 28px`, `font-weight: 500`, negative `margin-left` removed
+- [x] 3.5 `AppHeader.module.css` mobile buttons bumped 40px → 44px: `historyBtn`, `themeToggle`, `lockAllBtn`, `themeCycleBtn`, `supportBtn`
+- [x] 3.5 `GeneratorFooter.module.css` mobile buttons set to `44px` directly (done as part of CSS rewrite)
+- [x] `npx tsc --noEmit` passes (zero errors)
+- [x] `npm run build` succeeds
+- [x] 191/191 tests pass (30 test files, no regressions)
+
+### Deviations from spec
+- **`.harmonyBadge` CSS unchanged:** Spec confirmed these classes were already production-ready; no CSS edits were needed for 3.1 — only JSX wiring.
+- **GeneratorFooter.module.css fully rewritten** (not surgical edits): The spec said "remove `.actions` and `.detailBtn`" — given the small file size, a clean rewrite was cleaner than piecemeal removal. The output matches spec exactly.
+- **Mobile tap targets done in single step:** Spec separated 3.5 as a standalone task per file; in practice `GeneratorFooter.module.css`'s mobile targets were written to `44px` directly during the Task 2 rewrite, so no separate commit was needed for that file.
+
+### New discoveries / things to carry forward
+- **`--ui-size-btn-xl` (40px) left unchanged in `ui-tokens.css`** — as specified. Phase 5 may raise the token globally (`--ui-size-btn-xl: 44px`) which would then propagate everywhere. Until then, the 44px overrides in mobile media queries are explicit.
+- **`color-mix()` in `.detailStrip`** — same browser support floor as Phase 1/2 (`color-mix(in oklch, ...)`). No new requirements introduced.
+- **Phase 5 note:** `mobileShowPreview` ghost-state bug and DetailMode tab strip overflow are still Phase 5 items — not touched here.
+
+### Updated Current State notes
+- App Header: center zone wired, dividers added, mobile targets 44px
+- Generator Panel: full-width CTA strip replaces small button; mobile buttons 44px
+- Detail Mode: back link is now a bordered pill, visually distinct from tabs
 
 ---
 
