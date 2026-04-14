@@ -1,0 +1,87 @@
+.strip {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ui-space-5, 12px);
+  gap: var(--ui-space-3, 6px);
+
+  /* Floats over template content without pushing it down on scroll */
+  background: color-mix(in oklch, var(--color-surface, #fff) 80%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid color-mix(in oklch, var(--color-border, #e0ddd8) 60%, transparent);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-2, 4px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 var(--ui-space-4, 8px);
+  border-radius: var(--ui-radius-full, 9999px);
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-body, sans-serif);
+  color: var(--color-on-surface-subtle, #888);
+  background: transparent;
+  cursor: pointer;
+  transition: background 100ms ease, color 100ms ease, border-color 100ms ease;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.chip:hover {
+  color: var(--color-on-surface, #111);
+  background: color-mix(in oklch, var(--color-interactive-container, #e8e5ff) 50%, transparent);
+}
+
+.chip.active {
+  color: var(--color-interactive, #5a56e8);
+  background: var(--color-interactive-container, #e8e5ff);
+  border-color: color-mix(in oklch, var(--color-interactive, #5a56e8) 30%, transparent);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1, 2px);
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-radius-2, 6px);
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface-subtle, #888);
+  cursor: pointer;
+  transition: background 100ms ease, color 100ms ease;
+}
+
+.iconBtn:hover {
+  color: var(--color-on-surface, #111);
+  background: var(--color-surface-raised, #f4f2ef);
+}
+
+/* On mobile, keep chips tappable but tighter */
+@media (max-width: 480px) {
+  .chip {
+    height: 28px;
+    padding: 0 var(--ui-space-3, 6px);
+    font-size: 10px;
+  }
+}
