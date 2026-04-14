@@ -42,12 +42,11 @@ function LivePreviewContent() {
     }
   }, [panelRoute])
 
-  // In generator mode, always show landing (single fixed template per spec)
-  const template = mode === 'detail' ? showcaseTemplate : 'landing'
+  const template = showcaseTemplate
 
   const renderTemplate = () => {
-    // Detail mode non-landing templates bypass panelRoute
-    if (mode === 'detail' && template !== 'landing') {
+    // Non-landing templates bypass panelRoute (panelRoute is Landing-only)
+    if (template !== 'landing') {
       switch (template) {
         case 'system': return <SystemTemplate />
         case 'dashboard': return <DashboardTemplate />
@@ -55,7 +54,7 @@ function LivePreviewContent() {
       }
     }
 
-    // Landing template (both modes) and generator mode: honor panelRoute
+    // Landing template: honour panelRoute for pricing/legal sub-pages
     switch (panelRoute) {
       case 'pricing':
         return <PricingView onBack={() => setPanelRoute('home')} />
