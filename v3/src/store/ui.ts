@@ -1,4 +1,6 @@
 import type { StoreSet, StoreGet } from './types'
+import { encodeShare } from '@/core/share/encode'
+import { trackEvent } from '@/analytics'
 
 export type AppMode = 'generator' | 'detail'
 export type DetailTab = 'colors' | 'typography' | 'spacing' | 'effects' | 'components' | 'showcase' | 'export'
@@ -20,6 +22,7 @@ export interface UIState {
   upgradeModalOpen: boolean
   donateModalOpen: boolean
   donateModalSource: 'footer' | 'dropdown' | null
+  loadedFromShare: boolean
 }
 
 export interface UIActions {
@@ -41,6 +44,8 @@ export interface UIActions {
   closeUpgradeModal: () => void
   openDonateModal: (source: 'footer' | 'dropdown') => void
   closeDonateModal: () => void
+  copyShareLink: () => Promise<void>
+  dismissShareBanner: () => void
 }
 
 export const defaultUIState: UIState = {
@@ -57,6 +62,7 @@ export const defaultUIState: UIState = {
   upgradeModalOpen: false,
   donateModalOpen: false,
   donateModalSource: null,
+  loadedFromShare: false,
 }
 
 export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
@@ -116,5 +122,33 @@ export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
     closeDonateModal: () => set({
       ui: { ...get().ui, donateModalOpen: false, donateModalSource: null },
     }),
+    copyShareLink: async () => {
+      const state = get()
+      const { color, typography, ui, spacing, effects } = state
+      const { pairing, scale, locks, stepOverrides, stepLocks } = typography
+      if (!pairing || !scale) return
+
+      const snapshot = {
+        v: 3 as const,
+        colors: color.slots,
+        harmonyModel: color.activeRecipe?.id ?? null,
+        pairing,
+        typographyLocks: locks,
+        scaleRatio: (scale as typeof scale & { _ratio: number })._ratio,
+        mode: ui.mode,
+        activeTab: ui.activeTab,
+        theme: ui.theme,
+        spacingBaseUnit: spacing.baseUnit,
+        shadowMode: effects.shadowMode,
+        ...(stepOverrides != null && Object.keys(stepOverrides).length > 0 && { stepOverrides }),
+        ...(stepLocks    != null && Object.keys(stepLocks).length > 0    && { stepLocks }),
+      }
+
+      const hash = await encodeShare(snapshot)
+      const url = `${window.location.origin}${window.location.pathname}${hash}`
+      await navigator.clipboard.writeText(url)
+      trackEvent('Share Link Copied')
+    },
+    dismissShareBanner: () => set({ ui: { ...get().ui, loadedFromShare: false } }),
   }
 }
