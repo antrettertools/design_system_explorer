@@ -18,7 +18,7 @@ Do not read the full spec archive for context — this document is the distillat
 
 ## Current State (update after each phase)
 
-> Last updated: **2026-04-14** — Phase 3 complete.
+> Last updated: **2026-04-14** — Phase 4 complete.
 
 ### Right Panel / Live Preview
 - **Template lock removed** in `LivePreview.tsx`. `const template = showcaseTemplate` — respected in all modes. `mode` destructure also removed (was unused after lock removal).
@@ -36,11 +36,12 @@ Do not read the full spec archive for context — this document is the distillat
 ### Generator Panel
 - `SpaceHintBar` is **lock-aware**: shows " — locked slots will hold" hint when some slots locked; shows muted "All slots locked — unlock to regenerate" (with 🔒, `opacity: 0.5`) when all slots locked; falls through to default "Hit SPACE to regenerate" when no locks or empty slots.
 - `GeneratorFooter` has a full-width "Explore your design system →" CTA strip (40px, `--color-interactive-subtle` background, `color-mix()` border). On mobile the strip is hidden; mobile buttons (`generateMobile`, `previewBtn`) are 44px. ✓ Phase 3 done.
-- **Dual role-label opacity problem:** `ColorSwatches.module.css` `.roleTag { opacity: 0.55 }` is the column *header* above each card; `ColorSlotCard.module.css` `.card[data-light="true"] .roleLabel { color: rgba(0,0,0,0.55) }` is the label *inside* the swatch. Both need opacity increases. Phase 4 fixes both.
-- **Lock button hit area:** `.lockBtn { width: 24px; height: 24px }` on desktop (already 32px on mobile). Phase 4 corrects desktop to 32px.
-- **Shade strip decoupling:** `ShadeStrip` renders unconditionally based on `slot.locked`. Phase 4 decouples: adds `[shadeOpen, setShadeOpen]` state + chevron toggle + `data-shade-open` attribute. The Phase 2 `.locked .swatch` radius rule becomes a `[data-shade-open="false"] .swatch` rule in Phase 4 (they must coordinate — see Phase 4 spec).
-- **`ShadeStrip` radius gap:** `ShadeStrip.module.css` `.strip { border-radius: 0 0 var(--ui-radius-3) var(--ui-radius-3) }` was NOT updated in Phase 2 (Phase 2 only touched Phase 2-listed files). Phase 4 updates this to `--radius-md`.
-- **`TypographySpecimen` already uses `<input>` elements** with a `border-bottom` underline for heading + body text — it is more sophisticated than the master spec described. `[headingText, setHeadingText]` state exists. Phase 4 improves the affordance (dashed underline on hover, focus distinction, pencil icon) — it does NOT rebuild from scratch.
+- **Role-label opacity:** Both fixed. `.roleTag` opacity 0.55→1 (column header); light-card `.roleLabel` rgba(0,0,0,0.55)→rgba(0,0,0,0.80). ✓ Phase 4 done.
+- **Lock button hit area:** Desktop `.lockBtn` bumped to 32×32px, icon 11→13px. ✓ Phase 4 done.
+- **Shade strip decoupled from lock:** `ShadeStrip` now controlled by `[shadeOpen, setShadeOpen]` state + chevron button in `bottomRow`. `data-shade-open` attribute on card. `.locked .swatch` radius rule replaced with `[data-shade-open='true'] .swatch`. `removeBtn` offset corrected to `right: 36px`. ✓ Phase 4 done.
+- **`ShadeStrip` radius:** `.strip { border-radius: 0 0 var(--radius-md, 8px) var(--radius-md, 8px) }` — now tracks generated token. ✓ Phase 4 done.
+- **`TypographySpecimen` edit affordance:** `.inputTag` opacity 0.6→1; hover shows dashed `--color-interactive` underline; Pencil icon fades in on row-hover, hides on focus (`:has(.input:focus)`). ✓ Phase 4 done.
+- **TokenHints Zone C:** New component at `features/generator/TokenHints/`. Shows 6 live token rows (`--color-brand-500`, `--color-accent-500`, `--font-heading`, `--font-body`, `--radius-md`, `--shadow-md`). Reads computed CSS via `requestAnimationFrame` on `slots`/`pairing` change. Mounted directly in `GeneratorPanel.tsx` inside `.content` after Zone B (no `.section` wrapper — has own `border-top` + padding). ✓ Phase 4 done.
 
 ### Detail Mode
 - "← Generator" back link is now a **bordered pill** (`border: 1px solid var(--color-border)`, `border-radius: var(--ui-radius-full)`, `height: 28px`, `font-weight: 500`). Visually distinct from tabs. Negative margin removed. ✓ Phase 3 done.
@@ -88,7 +89,7 @@ Do not read the full spec archive for context — this document is the distillat
 | 1 | Template Freedom | [spec](./specs/2026-04-13-phase-1-template-freedom.md) | ✅ Complete (2026-04-14) | `LivePreview.tsx`, new `ShowcaseStrip/`, `SpaceHintBar.tsx` |
 | 2 | Meta-Theming Completion | [spec](./specs/2026-04-13-phase-2-meta-theming-completion.md) | ✅ Complete (2026-04-14) | `globals.css`, `ColorSlotCard.module.css`, `ColorPickerPopover.module.css`, modal CSS files, `AppHeader.module.css`, `ui-tokens.css` |
 | 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ✅ Complete (2026-04-14) | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
-| 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ⬜ Not started | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx/css`, new `TokenHints/` |
+| 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ✅ Complete (2026-04-14) | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx`, new `TokenHints/` |
 | 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ⬜ Not started | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
 | 6 | Showcase Virality | [spec](./specs/2026-04-13-phase-6-showcase-virality.md) | ⬜ Not started | `store/ui.ts`, `ShowcaseTab.tsx/css`, new `SharedDesignBanner/`, `App.tsx`, `api/og-image.ts`, `DesignSystemViewer.tsx/css` |
 
@@ -279,6 +280,38 @@ From `CLAUDE.md` — these are blocking launch but not UX phases:
 - App Header: center zone wired, dividers added, mobile targets 44px
 - Generator Panel: full-width CTA strip replaces small button; mobile buttons 44px
 - Detail Mode: back link is now a bordered pill, visually distinct from tabs
+
+---
+
+## Phase 4 — Generator Spatial Grammar — COMPLETE (2026-04-14)
+
+### What shipped
+- [x] 4.1 `ColorSwatches.module.css`: `.roleTag` opacity 0.55→1 (column header fully opaque)
+- [x] 4.1 `ColorSlotCard.module.css`: light-card `.roleLabel` rgba(0,0,0,0.55)→rgba(0,0,0,0.80)
+- [x] 4.2 `ColorSlotCard.module.css`: `.lockBtn` desktop 24×24→32×32px
+- [x] 4.2 `ColorSlotCard.tsx`: lock/unlock icon size 11→13px
+- [x] 4.3 `ColorSlotCard.tsx`: `ChevronDown` import; `shadeOpen` state; `data-shade-open` attr; chevron toggle button in `bottomRow`; `ShadeStrip` decoupled from lock state
+- [x] 4.3 `ColorSlotCard.module.css`: `.locked .swatch` → `[data-shade-open='true'] .swatch` radius rule; `removeBtn` right 32→36px; shadeToggle + shadeToggleOpen CSS appended
+- [x] 4.4 `ShadeStrip.module.css`: `.strip` radius `--ui-radius-3`→`--radius-md, 8px`
+- [x] 4.5 `TypographySpecimen.module.css`: `.inputTag` opacity 0.6→1; `.input:hover:not(:focus)` dashed interactive underline; `.editIcon` + `:has()` CSS appended
+- [x] 4.5 `TypographySpecimen.tsx`: `Pencil` import; pencil icon in heading and body inputRows
+- [x] 4.6 `TokenHints/TokenHints.tsx` created — 6 token rows, `requestAnimationFrame` read on `[slots, pairing]`
+- [x] 4.6 `TokenHints/TokenHints.module.css` created
+- [x] 4.6 `GeneratorPanel.tsx`: `TokenHints` imported and mounted as Zone C (no `.section` wrapper)
+- [x] `npx tsc --noEmit` passes (zero errors)
+- [x] `npm test` passes (191/191 tests, 30 files, no regressions)
+
+### Deviations from spec
+- **TokenHints label field:** Spec used short labels (`brand-500`) which would render as `--brand-500` (incorrect). Used full labels (`color-brand-500`) so rendered output is `--color-brand-500` — matching actual CSS custom property names.
+- **`removeBtn` offset:** Spec said "check visually: right: 36px may be needed". Changed to 36px proactively since lock button is now 32px (was 24px) — avoids guaranteed overlap without waiting for visual check.
+
+### New discoveries / things to carry forward
+- **`TokenHints` has no unit tests** — `getComputedStyle(document.documentElement)` returns empty strings in jsdom, making the component untestable without extensive mocking. The component is display-only with no logic to test; this is acceptable.
+- **`:has()` CSS selector** used in `TypographySpecimen.module.css` — supported Chrome 105+, Firefox 121+, Safari 15.4+. Harmless fallback (pencil stays visible during focus) on older browsers.
+- **Shade strip `shadeOpen` is local state** — intentionally not Zustand. SPACE to regenerate resets it (component unmounts/remounts). Toggle is not in undo history — by design.
+
+### Updated Current State notes
+- Generator Panel section updated: all 5 Phase 4 items complete, old "Phase 4 fixes" notes replaced with done markers.
 
 ---
 

@@ -4,7 +4,7 @@ import type { ColorSlot } from '@/core/color/types'
 import { nameFromHex } from '@/core/color/nameFromHex'
 import { ShadeStrip } from './ShadeStrip'
 import { ColorPickerPopover } from '@/components/ui/ColorPickerPopover/ColorPickerPopover'
-import { Lock, LockOpen, X } from 'lucide-react'
+import { Lock, LockOpen, X, ChevronDown } from 'lucide-react'
 import styles from './ColorSlotCard.module.css'
 
 function isLightColor(hex: string): boolean {
@@ -45,6 +45,7 @@ export function ColorSlotCard({
   const [pickerOpen, setPickerOpen] = useState(false)
   const [editingName, setEditingName] = useState(false)
   const [nameInput, setNameInput] = useState('')
+  const [shadeOpen, setShadeOpen] = useState(false)
   const swatchRef = useRef<HTMLDivElement>(null)
   const nameInputRef = useRef<HTMLInputElement>(null)
 
@@ -80,6 +81,7 @@ export function ColorSlotCard({
     <div
       className={cardClass}
       data-light={isLight}
+      data-shade-open={shadeOpen}
       draggable
       onDragStart={() => onDragStart?.(slot.id)}
       onDragOver={(e) => { e.preventDefault(); onDragOver?.(slot.id) }}
@@ -126,11 +128,20 @@ export function ColorSlotCard({
             aria-label={slot.locked ? 'Unlock color' : 'Lock color'}
             title={slot.locked ? 'Click to unlock' : 'Click to lock'}
           >
-            {slot.locked ? <Lock size={11} strokeWidth={2.5} /> : <LockOpen size={11} strokeWidth={2.5} />}
+            {slot.locked ? <Lock size={13} strokeWidth={2.5} /> : <LockOpen size={13} strokeWidth={2.5} />}
           </button>
         </div>
         <div className={styles.bottomRow}>
           <span className={styles.hex}>{slot.hex.toUpperCase()}</span>
+          <button
+            className={`${styles.shadeToggle} ${shadeOpen ? styles.shadeToggleOpen : ''}`}
+            onClick={(e) => { e.stopPropagation(); setShadeOpen(v => !v) }}
+            aria-label={shadeOpen ? 'Hide shade scale' : 'Show shade scale'}
+            aria-expanded={shadeOpen}
+            title={shadeOpen ? 'Hide shades' : 'Show shades'}
+          >
+            <ChevronDown size={10} strokeWidth={2.5} />
+          </button>
         </div>
         {canRemove && slot.role !== 'brand' && (
           <button
@@ -143,7 +154,7 @@ export function ColorSlotCard({
           </button>
         )}
       </div>
-      {slot.locked && <ShadeStrip hex={slot.hex} role={slot.role} />}
+      {shadeOpen && <ShadeStrip hex={slot.hex} role={slot.role} />}
       {pickerOpen && (
         <ColorPickerPopover
           hex={slot.hex}

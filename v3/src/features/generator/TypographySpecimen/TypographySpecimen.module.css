@@ -131,7 +131,7 @@
   letter-spacing: 0.08em;
   color: var(--color-on-surface-subtle);
   font-family: var(--font-body, sans-serif);
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .input {
@@ -148,6 +148,12 @@
 }
 
 .input:focus {
+  border-bottom-color: var(--color-interactive);
+  color: var(--color-on-surface);
+}
+
+.input:hover:not(:focus) {
+  border-bottom-style: dashed;
   border-bottom-color: var(--color-interactive);
   color: var(--color-on-surface);
 }
@@ -207,4 +213,21 @@
   color: var(--color-on-surface-subtle);
   white-space: nowrap;
   opacity: 0.45;
+}
+
+/* ── Edit affordance icon ─────────────────────────────────────── */
+.editIcon {
+  flex-shrink: 0;
+  color: var(--color-on-surface-subtle);
+  opacity: 0;
+  transition: opacity var(--ui-duration-2);
+  pointer-events: none;
+}
+
+.inputRow:hover .editIcon {
+  opacity: 0.5;
+}
+
+.inputRow:has(.input:focus) .editIcon {
+  opacity: 0;
 }
