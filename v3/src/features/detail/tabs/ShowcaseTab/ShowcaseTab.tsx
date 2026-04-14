@@ -16,10 +16,10 @@ const RADIUS_STEPS = ['none', 'sm', 'md', 'lg', 'xl', 'full'] as const
 const SHADOW_STEPS = ['sm', 'md', 'lg', 'xl'] as const
 
 export function ShowcaseTab() {
-  const { showcaseTemplate, theme, mode, activeTab } = useUI()
+  const { showcaseTemplate } = useUI()
   const { setShowcaseTemplate, copyShareLink } = useUIActions()
-  const { slots, activeRecipe, dataVizN } = useColor()
-  const { pairing, scale, locks } = useTypography()
+  const { dataVizN } = useColor()
+  const { pairing, scale } = useTypography()
   const { baseUnit, config: spacingConfig, overrides: spacingOverrides, radiusOverrides } = useSpacing()
   const { config: effectsConfig, shadowMode, shadowOverrides } = useEffects()
   const [copied, setCopied] = useState(false)
