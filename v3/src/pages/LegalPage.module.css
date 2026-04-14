@@ -29,7 +29,9 @@
   letter-spacing: -0.04em;
   color: var(--color-on-surface, #111);
   font-family: var(--font-heading, Georgia, serif);
+  text-decoration: none;
 }
+.wordmark:hover { opacity: 0.75; }
 
 .content {
   flex: 1;

@@ -1,20 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth/useAuth'
-import { useColor, useUIActions, useUI } from '@/store'
+import { useUIActions, useUI } from '@/store'
 import { TemplateIcon } from '../shared/TemplateIcon'
 import { HowItWorksSection } from './HowItWorksSection'
 import { LiveSystemSection } from './LiveSystemSection'
 import styles from './LandingTemplate.module.css'
-
-type LegalRoute = 'privacy' | 'terms' | 'impressum'
-
-type DsygnLandingProps = {
-  onNavigate: (route: LegalRoute) => void
-}
-
-function scrollToSection(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
 
 // ── Section: Pricing ─────────────────────────────────────────────────────────
 
@@ -167,100 +157,9 @@ function FeaturesSection() {
   )
 }
 
-// ── Section: Deep Dive ────────────────────────────────────────────────────────
-
-type SpacingStep = { key: string; varName: string }
-type RadiusStep  = { key: string; varName: string }
-type ShadowStep  = { key: string; varName: string }
-
-const SPACING_STEPS: SpacingStep[] = [
-  { key: 'xs',  varName: 'var(--ui-space-xs)' },
-  { key: 'sm',  varName: 'var(--ui-space-sm)' },
-  { key: 'md',  varName: 'var(--ui-space-md)' },
-  { key: 'lg',  varName: 'var(--ui-space-lg)' },
-  { key: 'xl',  varName: 'var(--ui-space-xl)' },
-  { key: '2xl', varName: 'var(--ui-space-2xl)' },
-  { key: '3xl', varName: 'var(--ui-space-3xl)' },
-]
-
-const RADIUS_STEPS: RadiusStep[] = [
-  { key: 'none', varName: 'var(--radius-none)' },
-  { key: 'sm',   varName: 'var(--radius-sm)' },
-  { key: 'md',   varName: 'var(--radius-md)' },
-  { key: 'lg',   varName: 'var(--radius-lg)' },
-  { key: 'xl',   varName: 'var(--radius-xl)' },
-  { key: 'full', varName: 'var(--radius-full)' },
-]
-
-const SHADOW_STEPS: ShadowStep[] = [
-  { key: 'sm', varName: 'var(--shadow-sm)' },
-  { key: 'md', varName: 'var(--shadow-md)' },
-  { key: 'lg', varName: 'var(--shadow-lg)' },
-  { key: 'xl', varName: 'var(--shadow-xl)' },
-]
-
-function DeepDiveSection() {
-  const { dataVizN } = useColor()
-
-  return (
-    <section className={`${styles.section} ${styles.deepDive}`}>
-      <div className={styles.deepDiveLabel}>Explore the full system</div>
-
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Spacing scale</div>
-        <div className={styles.spacingScale}>
-          {SPACING_STEPS.map((step) => (
-            <div key={step.key} className={styles.spacingRow}>
-              <span className={styles.spacingLabel}>{step.key}</span>
-              <div className={styles.spacingBar} style={{ width: step.varName }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Border radius</div>
-        <div className={styles.radiusRow}>
-          {RADIUS_STEPS.map((step) => (
-            <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div className={styles.radiusChip} style={{ borderRadius: step.varName }} />
-              <div className={styles.radiusChipLabel}>{step.key}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Shadows</div>
-        <div className={styles.shadowRow}>
-          {SHADOW_STEPS.map((step) => (
-            <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div className={styles.shadowBox} style={{ boxShadow: step.varName }} />
-              <div className={styles.shadowBoxLabel}>shadow-{step.key}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Data visualization</div>
-        <div className={styles.datavizStrip}>
-          {Array.from({ length: dataVizN }, (_, i) => (
-            <div
-              key={i}
-              className={styles.datavizSegment}
-              style={{ background: `var(--color-dataviz-${i + 1})` }}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
+export function DsygnLanding() {
   const { user } = useAuth()
   const { openSignInPrompt, openUpgradeModal } = useUIActions()
   const { mode } = useUI()
@@ -276,19 +175,17 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
         <div className={styles.navLogo}>dsygn.<span className={styles.cloudWord}>cloud</span></div>
         <ul className={styles.navLinks}>
           <li>
-            <button className={styles.navLink} onClick={() => scrollToSection('how-it-works')}>
+            <button className={styles.navLink} onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>
               How it works
             </button>
           </li>
           <li>
-            <button className={styles.navLink} onClick={() => scrollToSection('features')}>
+            <button className={styles.navLink} onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
               Features
             </button>
           </li>
           <li>
-            <button className={styles.navLink} onClick={() => scrollToSection('pricing')}>
-              Pricing
-            </button>
+            <Link className={styles.navLink} to="/pricing">Pricing</Link>
           </li>
           <li>
             <Link className={styles.navLink} to="/blog">Blog</Link>
@@ -326,9 +223,9 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
           <button className={styles.heroPrimary} onClick={() => openSignInPrompt('manual')}>
             Start building free
           </button>
-          <button className={styles.heroGhost} onClick={() => scrollToSection('pricing')}>
+          <Link className={styles.heroGhost} to="/pricing">
             See pricing
-          </button>
+          </Link>
         </div>
         {mode === 'generator' && (
           <div className={styles.spacebarVisual}>
@@ -355,9 +252,6 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
       {/* ── PRICING ──────────────────────────────────────────── */}
       <PricingSection />
 
-      {/* ── DEEP DIVE ────────────────────────────────────────── */}
-      <DeepDiveSection />
-
       {/* ── FOOTER ───────────────────────────────────────────── */}
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
@@ -367,16 +261,16 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
           <div className={styles.footerCols}>
             <div className={styles.footerCol}>
               <div className={styles.footerColLabel}>Product</div>
-              <button className={styles.footerLink} onClick={() => scrollToSection('features')}>Features</button>
-              <button className={styles.footerLink} onClick={() => scrollToSection('how-it-works')}>How it works</button>
-              <button className={styles.footerLink} onClick={() => scrollToSection('pricing')}>Pricing</button>
+              <button className={styles.footerLink} onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>Features</button>
+              <button className={styles.footerLink} onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>How it works</button>
+              <Link className={styles.footerLink} to="/pricing">Pricing</Link>
               <Link className={styles.footerLink} to="/blog">Blog</Link>
             </div>
             <div className={styles.footerCol}>
               <div className={styles.footerColLabel}>Legal</div>
-              <button className={styles.footerLink} onClick={() => onNavigate('privacy')}>Privacy</button>
-              <button className={styles.footerLink} onClick={() => onNavigate('terms')}>Terms</button>
-              <button className={styles.footerLink} onClick={() => onNavigate('impressum')}>Impressum</button>
+              <Link className={styles.footerLink} to="/legal/privacy">Privacy</Link>
+              <Link className={styles.footerLink} to="/legal/terms">Terms</Link>
+              <Link className={styles.footerLink} to="/impressum">Impressum</Link>
             </div>
           </div>
         </div>

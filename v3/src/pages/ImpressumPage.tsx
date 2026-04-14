@@ -6,50 +6,100 @@ export function ImpressumPage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to="/" className={styles.back}>← Back to generator</Link>
-        <span className={styles.wordmark}>dsygn.cloud</span>
+        <Link to="/" className={styles.back}>← Back to dsygn.cloud</Link>
+        <Link to="/" className={styles.wordmark}>dsygn.cloud</Link>
       </header>
 
       <div className={styles.content}>
-        <h1>Impressum</h1>
-        <p className={styles.updated}>Angaben gemäß § 5 TMG / Legal notice</p>
+        <h1>Legal Notice (Impressum)</h1>
+        <p className={styles.updated}>Information pursuant to § 5 TMG (German Telemedia Act)</p>
 
-        <h2>Verantwortlich / Responsible</h2>
+        <h2>Service Provider</h2>
         <p>
-          {/* Replace with your full legal name */}
-          [YOUR FULL LEGAL NAME]<br />
-          {/* Replace with your registered business address */}
-          [STREET ADDRESS]<br />
-          [POSTAL CODE] [CITY]<br />
-          [COUNTRY]
+          <strong>Florian Antretter</strong><br />
+          Hochriesstr. 3<br />
+          83064 Raubling<br />
+          Germany
         </p>
 
-        <h2>Kontakt / Contact</h2>
+        <h2>Contact</h2>
         <p>
-          {/* Replace with your contact email */}
           E-Mail: <a href="mailto:hello@dsygn.cloud">hello@dsygn.cloud</a>
         </p>
 
-        <h2>Umsatzsteuer-ID (if applicable)</h2>
+        <h2>VAT</h2>
         <p>
-          {/*
-            If you are registered for VAT (Umsatzsteuer), add your VAT ID here.
-            Example: DE123456789
-            If you are operating as Kleingewerbe below the Kleinunternehmerregelung
-            threshold (§19 UStG), state that instead:
-            "Gemäß § 19 UStG wird keine Umsatzsteuer erhoben."
-          */}
-          Gemäß § 19 UStG wird keine Umsatzsteuer erhoben. {/* Remove this line if VAT-registered */}
+          Pursuant to § 19 UStG (German Value Added Tax Act — small business regulation),
+          VAT is not charged and is therefore not shown separately.
         </p>
 
-        <h2>Streitschlichtung / Dispute resolution</h2>
+        <h2>Responsible for Content</h2>
         <p>
-          Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{' '}
+          Responsible for editorial content pursuant to § 18 (2) MStV (German Interstate
+          Media Treaty):<br />
+          <strong>Florian Antretter</strong>, address as above.
+        </p>
+
+        <h2>EU Online Dispute Resolution</h2>
+        <p>
+          The European Commission provides a platform for online dispute resolution (ODR):{' '}
           <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">
             https://ec.europa.eu/consumers/odr/
-          </a>.
-          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
-          Verbraucherschlichtungsstelle teilzunehmen.
+          </a>.<br />
+          Our e-mail address can be found above.
+        </p>
+        <p>
+          We are neither willing nor obliged to participate in dispute resolution proceedings
+          before a consumer arbitration board.
+        </p>
+
+        <h2>Liability for Content</h2>
+        <p>
+          As a service provider we are responsible for our own content on these pages in
+          accordance with general law pursuant to § 7 (1) TMG. According to §§ 8–10 TMG,
+          however, we are not obligated to monitor transmitted or stored third-party information
+          or to investigate circumstances that indicate illegal activity.
+        </p>
+        <p>
+          Obligations to remove or block the use of information under general law remain
+          unaffected. However, liability in this respect is only possible from the time of
+          knowledge of a specific infringement. Upon notification of such violations, we will
+          remove the content immediately.
+        </p>
+
+        <h2>Liability for Links</h2>
+        <p>
+          Our service contains links to external third-party websites over whose content we
+          have no control. Therefore, we cannot accept any liability for these external
+          contents. The respective provider or operator of the linked pages is always
+          responsible for the content of those pages.
+        </p>
+        <p>
+          The linked pages were checked for possible legal violations at the time of linking.
+          Illegal content was not recognisable at the time of linking. Permanent monitoring of
+          the content of the linked pages is not reasonable without concrete indications of a
+          violation. Upon notification of violations, we will remove such links immediately.
+        </p>
+
+        <h2>Copyright</h2>
+        <p>
+          The content and works created by the site operator on these pages are subject to
+          German copyright law. Duplication, processing, distribution, or any form of
+          commercialisation of such material beyond the scope of the copyright law requires
+          the prior written consent of the respective author or creator.
+        </p>
+        <p>
+          Downloads and copies of this site are only permitted for private, non-commercial
+          use. Insofar as the content on this site was not created by the operator, the
+          copyrights of third parties are respected. Third-party content is identified as
+          such. Should you nevertheless become aware of a copyright infringement, please
+          notify us. Upon notification of violations, we will remove such content immediately.
+        </p>
+
+        <h2>Privacy</h2>
+        <p>
+          For information on how we handle personal data, please see our{' '}
+          <Link to="/legal/privacy">Privacy Policy</Link>.
         </p>
       </div>
 

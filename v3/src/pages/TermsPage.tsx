@@ -6,13 +6,13 @@ export function TermsPage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to="/" className={styles.back}>← Back to generator</Link>
-        <span className={styles.wordmark}>dsygn.cloud</span>
+        <Link to="/" className={styles.back}>← Back to dsygn.cloud</Link>
+        <Link to="/" className={styles.wordmark}>dsygn.cloud</Link>
       </header>
 
       <div className={styles.content}>
         <h1>Terms of Service</h1>
-        <p className={styles.updated}>Last updated: 2026-03-28</p>
+        <p className={styles.updated}>Last updated: 2026-04-14</p>
 
         <h2>1. Service description</h2>
         <p>
