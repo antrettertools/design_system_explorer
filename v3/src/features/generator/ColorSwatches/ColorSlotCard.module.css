@@ -1,7 +1,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: var(--ui-radius-4);
+  border-radius: var(--radius-md, 8px);
   overflow: hidden;
   position: relative;
   cursor: grab;
@@ -120,7 +120,7 @@
 .card[data-light='true'] .hex { color: rgba(0, 0, 0, 0.5); }
 
 .locked .swatch {
-  border-radius: var(--ui-radius-4) var(--ui-radius-4) 0 0;
+  border-radius: var(--radius-md, 8px) var(--radius-md, 8px) 0 0;
 }
 
 .removeBtn {
@@ -166,7 +166,7 @@
 .touchOver {
   outline: 2px solid var(--color-interactive);
   outline-offset: 2px;
-  border-radius: var(--ui-radius-4);
+  border-radius: var(--radius-md, 8px);
 }
 
 /* Other cards during drag: step back */
