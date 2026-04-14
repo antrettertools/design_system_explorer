@@ -36,7 +36,7 @@
 }
 
 .card[data-light='true'] .roleLabel {
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(0, 0, 0, 0.80);
   text-shadow: none;
 }
 
