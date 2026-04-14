@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, type ComponentType } from 'react'
 import styles from './DetailMode.module.css'
 import { useUI, useUIActions } from '@/store'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Palette, Type, Ruler, Wand2, LayoutGrid, Monitor, Download } from 'lucide-react'
 import type { DetailTab } from '@/store/ui'
 import { ColorsTab } from './tabs/ColorsTab/ColorsTab'
 import { TypographyTab } from './tabs/TypographyTab/TypographyTab'
@@ -11,14 +11,21 @@ import { ShowcaseTab } from './tabs/ShowcaseTab/ShowcaseTab'
 import { ExportTab } from './tabs/ExportTab/ExportTab'
 import { ComponentsTab } from './tabs/ComponentsTab/ComponentsTab'
 
-const ALL_TABS: { id: DetailTab; label: string; short: string }[] = [
-  { id: 'colors',     label: 'Colors',     short: 'Clr' },
-  { id: 'typography', label: 'Typography', short: 'Typ' },
-  { id: 'spacing',    label: 'Spacing',    short: 'Spc' },
-  { id: 'effects',    label: 'Effects',    short: 'Eff' },
-  { id: 'components', label: 'Components', short: 'Cmp' },
-  { id: 'showcase',   label: 'Showcase',   short: 'Shw' },
-  { id: 'export',     label: 'Export',     short: 'Exp' },
+type TabDef = {
+  id: DetailTab
+  label: string
+  short: string
+  Icon: ComponentType<{ size?: number | string; strokeWidth?: number | string; className?: string }>
+}
+
+const ALL_TABS: TabDef[] = [
+  { id: 'colors',     label: 'Colors',     short: 'Colors', Icon: Palette    },
+  { id: 'typography', label: 'Typography', short: 'Type',   Icon: Type       },
+  { id: 'spacing',    label: 'Spacing',    short: 'Space',  Icon: Ruler      },
+  { id: 'effects',    label: 'Effects',    short: 'FX',     Icon: Wand2      },
+  { id: 'components', label: 'Components', short: 'Comps',  Icon: LayoutGrid },
+  { id: 'showcase',   label: 'Showcase',   short: 'Show',   Icon: Monitor    },
+  { id: 'export',     label: 'Export',     short: 'Export', Icon: Download   },
 ]
 
 const IMPLEMENTED_TABS: DetailTab[] = ['colors', 'typography', 'spacing', 'effects', 'components', 'showcase', 'export']
@@ -96,6 +103,29 @@ export function DetailMode() {
       <div className={styles.content}>
         {renderTab()}
       </div>
+
+      {/* Bottom navigation — visible only on mobile via CSS */}
+      <nav className={styles.bottomTabs} aria-label="Detail mode tabs">
+        {ALL_TABS.map(tab => {
+          const { Icon } = tab
+          return (
+            <button
+              key={tab.id}
+              className={`${styles.bottomTab} ${activeTab === tab.id ? styles.bottomTabActive : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+              aria-selected={activeTab === tab.id}
+              aria-label={
+                IMPLEMENTED_TABS.includes(tab.id)
+                  ? tab.label
+                  : `${tab.label} (coming soon)`
+              }
+            >
+              <Icon size={18} strokeWidth={activeTab === tab.id ? 2.5 : 1.75} />
+              <span className={styles.bottomTabLabel}>{tab.short}</span>
+            </button>
+          )
+        })}
+      </nav>
     </div>
   )
 }

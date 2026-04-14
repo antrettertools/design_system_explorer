@@ -30,6 +30,8 @@ function LivePreviewContent() {
 
   const [panelRoute, setPanelRoute] = useState<PanelRoute>('home')
   const panelRef = useRef<HTMLDivElement>(null)
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
 
   // Reset to home when a new palette is generated
   useEffect(() => {
@@ -68,8 +70,36 @@ function LivePreviewContent() {
     }
   }
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    // Only track touches that start near the left edge — avoids interfering
+    // with horizontal scrolling inside templates
+    const touch = e.touches[0]
+    if (touch.clientX < 48) {
+      touchStartX.current = touch.clientX
+      touchStartY.current = touch.clientY
+    }
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null || touchStartY.current === null) return
+    const touch = e.changedTouches[0]
+    const deltaX = touch.clientX - touchStartX.current
+    const deltaY = Math.abs(touch.clientY - (touchStartY.current ?? touch.clientY))
+    // Swipe right: at least 60px horizontal, less than 40px vertical drift
+    if (deltaX > 60 && deltaY < 40) {
+      hideMobilePreview()
+    }
+    touchStartX.current = null
+    touchStartY.current = null
+  }
+
   return (
-    <div className={styles.panel} ref={panelRef}>
+    <div
+      className={styles.panel}
+      ref={panelRef}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <button className={styles.backBtn} onClick={hideMobilePreview} aria-label="Back to generator">
         &larr; Back to generator
       </button>

@@ -18,7 +18,7 @@ Do not read the full spec archive for context — this document is the distillat
 
 ## Current State (update after each phase)
 
-> Last updated: **2026-04-14** — Phase 4 complete.
+> Last updated: **2026-04-14** — Phase 5 complete.
 
 ### Right Panel / Live Preview
 - **Template lock removed** in `LivePreview.tsx`. `const template = showcaseTemplate` — respected in all modes. `mode` destructure also removed (was unused after lock removal).
@@ -71,14 +71,15 @@ Do not read the full spec archive for context — this document is the distillat
 
 ### Mobile
 - **AppHeader** touch targets bumped to 44px (all icon buttons). ✓ Phase 3 done.
-- **GeneratorFooter** mobile buttons (`generateMobile`, `previewBtn`) bumped to 44px. ✓ Phase 3 done.
-- Detail Mode tab strip overflows on narrow viewports. Phase 5 replaces it with a bottom nav on mobile.
-- `mobileShowPreview` is not reset when mode changes — ghost state bug. Phase 5 fixes in `store/ui.ts`.
-- AppHeader buttons are 40px on mobile (WCAG minimum is 44px). Phase 5 corrects all to 44px.
-- `DetailMode.mobilePreviewBtn` is 28px — worst touch target in the app. Phase 5 fixes to 44px.
-- `LivePreview.backBtn` has no explicit height — Phase 5 adds `min-height: 44px`.
-- `--ui-size-btn-xl` token is 40px — Phase 5 raises to 44px, fixing GeneratorFooter buttons automatically.
-- `OnboardingOverlay` shows "Hit SPACE" on touch devices. Phase 5 adds `window.matchMedia('(pointer: coarse)')` detection for adaptive text.
+- **GeneratorFooter** mobile buttons (`generateMobile`, `previewBtn`) bumped to 44px. ✓ Phase 5 (via token cascade from `--ui-size-btn-xl: 44px`).
+- **`--ui-size-btn-xl` raised to 44px** in `ui-tokens.css`. All components using this token are now WCAG 2.5.5 compliant. ✓ Phase 5 done.
+- **AppHeader mobile block consolidated**: `supportBtn` merged into main `@media (max-width: 768px)` block; `exportBtn` now has `height: 44px` on mobile. ✓ Phase 5 done.
+- **Detail Mode bottom nav**: On mobile (≤768px), the 7-tab strip moves to a fixed bottom bar with icons + labels (56px, safe-area aware). Desktop tab strip hidden; `divider` hidden; `topBar` shows only back + preview buttons. ✓ Phase 5 done.
+- **`DetailMode.mobilePreviewBtn`** raised to `var(--ui-size-btn-xl)` (44px). ✓ Phase 5 done.
+- **`LivePreview.backBtn`** given `min-height: 44px` (padding changed to horizontal-only, flex centering preserved). ✓ Phase 5 done.
+- **`mobileShowPreview` ghost state** fixed: `setMode` now resets `mobileShowPreview: false` in both branches (detail and generator). ✓ Phase 5 done.
+- **Swipe-to-go-back gesture** in `LivePreviewContent`: left-edge (x < 48px) touch tracking; swipe right ≥60px with <40px vertical drift calls `hideMobilePreview()`. ✓ Phase 5 done.
+- **`OnboardingOverlay` touch adaptation**: `isTouch = window.matchMedia('(pointer: coarse)').matches`; touch devices see "Tap Generate for a new palette." / "Tap anywhere to dismiss". ✓ Phase 5 done.
 
 ---
 
@@ -90,7 +91,7 @@ Do not read the full spec archive for context — this document is the distillat
 | 2 | Meta-Theming Completion | [spec](./specs/2026-04-13-phase-2-meta-theming-completion.md) | ✅ Complete (2026-04-14) | `globals.css`, `ColorSlotCard.module.css`, `ColorPickerPopover.module.css`, modal CSS files, `AppHeader.module.css`, `ui-tokens.css` |
 | 3 | Header & Navigation Clarity | [spec](./specs/2026-04-13-phase-3-header-navigation-clarity.md) | ✅ Complete (2026-04-14) | `AppHeader.tsx`, `AppHeader.module.css`, `GeneratorFooter.tsx/css`, `DetailMode.module.css` |
 | 4 | Generator Spatial Grammar | [spec](./specs/2026-04-13-phase-4-generator-spatial-grammar.md) | ✅ Complete (2026-04-14) | `ColorSlotCard.tsx/css`, `ColorSwatches.module.css`, `ShadeStrip.module.css`, `TypographySpecimen.tsx/css`, `GeneratorPanel.tsx`, new `TokenHints/` |
-| 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ⬜ Not started | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
+| 5 | Mobile & Touch | [spec](./specs/2026-04-13-phase-5-mobile-and-touch.md) | ✅ Complete (2026-04-14) | `ui-tokens.css`, `AppHeader.module.css`, `DetailMode.tsx/css`, `LivePreview.tsx/css`, `OnboardingOverlay.tsx`, `store/ui.ts` |
 | 6 | Showcase Virality | [spec](./specs/2026-04-13-phase-6-showcase-virality.md) | ⬜ Not started | `store/ui.ts`, `ShowcaseTab.tsx/css`, new `SharedDesignBanner/`, `App.tsx`, `api/og-image.ts`, `DesignSystemViewer.tsx/css` |
 
 **Dependencies:**
@@ -312,6 +313,38 @@ From `CLAUDE.md` — these are blocking launch but not UX phases:
 
 ### Updated Current State notes
 - Generator Panel section updated: all 5 Phase 4 items complete, old "Phase 4 fixes" notes replaced with done markers.
+
+---
+
+## Phase 5 — Mobile & Touch — COMPLETE (2026-04-14)
+
+### What shipped
+- [x] 5.1 `ui-tokens.css`: `--ui-size-btn-xl` raised 40→44px (WCAG 2.5.5 cascade fix)
+- [x] 5.2 `AppHeader.module.css`: separate `supportBtn` mobile block removed and consolidated into main `@media (max-width: 768px)` block; all buttons set to 44px; `exportBtn` gains `height: 44px` on mobile
+- [x] 5.3 `DetailMode.module.css`: `mobilePreviewBtn` height changed from `--ui-size-btn-sm` (28px) to `--ui-size-btn-xl` (44px)
+- [x] 5.3 `LivePreview.module.css`: `backBtn` `padding` changed to horizontal-only + `min-height: 44px` added (flex centering preserved)
+- [x] 5.4 `DetailMode.tsx`: icon imports added (`Palette`, `Type`, `Ruler`, `Wand2`, `LayoutGrid`, `Monitor`, `Download`); `TabDef` type added; `ALL_TABS` updated with icons and improved short labels (`Clr`→`Colors`, `Typ`→`Type`, etc.); `bottomTabs` nav rendered as last child of `.shell`
+- [x] 5.5 `DetailMode.module.css`: `.bottomTabs` hidden on desktop; full mobile layout in `@media (max-width: 768px)` — `.tabs` and `.divider` hidden, `.topBar` space-between, `.content` bottom-padded for nav height, `.bottomTabs/.bottomTab/.bottomTabActive/.bottomTabLabel` fully styled with safe-area support
+- [x] 5.6 `store/ui.ts`: `setMode` adds `mobileShowPreview: false` to both branches (detail and generator) — ghost state fixed
+- [x] 5.7 `LivePreview.tsx`: `touchStartX`/`touchStartY` refs added; `handleTouchStart` (left-edge guard < 48px) and `handleTouchEnd` (60px horizontal / 40px vertical threshold) handlers; `onTouchStart`/`onTouchEnd` wired to panel div
+- [x] 5.8 `OnboardingOverlay.tsx`: `isTouch` constant using `window.matchMedia('(pointer: coarse)')` with `typeof window` guard; conditional text for line1 and hint paragraph
+- [x] `npx tsc --noEmit` passes (zero errors)
+- [x] `npm run build` succeeds
+- [x] 191/191 tests pass (30 files, no regressions)
+
+### Deviations from spec
+- **`TabDef.Icon` type widened:** Spec used `React.ComponentType<{ size?: number; strokeWidth?: number }>`. The actual `ForwardRefExoticComponent` from lucide-react has `size?: string | number`, causing a `propTypes` variance error in `tsc -b`. Changed to `ComponentType<{ size?: number | string; strokeWidth?: number | string; className?: string }>` — functionally identical at the call sites (we always pass `number`), type-safe with no `any`.
+- **`tsc --noEmit` vs `tsc -b`:** `tsc --noEmit` passed before the type fix but `npm run build` (which runs `tsc -b`) caught the propTypes variance issue. Both now pass.
+
+### New discoveries / things to carry forward
+- **`tsc -b` is stricter than `tsc --noEmit`** for this project — always run `npm run build` as the final check, not just `npx tsc --noEmit`.
+- **`--ui-size-btn-xl` token change is cascade-safe**: `GeneratorFooter` mobile buttons that were hardcoded to `44px` in Phase 3 are unaffected — same value.
+- **Bottom nav renders all 7 tabs in DOM on desktop** (hidden via `display: none`). This is intentional — the spec justified this as simpler than CSS `order` reordering.
+- **`activeTabRef` scroll behavior** only exists on the desktop `tabs` nav. The `bottomTabs` nav has no scroll behavior — correct per spec.
+
+### Updated Current State notes
+- Mobile section: all 5 deliverables complete, ghost state fixed, bottom nav live, swipe gesture active
+- Phase 5 row in Phase Status table: marked ✅ Complete
 
 ---
 

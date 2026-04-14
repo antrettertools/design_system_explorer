@@ -68,13 +68,13 @@ export function createUIActions(set: StoreSet, get: StoreGet): UIActions {
         // doesn't regenerate everything. Users unlock individually per section.
         const lockedSlots = state.color.slots.map(s => ({ ...s, locked: true }))
         set({
-          ui: { ...state.ui, mode },
+          ui: { ...state.ui, mode, mobileShowPreview: false },
           color: { ...state.color, slots: lockedSlots },
           typography: { ...state.typography, locks: { heading: true, body: true, scale: true } },
           effects: { ...state.effects, shadowLocked: true, focusRingLocked: true },
         })
       } else {
-        set({ ui: { ...state.ui, mode } })
+        set({ ui: { ...state.ui, mode, mobileShowPreview: false } })
       }
     },
     setTheme: (theme) => {

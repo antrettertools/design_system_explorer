@@ -68,7 +68,7 @@
   --ui-size-btn-sm:   28px;   /* small buttons, chips (GeneratorFooter, vibeChip) */
   --ui-size-btn-md:   32px;   /* standard action buttons (themeToggle, themeBtn) */
   --ui-size-btn-lg:   36px;   /* primary CTA buttons (exportBtn, copyBtn, navCta) */
-  --ui-size-btn-xl:   40px;   /* mobile touch-friendly buttons (generateMobile) */
+  --ui-size-btn-xl:   44px;   /* mobile touch-friendly buttons (generateMobile) — WCAG 2.5.5 minimum */
   --ui-size-divider:   4px;   /* SplitPane drag handle width */
   --ui-size-drawer:  360px;   /* SessionsDrawer slide-in panel width */
 

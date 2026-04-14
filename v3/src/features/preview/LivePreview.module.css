@@ -46,7 +46,8 @@
     z-index: 10;
     background: var(--color-surface, #fff);
     border-bottom: 1px solid var(--color-border, #e8e4df);
-    padding: var(--ui-space-5) var(--ui-space-8);
+    padding: 0 var(--ui-space-8);
+    min-height: 44px;              /* WCAG 2.5.5 */
     font-size: var(--ui-text-sm);
     color: var(--color-on-surface, #111);
     cursor: pointer;

@@ -194,10 +194,6 @@
 
 .supportBtn:active { transform: scale(0.94); }
 
-@media (max-width: 768px) {
-  .supportBtn { width: 44px; height: 44px; }
-}
-
 .exportBtn {
   height: var(--ui-size-btn-md);
   padding: 0 var(--ui-space-6);
@@ -245,18 +241,19 @@
 
   .actions { gap: var(--ui-space-3); }
 
-  /* Larger touch targets for small icon buttons (WCAG 2.5.5 minimum 44px) */
-  .historyBtn { width: 44px; height: 44px; }
+  /* 44px touch targets — WCAG 2.5.5 */
+  .historyBtn  { width: 44px; height: 44px; }
   .themeToggle { width: 44px; height: 44px; }
-  .lockAllBtn { width: 44px; height: 44px; }
+  .lockAllBtn  { width: 44px; height: 44px; }
+  .supportBtn  { width: 44px; height: 44px; }
 
   /* Swap: hide 3-way segment, show cycling button */
   .themeSegment { display: none; }
   .themeCycleBtn { display: flex; width: 44px; height: 44px; }
 
-  /* Icon-only export button */
+  /* Icon-only export button — 44px height */
   .exportBtnLabel { display: none; }
-  .exportBtn { padding: 0 var(--ui-space-5); }
+  .exportBtn { padding: 0 var(--ui-space-5); height: 44px; }
 }
 
 /* ── Auth UI ─────────────────────────────────────────────────────────── */

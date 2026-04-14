@@ -6,6 +6,8 @@ const AUTO_DISMISS_MS = 5000
 
 export function OnboardingOverlay() {
   const [visible, setVisible] = useState(false)
+  const isTouch = typeof window !== 'undefined'
+    && window.matchMedia('(pointer: coarse)').matches
 
   useEffect(() => {
     // Only show if user hasn't seen the overlay before
@@ -38,13 +40,19 @@ export function OnboardingOverlay() {
   return (
     <div className={styles.overlay} aria-live="polite" role="status">
       <div className={styles.card}>
-        <p className={styles.line1}>
-          Hit <kbd className={styles.kbd}>space</kbd> to generate.
-        </p>
+        {isTouch ? (
+          <p className={styles.line1}>
+            Tap <strong className={styles.kbd}>Generate</strong> for a new palette.
+          </p>
+        ) : (
+          <p className={styles.line1}>
+            Hit <kbd className={styles.kbd}>space</kbd> to generate.
+          </p>
+        )}
         <p className={styles.line2}>
           Sign in to save. <strong className={styles.price}>€29</strong> for the full kit.
         </p>
-        <p className={styles.hint}>Click anywhere to dismiss</p>
+        <p className={styles.hint}>{isTouch ? 'Tap anywhere to dismiss' : 'Click anywhere to dismiss'}</p>
       </div>
     </div>
   )
