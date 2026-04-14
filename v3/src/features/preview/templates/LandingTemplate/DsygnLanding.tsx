@@ -1,306 +1,177 @@
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth/useAuth'
-import { useColor, useTypography, useUIActions, useUI } from '@/store'
-import { POSITION_LABELS } from '@/core/color/types'
+import { useColor, useUIActions, useUI } from '@/store'
 import { TemplateIcon } from '../shared/TemplateIcon'
+import { HowItWorksSection } from './HowItWorksSection'
+import { LiveSystemSection } from './LiveSystemSection'
 import styles from './LandingTemplate.module.css'
 
-type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
+type LegalRoute = 'privacy' | 'terms' | 'impressum'
 
 type DsygnLandingProps = {
-  onNavigate: (route: PanelRoute) => void
+  onNavigate: (route: LegalRoute) => void
 }
 
-// ── Section 03: Live Palette ──────────────────────────────────────────────────
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
 
-function PaletteSection() {
-  const color = useColor()
-  const { slots, dataVizN, stateOverrides } = color
+// ── Section: Pricing ─────────────────────────────────────────────────────────
 
-  const semanticStates: Array<{ key: string; label: string }> = [
-    { key: 'success', label: 'Success' },
-    { key: 'warning', label: 'Warning' },
-    { key: 'error', label: 'Error' },
-    { key: 'info', label: 'Info' },
-  ]
+const EARLY_BIRD_ACTIVE = import.meta.env.VITE_EARLY_BIRD_ACTIVE === 'true'
+
+function PricingSection() {
+  const { user } = useAuth()
+  const { openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
+
+  const isSignedIn = user !== null
+  const isPaid = user?.plan === 'paid'
 
   return (
-    <section className={styles.section}>
-      <div className={styles.sectionLabel}>Your colors</div>
+    <section className={styles.section} id="pricing">
+      <div className={styles.sectionLabel}>Simple pricing</div>
 
-      {/* Row 1 — Core palette */}
-      <div className={styles.paletteRow}>
-        {slots.map((slot) => {
-          return (
-            <div key={slot.id} className={styles.swatchCard}>
-              <div
-                className={styles.swatch}
-                style={{ background: `var(--color-${slot.role}-500)` }}
-              />
-              <span className={styles.swatchLabel}>
-                {slot.name ?? POSITION_LABELS[slot.role]}
-              </span>
-              <span className={styles.swatchHex}>{slot.hex}</span>
-            </div>
-          )
-        })}
+      <div className={styles.pricingGrid}>
+
+        {/* Free card */}
+        <div className={styles.pricingCard}>
+          <div className={styles.pricingLabel}>Free</div>
+          <div className={styles.pricingPrice}>€0</div>
+          <div className={styles.pricingSubtext}>forever</div>
+          <ul className={styles.pricingList}>
+            <li className={styles.pricingListItem}>Generator (all features)</li>
+            <li className={styles.pricingListItem}>CSS export</li>
+            <li className={styles.pricingListItem}>3 saved designs</li>
+            <li className={styles.pricingListItem}>No account required to start</li>
+          </ul>
+          <button className={styles.pricingCta} onClick={() => openSignInPrompt('manual')}>
+            Start free
+          </button>
+        </div>
+
+        {/* Lifetime card */}
+        <div className={`${styles.pricingCard} ${styles.pricingCardHighlight}`}>
+          <div className={styles.pricingLabelRow}>
+            <span className={styles.pricingLabel}>Lifetime</span>
+            {EARLY_BIRD_ACTIVE && <span className={styles.earlyBirdBadge}>Early Bird</span>}
+          </div>
+          <div className={styles.pricingPrice}>€29</div>
+          <div className={styles.pricingSubtext}>one-time · no subscription</div>
+          <ul className={styles.pricingList}>
+            <li className={styles.pricingListItem}>Everything in Free</li>
+            <li className={styles.pricingListItem}>Unlimited cloud saves</li>
+            <li className={styles.pricingListItem}>All export formats (ZIP, Figma, W3C, SCSS, Tailwind)</li>
+            <li className={styles.pricingListItem}>Branding PDF</li>
+            <li className={styles.pricingListItem}>Hosted public design system page</li>
+            <li className={styles.pricingListItem}>Version history</li>
+          </ul>
+          {!isSignedIn && (
+            <button className={styles.pricingCta} onClick={() => openSignInPrompt('manual')}>
+              Get lifetime access
+            </button>
+          )}
+          {isSignedIn && !isPaid && (
+            <button className={styles.pricingCta} onClick={openUpgradeModal}>
+              Upgrade — €29
+            </button>
+          )}
+          {isSignedIn && isPaid && (
+            <button className={`${styles.pricingCta} ${styles.pricingCtaDisabled}`} disabled>
+              You&apos;re all set ✓
+            </button>
+          )}
+        </div>
+
       </div>
 
-      {/* Row 2 — Semantic states */}
-      <div className={styles.paletteRow}>
-        {semanticStates.map(({ key, label }) => {
-          const overrideHex = stateOverrides[key as keyof typeof stateOverrides]
-          return (
-            <div key={key} className={styles.swatchCard}>
-              <div
-                className={styles.swatch}
-                style={{ background: `var(--color-${key})` }}
-              />
-              <span className={styles.swatchLabel}>{label}</span>
-              {overrideHex !== undefined && (
-                <span className={styles.swatchHex}>{overrideHex}</span>
-              )}
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Row 3 — Data viz strip */}
-      <div className={styles.datavizStrip}>
-        {Array.from({ length: dataVizN }, (_, i) => (
-          <div
-            key={i}
-            className={styles.datavizSegment}
-            style={{ background: `var(--color-dataviz-${i + 1})` }}
-          />
-        ))}
+      <div className={styles.coffeeRow}>
+        Enjoying dsygn.<span className={styles.cloudWord}>cloud</span>? ☕{' '}
+        <button className={styles.coffeeBtn} onClick={() => openDonateModal('footer')}>
+          Buy me a coffee
+        </button>
       </div>
     </section>
   )
 }
 
-// ── Section 04: Typography Scale ──────────────────────────────────────────────
+// ── Section: Features ─────────────────────────────────────────────────────────
 
-type SpecimenRow = {
-  label: string
-  fontFamily: string
-  fontSize: string
-  fontWeight: string
-  sample: string
-}
-
-const SPECIMEN_ROWS: SpecimenRow[] = [
-  {
-    label: 'Display',
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--font-size-display)',
-    fontWeight: 'var(--font-weight-display)',
-    sample: 'The quick brown fox',
-  },
-  {
-    label: 'Heading',
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--font-size-h1)',
-    fontWeight: 'var(--font-weight-h1)',
-    sample: 'The quick brown fox',
-  },
-  {
-    label: 'Subhead',
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--font-size-h2)',
-    fontWeight: 'var(--font-weight-h2)',
-    sample: 'The quick brown fox',
-  },
-  {
-    label: 'Body',
-    fontFamily: 'var(--font-body)',
-    fontSize: 'var(--font-size-body)',
-    fontWeight: 'var(--font-weight-body)',
-    sample: 'The quick brown fox jumps over the lazy dog.',
-  },
-  {
-    label: 'Small',
-    fontFamily: 'var(--font-body)',
-    fontSize: 'var(--font-size-small)',
-    fontWeight: 'var(--font-weight-small)',
-    sample: 'Caption · Label · Meta',
-  },
-]
-
-function TypographySection() {
-  const typography = useTypography()
-  const { pairing } = typography
-
-  const headingFont = pairing?.heading ?? '—'
-  const bodyFont = pairing?.body ?? '—'
-
+function FeaturesSection() {
   return (
-    <section className={styles.section}>
-      <div className={styles.sectionLabel}>Your typography</div>
+    <section className={styles.section} id="features">
+      <div className={styles.sectionLabel}>Features</div>
+      <div className={styles.featuresGrid}>
 
-      <div className={styles.fontPairingBadge}>
-        {headingFont} + {bodyFont}
-      </div>
-
-      <div className={styles.typeScale}>
-        {SPECIMEN_ROWS.map((row) => (
-          <div key={row.label} className={styles.typeRow}>
-            <span className={styles.typeLabel}>{row.label}</span>
-            <span
-              className={styles.typeSpecimen}
-              style={{
-                fontFamily: row.fontFamily,
-                fontSize: row.fontSize,
-                fontWeight: row.fontWeight,
-              }}
-            >
-              {row.sample}
-            </span>
-            <span className={styles.typeMeta}>
-              {row.fontSize} / {row.fontWeight}
-            </span>
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-a-500, var(--color-accent-a, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="star" size={28} />
           </div>
-        ))}
+          <div className={styles.featTitle}>OKLCH Color Science</div>
+          <div className={styles.featBody}>
+            Perceptually uniform colors with no muddy mid-tones. Every shade looks intentional — semantic state colors generated automatically.
+          </div>
+        </div>
+
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-b-500, var(--color-accent-b, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="file" size={28} />
+          </div>
+          <div className={styles.featTitle}>Token Export</div>
+          <div className={styles.featBody}>
+            CSS variables, Tailwind v3/v4, SCSS, W3C Design Tokens, Figma JSON. One click. Always in sync.
+          </div>
+        </div>
+
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-brand-500, var(--color-interactive, #e8543a))' }}>
+            <TemplateIcon slug="arrow-right" size={28} />
+          </div>
+          <div className={styles.featTitle}>Ship in Seconds</div>
+          <div className={styles.featBody}>
+            Hit ␣ space to regenerate. Lock what you love. Export and paste. No config files, no rituals.
+          </div>
+        </div>
+
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-a-500, var(--color-accent-a, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="check" size={28} />
+          </div>
+          <div className={styles.featTitle}>Lock & Refine</div>
+          <div className={styles.featBody}>
+            Love the color? Lock it. Hate the font? Regenerate just that. Build your perfect system incrementally.
+          </div>
+        </div>
+
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-accent-b-500, var(--color-accent-b, var(--color-interactive, #6366f1)))' }}>
+            <TemplateIcon slug="image" size={28} />
+          </div>
+          <div className={styles.featTitle}>Dark Mode Ready</div>
+          <div className={styles.featBody}>
+            Every token has a light and dark value. Toggle themes instantly — the full system adapts without code changes.
+          </div>
+        </div>
+
+        <div className={styles.featCard}>
+          <div className={styles.featIcon} style={{ color: 'var(--color-brand-500, var(--color-interactive, #e8543a))' }}>
+            <TemplateIcon slug="edit" size={28} />
+          </div>
+          <div className={styles.featTitle}>Typography System</div>
+          <div className={styles.featBody}>
+            Curated font pairings with a modular type scale. Display through caption — every step has a CSS variable.
+          </div>
+        </div>
+
       </div>
     </section>
   )
 }
 
-// ── Section 05: Components in Action ─────────────────────────────────────────
-
-function ComponentsSection() {
-  return (
-    <section className={styles.section}>
-      <div className={styles.sectionLabel}>Your components</div>
-
-      {/* Buttons */}
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Buttons</div>
-        <div className={styles.buttonRow}>
-          <button className={`${styles.demoBtn} ${styles.demoBtnPrimary}`}>Save design</button>
-          <button className={`${styles.demoBtn} ${styles.demoBtnSecondary}`}>Preview</button>
-          <button className={`${styles.demoBtn} ${styles.demoBtnGhost}`}>Cancel</button>
-          <button className={`${styles.demoBtn} ${styles.demoBtnDestructive}`}>Delete</button>
-        </div>
-      </div>
-
-      {/* Badges */}
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Badges</div>
-        <div className={styles.badgeRow}>
-          <span
-            className={styles.demoBadge}
-            style={{ background: 'var(--color-surface-raised)', color: 'var(--color-on-surface-subtle)' }}
-          >
-            Default
-          </span>
-          <span
-            className={styles.demoBadge}
-            style={{ background: 'var(--color-success-container)', color: 'var(--color-success)' }}
-          >
-            Success
-          </span>
-          <span
-            className={styles.demoBadge}
-            style={{ background: 'var(--color-warning-container)', color: 'var(--color-warning)' }}
-          >
-            Warning
-          </span>
-          <span
-            className={styles.demoBadge}
-            style={{ background: 'var(--color-error-container)', color: 'var(--color-error)' }}
-          >
-            Error
-          </span>
-          <span
-            className={styles.demoBadge}
-            style={{ background: 'var(--color-info-container)', color: 'var(--color-info)' }}
-          >
-            Info
-          </span>
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Input</div>
-        <div className={styles.inputGroup}>
-          <label className={styles.demoLabel} htmlFor="demo-email">Email</label>
-          <input
-            id="demo-email"
-            className={styles.demoInput}
-            type="email"
-            placeholder="you@example.com"
-          />
-        </div>
-      </div>
-
-      {/* Alert cards */}
-      <div className={styles.componentGroup}>
-        <div className={styles.componentGroupLabel}>Alerts</div>
-        <div className={styles.alertGrid}>
-          <div
-            className={styles.alertCard}
-            style={{
-              background: 'var(--color-success-container)',
-              borderLeftColor: 'var(--color-success)',
-            }}
-          >
-            <span className={styles.alertIcon}>✓</span>
-            <div>
-              <div className={styles.alertTitle}>Tokens compiled</div>
-              <div className={styles.alertBody}>47 tokens · no contrast errors</div>
-            </div>
-          </div>
-          <div
-            className={styles.alertCard}
-            style={{
-              background: 'var(--color-info-container)',
-              borderLeftColor: 'var(--color-info)',
-            }}
-          >
-            <span className={styles.alertIcon}>ℹ</span>
-            <div>
-              <div className={styles.alertTitle}>New harmony model</div>
-              <div className={styles.alertBody}>Triadic — 4 accents generated</div>
-            </div>
-          </div>
-          <div
-            className={styles.alertCard}
-            style={{
-              background: 'var(--color-warning-container)',
-              borderLeftColor: 'var(--color-warning)',
-            }}
-          >
-            <span className={styles.alertIcon}>⚠</span>
-            <div>
-              <div className={styles.alertTitle}>Breaking change</div>
-              <div className={styles.alertBody}>Token names changed in v2</div>
-            </div>
-          </div>
-          <div
-            className={styles.alertCard}
-            style={{
-              background: 'var(--color-error-container)',
-              borderLeftColor: 'var(--color-error)',
-            }}
-          >
-            <span className={styles.alertIcon}>✕</span>
-            <div>
-              <div className={styles.alertTitle}>Contrast failed</div>
-              <div className={styles.alertBody}>Body text below 4.5:1 on surface-raised</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ── Section 06: Spacing + Effects ────────────────────────────────────────────
+// ── Section: Deep Dive ────────────────────────────────────────────────────────
 
 type SpacingStep = { key: string; varName: string }
-type RadiusStep = { key: string; varName: string }
-type ShadowStep = { key: string; varName: string }
+type RadiusStep  = { key: string; varName: string }
+type ShadowStep  = { key: string; varName: string }
 
 const SPACING_STEPS: SpacingStep[] = [
   { key: 'xs',  varName: 'var(--ui-space-xs)' },
@@ -328,55 +199,58 @@ const SHADOW_STEPS: ShadowStep[] = [
   { key: 'xl', varName: 'var(--shadow-xl)' },
 ]
 
-function SpacingSection() {
-  return (
-    <section className={styles.section}>
-      <div className={styles.sectionLabel}>Your spacing + effects</div>
+function DeepDiveSection() {
+  const { dataVizN } = useColor()
 
-      {/* Spacing scale */}
+  return (
+    <section className={`${styles.section} ${styles.deepDive}`}>
+      <div className={styles.deepDiveLabel}>Explore the full system</div>
+
       <div className={styles.componentGroup}>
         <div className={styles.componentGroupLabel}>Spacing scale</div>
         <div className={styles.spacingScale}>
           {SPACING_STEPS.map((step) => (
             <div key={step.key} className={styles.spacingRow}>
               <span className={styles.spacingLabel}>{step.key}</span>
-              <div
-                className={styles.spacingBar}
-                style={{ width: step.varName }}
-              />
+              <div className={styles.spacingBar} style={{ width: step.varName }} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Border radius chips */}
       <div className={styles.componentGroup}>
         <div className={styles.componentGroupLabel}>Border radius</div>
         <div className={styles.radiusRow}>
           {RADIUS_STEPS.map((step) => (
             <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                className={styles.radiusChip}
-                style={{ borderRadius: step.varName }}
-              />
+              <div className={styles.radiusChip} style={{ borderRadius: step.varName }} />
               <div className={styles.radiusChipLabel}>{step.key}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Shadow boxes */}
       <div className={styles.componentGroup}>
         <div className={styles.componentGroupLabel}>Shadows</div>
         <div className={styles.shadowRow}>
           {SHADOW_STEPS.map((step) => (
             <div key={step.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                className={styles.shadowBox}
-                style={{ boxShadow: step.varName }}
-              />
+              <div className={styles.shadowBox} style={{ boxShadow: step.varName }} />
               <div className={styles.shadowBoxLabel}>shadow-{step.key}</div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.componentGroup}>
+        <div className={styles.componentGroupLabel}>Data visualization</div>
+        <div className={styles.datavizStrip}>
+          {Array.from({ length: dataVizN }, (_, i) => (
+            <div
+              key={i}
+              className={styles.datavizSegment}
+              style={{ background: `var(--color-dataviz-${i + 1})` }}
+            />
           ))}
         </div>
       </div>
@@ -384,147 +258,7 @@ function SpacingSection() {
   )
 }
 
-// ── Section 07: Features — 3 Cards ───────────────────────────────────────────
-
-function FeaturesSection() {
-  return (
-    <section className={styles.section} id="features">
-      <div className={styles.sectionLabel}>How it works</div>
-      <div className={styles.featuresGrid}>
-
-        {/* Card 1 — OKLCH Color Science */}
-        <div className={styles.featCard}>
-          <div className={styles.featIcon} style={{ color: 'var(--color-accent-a-500, var(--color-accent-a, var(--color-interactive, #6366f1)))' }}>
-            <TemplateIcon slug="star" size={28} />
-          </div>
-          <div className={styles.featTitle}>OKLCH Color Science</div>
-          <div className={styles.featBody}>
-            Perceptually uniform colors. Every shade looks intentional — no muddy mid-tones,
-            no blown-out lights. Semantic state colors generated automatically.
-          </div>
-        </div>
-
-        {/* Card 2 — Token Export */}
-        <div className={styles.featCard}>
-          <div className={styles.featIcon} style={{ color: 'var(--color-accent-b-500, var(--color-accent-b, var(--color-interactive, #6366f1)))' }}>
-            <TemplateIcon slug="file" size={28} />
-          </div>
-          <div className={styles.featTitle}>Token Export</div>
-          <div className={styles.featBody}>
-            CSS variables, Tailwind v3/v4, SCSS, W3C Design Tokens, Figma JSON. One click. Always in sync.
-          </div>
-        </div>
-
-        {/* Card 3 — Ship in Seconds */}
-        <div className={styles.featCard}>
-          <div className={styles.featIcon} style={{ color: 'var(--color-brand-500, var(--color-interactive, #e8543a))' }}>
-            <TemplateIcon slug="arrow-right" size={28} />
-          </div>
-          <div className={styles.featTitle}>Ship in Seconds</div>
-          <div className={styles.featBody}>
-            Hit ␣ space to regenerate. Lock what you love. Export and paste. No config files, no rituals.
-          </div>
-        </div>
-
-      </div>
-    </section>
-  )
-}
-
-// ── Section 08: Pricing ───────────────────────────────────────────────────────
-
-const EARLY_BIRD_ACTIVE = import.meta.env.VITE_EARLY_BIRD_ACTIVE === 'true'
-
-function PricingSection() {
-  const { user } = useAuth()
-  const { openSignInPrompt, openUpgradeModal, openDonateModal } = useUIActions()
-
-  const isSignedIn = user !== null
-  const isPaid = user?.plan === 'paid'
-
-  return (
-    <section className={styles.section}>
-      <div className={styles.sectionLabel}>Simple pricing</div>
-
-      <div className={styles.pricingGrid}>
-
-        {/* Free card */}
-        <div className={styles.pricingCard}>
-          <div className={styles.pricingLabel}>Free</div>
-          <div className={styles.pricingPrice}>€0</div>
-          <div className={styles.pricingSubtext}>forever</div>
-          <ul className={styles.pricingList}>
-            <li className={styles.pricingListItem}>Generator (all features)</li>
-            <li className={styles.pricingListItem}>CSS export</li>
-            <li className={styles.pricingListItem}>3 saved designs</li>
-            <li className={styles.pricingListItem}>No account required to start</li>
-          </ul>
-          <button
-            className={styles.pricingCta}
-            onClick={() => openSignInPrompt('manual')}
-          >
-            Start free
-          </button>
-        </div>
-
-        {/* Lifetime card */}
-        <div className={`${styles.pricingCard} ${styles.pricingCardHighlight}`}>
-          <div className={styles.pricingLabelRow}>
-            <span className={styles.pricingLabel}>Lifetime</span>
-            {EARLY_BIRD_ACTIVE && (
-              <span className={styles.earlyBirdBadge}>Early Bird</span>
-            )}
-          </div>
-          <div className={styles.pricingPrice}>€29</div>
-          <div className={styles.pricingSubtext}>one-time · no subscription</div>
-          <ul className={styles.pricingList}>
-            <li className={styles.pricingListItem}>Everything in Free</li>
-            <li className={styles.pricingListItem}>Unlimited cloud saves</li>
-            <li className={styles.pricingListItem}>All export formats (ZIP, Figma, W3C, SCSS, Tailwind)</li>
-            <li className={styles.pricingListItem}>Branding PDF</li>
-            <li className={styles.pricingListItem}>Hosted public design system page</li>
-            <li className={styles.pricingListItem}>Version history</li>
-          </ul>
-          {!isSignedIn && (
-            <button
-              className={styles.pricingCta}
-              onClick={() => openSignInPrompt('manual')}
-            >
-              Get lifetime access
-            </button>
-          )}
-          {isSignedIn && !isPaid && (
-            <button
-              className={styles.pricingCta}
-              onClick={openUpgradeModal}
-            >
-              Upgrade — €29
-            </button>
-          )}
-          {isSignedIn && isPaid && (
-            <button
-              className={`${styles.pricingCta} ${styles.pricingCtaDisabled}`}
-              disabled
-            >
-              You&apos;re all set ✓
-            </button>
-          )}
-        </div>
-
-      </div>
-
-      <div className={styles.coffeeRow}>
-        Enjoying dsygn.<span className={styles.cloudWord}>cloud</span>? ☕{' '}
-        <button
-          className={styles.coffeeBtn}
-          onClick={() => openDonateModal('footer')}
-        >
-          Buy me a coffee
-        </button>
-      </div>
-    </section>
-  )
-}
+// ── Main component ────────────────────────────────────────────────────────────
 
 export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
   const { user } = useAuth()
@@ -532,44 +266,41 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
   const { mode } = useUI()
 
   const isSignedIn = user !== null
-  const isPaid = user?.plan === 'paid'
+  const isPaid     = user?.plan === 'paid'
 
   return (
     <div className={styles.page}>
 
-      {/* ── NAV ─────────────────────────────────────────────── */}
+      {/* ── NAV ──────────────────────────────────────────────── */}
       <nav className={styles.nav}>
         <div className={styles.navLogo}>dsygn.<span className={styles.cloudWord}>cloud</span></div>
         <ul className={styles.navLinks}>
           <li>
-            <button className={styles.navLink} onClick={() => onNavigate('pricing')}>
+            <button className={styles.navLink} onClick={() => scrollToSection('how-it-works')}>
+              How it works
+            </button>
+          </li>
+          <li>
+            <button className={styles.navLink} onClick={() => scrollToSection('features')}>
+              Features
+            </button>
+          </li>
+          <li>
+            <button className={styles.navLink} onClick={() => scrollToSection('pricing')}>
               Pricing
             </button>
           </li>
           <li>
-            <a
-              className={styles.navLink}
-              href="/blog"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Blog
-            </a>
+            <Link className={styles.navLink} to="/blog">Blog</Link>
           </li>
         </ul>
         <div className={styles.navRight}>
           {!isSignedIn && (
             <>
-              <button
-                className={styles.navCtaOutline}
-                onClick={() => openSignInPrompt('manual')}
-              >
+              <button className={styles.navCtaOutline} onClick={() => openSignInPrompt('manual')}>
                 Sign in
               </button>
-              <button
-                className={styles.navCta}
-                onClick={() => openSignInPrompt('manual')}
-              >
+              <button className={styles.navCta} onClick={() => openSignInPrompt('manual')}>
                 Get started
               </button>
             </>
@@ -582,54 +313,52 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
         </div>
       </nav>
 
-      {/* ── HERO ────────────────────────────────────────────── */}
+      {/* ── HERO ─────────────────────────────────────────────── */}
       <section className={styles.hero}>
         <h1 className={styles.heroHeadline}>
           Your design system,<br />
           <span className={styles.heroAccent}>in one keystroke.</span>
         </h1>
         <p className={styles.heroSub}>
-          Generate a complete, production-ready design system — colors, typography,
-          spacing, tokens — in seconds. Built for vibe coders, designers, and dev teams.
+          Generate a complete, production-ready design system — colors, typography, spacing, tokens — in seconds.
         </p>
         <div className={styles.heroActions}>
-          <button
-            className={styles.heroPrimary}
-            onClick={() => openSignInPrompt('manual')}
-          >
+          <button className={styles.heroPrimary} onClick={() => openSignInPrompt('manual')}>
             Start building free
           </button>
-          <button
-            className={styles.heroGhost}
-            onClick={() => onNavigate('pricing')}
-          >
+          <button className={styles.heroGhost} onClick={() => scrollToSection('pricing')}>
             See pricing
           </button>
         </div>
         {mode === 'generator' && (
-          <p className={styles.spaceHint}>Hit ␣ to regenerate this page</p>
+          <div className={styles.spacebarVisual}>
+            <kbd className={styles.spaceKey}>
+              <span className={styles.spaceKeyGlyph}>␣</span>
+              <span>Space — regenerate</span>
+            </kbd>
+          </div>
         )}
+        <p className={styles.socialProof}>
+          Join hundreds of designers already building with dsygn.cloud
+        </p>
       </section>
 
-      {/* ── SECTION 03: LIVE PALETTE ────────────────────────── */}
-      <PaletteSection />
+      {/* ── HOW IT WORKS ─────────────────────────────────────── */}
+      <HowItWorksSection />
 
-      {/* ── SECTION 04: TYPOGRAPHY SCALE ────────────────────── */}
-      <TypographySection />
+      {/* ── LIVE DESIGN SYSTEM ───────────────────────────────── */}
+      <LiveSystemSection />
 
-      {/* ── SECTION 05: COMPONENTS IN ACTION ────────────────── */}
-      <ComponentsSection />
-
-      {/* ── SECTION 06: SPACING + EFFECTS ───────────────────── */}
-      <SpacingSection />
-
-      {/* ── SECTION 07: FEATURES — 3 CARDS ─────────────────── */}
+      {/* ── FEATURES ─────────────────────────────────────────── */}
       <FeaturesSection />
 
-      {/* ── SECTION 08: PRICING ─────────────────────────────── */}
+      {/* ── PRICING ──────────────────────────────────────────── */}
       <PricingSection />
 
-      {/* ── FOOTER ──────────────────────────────────────────── */}
+      {/* ── DEEP DIVE ────────────────────────────────────────── */}
+      <DeepDiveSection />
+
+      {/* ── FOOTER ───────────────────────────────────────────── */}
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
           <div className={styles.footerBrand}>
@@ -638,42 +367,16 @@ export function DsygnLanding({ onNavigate }: DsygnLandingProps) {
           <div className={styles.footerCols}>
             <div className={styles.footerCol}>
               <div className={styles.footerColLabel}>Product</div>
-              <a className={styles.footerLink} href="#features">Features</a>
-              <button
-                className={styles.footerLink}
-                onClick={() => onNavigate('pricing')}
-              >
-                Pricing
-              </button>
-              <a
-                className={styles.footerLink}
-                href="/blog"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Blog
-              </a>
+              <button className={styles.footerLink} onClick={() => scrollToSection('features')}>Features</button>
+              <button className={styles.footerLink} onClick={() => scrollToSection('how-it-works')}>How it works</button>
+              <button className={styles.footerLink} onClick={() => scrollToSection('pricing')}>Pricing</button>
+              <Link className={styles.footerLink} to="/blog">Blog</Link>
             </div>
             <div className={styles.footerCol}>
               <div className={styles.footerColLabel}>Legal</div>
-              <button
-                className={styles.footerLink}
-                onClick={() => onNavigate('privacy')}
-              >
-                Privacy
-              </button>
-              <button
-                className={styles.footerLink}
-                onClick={() => onNavigate('terms')}
-              >
-                Terms
-              </button>
-              <button
-                className={styles.footerLink}
-                onClick={() => onNavigate('impressum')}
-              >
-                Impressum
-              </button>
+              <button className={styles.footerLink} onClick={() => onNavigate('privacy')}>Privacy</button>
+              <button className={styles.footerLink} onClick={() => onNavigate('terms')}>Terms</button>
+              <button className={styles.footerLink} onClick={() => onNavigate('impressum')}>Impressum</button>
             </div>
           </div>
         </div>

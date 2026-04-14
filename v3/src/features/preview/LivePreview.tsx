@@ -6,11 +6,10 @@ import { DsygnLanding } from './templates/LandingTemplate/DsygnLanding'
 import { SystemTemplate } from './templates/SystemTemplate/SystemTemplate'
 import { DashboardTemplate } from './templates/DashboardTemplate/DashboardTemplate'
 import { BlogTemplate } from './templates/BlogTemplate/BlogTemplate'
-import { PricingView } from './views/PricingView'
 import { LegalView } from './views/LegalView'
 import { ShowcaseStrip } from './ShowcaseStrip/ShowcaseStrip'
 
-type PanelRoute = 'home' | 'pricing' | 'privacy' | 'terms' | 'impressum'
+type PanelRoute = 'home' | 'privacy' | 'terms' | 'impressum'
 
 function LivePreviewErrorFallback() {
   return (
@@ -57,10 +56,8 @@ function LivePreviewContent() {
       }
     }
 
-    // Landing template: honour panelRoute for pricing/legal sub-pages
+    // Landing template: honour panelRoute for legal sub-pages
     switch (panelRoute) {
-      case 'pricing':
-        return <PricingView onBack={() => setPanelRoute('home')} />
       case 'privacy':
       case 'terms':
       case 'impressum':
