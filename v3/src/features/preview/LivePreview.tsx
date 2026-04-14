@@ -24,7 +24,7 @@ function LivePreviewErrorFallback() {
 }
 
 function LivePreviewContent() {
-  const { showcaseTemplate, mode } = useUI()
+  const { showcaseTemplate } = useUI()
   const { hideMobilePreview } = useUIActions()
   const { lastBaseHue } = useColor()
 
