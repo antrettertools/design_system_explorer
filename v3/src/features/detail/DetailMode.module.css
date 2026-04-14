@@ -17,23 +17,29 @@
 }
 
 .backLink {
-  background: none;
-  border: none;
+  background: transparent;
+  border: 1px solid var(--color-border);
   font-size: var(--ui-text-sm);
+  font-weight: 500;
   color: var(--color-on-surface-subtle);
   cursor: pointer;
-  padding: var(--ui-space-1) var(--ui-space-2);
-  margin-left: calc(-1 * var(--ui-space-2));
+  padding: 0 var(--ui-space-5);
+  margin-left: 0;
+  height: 28px;
   display: flex;
   align-items: center;
   gap: var(--ui-space-2);
   white-space: nowrap;
-  border-radius: var(--ui-radius-2);
-  transition: color var(--ui-duration-2), background var(--ui-duration-2);
+  border-radius: var(--ui-radius-full);
+  transition: color var(--ui-duration-2), background var(--ui-duration-2), border-color var(--ui-duration-2);
   flex-shrink: 0;
 }
 
-.backLink:hover { color: var(--color-on-surface); background: var(--color-surface-raised, var(--color-border)); }
+.backLink:hover {
+  color: var(--color-on-surface);
+  background: var(--color-surface-raised, var(--color-border));
+  border-color: var(--color-border-strong, var(--color-on-surface-subtle));
+}
 .backLink:active { transform: scale(0.97); }
 
 .divider {

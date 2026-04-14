@@ -1,5 +1,5 @@
 .footer {
-  padding: var(--ui-space-6) var(--ui-space-8);
+  padding: var(--ui-space-5) var(--ui-space-8);
   border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
@@ -7,32 +7,41 @@
   background: var(--color-surface);
 }
 
-.actions {
+/* Desktop: full-width CTA strip */
+.detailStrip {
   display: flex;
   align-items: center;
-  gap: var(--ui-space-3);
-  margin-left: auto;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--ui-space-8);
+  background: var(--color-interactive-subtle);
+  border: 1px solid color-mix(in oklch, var(--color-interactive) 25%, transparent);
+  border-radius: var(--ui-radius-3);
+  cursor: pointer;
+  transition: background var(--ui-duration-2), border-color var(--ui-duration-2);
 }
 
-.detailBtn {
-  height: var(--ui-size-btn-sm);
-  padding: 0 var(--ui-space-6);
-  background: var(--color-interactive);
-  color: var(--color-on-interactive);
-  border: none;
-  border-radius: var(--ui-radius-3);
+.detailStrip:hover {
+  background: color-mix(in oklch, var(--color-interactive-subtle) 80%, var(--color-interactive) 20%);
+  border-color: color-mix(in oklch, var(--color-interactive) 45%, transparent);
+}
+
+.detailStrip:active { transform: scale(0.99); }
+
+.detailStripText {
   font-size: var(--ui-text-sm);
   font-weight: 600;
-  cursor: pointer;
+  color: var(--color-interactive);
   font-family: var(--font-body, sans-serif);
-  display: flex;
-  align-items: center;
-  gap: var(--ui-space-2);
-  transition: opacity var(--ui-duration-2);
+  letter-spacing: 0.01em;
 }
 
-.detailBtn:hover { opacity: 0.85; }
-.detailBtn:active { transform: scale(0.97); }
+.detailStripArrow {
+  color: var(--color-interactive);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
 
 .generateMobile {
   display: none;
@@ -43,6 +52,9 @@
 }
 
 @media (max-width: 768px) { /* --ui-bp-mobile */
+  /* Hide desktop strip on mobile */
+  .detailStrip { display: none; }
+
   .footer {
     position: sticky;
     bottom: 0;
@@ -54,7 +66,7 @@
     justify-content: center;
     gap: var(--ui-space-3);
     flex: 1;
-    height: var(--ui-size-btn-xl);
+    height: 44px;
     background: var(--color-on-surface);
     color: var(--color-background);
     border: none;
@@ -70,7 +82,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--ui-space-2);
-    height: var(--ui-size-btn-xl);
+    height: 44px;
     padding: 0 var(--ui-space-8);
     background: var(--color-surface, #fff);
     color: var(--color-on-surface, #111);
