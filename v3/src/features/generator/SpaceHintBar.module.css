@@ -28,3 +28,21 @@
 @media (max-width: 768px) {
   .bar { display: none; }
 }
+
+/* Lock-state variants */
+
+.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.lockIcon {
+  font-size: 11px;
+  margin-right: var(--ui-space-2, 4px);
+}
+
+.hint {
+  opacity: 0.7;
+  font-style: italic;
+}
