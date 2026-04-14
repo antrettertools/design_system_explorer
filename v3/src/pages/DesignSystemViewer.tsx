@@ -164,12 +164,16 @@ function DesignSystemViewerContent() {
     ]
 
     const injected: HTMLMetaElement[] = []
+    // Track pre-existing tags that were mutated so we can restore them on cleanup
+    const restored: Array<{ el: Element; prevContent: string | null }> = []
 
     for (const [property, content] of metas) {
       const attr = property.startsWith('twitter:') ? 'name' : 'property'
       const existing = document.querySelector(`meta[${attr}="${property}"]`)
       if (existing) {
+        const prevContent = existing.getAttribute('content')
         existing.setAttribute('content', content)
+        restored.push({ el: existing, prevContent })
       } else {
         const meta = document.createElement('meta')
         meta.setAttribute(attr, property)
@@ -180,8 +184,17 @@ function DesignSystemViewerContent() {
     }
 
     return () => {
+      // Remove newly created tags
       for (const meta of injected) {
         meta.parentNode?.removeChild(meta)
+      }
+      // Restore pre-existing tags to their original content
+      for (const { el, prevContent } of restored) {
+        if (prevContent !== null) {
+          el.setAttribute('content', prevContent)
+        } else {
+          el.removeAttribute('content')
+        }
       }
     }
   }, [design])
